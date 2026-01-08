@@ -1,14 +1,14 @@
-# Local Code Review Plugin
+# Code Review Changes Plugin
 
-Automated code review for local uncommitted git changes using multiple specialized agents with confidence-based scoring to filter false positives.
+Automated code review for uncommitted git changes using multiple specialized agents with confidence-based scoring to filter false positives.
 
 ## Overview
 
-The Local Code Review Plugin automates code review for uncommitted changes in your local git repository. It launches multiple agents in parallel to independently audit changes from different perspectives, using confidence scoring to filter out false positives and ensure only high-quality, actionable feedback is reported.
+The Code Review Changes Plugin automates code review for uncommitted changes in your git repository. It launches multiple agents in parallel to independently audit changes from different perspectives, using confidence scoring to filter out false positives and ensure only high-quality, actionable feedback is reported.
 
 ## Commands
 
-### `/local-code-review`
+### `/code-review-changes`
 
 Performs automated code review on all uncommitted git changes (staged and unstaged) using multiple specialized agents.
 
@@ -26,27 +26,27 @@ Performs automated code review on all uncommitted git changes (staged and unstag
 
 **Usage:**
 ```bash
-/local-code-review [--output-file <path>]
+/code-review-changes [--output-file <path>]
 ```
 
 **Options:**
-- `--output-file <path>`: Save the review to a custom file path (default: `.code-review.md` in repo root)
+- `--output-file <path>`: Save the review to a custom file path (default: `.code-review-changes.md` in repo root)
 
 **Example workflow:**
 ```bash
 # Make some changes to your code
-# Run local code review:
-/local-code-review
+# Run code review:
+/code-review-changes
 
 # Claude will:
 # - Check for uncommitted changes
 # - Launch 4 review agents in parallel
 # - Validate each issue found
 # - Output issues to terminal
-# - Save review to .code-review.md
+# - Save review to .code-review-changes.md
 
 # Use custom output file:
-/local-code-review --output-file reviews/my-review.md
+/code-review-changes --output-file reviews/my-review.md
 ```
 
 **Features:**
@@ -56,11 +56,11 @@ Performs automated code review on all uncommitted git changes (staged and unstag
 - CLAUDE.md compliance checking with explicit guideline verification
 - Bug detection focused on changes (not pre-existing issues)
 - Outputs to both terminal and file for reference
-- Local file path references with line numbers
+- File path references with line numbers
 
 **Review output format:**
 ```markdown
-## Local Code Review
+## Code Review
 
 Reviewed uncommitted changes (3 files modified)
 
@@ -86,7 +86,7 @@ Violates rule: "Always validate input parameters"
 ...
 
 ---
-Review saved to: .code-review.md
+Review saved to: .code-review-changes.md
 ```
 
 **False positives filtered:**
@@ -103,7 +103,7 @@ This plugin should be placed in your Claude Code plugins directory. The command 
 
 ## Best Practices
 
-### Using `/local-code-review`
+### Using `/code-review-changes`
 - Maintain clear CLAUDE.md files for better compliance checking
 - Run before committing to catch issues early
 - Review agent findings as a starting point for self-review
@@ -128,7 +128,7 @@ This plugin should be placed in your Claude Code plugins directory. The command 
 vim src/feature.ts
 
 # Review before committing
-/local-code-review
+/code-review-changes
 
 # Review the automated feedback
 # Make any necessary fixes
@@ -144,7 +144,7 @@ git commit -m "Add new feature"
 git add src/specific-file.ts
 
 # Run review (will review all uncommitted changes)
-/local-code-review
+/code-review-changes
 
 # Commit reviewed changes
 git commit -m "Reviewed changes"
@@ -198,7 +198,7 @@ git commit -m "Reviewed changes"
 
 - **Write specific CLAUDE.md files**: Clear guidelines = better reviews
 - **Review incrementally**: Smaller changes = faster, more focused reviews
-- **Use the output file**: Keep `.code-review.md` for reference before committing
+- **Use the output file**: Keep `.code-review-changes.md` for reference before committing
 - **Iterate on guidelines**: Update CLAUDE.md based on patterns
 - **Trust the validation**: Multi-agent validation prevents noise
 
@@ -208,12 +208,12 @@ git commit -m "Reviewed changes"
 
 Use the `--output-file` flag to specify a custom location:
 ```bash
-/local-code-review --output-file docs/reviews/feature-review.md
+/code-review-changes --output-file docs/reviews/feature-review.md
 ```
 
 ### Customizing review focus
 
-Edit `commands/local-code-review.md` to add or modify agent tasks:
+Edit `commands/code-review-changes.md` to add or modify agent tasks:
 - Add security-focused agents
 - Add performance analysis agents
 - Add accessibility checking agents
@@ -236,11 +236,13 @@ Edit `commands/local-code-review.md` to add or modify agent tasks:
 
 ### Output locations
 - Terminal: Formatted markdown displayed directly
-- File: `.code-review.md` (default) or custom path
+- File: `.code-review-changes.md` (default) or custom path
 
 ## Author
 
-Based on the original code-review plugin by Boris Cherny (boris@anthropic.com)
+Jesse Naranjo
+
+Based on the code-review plugin by Boris Cherny (boris@anthropic.com)
 
 ## Version
 

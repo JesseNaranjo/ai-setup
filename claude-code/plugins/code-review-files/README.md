@@ -4,9 +4,9 @@ Automated code review for specific files using multiple specialized agents with 
 
 ## Overview
 
-The Code Review Files Plugin provides targeted code review for specific files in your git repository. Unlike the local-code-review plugin which reviews all uncommitted changes, this plugin lets you specify exactly which files to review. It intelligently handles two scenarios:
+The Code Review Files Plugin provides targeted code review for specific files in your git repository. Unlike the code-review-changes plugin which reviews all uncommitted changes, this plugin lets you specify exactly which files to review. It intelligently handles two scenarios:
 
-1. **Files with uncommitted changes**: Reviews only the changes (like local-code-review)
+1. **Files with uncommitted changes**: Reviews only the changes (like code-review-changes)
 2. **Files without changes**: Reviews the entire file content
 
 This makes it ideal for reviewing specific files regardless of their change status.
@@ -106,9 +106,9 @@ Review saved to: .code-review-files.md
 - General quality issues (unless in CLAUDE.md)
 - Issues with lint ignore comments
 
-## Comparison with local-code-review
+## Comparison with code-review-changes
 
-| Feature | local-code-review | code-review-files |
+| Feature | code-review-changes | code-review-files |
 |---------|-------------------|-------------------|
 | Scope | All uncommitted changes | Specific files only |
 | File selection | Automatic (all changed) | Manual (user specifies) |
@@ -121,7 +121,7 @@ Review saved to: .code-review-files.md
 - Focus review on a subset of changes
 - Review legacy code for issues
 
-**When to use local-code-review:**
+**When to use code-review-changes:**
 - Review all changes before committing
 - Comprehensive pre-commit check
 - Don't know which files need review
@@ -146,7 +146,7 @@ This plugin should be placed in your Claude Code plugins directory. The command 
 - When you want focused review (not all changes)
 
 ### When not to use
-- To review all uncommitted changes (use `/local-code-review`)
+- To review all uncommitted changes (use `/code-review-changes`)
 - For files outside the git repository
 - For binary files or non-code files
 
@@ -234,7 +234,7 @@ git commit -m "Add new feature"
 
 - **Review related files together**: Files that interact should be reviewed together
 - **Use for code exploration**: Review unfamiliar files before modifying them
-- **Combine with local-code-review**: Use `/local-code-review` for all changes, `/code-review-files` for focused review
+- **Combine with code-review-changes**: Use `/code-review-changes` for all changes, `/code-review-files` for focused review
 - **Keep CLAUDE.md updated**: Better guidelines = better reviews
 - **Trust the validation**: Multi-agent validation prevents noise
 

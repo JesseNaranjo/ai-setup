@@ -1,9 +1,9 @@
 ---
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Read, Write, Glob
-description: Code review local uncommitted git changes
+description: Code review uncommitted git changes
 ---
 
-Provide a code review for local uncommitted git changes.
+Provide a code review for uncommitted git changes.
 
 To do this, follow these steps precisely:
 
@@ -57,7 +57,7 @@ To do this, follow these steps precisely:
 
    If NO issues were found, output:
    ```
-   ## Local Code Review
+   ## Code Review
 
    No issues found. Checked for bugs and CLAUDE.md compliance.
 
@@ -66,7 +66,7 @@ To do this, follow these steps precisely:
 
    If issues WERE found, format the output as:
    ```
-   ## Local Code Review
+   ## Code Review
 
    Reviewed uncommitted changes ([N] files modified)
 
@@ -87,7 +87,7 @@ To do this, follow these steps precisely:
 8. Write the review output:
    - Display the formatted review in the terminal
    - Write the same content to a file:
-     - Default: `.code-review.md` in the repository root
+     - Default: `.code-review-changes.md` in the repository root
      - If `--output-file <path>` argument was provided, use that path instead
    - At the end, print: "Review saved to: [filepath]"
 

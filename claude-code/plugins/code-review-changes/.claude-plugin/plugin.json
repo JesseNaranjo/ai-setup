@@ -1,0 +1,8 @@
+{
+  "name": "code-review-changes",
+  "description": "Automated code review for uncommitted git changes using multiple specialized agents with confidence-based scoring",
+  "version": "1.0.0",
+  "author": {
+    "name": "Jesse Naranjo"
+  }
+}

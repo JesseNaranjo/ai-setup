@@ -8,9 +8,9 @@
     },
     "plugins": [
         {
-            "name": "local-code-review",
-            "source": "./claude-code/plugins/local-code-review",
-            "description": "Automated code review for local uncommitted git changes using multiple specialized agents with confidence-based scoring to filter false positives",
+            "name": "code-review-changes",
+            "source": "./claude-code/plugins/code-review-changes",
+            "description": "Automated code review for uncommitted git changes using multiple specialized agents with confidence-based scoring to filter false positives",
             "version": "1.0.0",
             "keywords": [
                 "code-review",
