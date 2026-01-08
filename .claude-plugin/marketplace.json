@@ -19,6 +19,19 @@
                 "bugs",
                 "typescript"
             ]
+        },
+        {
+            "name": "code-review-files",
+            "source": "./claude-code/plugins/code-review-files",
+            "description": "Automated code review for specific files - reviews changes if present, otherwise reviews entire file",
+            "version": "1.0.0",
+            "keywords": [
+                "code-review",
+                "git",
+                "files",
+                "security",
+                "bugs"
+            ]
         }
     ]
 }

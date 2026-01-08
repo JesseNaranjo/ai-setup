@@ -1,0 +1,8 @@
+{
+  "name": "code-review-files",
+  "description": "Automated code review for specific files with support for both uncommitted changes and full file review",
+  "version": "1.0.0",
+  "author": {
+    "name": "Jesse Naranjo"
+  }
+}
