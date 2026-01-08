@@ -1,27 +1,28 @@
 ---
-allowed-tools: Bash(gh issue view:*), Bash(gh search:*), Bash(gh issue list:*), Bash(gh pr comment:*), Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh pr list:*), mcp__github_inline_comment__create_inline_comment
-description: Code review a pull request
+allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Read, Write, Glob
+description: Code review local uncommitted git changes
 ---
 
-Provide a code review for the given pull request.
+Provide a code review for local uncommitted git changes.
 
 To do this, follow these steps precisely:
 
-1. Launch a haiku agent to check if any of the following are true:
-   - The pull request is closed
-   - The pull request is a draft
-   - The pull request does not need code review (e.g. automated PR, trivial change that is obviously correct)
-   - Claude has already commented on this PR (check `gh pr view <PR> --comments` for comments left by claude)
+1. Launch a haiku agent to check if there are any uncommitted changes:
+   - Run `git diff HEAD --stat` to see all uncommitted changes (staged and unstaged)
+   - If there are no changes, stop and inform the user: "No uncommitted changes to review."
+   - Also check if the current directory is a git repository using `git rev-parse --git-dir`
 
-   If any condition is true, stop and do not proceed.
-
-Note: Still review Claude generated PR's.
+   If no changes exist, stop and do not proceed.
 
 2. Launch a haiku agent to return a list of file paths (not their contents) for all relevant CLAUDE.md files including:
    - The root CLAUDE.md file, if it exists
-   - Any CLAUDE.md files in directories containing files modified by the pull request
+   - Any CLAUDE.md files in directories containing files with uncommitted changes
+   - Use `git diff HEAD --name-only` to get the list of modified files
 
-3. Launch a sonnet agent to view the pull request and return a summary of the changes
+3. Launch a sonnet agent to view the uncommitted changes and return a summary:
+   - Run `git diff HEAD` to get the full diff
+   - Run `git branch --show-current` to get the current branch name
+   - Summarize what changes are being made
 
 4. Launch 4 agents in parallel to independently review the changes. Each agent should return the list of issues, where each issue includes a description and the reason it was flagged (e.g. "CLAUDE.md adherence", "bug"). The agents should do the following:
 
@@ -46,40 +47,66 @@ Note: Still review Claude generated PR's.
 
    If you are not certain an issue is real, do not flag it. False positives erode trust and waste reviewer time.
 
-   In addition to the above, each subagent should be told the PR title and description. This will help provide context regarding the author's intent.
+   In addition to the above, each subagent should be told the current branch name and a summary of the changes. This will help provide context regarding the author's intent.
 
-5. For each issue found in the previous step by agents 3 and 4, launch parallel subagents to validate the issue. These subagents should get the PR title and description along with a description of the issue. The agent's job is to review the issue to validate that the stated issue is truly an issue with high confidence. For example, if an issue such as "variable is not defined" was flagged, the subagent's job would be to validate that is actually true in the code. Another example would be CLAUDE.md issues. The agent should validate that the CLAUDE.md rule that was violated is scoped for this file and is actually violated. Use Opus subagents for bugs and logic issues, and sonnet agents for CLAUDE.md violations.
+5. For each issue found in the previous step by agents 3 and 4, launch parallel subagents to validate the issue. These subagents should get the branch name and change summary along with a description of the issue. The agent's job is to review the issue to validate that the stated issue is truly an issue with high confidence. For example, if an issue such as "variable is not defined" was flagged, the subagent's job would be to validate that is actually true in the code. Another example would be CLAUDE.md issues. The agent should validate that the CLAUDE.md rule that was violated is scoped for this file and is actually violated. Use Opus subagents for bugs and logic issues, and sonnet agents for CLAUDE.md violations.
 
 6. Filter out any issues that were not validated in step 5. This step will give us our list of high signal issues for our review.
 
-7. If issues were found, skip to step 8 to post inline comments directly.
+7. Generate the review output. The output should be written to BOTH the terminal AND a markdown file.
 
-   If NO issues were found, post a summary comment using `gh pr comment` (if `--comment` argument is provided):
-   "No issues found. Checked for bugs and CLAUDE.md compliance."
+   If NO issues were found, output:
+   ```
+   ## Local Code Review
 
-8. Post inline comments for each issue using `mcp__github_inline_comment__create_inline_comment`:
-   - `path`: the file path
-   - `line` (and `startLine` for ranges): select the buggy lines so the user sees them
-   - `body`: Brief description of the issue (no "Bug:" prefix). For small fixes (up to 5 lines changed), include a committable suggestion:
-     ```suggestion
-     corrected code here
-     ```
+   No issues found. Checked for bugs and CLAUDE.md compliance.
 
-     **Suggestions must be COMPLETE.** If a fix requires additional changes elsewhere (e.g., renaming a variable requires updating all usages), do NOT use a suggestion block. The author should be able to click "Commit suggestion" and have a working fix - no followup work required.
+   Files reviewed: [list of modified files]
+   ```
 
-     For larger fixes (6+ lines, structural changes, or changes spanning multiple locations), do NOT use suggestion blocks. Instead:
+   If issues WERE found, format the output as:
+   ```
+   ## Local Code Review
+
+   Reviewed uncommitted changes ([N] files modified)
+
+   ### Issues Found: [count]
+
+   **1. [Issue title]** ([Category: Bug/CLAUDE.md violation])
+   `path/to/file.ts:line-range`
+
+   [Description of the issue]
+
+   ```suggestion
+   [corrected code here - only for small fixes up to 5 lines]
+   ```
+
+   **2. [Next issue]** ...
+   ```
+
+8. Write the review output:
+   - Display the formatted review in the terminal
+   - Write the same content to a file:
+     - Default: `.code-review.md` in the repository root
+     - If `--output-file <path>` argument was provided, use that path instead
+   - At the end, print: "Review saved to: [filepath]"
+
+   For suggestions:
+   - For small fixes (up to 5 lines changed), include a committable suggestion in a code block
+   - **Suggestions must be COMPLETE.** If a fix requires additional changes elsewhere (e.g., renaming a variable requires updating all usages), do NOT use a suggestion block.
+   - For larger fixes (6+ lines, structural changes, or changes spanning multiple locations), do NOT use suggestion blocks. Instead:
      1. Describe what the issue is
      2. Explain the suggested fix at a high level
-     3. Include a copyable prompt for Claude Code that the user can use to fix the issue, formatted as:
+     3. Include a copyable prompt for Claude Code that the user can use to fix the issue:
         ```
         Fix [file:line]: [brief description of issue and suggested fix]
         ```
 
-   **IMPORTANT: Only post ONE comment per unique issue. Do not post duplicate comments.**
+   **IMPORTANT: Only report ONE entry per unique issue. Do not duplicate issues.**
 
 Use this list when evaluating issues in Steps 4 and 5 (these are false positives, do NOT flag):
 
-- Pre-existing issues
+- Pre-existing issues (issues that exist in the codebase before these changes)
 - Something that appears to be a bug but is actually correct
 - Pedantic nitpicks that a senior engineer would not flag
 - Issues that a linter will catch (do not run the linter to verify)
@@ -88,23 +115,10 @@ Use this list when evaluating issues in Steps 4 and 5 (these are false positives
 
 Notes:
 
-- Use gh CLI to interact with GitHub (e.g., fetch pull requests, create comments). Do not use web fetch.
+- Use git CLI to interact with the repository. Do not use GitHub CLI.
 - Create a todo list before starting.
-- You must cite and link each issue in inline comments (e.g., if referring to a CLAUDE.md, include a link to it).
-- If no issues are found, post a comment with the following format:
-
----
-
-## Code review
-
-No issues found. Checked for bugs and CLAUDE.md compliance.
-
----
-
-- When linking to code in inline comments, follow the following format precisely, otherwise the Markdown preview won't render correctly: https://github.com/anthropics/claude-code/blob/c21d3c10bc8e898b7ac1a2d745bdc9bc4e423afe/package.json#L10-L15
-  - Requires full git sha
-  - You must provide the full sha. Commands like `https://github.com/owner/repo/blob/$(git rev-parse HEAD)/foo/bar` will not work, since your comment will be directly rendered in Markdown.
-  - Repo name must match the repo you're code reviewing
-  - # sign after the file name
-  - Line range format is L[start]-L[end]
-  - Provide at least 1 line of context before and after, centered on the line you are commenting about (eg. if you are commenting about lines 5-6, you should link to `L4-7`)
+- You must cite each issue with its file path and line numbers (e.g., `src/utils.ts:42-48`).
+- When referencing CLAUDE.md rules, quote the exact rule being violated.
+- If no issues are found, output the "no issues" format shown in step 7.
+- File paths should be relative to the repository root.
+- Line numbers should reference the lines in the working copy (not the diff line numbers).

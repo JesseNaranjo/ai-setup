@@ -1,89 +1,96 @@
-# Code Review Plugin
+# Local Code Review Plugin
 
-Automated code review for pull requests using multiple specialized agents with confidence-based scoring to filter false positives.
+Automated code review for local uncommitted git changes using multiple specialized agents with confidence-based scoring to filter false positives.
 
 ## Overview
 
-The Code Review Plugin automates pull request review by launching multiple agents in parallel to independently audit changes from different perspectives. It uses confidence scoring to filter out false positives, ensuring only high-quality, actionable feedback is posted.
+The Local Code Review Plugin automates code review for uncommitted changes in your local git repository. It launches multiple agents in parallel to independently audit changes from different perspectives, using confidence scoring to filter out false positives and ensure only high-quality, actionable feedback is reported.
 
 ## Commands
 
-### `/code-review`
+### `/local-code-review`
 
-Performs automated code review on a pull request using multiple specialized agents.
+Performs automated code review on all uncommitted git changes (staged and unstaged) using multiple specialized agents.
 
 **What it does:**
-1. Checks if review is needed (skips closed, draft, trivial, or already-reviewed PRs)
+1. Checks if there are any uncommitted changes to review
 2. Gathers relevant CLAUDE.md guideline files from the repository
-3. Summarizes the pull request changes
+3. Summarizes the uncommitted changes
 4. Launches 4 parallel agents to independently review:
    - **Agents #1 & #2**: Audit for CLAUDE.md compliance
    - **Agent #3**: Scan for obvious bugs in changes
-   - **Agent #4**: Analyze git blame/history for context-based issues
-5. Scores each issue 0-100 for confidence level
-6. Filters out issues below 80 confidence threshold
-7. Outputs review (to terminal by default, or as PR comment with `--comment` flag)
+   - **Agent #4**: Analyze for security issues and incorrect logic
+5. Validates each issue with follow-up agents
+6. Filters out low-confidence issues
+7. Outputs review to terminal AND saves to markdown file
 
 **Usage:**
 ```bash
-/code-review [--comment]
+/local-code-review [--output-file <path>]
 ```
 
 **Options:**
-- `--comment`: Post the review as a comment on the pull request (default: outputs to terminal only)
+- `--output-file <path>`: Save the review to a custom file path (default: `.code-review.md` in repo root)
 
 **Example workflow:**
 ```bash
-# On a PR branch, run locally (outputs to terminal):
-/code-review
-
-# Post review as PR comment:
-/code-review --comment
+# Make some changes to your code
+# Run local code review:
+/local-code-review
 
 # Claude will:
+# - Check for uncommitted changes
 # - Launch 4 review agents in parallel
-# - Score each issue for confidence
-# - Output issues ≥80 confidence (to terminal or PR depending on flag)
-# - Skip if no high-confidence issues found
+# - Validate each issue found
+# - Output issues to terminal
+# - Save review to .code-review.md
+
+# Use custom output file:
+/local-code-review --output-file reviews/my-review.md
 ```
 
 **Features:**
+- Reviews all uncommitted changes (both staged and unstaged)
 - Multiple independent agents for comprehensive review
-- Confidence-based scoring reduces false positives (threshold: 80)
+- Confidence-based validation reduces false positives
 - CLAUDE.md compliance checking with explicit guideline verification
 - Bug detection focused on changes (not pre-existing issues)
-- Historical context analysis via git blame
-- Automatic skipping of closed, draft, or already-reviewed PRs
-- Links directly to code with full SHA and line ranges
+- Outputs to both terminal and file for reference
+- Local file path references with line numbers
 
-**Review comment format:**
+**Review output format:**
 ```markdown
-## Code review
+## Local Code Review
 
-Found 3 issues:
+Reviewed uncommitted changes (3 files modified)
 
-1. Missing error handling for OAuth callback (CLAUDE.md says "Always handle OAuth errors")
+### Issues Found: 2
 
-https://github.com/owner/repo/blob/abc123.../src/auth.ts#L67-L72
+**1. Missing error handling** (Bug)
+`src/utils.ts:42-45`
 
-2. Memory leak: OAuth state not cleaned up (bug due to missing cleanup in finally block)
+The async function doesn't handle promise rejection...
 
-https://github.com/owner/repo/blob/abc123.../src/auth.ts#L88-L95
-
-3. Inconsistent naming pattern (src/conventions/CLAUDE.md says "Use camelCase for functions")
-
-https://github.com/owner/repo/blob/abc123.../src/utils.ts#L23-L28
+```suggestion
+try {
+  await fetchData();
+} catch (error) {
+  console.error('Failed to fetch:', error);
+}
 ```
 
-**Confidence scoring:**
-- **0**: Not confident, false positive
-- **25**: Somewhat confident, might be real
-- **50**: Moderately confident, real but minor
-- **75**: Highly confident, real and important
-- **100**: Absolutely certain, definitely real
+**2. CLAUDE.md violation** (CLAUDE.md violation)
+`src/api/handler.ts:78`
+
+Violates rule: "Always validate input parameters"
+...
+
+---
+Review saved to: .code-review.md
+```
 
 **False positives filtered:**
-- Pre-existing issues not introduced in PR
+- Pre-existing issues not introduced in changes
 - Code that looks like a bug but isn't
 - Pedantic nitpicks
 - Issues linters will catch
@@ -92,137 +99,121 @@ https://github.com/owner/repo/blob/abc123.../src/utils.ts#L23-L28
 
 ## Installation
 
-This plugin is included in the Claude Code repository. The command is automatically available when using Claude Code.
+This plugin should be placed in your Claude Code plugins directory. The command is automatically available when using Claude Code.
 
 ## Best Practices
 
-### Using `/code-review`
+### Using `/local-code-review`
 - Maintain clear CLAUDE.md files for better compliance checking
-- Trust the 80+ confidence threshold - false positives are filtered
-- Run on all non-trivial pull requests
-- Review agent findings as a starting point for human review
+- Run before committing to catch issues early
+- Review agent findings as a starting point for self-review
 - Update CLAUDE.md based on recurring review patterns
 
 ### When to use
-- All pull requests with meaningful changes
-- PRs touching critical code paths
-- PRs from multiple contributors
-- PRs where guideline compliance matters
+- Before committing changes
+- After making significant modifications
+- When working on critical code paths
+- To validate changes before creating a PR
 
 ### When not to use
-- Closed or draft PRs (automatically skipped anyway)
-- Trivial automated PRs (automatically skipped)
-- Urgent hotfixes requiring immediate merge
-- PRs already reviewed (automatically skipped)
+- When there are no uncommitted changes (automatically detected)
+- For trivial whitespace-only changes
+- When you need to review already-committed code (use git diff ranges instead)
 
 ## Workflow Integration
 
-### Standard PR review workflow:
+### Pre-commit review workflow:
 ```bash
-# Create PR with changes
-# Run local review (outputs to terminal)
-/code-review
+# Make your changes
+vim src/feature.ts
+
+# Review before committing
+/local-code-review
 
 # Review the automated feedback
 # Make any necessary fixes
 
-# Optionally post as PR comment
-/code-review --comment
-
-# Merge when ready
+# Stage and commit when ready
+git add -A
+git commit -m "Add new feature"
 ```
 
-### As part of CI/CD:
+### Review specific changes:
 ```bash
-# Trigger on PR creation or update
-# Use --comment flag to post review comments
-/code-review --comment
-# Skip if review already exists
+# Stage only the files you want to review
+git add src/specific-file.ts
+
+# Run review (will review all uncommitted changes)
+/local-code-review
+
+# Commit reviewed changes
+git commit -m "Reviewed changes"
 ```
 
 ## Requirements
 
-- Git repository with GitHub integration
-- GitHub CLI (`gh`) installed and authenticated
+- Git repository (must be inside a git repo)
+- Uncommitted changes to review
 - CLAUDE.md files (optional but recommended for guideline checking)
 
 ## Troubleshooting
 
+### "No uncommitted changes to review"
+
+**Issue**: The plugin reports no changes
+
+**Solution**:
+- Check `git status` to see if you have changes
+- Make sure you're in a git repository
+- Ensure changes are not already committed
+
 ### Review takes too long
 
-**Issue**: Agents are slow on large PRs
+**Issue**: Agents are slow on large changesets
 
 **Solution**:
 - Normal for large changes - agents run in parallel
 - 4 independent agents ensure thoroughness
-- Consider splitting large PRs into smaller ones
+- Consider reviewing smaller batches of changes
 
 ### Too many false positives
 
 **Issue**: Review flags issues that aren't real
 
 **Solution**:
-- Default threshold is 80 (already filters most false positives)
+- Validation agents should filter most false positives
 - Make CLAUDE.md more specific about what matters
 - Consider if the flagged issue is actually valid
 
-### No review comment posted
+### Output file not created
 
-**Issue**: `/code-review` runs but no comment appears
-
-**Solution**:
-Check if:
-- PR is closed (reviews skipped)
-- PR is draft (reviews skipped)
-- PR is trivial/automated (reviews skipped)
-- PR already has review (reviews skipped)
-- No issues scored ≥80 (no comment needed)
-
-### Link formatting broken
-
-**Issue**: Code links don't render correctly in GitHub
+**Issue**: Review runs but no file is saved
 
 **Solution**:
-Links must follow this exact format:
-```
-https://github.com/owner/repo/blob/[full-sha]/path/file.ext#L[start]-L[end]
-```
-- Must use full SHA (not abbreviated)
-- Must use `#L` notation
-- Must include line range with at least 1 line of context
-
-### GitHub CLI not working
-
-**Issue**: `gh` commands fail
-
-**Solution**:
-- Install GitHub CLI: `brew install gh` (macOS) or see [GitHub CLI installation](https://cli.github.com/)
-- Authenticate: `gh auth login`
-- Verify repository has GitHub remote
+- Check write permissions in the repository
+- Verify the output path is valid
+- Check for any error messages during output
 
 ## Tips
 
 - **Write specific CLAUDE.md files**: Clear guidelines = better reviews
-- **Include context in PRs**: Helps agents understand intent
-- **Use confidence scores**: Issues ≥80 are usually correct
+- **Review incrementally**: Smaller changes = faster, more focused reviews
+- **Use the output file**: Keep `.code-review.md` for reference before committing
 - **Iterate on guidelines**: Update CLAUDE.md based on patterns
-- **Review automatically**: Set up as part of PR workflow
-- **Trust the filtering**: Threshold prevents noise
+- **Trust the validation**: Multi-agent validation prevents noise
 
 ## Configuration
 
-### Adjusting confidence threshold
+### Customizing output location
 
-The default threshold is 80. To adjust, modify the command file at `commands/code-review.md`:
-```markdown
-Filter out any issues with a score less than 80.
+Use the `--output-file` flag to specify a custom location:
+```bash
+/local-code-review --output-file docs/reviews/feature-review.md
 ```
-
-Change `80` to your preferred threshold (0-100).
 
 ### Customizing review focus
 
-Edit `commands/code-review.md` to add or modify agent tasks:
+Edit `commands/local-code-review.md` to add or modify agent tasks:
 - Add security-focused agents
 - Add performance analysis agents
 - Add accessibility checking agents
@@ -233,25 +224,23 @@ Edit `commands/code-review.md` to add or modify agent tasks:
 ### Agent architecture
 - **2x CLAUDE.md compliance agents**: Redundancy for guideline checks
 - **1x bug detector**: Focused on obvious bugs in changes only
-- **1x history analyzer**: Context from git blame and history
-- **Nx confidence scorers**: One per issue for independent scoring
+- **1x logic/security analyzer**: Context-aware issue detection
+- **Nx validation agents**: One per issue for independent confirmation
 
-### Scoring system
-- Each issue independently scored 0-100
-- Scoring considers evidence strength and verification
-- Threshold (default 80) filters low-confidence issues
-- For CLAUDE.md issues: verifies guideline explicitly mentions it
+### Git commands used
+- `git diff HEAD` - Get all uncommitted changes
+- `git diff HEAD --stat` - Summary of changes
+- `git diff HEAD --name-only` - List of modified files
+- `git branch --show-current` - Current branch name
+- `git rev-parse --git-dir` - Verify git repository
 
-### GitHub integration
-Uses `gh` CLI for:
-- Viewing PR details and diffs
-- Fetching repository data
-- Reading git blame and history
-- Posting review comments
+### Output locations
+- Terminal: Formatted markdown displayed directly
+- File: `.code-review.md` (default) or custom path
 
 ## Author
 
-Boris Cherny (boris@anthropic.com)
+Based on the original code-review plugin by Boris Cherny (boris@anthropic.com)
 
 ## Version
 
