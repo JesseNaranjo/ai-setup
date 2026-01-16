@@ -8,19 +8,6 @@
     },
     "plugins": [
         {
-            "name": "code-review-changes",
-            "source": "./claude-code/plugins/code-review-changes",
-            "description": "Automated code review for uncommitted git changes using multiple specialized agents with confidence-based scoring to filter false positives",
-            "version": "1.0.0",
-            "keywords": [
-                "code-review",
-                "git",
-                "security",
-                "bugs",
-                "typescript"
-            ]
-        },
-        {
             "name": "code-review-files",
             "source": "./claude-code/plugins/code-review-files",
             "description": "Automated code review for specific files - reviews changes if present, otherwise reviews entire file",
@@ -31,6 +18,19 @@
                 "files",
                 "security",
                 "bugs"
+            ]
+        },
+        {
+            "name": "code-review-staged",
+            "source": "./claude-code/plugins/code-review-staged",
+            "description": "Automated code review for staged git changes using multiple specialized agents with confidence-based scoring to filter false positives",
+            "version": "1.0.0",
+            "keywords": [
+                "code-review",
+                "git",
+                "security",
+                "bugs",
+                "typescript"
             ]
         }
     ]

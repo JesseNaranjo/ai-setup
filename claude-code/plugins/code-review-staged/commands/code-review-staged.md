@@ -1,26 +1,26 @@
 ---
 allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Read, Write, Glob
-description: Code review uncommitted git changes
+description: Code review staged git changes
 ---
 
-Provide a code review for uncommitted git changes.
+Provide a code review for staged git changes.
 
 To do this, follow these steps precisely:
 
-1. Launch a haiku agent to check if there are any uncommitted changes:
-   - Run `git diff HEAD --stat` to see all uncommitted changes (staged and unstaged)
-   - If there are no changes, stop and inform the user: "No uncommitted changes to review."
+1. Launch a haiku agent to check if there are any staged changes:
+   - Run `git diff --cached --stat` to see all staged changes
+   - If there are no changes, stop and inform the user: "No staged changes to review."
    - Also check if the current directory is a git repository using `git rev-parse --git-dir`
 
    If no changes exist, stop and do not proceed.
 
 2. Launch a haiku agent to return a list of file paths (not their contents) for all relevant CLAUDE.md files including:
    - The root CLAUDE.md file, if it exists
-   - Any CLAUDE.md files in directories containing files with uncommitted changes
-   - Use `git diff HEAD --name-only` to get the list of modified files
+   - Any CLAUDE.md files in directories containing files with staged changes
+   - Use `git diff --cached --name-only` to get the list of staged files
 
-3. Launch a sonnet agent to view the uncommitted changes and return a summary:
-   - Run `git diff HEAD` to get the full diff
+3. Launch a sonnet agent to view the staged changes and return a summary:
+   - Run `git diff --cached` to get the full diff
    - Run `git branch --show-current` to get the current branch name
    - Summarize what changes are being made
 
@@ -61,14 +61,14 @@ To do this, follow these steps precisely:
 
    No issues found. Checked for bugs and CLAUDE.md compliance.
 
-   Files reviewed: [list of modified files]
+   Files reviewed: [list of staged files]
    ```
 
    If issues WERE found, format the output as:
    ```
    ## Code Review
 
-   Reviewed uncommitted changes ([N] files modified)
+   Reviewed staged changes ([N] files modified)
 
    ### Issues Found: [count]
 
@@ -87,7 +87,7 @@ To do this, follow these steps precisely:
 8. Write the review output:
    - Display the formatted review in the terminal
    - Write the same content to a file:
-     - Default: `.code-review-changes.md` in the repository root
+     - Default: `.code-review-staged.md` in the repository root
      - If `--output-file <path>` argument was provided, use that path instead
    - At the end, print: "Review saved to: [filepath]"
 
