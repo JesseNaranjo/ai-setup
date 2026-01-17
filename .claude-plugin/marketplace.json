@@ -8,29 +8,21 @@
     },
     "plugins": [
         {
-            "name": "code-review-files",
-            "source": "./claude-code/plugins/code-review-files",
-            "description": "Automated code review for specific files - reviews changes if present, otherwise reviews entire file",
-            "version": "1.0.0",
-            "keywords": [
-                "code-review",
-                "git",
-                "files",
-                "security",
-                "bugs"
-            ]
-        },
-        {
-            "name": "code-review-staged",
-            "source": "./claude-code/plugins/code-review-staged",
-            "description": "Automated code review for staged git changes using multiple specialized agents with confidence-based scoring to filter false positives",
-            "version": "1.0.0",
+            "name": "code-review",
+            "source": "./claude-code/plugins/code-review",
+            "description": "Comprehensive 10-agent code review for Node.js and .NET projects with severity classification and language-specific checks",
+            "version": "2.0.0",
             "keywords": [
                 "code-review",
                 "git",
                 "security",
                 "bugs",
-                "typescript"
+                "typescript",
+                "csharp",
+                "dotnet",
+                "nodejs",
+                "performance",
+                "architecture"
             ]
         }
     ]
