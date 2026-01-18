@@ -1,396 +1,603 @@
-# Shared 10-Agent Review Workflow
+# Code Review Workflow Orchestration
 
-This document defines the comprehensive code review workflow used by both `/code-review-files` and `/code-review-staged` commands.
+This document defines the orchestration logic for the code review workflow. Agent definitions, language configs, validation rules, and output formats are in separate files.
+
+## Related Files
+
+- `agents/*.md` - Individual agent definitions with MODE parameter
+- `languages/nodejs.md` - Node.js/TypeScript specific checks
+- `languages/dotnet.md` - .NET/C# specific checks
+- `shared/validation-rules.md` - Validation process and rules
+- `shared/output-format.md` - Output formatting templates
+- `shared/severity-definitions.md` - Canonical severity definitions
 
 ## Severity Classification
 
-All issues MUST be classified using these severity levels:
+Reference `shared/severity-definitions.md` for canonical severity definitions.
 
-| Severity | Definition | Action Required |
-|----------|------------|-----------------|
-| **Critical** | Data loss, security breach, production outage risk | Must fix before merge |
-| **Major** | Significant bug or violation affecting functionality | Should fix before merge |
-| **Minor** | Small issue that should be addressed | Can merge, fix soon |
-| **Suggestion** | Recommended improvement for future consideration | Optional |
+| Severity | Action Required |
+|----------|-----------------|
+| **Critical** | Must fix before merge |
+| **Major** | Should fix before merge |
+| **Minor** | Can merge, fix soon |
+| **Suggestion** | Optional |
 
-## Language-Specific Focus Areas
+## Agent Configuration
 
-### Node.js (JavaScript/TypeScript)
+### Available Agents
 
-Detect Node.js projects by checking for `package.json` in the repository.
+| Agent | File | Model | Supported Modes |
+|-------|------|-------|-----------------|
+| Compliance | `agents/compliance-agent.md` | Opus | thorough, gaps, quick |
+| Bug Detection | `agents/bug-detection-agent.md` | Opus | thorough, gaps, quick |
+| Security | `agents/security-agent.md` | Opus | thorough, gaps, quick |
+| Performance | `agents/performance-agent.md` | Opus | thorough, gaps, quick |
+| Architecture | `agents/architecture-agent.md` | Sonnet | thorough, quick |
+| API Contracts | `agents/api-contracts-agent.md` | Sonnet | thorough, quick |
+| Error Handling | `agents/error-handling-agent.md` | Sonnet | thorough, quick |
+| Test Coverage | `agents/test-coverage-agent.md` | Sonnet | thorough, quick |
 
-| Category | Language-Specific Focus |
-|----------|------------------------|
-| **Bugs** | Unhandled promise rejections, `undefined`/`null` issues, incorrect `this` binding, async/await pitfalls, type coercion bugs |
-| **Security** | Prototype pollution, ReDoS, dynamic code execution, insecure dependencies, JWT validation, XSS via template literals |
-| **Performance** | Event loop blocking, memory leaks from closures/event listeners, inefficient array methods (forEach vs for), missing stream usage for large data |
-| **Architecture** | CommonJS vs ESM issues, circular imports, React hooks rules violations, improper TypeScript typing |
-| **Error Handling** | Unhandled promise rejections, missing `.catch()`, missing error boundaries (React), swallowed errors |
-| **Test Files** | `*.test.ts`, `*.spec.ts`, `*.test.js`, `*.spec.js`, `*-test.js`, `*-spec.js`, `__tests__/` and `tests/` directories |
+### MODE Parameter
 
-### .NET (C#)
+Each agent accepts a MODE parameter:
+- **thorough**: Comprehensive review, check all issues
+- **gaps**: Focus on subtle issues that might be missed (Opus agents only)
+- **quick**: Fast pass on critical issues only
 
-Detect .NET projects by checking for `*.csproj`, `*.sln`, or `*.slnx` files in the repository.
+## Orchestration Sequence
 
-| Category | Language-Specific Focus |
-|----------|------------------------|
-| **Bugs** | Null reference exceptions, `IDisposable` not disposed, async deadlocks (`Result`/`Wait()` on async), LINQ deferred execution issues |
-| **Security** | SQL injection via string concatenation, insecure deserialization, hardcoded connection strings, missing `[Authorize]` attributes, path traversal |
-| **Performance** | Boxing/unboxing overhead, LINQ in hot loops, excessive allocations, missing `ConfigureAwait(false)` in libraries, N+1 EF queries |
-| **Architecture** | DI anti-patterns (service locator), missing interfaces for testability, controller bloat, improper layering violations |
-| **Error Handling** | Missing exception handling, swallowed exceptions (empty catch), improper `Task` handling, missing try-finally for cleanup |
-| **Test Files** | `*.Tests.cs`, `*Tests/` projects, `*.UnitTests/` projects, `tests/` directories |
+This section defines the authoritative execution order for review pipelines. Each step must complete before the next begins.
 
----
+### Deep Review Orchestration (16 agent invocations)
 
-## Review Agents (Step 4)
+1. **Steps 1-3: Input, Context, Content**
+   - Validate input, discover context, gather file content
+   - OUTPUT: Files to review, diffs, AI instructions, test files
 
-Launch ALL 10 agents in parallel. Each agent returns a list of issues with:
-- Issue title
-- File path and line range
-- Description
-- Category (from agent's focus area)
-- Suggested severity level
+2. **Phase 1: Thorough Review** (8 agents in parallel)
+   - Launch: compliance, bug, security, performance (Opus) + architecture, api, error-handling, test-coverage (Sonnet)
+   - MODE: `thorough` for all agents
+   - WAIT: All 8 agents must complete before proceeding
+   - OUTPUT: Phase 1 findings (grouped by category)
 
-### Agent Definitions
+3. **Phase 2: Gaps Review** (4 Opus agents in parallel)
+   - Launch: compliance, bug, security, performance (Opus only)
+   - MODE: `gaps`
+   - INPUT: Phase 1 findings passed as `previous_findings` (each agent receives only its own category)
+   - WAIT: All 4 agents must complete before proceeding
+   - OUTPUT: Phase 2 findings (subtle issues, edge cases)
 
-**Agents 1-2: Compliance with CLAUDE.md and other AI Agent Instructions (Opus)**
+4. **Synthesis** (4 agents in parallel)
+   - Launch: 4 instances of synthesis-agent with different category pairs
+   - INPUT: ALL findings from Phase 1 AND Phase 2
+   - Pairs: Security+Performance, Architecture+Test Coverage, Bugs+Error Handling, Compliance+Bugs
+   - WAIT: All 4 synthesis agents must complete before proceeding
+   - OUTPUT: `cross_cutting_insights` list
 
+5. **Validation**
+   - INPUT: All issues from Phase 1 + Phase 2 + Synthesis
+   - Process: Batch validation by file (see `validation-rules.md`)
+   - OUTPUT: VALID/INVALID/DOWNGRADE verdict for each issue
+
+6. **Aggregation**
+   - Filter invalid issues, apply downgrades, deduplicate, add consensus badges
+   - OUTPUT: Final issue list
+
+7. **Output**
+   - Generate formatted report, write to file
+
+### Quick Review Orchestration (7 agent invocations)
+
+1. **Steps 1-3: Input, Context, Content**
+   - Same as deep review
+   - OUTPUT: Files to review, diffs, AI instructions, test files
+
+2. **Review** (4 agents in parallel)
+   - Launch: bug, security, error-handling, test-coverage
+   - MODE: `quick` for all agents
+   - WAIT: All 4 agents must complete before proceeding
+   - OUTPUT: Quick review findings
+
+3. **Synthesis** (3 agents in parallel)
+   - Launch: 3 instances of synthesis-agent with different category pairs
+   - INPUT: All findings from step 2
+   - Pairs: Bugs+Error Handling, Security+Bugs, Bugs+Test Coverage
+   - WAIT: All 3 synthesis agents must complete before proceeding
+   - OUTPUT: `cross_cutting_insights` list
+
+4. **Validation**
+   - Critical/Major issues only (Minor and Suggestions skip validation)
+   - OUTPUT: VALID/INVALID/DOWNGRADE verdict
+
+5. **Aggregation & Output**
+   - Same as deep review
+
+## Review Configurations
+
+### Deep Review (deep-review, deep-review-staged)
+
+Deep review uses a **two-phase sequential approach** for Opus agents to reduce duplicates and improve gaps analysis:
+
+**Phase 1: Thorough Review (8 agents in parallel)**
+
+| Agent | Model | MODE |
+|-------|-------|------|
+| compliance-agent | Opus | thorough |
+| bug-detection-agent | Opus | thorough |
+| security-agent | Opus | thorough |
+| performance-agent | Opus | thorough |
+| architecture-agent | Sonnet | thorough |
+| api-contracts-agent | Sonnet | thorough |
+| error-handling-agent | Sonnet | thorough |
+| test-coverage-agent | Sonnet | thorough |
+
+**Phase 2: Gaps Review with Context (4 Opus agents in parallel)**
+
+After Phase 1 completes, pass thorough findings to gaps mode agents:
+
+| Agent | Model | MODE | Context |
+|-------|-------|------|---------|
+| compliance-agent | Opus | gaps | Phase 1 compliance findings |
+| bug-detection-agent | Opus | gaps | Phase 1 bug findings |
+| security-agent | Opus | gaps | Phase 1 security findings |
+| performance-agent | Opus | gaps | Phase 1 performance findings |
+
+Gaps mode agents receive prior findings to:
+- Skip issues already flagged (same file + overlapping lines)
+- Focus on subtle issues that might be missed
+- Find edge cases and boundary conditions
+
+Total: 16 agent invocations (8 Phase 1 + 4 Phase 2 + 4 Synthesis), executed in three sequential phases to enable context passing.
+
+### Quick Review (quick-review, quick-review-staged)
+
+Launch 4 agent invocations in parallel:
+
+| Agent | MODE |
+|-------|------|
+| bug-detection-agent | quick |
+| security-agent | quick |
+| error-handling-agent | quick |
+| test-coverage-agent | quick |
+
+Quick review also includes **cross-agent synthesis** with 3 synthesis agents:
+
+| Input Categories | Cross-Cutting Question |
+|-----------------|------------------------|
+| Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
+| Security + Bugs | "Do security issues introduce or relate to bugs?" |
+| Bugs + Test Coverage | "Are identified bugs covered by tests?" |
+
+Total: 7 agent invocations (4 review + 3 synthesis).
+
+## Settings Application
+
+Settings from `.claude/code-review.local.md` affect the workflow at specific points. This section documents how each setting is processed.
+
+### skip_agents (Agent Filtering)
+
+**Applied in:** Step 4 (Review Execution), before launching agents
+
+**Implementation:**
 ```
-Agent 1: AI Agent Instructions Compliance Checker A
-Model: Opus
-Focus: Standards adherence
-
-Review the code for compliance with CLAUDE.md and other AI Agent Instructions. For each file being reviewed, only consider CLAUDE.md and other AI Agent Instructions files that share a file path with the file or its parent directories.
-
-For each violation:
-- Quote the exact CLAUDE.md and other AI Agent Instructions rule being violated
-- Cite the file path and line numbers
-- Explain why this is a violation
-- Classify severity (usually Major for explicit rule violations)
-
-Only flag clear, unambiguous violations where you can quote the exact rule.
-```
-
-```
-Agent 2: AI Agent Instructions Compliance Checker B
-Model: Opus
-Focus: Independent verification of standards adherence
-
-Independently review for compliance with CLAUDE.md and other AI Agent Instructions using the same approach as Agent 1. Do not coordinate with Agent 1 - this provides redundancy and catches issues one agent might miss.
-```
-
-**Agents 3-4: Bug Detection (Opus)**
-
-```
-Agent 3: Bug Detection - Logical Errors
-Model: Opus
-Focus: Runtime bugs, null references, off-by-one errors
-
-Scan for logical bugs that will cause incorrect behavior at runtime:
-- Null/undefined reference errors
-- Off-by-one errors in loops/arrays
-- Incorrect conditionals (wrong operator, inverted logic)
-- Type mismatches causing runtime failures
-- Uninitialized variables
-- Incorrect function return values
-
-Node.js specific: Unhandled promises, async/await misuse, `this` binding
-.NET specific: Null reference exceptions, IDisposable leaks, async deadlocks
-
-Only flag bugs you are confident will cause incorrect behavior. Ignore theoretical edge cases.
-```
-
-```
-Agent 4: Bug Detection - Edge Cases & State
-Model: Opus
-Focus: Boundary conditions, race conditions, state management
-
-Scan for edge case and state-related bugs:
-- Boundary condition failures (empty arrays, zero values, max values)
-- Race conditions in concurrent code
-- State management issues (stale state, incorrect updates)
-- Resource cleanup failures
-- Incorrect error recovery paths
-
-Node.js specific: Event loop blocking, memory leaks from closures
-.NET specific: LINQ deferred execution issues, improper Task handling
-
-Focus on high-confidence issues in the changed code.
-```
-
-**Agent 5: Security (Opus)**
-
-```
-Agent 5: Security Analysis
-Model: Opus
-Focus: Injection, authentication, secrets, OWASP issues
-
-Analyze for security vulnerabilities:
-- Injection attacks (SQL, command, XSS, template)
-- Authentication/authorization bypasses
-- Hardcoded secrets, API keys, passwords
-- Insecure cryptographic practices
-- Path traversal vulnerabilities
-- Insecure deserialization
-- Missing input validation on security boundaries
-
-Node.js specific: Prototype pollution, ReDoS, dynamic code execution, JWT issues
-.NET specific: SQL via string concat, missing [Authorize], connection strings
-
-Classify severity:
-- Critical: Direct exploitation risk, data breach potential
-- Major: Requires specific conditions but exploitable
-- Minor: Defense-in-depth issues
-```
-
-**Agent 6: Performance (Opus)**
-
-```
-Agent 6: Performance Analysis
-Model: Opus
-Focus: Complexity, memory, hot paths, N+1 queries
-
-Analyze for performance issues:
-- O(n^2) or worse algorithms where O(n) is possible
-- Memory leaks or excessive allocations
-- N+1 query patterns in database access
-- Blocking operations in async contexts
-- Inefficient data structure usage
-- Unnecessary object creation in hot paths
-
-Node.js specific: Event loop blocking, inefficient array methods, missing streams
-.NET specific: Boxing/unboxing, LINQ in loops, missing ConfigureAwait
-
-Only flag issues that will have measurable impact. Ignore micro-optimizations.
-Severity: Critical only if causes outages, usually Major or Minor.
-```
-
-**Agent 7: Architecture (Sonnet)**
-
-```
-Agent 7: Architecture Review
-Model: Sonnet
-Focus: Coupling, patterns, SOLID principles
-
-Review for architectural issues:
-- High coupling between unrelated components
-- SOLID principle violations
-- Anti-patterns (god objects, feature envy, shotgun surgery)
-- Layer violations (presentation accessing data directly)
-- Missing abstractions that hurt maintainability
-
-Node.js specific: Circular imports, CommonJS/ESM mixing, React hooks violations
-.NET specific: DI anti-patterns, missing interfaces, controller bloat
-
-Severity: Usually Minor or Suggestion unless causing immediate problems.
+Before launching each agent:
+1. Get the agent name (e.g., "compliance", "security", "performance")
+2. Check if agent name is in skip_agents list
+3. If yes: Skip this agent, do not launch it
+4. If no: Launch agent as normal
 ```
 
-**Agent 8: API & Contracts (Sonnet)**
-
-```
-Agent 8: API & Contract Analysis
-Model: Sonnet
-Focus: Breaking changes, compatibility, interface contracts
-
-Analyze for API and contract issues:
-- Breaking changes to public APIs (removed methods, changed signatures)
-- Backward compatibility issues
-- Interface contract violations
-- Inconsistent API patterns
-- Missing versioning on breaking changes
-- Schema/type changes affecting consumers
-
-Severity:
-- Critical: Breaking change without migration path
-- Major: Breaking change with workaround
-- Minor: Inconsistency, documentation gaps
+**Example:**
+```yaml
+skip_agents: ["architecture", "api-contracts"]
 ```
 
-**Agent 9: Error Handling (Sonnet)**
+With this setting, deep review launches only 6 Phase 1 agents (instead of 8), reducing total invocations.
 
+**Adjustment to counts:**
+- Deep review: `(8 - skipped_count)` Phase 1 + `4` Phase 2 + `4` Synthesis
+- Quick review: `(4 - skipped_count)` Review + `3` Synthesis
+
+### min_severity (Severity Filtering)
+
+**Applied in:** Step 6 (Aggregation), after validation
+
+**Implementation:**
 ```
-Agent 9: Error Handling Review
-Model: Sonnet
-Focus: Try/catch gaps, resilience, error recovery
-
-Review error handling practices:
-- Missing error handling for operations that can fail
-- Swallowed exceptions (empty catch blocks)
-- Error messages that leak sensitive information
-- Missing cleanup/finally blocks
-- Incorrect error propagation
-- Missing retry logic for transient failures
-
-Node.js specific: Unhandled rejections, missing .catch(), error boundaries
-.NET specific: Missing exception handling, improper Task handling
-
-Severity: Major if can cause crashes/data loss, otherwise Minor.
-```
-
-**Agent 10: Test Coverage (Sonnet)**
-
-```
-Agent 10: Test Coverage Analysis
-Model: Sonnet
-Focus: Missing tests, test quality, test suggestions
-
-Analyze test coverage for the changed code:
-- New code paths without corresponding tests
-- Edge cases not covered by existing tests
-- Modified logic that invalidates existing tests
-- Missing integration tests for API changes
-- Test quality issues (no assertions, testing implementation details)
-
-Detect test files based on project type:
-- Node.js: *.test.ts, *.spec.ts, *.test.js, *.spec.js, __tests__/, tests/
-- .NET: *.Tests.cs, *Tests/ projects, *.UnitTests/, tests/
-
-Output: List of specific test cases that should be added, with:
-- What to test
-- Expected behavior
-- Suggested test file location
-
-Severity: Usually Suggestion, Minor if critical path lacks tests.
+After validation completes:
+1. Parse min_severity setting (default: "suggestion")
+2. Define severity order: critical > major > minor > suggestion
+3. For each validated issue:
+   - If issue.severity < min_severity: Remove from output
+   - If issue.severity >= min_severity: Keep in output
 ```
 
----
+**Severity comparison:**
+| min_severity | Included Severities |
+|--------------|---------------------|
+| `suggestion` | All (critical, major, minor, suggestion) |
+| `minor` | critical, major, minor |
+| `major` | critical, major |
+| `critical` | critical only |
 
-## Validation (Step 5)
-
-For EACH issue found by ALL agents (not just bugs), launch validation subagents:
-
-**Validation Rules:**
-- Use Opus validators for: Bugs (3-4), Security (5), Performance (6)
-- Use Sonnet validators for: AI Agent Instructions (1-2), Architecture (7), API (8), Errors (9), Tests (10)
-
-**Validator Prompt Template:**
-```
-Validate this issue by checking if it is truly present in the code:
-
-Issue: [title]
-File: [path:lines]
-Category: [category]
-Description: [description]
-
-Your task:
-1. Read the relevant file(s) to verify the issue exists
-2. Check if this is actually a problem or a false positive
-3. Verify severity classification is appropriate
-4. Return: VALID, INVALID, or DOWNGRADE (with new severity)
-
-Common false positives to check:
-- Pre-existing issues not introduced in these changes
-- Code that appears wrong but has valid context
-- Issues already handled elsewhere
-- Lint-ignore comments silencing intentional violations
+**Example:**
+```yaml
+min_severity: "major"
 ```
 
----
+This filters out Minor and Suggestion issues from the final report.
 
-## Aggregation (Step 6)
+### additional_test_patterns (Test Pattern Merging)
 
-After validation, perform deduplication and consensus scoring:
+**Applied in:** Step 2 (Context Discovery), when finding related test files
 
-1. **Remove invalid issues**: Filter out issues marked INVALID by validators
-2. **Apply severity downgrades**: Update severity for issues marked DOWNGRADE
-3. **Deduplicate**: Merge issues flagged by multiple agents for same file+line range
-4. **Consensus scoring**: Issues flagged by 2+ agents get higher confidence badge
-
----
-
-## Output Format (Step 7)
-
-Generate the review output in this format. Write to BOTH terminal AND file.
-
-### If NO issues were found:
-
-```markdown
-## Code Review
-
-**Reviewed:** [N] file(s) | **Branch:** [branch-name]
-**Review Depth:** Comprehensive (10-agent analysis)
-
-No issues found. All checks passed:
-- Compliance with CLAUDE.md and other AI Agent Instructions
-- Bug detection (logical errors, edge cases)
-- Security analysis
-- Performance review
-- Architecture patterns
-- API compatibility
-- Error handling
-- Test coverage
-
-Files reviewed:
-[list files]
+**Implementation:**
+```
+When finding related test files:
+1. Load default test patterns from languages/*.md
+2. Get additional_test_patterns from settings (default: [])
+3. Merge patterns: combined = default_patterns + additional_test_patterns
+4. Use combined patterns for test file discovery
 ```
 
-### If issues WERE found:
-
-```markdown
-## Code Review
-
-**Reviewed:** [N] file(s) | **Branch:** [branch-name]
-**Review Depth:** Comprehensive (10-agent analysis)
-
-### Summary
-
-| Category | Critical | Major | Minor | Suggestions |
-|----------|----------|-------|-------|-------------|
-| AI Agent Instructions | 0 | 0 | 0 | 0 |
-| Bugs | 0 | 0 | 0 | 0 |
-| Security | 0 | 0 | 0 | 0 |
-| Performance | 0 | 0 | 0 | 0 |
-| Architecture | 0 | 0 | 0 | 0 |
-| API/Contracts | 0 | 0 | 0 | 0 |
-| Error Handling | 0 | 0 | 0 | 0 |
-| Test Coverage | 0 | 0 | 0 | 0 |
-| **Total** | **0** | **0** | **0** | **0** |
-
-### Critical Issues (Must Fix)
-
-[List critical issues - empty section if none]
-
-### Major Issues (Should Fix)
-
-[List major issues - empty section if none]
-
-### Minor Issues
-
-[List minor issues - empty section if none]
-
-### Suggestions
-
-[List suggestions - empty section if none]
-
-### Test Recommendations
-
-[Aggregated test case suggestions from Agent 10]
-
----
-Review saved to: [filepath]
+**Example:**
+```yaml
+additional_test_patterns:
+  - "**/*.integration.ts"
+  - "**/*.e2e.ts"
 ```
 
-### Issue Entry Format:
+These patterns are merged with default patterns like `*.test.ts`, `*.spec.ts`.
 
-```markdown
-**[N]. [Issue title]** `[Severity]` `[Category]` [Consensus badge if 2+ agents]
-`path/to/file.ts:line-range`
+### custom_rules (Custom Rule Passing)
 
-[Description of the issue]
+**Applied in:** Step 4 (Review Execution), when launching compliance-agent
 
-[For small fixes (up to 5 lines), include suggestion block:]
-```suggestion
-[corrected code]
+**Implementation:**
+```
+When launching compliance-agent:
+1. Get custom_rules from settings (default: [])
+2. If custom_rules is not empty:
+   - Add "Custom Rules" section to agent prompt
+   - Include each rule with pattern, message, and severity
+3. Agent checks these rules in addition to CLAUDE.md rules
 ```
 
-[For larger fixes, include prompt:]
-```
-Fix [file:line]: [brief description of issue and suggested fix]
-```
+**Agent prompt addition:**
+```yaml
+# Include in compliance-agent prompt:
+custom_rules:
+  - pattern: "console\\.log"
+    message: "Remove console.log statements before committing"
+    severity: "minor"
 ```
 
----
+**Example settings:**
+```yaml
+custom_rules:
+  - pattern: "\\bTODO\\b"
+    message: "Resolve TODO comments before merging"
+    severity: "suggestion"
+```
+
+### Project Instructions (Markdown Body)
+
+**Applied in:** Step 4 (Review Execution), to all agents
+
+**Implementation:**
+```
+After loading settings file:
+1. Extract markdown body (content after YAML frontmatter)
+2. If body is not empty:
+   - Add to all agent prompts as "Project-Specific Instructions"
+   - This provides context about the project's conventions and exceptions
+```
+
+**Agent prompt addition:**
+```
+project_instructions: |
+  # Project Context
+  This is a high-security financial application...
+```
+
+## Workflow Steps
+
+### Step 1: Input Validation
+
+Verify:
+- Current directory is a git repository
+- Files/changes exist to review
+- Parse command arguments
+
+### Step 2: Context Discovery
+
+1. Find all AI Agent Instructions files:
+   - `CLAUDE.md` files (root and directories)
+   - `.ai/AI-AGENT-INSTRUCTIONS.md` files
+   - `.github/copilot-instructions.md` files
+
+2. Detect project type and language per file:
+
+   **Per-File Language Detection:**
+   For each file being reviewed, detect its language:
+
+   - **By extension**:
+     - `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, `.cjs` → Node.js/TypeScript
+     - `.cs` → .NET/C#
+     - `.py` → Python (future support)
+
+   - **By nearest project file**:
+     - Walk up directories to find `package.json` or `*.csproj`
+     - Use that project's language config
+
+   - **For monorepos/mixed codebases**:
+     - Apply language-specific checks PER FILE
+     - Group files by language when reporting to agents
+     - Example context: "Node.js files: [a.ts, b.ts], .NET files: [c.cs]"
+
+   **Language Override:**
+   Commands accept `--language` parameter to force detection:
+   - `--language nodejs` - Force Node.js/TypeScript checks for all files
+   - `--language dotnet` - Force .NET/C# checks for all files
+
+3. Find related test files based on detected project type(s)
+
+### Step 3: Content Gathering
+
+1. Get current branch name
+2. For files with changes: get diff AND full file content
+3. For files without changes: get full file content
+4. Read related test files for context
+
+### Step 4: Review Execution
+
+Review execution varies by review type:
+
+#### Deep Review: Two-Phase Sequential Approach
+
+**Phase 1: Launch 8 agents with thorough mode in parallel**
+- All 4 Opus agents (compliance, bug-detection, security, performance) in thorough mode
+- All 4 Sonnet agents (architecture, api-contracts, error-handling, test-coverage) in thorough mode
+
+Wait for all Phase 1 agents to complete and collect their findings.
+
+**Phase 2: Launch 4 Opus agents with gaps mode in parallel**
+
+Pass Phase 1 findings as context to gaps mode agents. Each agent receives findings from its own category:
+
+```yaml
+previous_findings:
+  - title: "SQL injection in getUser"
+    file: "src/db/users.ts"
+    line: 23
+    category: "Security"
+    severity: "Critical"
+    # Gaps agent should skip this - already flagged
+```
+
+Gaps mode agents use this context to:
+- Skip issues that match prior findings (same file + overlapping line ranges)
+- Focus analysis on areas not yet covered
+- Find subtle issues that complement thorough findings
+
+#### Quick Review: Single-Phase Parallel
+
+Launch 4 agents with quick mode in parallel. No gaps phase.
+
+#### Agent Invocation Pattern
+
+Use the Task tool to launch each agent. Here is the exact invocation pattern:
+
+```
+Task(
+  subagent_type: "Explore",
+  model: "opus",  // or "sonnet" per agent config
+  description: "[Agent name] review for [scope]",
+  prompt: """
+MODE: thorough  // or gaps, quick
+
+project_type: nodejs  // or dotnet, or both
+
+files_to_review:
+  - path: "src/services/OrderService.ts"
+    has_changes: true
+    diff: |
+      @@ -45,8 +45,12 @@
+      +  const orders = await Order.findAll();
+      +  for (const order of orders) {
+      +    order.items = await OrderItem.findByOrderId(order.id);
+      +  }
+    full_content: |
+      import { Order, OrderItem } from '../models';
+      // ... full file content
+
+ai_instructions:
+  - source: "CLAUDE.md"
+    content: |
+      ## Security
+      - All API endpoints MUST have authentication
+
+related_tests:
+  - path: "src/services/OrderService.test.ts"
+    content: |
+      describe('OrderService', () => { ... });
+
+// For gaps mode only:
+previous_findings:
+  - title: "Issue already found in thorough mode"
+    file: "src/services/OrderService.ts"
+    line: 45
+    category: "Performance"
+    severity: "Critical"
+
+Follow ${CLAUDE_PLUGIN_ROOT}/agents/[agent-name].md instructions.
+Return findings as YAML per shared/output-schema-base.md.
+"""
+)
+```
+
+**Model Selection per Agent:**
+
+| Agent | Model |
+|-------|-------|
+| compliance-agent | opus |
+| bug-detection-agent | opus |
+| security-agent | opus |
+| performance-agent | opus |
+| architecture-agent | sonnet |
+| api-contracts-agent | sonnet |
+| error-handling-agent | sonnet |
+| test-coverage-agent | sonnet |
+| synthesis-agent | sonnet |
+
+#### Common Agent Input
+
+Each agent receives:
+- Current branch name
+- Files to review (diffs and/or full content)
+- Detected project type(s) and language per file
+- Relevant AI Agent Instructions files
+- Related test files
+- MODE parameter
+- Previous findings (gaps mode only, from same category)
+
+Each agent returns issues following the YAML schema defined in each agent file.
+
+#### Pre-Existing Issue Detection (For Staged/Diff Reviews)
+
+**CRITICAL**: When reviewing staged changes or diffs, agents must only flag issues in CHANGED lines.
+
+**Context provided to agents:**
+1. Diff content with line markers (lines starting with `+` are additions)
+2. Surrounding unchanged lines (for understanding context only)
+3. Full file content (for reference only, not for flagging issues)
+
+**Rules for what to flag:**
+- ✅ Issue is in a line starting with `+` in the diff (newly added code)
+- ✅ Change INTRODUCES the issue (e.g., removes null check that protected existing code)
+- ✅ Change WORSENS an existing issue (e.g., increases scope of vulnerability)
+
+**Do NOT flag:**
+- ❌ Issues in unchanged code (lines without `+` prefix)
+- ❌ Pre-existing problems not made worse by the change
+- ❌ Style issues in untouched code nearby
+- ❌ Issues visible in "full file" context but not in the diff
+
+**Example:**
+```diff
+  function getUser(id) {
++   const user = await db.query(`SELECT * FROM users WHERE id = ${id}`);  // FLAG: SQL injection
+    if (existingBuggyCode) {  // DO NOT FLAG: pre-existing, not in diff
+      return null;
+    }
++   return user;
+  }
+```
+
+#### Automatic Cross-File Analysis
+
+Agents automatically perform cross-file analysis when the reviewed code suggests cross-cutting concerns. This is triggered by:
+
+- **Import/export statements** → Check for consumers, circular dependencies
+- **Class/interface definitions** → Check implementations, inheritance chains
+- **API contracts** → Check for breaking changes affecting consumers
+- **Shared types/utilities** → Check all usages for consistency
+
+When triggered, agents use Grep and Glob tools to discover related files, then Read to analyze relationships. This enables detection of:
+- Unused exports
+- Circular dependencies
+- Broken call chains (signature changed, callers not updated)
+- Interface/implementation mismatches
+
+See `agents/architecture-agent.md` for detailed cross-file analysis triggers and process.
+
+### Synthesis Phase: Cross-Agent Synthesis
+
+After the review phase and before validation, launch **synthesis agents** that analyze findings across categories to identify cross-cutting concerns.
+
+**Purpose**: Catch issues that span multiple review categories, such as:
+- Security fixes that introduce performance regressions
+- Architectural changes lacking test coverage
+- Bug fixes that break API contracts or lack error handling
+
+#### Deep Review Synthesis (4 agents in parallel)
+
+| Agent | Input Categories | Cross-Cutting Question |
+|-------|-----------------|------------------------|
+| `agents/synthesis-agent.md` | Security + Performance | "Do any security fixes introduce performance issues?" |
+| `agents/synthesis-agent.md` | Architecture + Test Coverage | "Are architectural changes covered by tests?" |
+| `agents/synthesis-agent.md` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
+| `agents/synthesis-agent.md` | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
+
+#### Quick Review Synthesis (3 agents in parallel)
+
+| Agent | Input Categories | Cross-Cutting Question |
+|-------|-----------------|------------------------|
+| `agents/synthesis-agent.md` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
+| `agents/synthesis-agent.md` | Security + Bugs | "Do security issues introduce or relate to bugs?" |
+| `agents/synthesis-agent.md` | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
+
+Each synthesis agent receives:
+- All findings from both input categories
+- The file diffs/content being reviewed
+- Context about what each category found
+
+**Synthesis Agent Output**:
+```yaml
+cross_cutting_insights:
+  - title: "SQL injection fix uses unbounded query"
+    related_findings:
+      - security: "SQL injection in getUser"
+      - performance: "Unbounded query in user lookup"
+    # Both categories required - if only one has a finding, don't flag as cross-cutting
+    insight: "The parameterized query fix doesn't limit result set size, potential DoS"
+    category: "Performance"
+    severity: "Major"
+    file: "src/db/users.ts"
+    line: 25
+```
+
+Synthesis insights are added to the issue pool before validation.
+
+### Step 5: Validation
+
+For each issue from the review phases, launch a validation subagent.
+
+See `shared/validation-rules.md` for:
+- Validator model assignment
+- Validation prompt template
+- Common false positive checks
+
+### Step 6: Aggregation
+
+1. Remove issues marked INVALID
+2. Apply severity downgrades
+3. Deduplicate by file+line range
+4. Add consensus badges for multi-agent issues
+
+See `shared/validation-rules.md` for full aggregation rules.
+
+### Step 7: Generate Output
+
+Format results according to `shared/output-format.md`.
+
+### Step 8: Write Output
+
+1. Display formatted review in terminal
+2. Write to output file (default or specified via --output-file)
+3. Print "Review saved to: [filepath]"
+
+## Language-Specific Focus
+
+Agents apply language-specific checks based on per-file detection:
+
+- **Node.js/TypeScript files** (`.ts`, `.tsx`, `.js`, `.jsx`): See `languages/nodejs.md`
+- **.NET/C# files** (`.cs`): See `languages/dotnet.md`
+
+For mixed codebases (monorepos):
+- Each file is analyzed with its own language config
+- Agents receive file groupings by language
+- Cross-language issues (e.g., API contract mismatches) are handled by architecture and API agents
 
 ## False Positive Guidelines
 
@@ -400,18 +607,16 @@ Do NOT flag these (across all agents):
 - Code that appears problematic but is actually correct in context
 - Pedantic nitpicks that a senior engineer would not flag
 - Issues that a linter/type checker will catch
-- General quality concerns not explicitly required by CLAUDE.md and other AI Agent Instructions
+- General quality concerns not explicitly required by AI Agent Instructions
 - Issues with explicit ignore comments (lint-disable, etc.)
 - Theoretical issues that require specific conditions to manifest
 - Subjective style preferences not mandated by guidelines
-
----
 
 ## Notes
 
 - Use git CLI for repository interactions (not GitHub CLI)
 - Always cite file paths and line numbers for each issue
-- Quote exact CLAUDE.md and other AI Agent Instructions rules when citing violations
+- Quote exact AI Agent Instructions rules when citing violations
 - File paths should be relative to repository root
 - Line numbers reference lines in working copy (not diff line numbers)
 - Maintain a todo list to track review progress

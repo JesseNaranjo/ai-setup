@@ -10,19 +10,22 @@
         {
             "name": "code-review",
             "source": "./claude-code/plugins/code-review",
-            "description": "Comprehensive 10-agent code review for Node.js and .NET projects with severity classification and language-specific checks",
-            "version": "2.0.1",
+            "description": "Modular 9-agent code review with sequential gaps analysis, cross-agent synthesis, and actionable fixes for Node.js and .NET projects",
+            "version": "3.0.0",
             "keywords": [
-                "code-review",
-                "git",
-                "security",
+                "agents",
+                "architecture",
                 "bugs",
-                "typescript",
+                "code-review",
                 "csharp",
                 "dotnet",
+                "git",
                 "nodejs",
                 "performance",
-                "architecture"
+                "security",
+                "skills",
+                "synthesis",
+                "typescript"
             ]
         }
     ]

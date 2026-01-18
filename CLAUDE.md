@@ -1,0 +1,216 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Repository Overview
+
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.0.0) - a modular 9-agent architecture with:
+- Two-phase sequential review (thorough → gaps with context passing)
+- Cross-agent synthesis for ripple effect detection
+- Actionable fix outputs (inline diffs and Claude Code prompts)
+- Support for Node.js/TypeScript and .NET/C# projects
+
+## Plugin Commands
+
+| Command | Description |
+|---------|-------------|
+| `/deep-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (8 agents) → Phase 2 (4 gaps agents) → Synthesis (4 agents) |
+| `/deep-review-staged [--output-file <path>]` | Deep review of staged git changes with full pipeline |
+| `/quick-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
+| `/quick-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
+
+## Plugin Skills
+
+| Skill | Trigger Phrases |
+|-------|-----------------|
+| `security-review` | "security review", "check for vulnerabilities", "audit security" |
+| `performance-review` | "check performance", "find slow code", "optimize" |
+| `bug-review` | "find bugs", "check for errors", "find edge cases" |
+| `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+
+## Architecture
+
+### Directory Structure
+
+```
+claude-code/plugins/code-review/
+├── .claude-plugin/plugin.json       # Plugin metadata (v3.0.0)
+├── commands/                        # Slash command definitions
+│   ├── deep-review.md               # Deep file review (16 agent invocations)
+│   ├── deep-review-staged.md        # Deep staged review (16 agent invocations)
+│   ├── quick-review.md              # Quick file review (7 invocations)
+│   └── quick-review-staged.md       # Quick staged review (7 invocations)
+├── agents/                          # Modular agent definitions (9 agents)
+│   ├── compliance-agent.md          # AI instructions compliance
+│   ├── bug-detection-agent.md       # Logical errors & edge cases
+│   ├── security-agent.md            # Security vulnerabilities
+│   ├── performance-agent.md         # Performance issues
+│   ├── architecture-agent.md        # Architecture patterns
+│   ├── api-contracts-agent.md       # API compatibility
+│   ├── error-handling-agent.md      # Error handling gaps
+│   ├── test-coverage-agent.md       # Test coverage gaps
+│   └── synthesis-agent.md           # Cross-agent insights (NEW)
+├── skills/                          # Targeted review skills (progressive disclosure)
+│   ├── security-review/
+│   │   ├── SKILL.md                 # Core skill instructions
+│   │   ├── references/              # Detailed patterns (loaded on-demand)
+│   │   │   └── common-vulnerabilities.md
+│   │   └── examples/                # Sample output format
+│   │       └── example-output.md
+│   ├── performance-review/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   │   └── performance-patterns.md
+│   │   └── examples/
+│   │       └── example-output.md
+│   ├── bug-review/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   │   └── common-bugs.md
+│   │   └── examples/
+│   │       └── example-output.md
+│   └── compliance-review/
+│       ├── SKILL.md
+│       ├── references/
+│       │   └── compliance-patterns.md
+│       └── examples/
+│           └── example-output.md
+├── languages/                       # Language-specific configs
+│   ├── nodejs.md                    # Node.js/TypeScript checks
+│   └── dotnet.md                    # .NET/C# checks
+├── shared/
+│   ├── settings-loader.md           # Settings loading and application
+│   ├── input-validation-files.md    # File-based input validation
+│   ├── input-validation-staged.md   # Staged input validation
+│   ├── content-gathering-files.md   # File-based content gathering
+│   ├── content-gathering-staged.md  # Staged content gathering
+│   ├── context-discovery.md         # Context discovery instructions
+│   ├── review-workflow.md           # Orchestration logic + agent invocation pattern
+│   ├── skill-common-workflow.md     # Common skill workflow steps (NEW)
+│   ├── validation-rules.md          # Validation process
+│   ├── output-format.md             # Output templates (with fix_type)
+│   ├── output-generation.md         # Output generation and file writing
+│   ├── output-schema-base.md        # Base YAML schema for all agents
+│   ├── severity-definitions.md      # Severity classification
+│   ├── gaps-mode-rules.md           # Rules for gaps mode operation
+│   └── false-positives.md           # False positive rules
+├── templates/
+│   └── code-review.local.md.example # Settings template for users
+└── README.md
+```
+
+### 9-Agent Architecture with Modes
+
+| Agent | Model | Modes | Focus |
+|-------|-------|-------|-------|
+| compliance-agent | Opus | thorough, gaps, quick | AI instructions compliance |
+| bug-detection-agent | Opus | thorough, gaps, quick | Bugs & edge cases |
+| security-agent | Opus | thorough, gaps, quick | Security vulnerabilities |
+| performance-agent | Opus | thorough, gaps, quick | Performance issues |
+| architecture-agent | Sonnet | thorough, quick | Architecture patterns |
+| api-contracts-agent | Sonnet | thorough, quick | API compatibility |
+| error-handling-agent | Sonnet | thorough, quick | Error handling |
+| test-coverage-agent | Sonnet | thorough, quick | Test coverage |
+| synthesis-agent | Sonnet | (cross-category) | Cross-agent insights |
+
+### Deep Review Pipeline
+
+1. **Phase 1** (8 agents parallel): Thorough mode review
+2. **Phase 2** (4 Opus agents parallel): Gaps mode with Phase 1 findings as context
+3. **Phase 3** (4 synthesis agents parallel): Cross-cutting concern detection
+4. **Validation**: All issues validated before output
+
+### MODE Parameter
+
+- **thorough**: Comprehensive review, check all issues
+- **gaps**: Focus on subtle issues, receives prior findings to skip duplicates (Opus agents only)
+- **quick**: Fast pass on critical issues only
+
+### Actionable Fix Formats
+
+- **fix_type: diff**: Inline code diff for single-location fixes ≤10 lines
+- **fix_type: prompt**: Claude Code prompt for multi-location/structural fixes
+
+### Key Files
+
+- `agents/*.md` - Individual agent definitions with MODE support
+- `languages/*.md` - Language-specific checks and patterns
+- `shared/settings-loader.md` - Settings loading and application
+- `shared/input-validation-*.md` - Input validation for file/staged commands
+- `shared/content-gathering-*.md` - Content gathering for file/staged commands
+- `shared/review-workflow.md` - Orchestration, workflow steps, and agent invocation pattern
+- `shared/skill-common-workflow.md` - Shared workflow steps for skills (scope, context, validation, reporting)
+- `shared/validation-rules.md` - Issue validation process
+- `shared/output-format.md` - Output formatting templates
+- `shared/output-generation.md` - Output generation and file writing
+- `shared/false-positives.md` - False positive rules
+- `commands/*.md` - Define command interfaces (reference shared components)
+- `skills/*/SKILL.md` - Skill definitions (reference skill-common-workflow.md)
+- `templates/code-review.local.md.example` - User settings template
+
+### Project Settings
+
+Users can customize plugin behavior per-project by creating `.claude/code-review.local.md`:
+
+```yaml
+---
+enabled: true
+output_dir: "."
+skip_agents: []
+min_severity: "suggestion"
+language: ""
+custom_rules: []
+---
+
+# Project-specific instructions for review agents
+```
+
+See `shared/settings-loader.md` for loading logic and `README.md` for full documentation.
+
+## Language Detection
+
+- **Node.js/TypeScript**: Detected by `package.json`
+- **.NET/C#**: Detected by `*.csproj`, `*.sln`, or `*.slnx`
+
+## Making Changes
+
+When modifying the plugin:
+
+1. **Agent behavior**: Edit agent files in `agents/` directory
+2. **Language-specific checks**: Edit files in `languages/` directory
+3. **Validation rules**: Edit `shared/validation-rules.md`
+4. **Output format**: Edit `shared/output-format.md`
+5. **Workflow orchestration**: Edit `shared/review-workflow.md`
+6. **Agent invocation pattern**: Edit `shared/review-workflow.md` (Agent Invocation Pattern section)
+7. **Common skill steps**: Edit `shared/skill-common-workflow.md`
+8. **Command arguments**: Edit command YAML frontmatter in `commands/`
+9. **Skills**: Edit skill files in `skills/*/SKILL.md`
+10. **Skill references**: Add detailed patterns to `skills/*/references/`
+11. **Skill examples**: Add sample outputs to `skills/*/examples/`
+12. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
+
+## Skill Structure (Progressive Disclosure)
+
+Each skill follows progressive disclosure pattern:
+
+1. **SKILL.md** (~130-170 lines): Core workflow loaded when skill triggers
+2. **shared/skill-common-workflow.md**: Common workflow steps (scope, context, validation, reporting)
+3. **references/** (optional): Detailed patterns loaded on-demand
+4. **examples/** (optional): Sample output formats for reference
+
+```
+skills/skill-name/
+├── SKILL.md              # Always loaded when skill triggers (~130-170 lines)
+├── references/           # Loaded when Claude needs detailed patterns
+│   └── patterns.md
+└── examples/             # Loaded when Claude needs output format reference
+    └── example-output.md
+```
+
+Skills reference `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures (determining scope, gathering context, validating findings, and reporting results) to avoid duplication across skills.
+
+## Version Management
+
+Update version in both:
+- `claude-code/plugins/code-review/.claude-plugin/plugin.json`
+- `.claude-plugin/marketplace.json`

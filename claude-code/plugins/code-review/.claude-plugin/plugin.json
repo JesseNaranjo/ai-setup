@@ -1,8 +1,21 @@
 {
     "name": "code-review",
-    "description": "Comprehensive 10-agent code review for Node.js and .NET projects",
-    "version": "2.0.1",
+    "description": "Modular 9-agent code review with sequential gaps analysis, cross-agent synthesis, and actionable fixes for Node.js and .NET projects",
+    "version": "3.0.0",
     "author": {
-        "name": "Jesse Naranjo"
-    }
+        "name": "Jesse Naranjo",
+        "email": "13751049+JesseNaranjo@users.noreply.github.com",
+        "url": "https://github.com/JesseNaranjo"
+    },
+    "license": "MIT",
+    "repository": "https://github.com/JesseNaranjo/ai-setup",
+    "homepage": "https://github.com/JesseNaranjo/ai-setup#readme",
+    "keywords": [
+        "code-review",
+        "security",
+        "performance",
+        "testing",
+        "nodejs",
+        "dotnet"
+    ]
 }

@@ -1,88 +1,253 @@
 # Code Review Plugin
 
-Comprehensive 10-agent code review for Node.js and .NET projects using Claude's multi-agent architecture.
+Modular 9-agent code review with parameterized modes for Node.js and .NET projects.
 
 ## Overview
 
-The Code Review Plugin provides automated, in-depth code review using 10 specialized agents that analyze code from different perspectives. Each agent focuses on a specific aspect of code quality, and their findings are validated and aggregated to produce high-signal, actionable feedback.
+The Code Review Plugin provides automated, in-depth code review using 9 specialized agents that analyze code from different perspectives. Each agent supports multiple review modes (thorough, gaps, quick) for flexible review depth.
 
 ### Key Features
 
-- **10-Agent Architecture**: Comprehensive coverage across multiple dimensions
-- **Language-Aware**: Specialized checks for Node.js/TypeScript and .NET/C# projects
+- **Modular 9-Agent Architecture**: Each agent is a separate file in `agents/` for easy customization
+- **Parameterized Modes**: thorough, gaps, and quick modes for different review depths
+- **Language-Aware**: Specialized checks for Node.js/TypeScript and .NET/C# (configs in `languages/`)
+- **Targeted Skills**: Security, performance, bug, and compliance review skills
 - **Validation Layer**: Every issue is independently validated to reduce false positives
 - **Severity Classification**: Issues categorized as Critical, Major, Minor, or Suggestion
 - **Consensus Scoring**: Issues flagged by multiple agents get higher confidence
-- **Deduplication**: Identical issues from multiple agents are merged
 
 ## Commands
 
-### `/code-review-files`
+### `/deep-review`
 
-Reviews specific files you specify. Intelligently handles files with and without uncommitted changes.
+Deep 9-agent code review of specific files with thorough + gaps modes for maximum coverage.
 
-**Usage:**
 ```bash
-/code-review-files <file1> [file2] [...] [--output-file <path>]
+/deep-review <file1> [file2] [...] [--output-file <path>]
 ```
 
-**Arguments:**
-- `<file>`: One or more file paths to review (required)
-- `--output-file <path>`: Custom output location (default: `.code-review-files.md`)
+### `/deep-review-staged`
 
-**Examples:**
+Deep 9-agent code review of staged git changes with thorough + gaps modes for maximum coverage.
+
 ```bash
-# Review a single file
-/code-review-files src/utils.ts
-
-# Review multiple files
-/code-review-files src/api/handler.ts src/models/user.ts
-
-# Review with custom output
-/code-review-files --output-file reviews/feature.md src/feature.ts
+/deep-review-staged [--output-file <path>]
 ```
 
-**Behavior:**
-- Files with uncommitted changes: Reviews the diff + full file context
-- Files without changes: Reviews the entire file content
+### `/quick-review`
 
-### `/code-review-staged`
+Fast 4-agent review of specific files focusing on critical issues (bugs, security, errors, tests).
 
-Reviews all staged git changes (files added with `git add`).
-
-**Usage:**
 ```bash
-/code-review-staged [--output-file <path>]
+/quick-review <file1> [file2] [...] [--output-file <path>]
 ```
 
-**Arguments:**
-- `--output-file <path>`: Custom output location (default: `.code-review-staged.md`)
+### `/quick-review-staged`
 
-**Examples:**
+Fast 4-agent review of staged git changes focusing on critical issues (bugs, security, errors, tests).
+
 ```bash
-# Review all staged changes
-git add src/feature.ts
-/code-review-staged
-
-# With custom output
-/code-review-staged --output-file reviews/pre-commit.md
+/quick-review-staged [--output-file <path>]
 ```
 
-## Review Dimensions
+## Configuration
 
-The 10-agent architecture covers these review dimensions:
+Customize the plugin's behavior per-project by creating a settings file.
 
-| Agent | Model | Category | Focus |
-|-------|-------|----------|-------|
-| 1-2 | Opus | AI Agent Instructions Compliance | Standards adherence, rule verification |
-| 3 | Opus | Bug Detection | Runtime bugs, null refs, off-by-one errors |
-| 4 | Opus | Bug Detection | Edge cases, race conditions, state issues |
-| 5 | Opus | Security | Injection, auth, secrets, OWASP vulnerabilities |
-| 6 | Opus | Performance | Complexity, memory, hot paths, N+1 queries |
-| 7 | Sonnet | Architecture | Coupling, patterns, SOLID principles |
-| 8 | Sonnet | API & Contracts | Breaking changes, compatibility issues |
-| 9 | Sonnet | Error Handling | Try/catch gaps, resilience, recovery |
-| 10 | Sonnet | Test Coverage | Missing tests, test recommendations |
+### Quick Start
+
+1. Copy the template to your project:
+   ```bash
+   mkdir -p .claude
+   cp ~/.claude/plugins/*/code-review/templates/code-review.local.md.example .claude/code-review.local.md
+   ```
+
+2. Edit `.claude/code-review.local.md` to customize settings
+
+3. Add to `.gitignore`:
+   ```gitignore
+   .claude/*.local.md
+   ```
+
+4. **Restart Claude Code** to apply the new settings
+
+> **Note:** Settings changes require restarting Claude Code to take effect.
+
+### Settings File Format
+
+Create `.claude/code-review.local.md` in your project root:
+
+```markdown
+---
+# Enable/disable the plugin
+enabled: true
+
+# Default output directory (default: "." = project root)
+output_dir: "."
+
+# Agents to skip (options: compliance, bugs, security, performance,
+#                         architecture, api-contracts, error-handling, test-coverage)
+skip_agents: []
+
+# Minimum severity to report (options: critical, major, minor, suggestion)
+min_severity: "suggestion"
+
+# Language override (options: nodejs, dotnet, or empty for auto-detect)
+language: ""
+
+# Custom rules (checked by compliance agent)
+custom_rules: []
+---
+
+# Project-Specific Instructions
+
+Add context for review agents here. This content is passed to all agents.
+```
+
+### Configuration Options
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `enabled` | `true` | Enable/disable plugin for this project |
+| `output_dir` | `"."` | Directory for review output files |
+| `skip_agents` | `[]` | List of agents to exclude from reviews |
+| `min_severity` | `"suggestion"` | Filter output to this severity or higher |
+| `language` | `""` | Force language (overridden by `--language` flag) |
+| `additional_test_patterns` | `[]` | Extra glob patterns for test files |
+| `custom_rules` | `[]` | Additional rules for compliance checks |
+
+### Example Configurations
+
+**Skip architecture reviews and only show major issues:**
+```yaml
+---
+skip_agents: ["architecture", "api-contracts"]
+min_severity: "major"
+---
+```
+
+**Save reviews to a dedicated folder:**
+```yaml
+---
+output_dir: "./docs/reviews"
+---
+```
+
+**Add custom rules:**
+```yaml
+---
+custom_rules:
+  - pattern: "console\\.log"
+    message: "Remove console.log before committing"
+    severity: "minor"
+---
+```
+
+**Provide project context:**
+```yaml
+---
+enabled: true
+---
+
+# Project Context
+
+This is a financial application. Pay extra attention to:
+- Input validation on all endpoints
+- SQL injection prevention
+- Error messages that don't leak sensitive data
+```
+
+### Priority Order
+
+Command-line flags override settings file:
+1. `--output-file` overrides `output_dir`
+2. `--language` overrides `language`
+
+## Skills
+
+Targeted review skills for specific concerns:
+
+| Skill | Trigger Phrases |
+|-------|-----------------|
+| `security-review` | "security review", "check for vulnerabilities", "audit security" |
+| `performance-review` | "check performance", "find slow code", "optimize" |
+| `bug-review` | "find bugs", "check for errors", "find edge cases" |
+| `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+
+## Architecture
+
+### Directory Structure
+
+```
+code-review/
+├── .claude-plugin/
+│   └── plugin.json              # Plugin metadata (v3.0.0)
+├── commands/
+│   ├── deep-review.md           # Deep file review (16 invocations)
+│   ├── deep-review-staged.md    # Deep staged review (16 invocations)
+│   ├── quick-review.md          # Quick file review (7 invocations)
+│   └── quick-review-staged.md   # Quick staged review (7 invocations)
+├── agents/                      # Modular agent definitions
+│   ├── compliance-agent.md      # AI instructions compliance
+│   ├── bug-detection-agent.md   # Logical errors & edge cases
+│   ├── security-agent.md        # Security vulnerabilities
+│   ├── performance-agent.md     # Performance issues
+│   ├── architecture-agent.md    # Architecture patterns
+│   ├── api-contracts-agent.md   # API compatibility
+│   ├── error-handling-agent.md  # Error handling gaps
+│   ├── test-coverage-agent.md   # Test coverage gaps
+│   └── synthesis-agent.md       # Cross-agent insights
+├── skills/                      # Targeted review skills
+│   ├── security-review/
+│   ├── performance-review/
+│   ├── bug-review/
+│   └── compliance-review/
+├── languages/                   # Language-specific configs
+│   ├── nodejs.md                # Node.js/TypeScript checks
+│   └── dotnet.md                # .NET/C# checks
+├── shared/
+│   ├── review-workflow.md       # Orchestration logic
+│   ├── validation-rules.md      # Validation process
+│   ├── output-format.md         # Output templates
+│   ├── output-schema-base.md    # Base YAML schema for all agents
+│   ├── severity-definitions.md  # Severity classification
+│   ├── gaps-mode-rules.md       # Rules for gaps mode operation
+│   └── context-discovery.md     # Context discovery instructions
+└── README.md
+```
+
+### Agent Configuration
+
+| Agent | Model | Supported Modes | Color |
+|-------|-------|-----------------|-------|
+| compliance-agent | Opus | thorough, gaps, quick | blue |
+| bug-detection-agent | Opus | thorough, gaps, quick | red |
+| security-agent | Opus | thorough, gaps, quick | magenta |
+| performance-agent | Opus | thorough, gaps, quick | yellow |
+| architecture-agent | Sonnet | thorough, quick | cyan |
+| api-contracts-agent | Sonnet | thorough, quick | green |
+| error-handling-agent | Sonnet | thorough, quick | orange |
+| test-coverage-agent | Sonnet | thorough, quick | blue |
+| synthesis-agent | Sonnet | (cross-category) | cyan |
+
+### MODE Parameter
+
+Each agent accepts a MODE parameter:
+
+| Mode | Description | Use Case |
+|------|-------------|----------|
+| **thorough** | Comprehensive review, check all issues | Default for full reviews |
+| **gaps** | Focus on subtle issues that might be missed | Additional coverage for Opus agents |
+| **quick** | Fast pass on critical issues only | Quick pre-commit checks |
+
+### Review Configurations
+
+| Command | Agents | Mode Invocations | Total Invocations |
+|---------|--------|------------------|-------------------|
+| `/deep-review` | All 9 | thorough (8) + gaps (4) + synthesis (4) | 16 |
+| `/deep-review-staged` | All 9 | thorough (8) + gaps (4) + synthesis (4) | 16 |
+| `/quick-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+| `/quick-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 
 ## Severity Levels
 
@@ -97,37 +262,25 @@ The 10-agent architecture covers these review dimensions:
 
 ### Node.js / TypeScript
 
-Detected by presence of `package.json`.
-
-**Language-specific checks:**
-- Unhandled promise rejections
-- Async/await pitfalls
-- `this` binding issues
-- Prototype pollution
-- ReDoS vulnerabilities
-- Event loop blocking
-- Memory leaks from closures
-- CommonJS vs ESM issues
-- React hooks violations
-- Test file detection: `*.test.ts`, `*.spec.ts`, `__tests__/`
+Detected by presence of `package.json`. See `languages/nodejs.md` for:
+- Bug patterns (promises, async/await, this binding)
+- Security checks (prototype pollution, ReDoS, injection)
+- Performance issues (event loop blocking, memory leaks)
+- Architecture concerns (circular imports, hooks violations)
+- Test file patterns
 
 ### .NET / C#
 
-Detected by presence of `*.csproj` or `*.sln` files.
-
-**Language-specific checks:**
-- Null reference exceptions
-- `IDisposable` not disposed
-- Async deadlocks (`Result`/`Wait()`)
-- SQL injection via string concatenation
-- Missing `[Authorize]` attributes
-- N+1 Entity Framework queries
-- Boxing/unboxing overhead
-- DI anti-patterns
-- Missing `ConfigureAwait(false)`
-- Test file detection: `*.Tests.cs`, `*Tests/` projects
+Detected by presence of `*.csproj` or `*.sln`. See `languages/dotnet.md` for:
+- Bug patterns (null references, IDisposable, async deadlocks)
+- Security checks (SQL injection, [Authorize], deserialization)
+- Performance issues (boxing, LINQ in loops, N+1 queries)
+- Architecture concerns (DI anti-patterns, controller bloat)
+- Test file patterns
 
 ## Output Format
+
+See `shared/output-format.md` for complete output templates.
 
 ### Summary Table
 
@@ -135,16 +288,15 @@ Detected by presence of `*.csproj` or `*.sln` files.
 ## Code Review
 
 **Reviewed:** 5 file(s) | **Branch:** feature/new-auth
-**Review Depth:** Comprehensive (10-agent analysis)
+**Review Depth:** Deep (9-agent analysis with thorough + gaps modes)
 
 ### Summary
 
 | Category | Critical | Major | Minor | Suggestions |
 |----------|----------|-------|-------|-------------|
-| AI Agent Instructions | 0 | 1 | 0 | 0 |
+| Compliance | 0 | 1 | 0 | 0 |
 | Bugs | 0 | 2 | 1 | 0 |
 | Security | 1 | 0 | 0 | 0 |
-| Performance | 0 | 0 | 1 | 2 |
 | ...
 ```
 
@@ -154,7 +306,7 @@ Detected by presence of `*.csproj` or `*.sln` files.
 **1. SQL Injection Vulnerability** `Critical` `Security` [2 agents]
 `src/data/UserRepository.cs:45-48`
 
-The query uses string concatenation with user input, allowing SQL injection.
+The query uses string concatenation with user input.
 
 ```suggestion
 var query = "SELECT * FROM Users WHERE Id = @id";
@@ -164,107 +316,69 @@ cmd.Parameters.AddWithValue("@id", userId);
 
 ## Workflow Integration
 
-### Pre-commit Review
+### Pre-commit Quick Review
 
 ```bash
-# Make changes
-vim src/feature.ts
-
-# Stage and review
 git add src/feature.ts
-/code-review-staged
-
-# Fix issues, then commit
-git commit -m "Add new feature"
+/quick-review-staged
+git commit -m "Add feature"
 ```
 
-### Targeted File Review
+### Comprehensive Review Before PR
 
 ```bash
-# Review specific files before modifying
-/code-review-files src/legacy/old-module.ts
-
-# Review related files together
-/code-review-files src/api/handler.ts src/models/user.ts src/services/auth.ts
+git add .
+/deep-review-staged
 ```
+
+### Targeted Security Audit
+
+Use the security-review skill for focused security analysis.
 
 ### Legacy Code Audit
 
 ```bash
-# Review critical paths before changes
-/code-review-files src/payments/processor.ts src/payments/validator.ts
+/deep-review src/legacy/critical-module.ts
 ```
 
-## Best Practices
+## Customization
 
-1. **Review incrementally**: Smaller changesets produce more focused reviews
-2. **Maintain CLAUDE.md and other AI Agent Instructions**: Clear guidelines improve compliance checking
-3. **Review related files together**: Context helps catch integration issues
-4. **Address Critical/Major first**: Focus on high-impact issues
-5. **Trust validation**: Multi-agent validation filters most false positives
+### Adding Language Support
+
+Create a new file in `languages/` following the pattern of `nodejs.md` or `dotnet.md`.
+
+### Modifying Agent Behavior
+
+Edit the agent file in `agents/` to customize:
+- Detection patterns
+- Severity classification
+- False positive rules
+
+### Creating Custom Commands
+
+Create a new `.md` file in `commands/` with the appropriate frontmatter.
 
 ## Requirements
 
 - Git repository
 - Claude Code CLI
-- For `/code-review-staged`: Staged changes (use `git add` first)
-- For `/code-review-files`: Valid file paths
+- For staged reviews: Changes staged with `git add`
+- For file reviews: Valid file paths
 
-## Technical Details
+## Version History
 
-### Workflow Steps
-
-1. **Input Validation**: Verify git repo, files/staged changes exist
-2. **Context Discovery**: Find CLAUDE.md and other AI Agent Instructions files, detect project type, find test files
-3. **Content Gathering**: Collect diffs, full files, and related context
-4. **10-Agent Review**: Parallel analysis across all dimensions
-5. **Validation**: Independent verification of each issue
-6. **Aggregation**: Deduplication, consensus scoring, severity adjustment
-7. **Output**: Formatted markdown to terminal and file
-
-### File Structure
-
-```
-code-review/
-├── .claude-plugin/
-│   └── plugin.json           # Plugin metadata
-├── commands/
-│   ├── code-review-files.md  # /code-review-files command
-│   └── code-review-staged.md # /code-review-staged command
-├── shared/
-│   └── review-workflow.md    # Shared 10-agent workflow
-└── README.md                 # This file
-```
-
-## Troubleshooting
-
-### "No staged changes to review"
-- Run `git add` to stage changes first
-- Check `git status` to verify staged files
-
-### "Not a git repository"
-- Ensure you're inside a git repository
-- Run `git rev-parse --git-dir` to verify
-
-### "No valid files specified"
-- Check file paths are correct
-- Use relative paths from repository root
-
-### Too many issues
-- Focus on Critical and Major severity first
-- Consider reviewing smaller changesets
-- Update CLAUDE.md and other AI Agent Instructions to clarify acceptable patterns
-
-### Missing language-specific checks
-- Verify `package.json` exists for Node.js detection
-- Verify `*.csproj` or `*.sln` exists for .NET detection
+- **3.0.0**: Modular architecture refactor
+  - Extracted agents to individual files
+  - Added MODE parameter (thorough, gaps, quick)
+  - Separated language configs
+  - Added targeted review skills
+  - Added quick-review and deep-review commands
+- **2.0.1**: Bug fixes
+- **2.0.0**: 10-agent architecture with validation layer
+- **1.0.0**: Initial release
 
 ## Author
 
 Jesse Naranjo
 
 Based on the code-review plugin by Boris Cherny (boris@anthropic.com)
-
-## Version
-
-2.0.1

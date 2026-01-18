@@ -1,0 +1,60 @@
+---
+enabled: true
+output_dir: "."
+skip_agents: []
+min_severity: "suggestion"
+language: ""
+additional_test_patterns: []
+custom_rules: []
+---
+
+<!-- IMPORTANT: Add `.claude/*.local.md` to your .gitignore to avoid committing project-specific settings -->
+
+# Code Review Plugin Settings
+
+Copy this file to `.claude/code-review.local.md` in your project root, then customize the settings below.
+
+> **Important:** After modifying this file, restart Claude Code for changes to take effect.
+
+## Configuration Options
+
+| Setting | Default | Description |
+|---------|---------|-------------|
+| `enabled` | `true` | Enable/disable the plugin |
+| `output_dir` | `"."` | Default output directory for review files (e.g., `"./reviews"`) |
+| `skip_agents` | `[]` | Agents to skip: compliance, bugs, security, performance, architecture, api-contracts, error-handling, test-coverage |
+| `min_severity` | `"suggestion"` | Minimum severity to report: critical, major, minor, suggestion |
+| `language` | `""` | Language override: nodejs, dotnet, or empty for auto-detection |
+| `additional_test_patterns` | `[]` | Additional glob patterns for test files (e.g., `["**/*.spec.ts"]`) |
+| `custom_rules` | `[]` | Custom rules to check (pattern, message, severity) |
+
+## Custom Rules Example
+
+Add custom rules to check in addition to CLAUDE.md rules:
+
+```yaml
+custom_rules:
+  - pattern: "console\\.log"
+    message: "Remove console.log before committing"
+    severity: "minor"
+  - pattern: "TODO|FIXME"
+    message: "Resolve TODO/FIXME comments"
+    severity: "suggestion"
+```
+
+## Project-Specific Instructions
+
+Add any additional context or instructions for code reviews in this project below.
+These instructions will be passed to all review agents.
+
+### Project Context
+
+<!-- Describe your project's architecture, key patterns, or areas of focus -->
+
+### Review Focus Areas
+
+<!-- List specific areas reviewers should pay attention to -->
+
+### Known Issues to Ignore
+
+<!-- List any known issues that should not be flagged -->

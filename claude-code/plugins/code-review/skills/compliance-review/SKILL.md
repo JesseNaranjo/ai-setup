@@ -1,0 +1,165 @@
+---
+name: compliance-review
+description: This skill should be used when the user asks to "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", "check naming conventions", or wants to ensure code follows project-specific rules and standards.
+version: 3.0.0
+---
+
+# Compliance Code Review Skill
+
+Perform a targeted compliance-focused code review against AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) to verify code adheres to project-specific rules and documented requirements.
+
+## When This Skill Triggers
+
+- CLAUDE.md compliance checking
+- Coding standards verification
+- AI agent instructions review
+- Project guidelines validation
+- Convention adherence checking
+- Architecture pattern compliance
+- Naming convention verification
+
+## Process Overview
+
+1. **Determine scope** - What code needs compliance review
+2. **Find AI Instructions** - Locate and parse all instruction files
+3. **Launch compliance agent** - Thorough mode, then gaps mode
+4. **Validate findings** - Confirm against exact rule text
+5. **Report results** - With exact rule citations
+
+For detailed procedures on steps 1, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
+
+---
+
+## Compliance-Specific Configuration
+
+### Agent Parameters
+
+- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
+- **Model:** Opus (for accurate rule interpretation)
+- **Modes:** thorough (first pass), gaps (second pass)
+
+### Instruction File Locations
+
+Search for instruction files in this priority order:
+
+| Priority | File Path |
+|----------|-----------|
+| 1 | `CLAUDE.md` (project root) |
+| 2 | `[directory]/CLAUDE.md` (subdirectory overrides) |
+| 3 | `.github/copilot-instructions.md` |
+| 4 | `.ai/AI-AGENT-INSTRUCTIONS.md` |
+| 5 | `docs/AI-INSTRUCTIONS.md` |
+
+---
+
+## Rule Classification
+
+Identify rules by keyword strength:
+
+**MUST/MUST NOT Rules → Major severity:**
+- Keywords: MUST, MUST NOT, SHALL, SHALL NOT, REQUIRED, ALWAYS, NEVER
+- Example: "All API endpoints MUST have authentication"
+
+**SHOULD/SHOULD NOT Rules → Minor severity:**
+- Keywords: SHOULD, SHOULD NOT, RECOMMENDED, PREFER
+- Example: "Functions SHOULD have JSDoc comments"
+
+**MAY/CONSIDER Rules → Suggestion severity:**
+- Keywords: MAY, OPTIONAL, CONSIDER, CAN
+- Example: "You MAY use helper functions for common patterns"
+
+---
+
+## Compliance Categories Checked
+
+**Architecture Violations (Major):**
+- Layer violations (UI importing from data layer)
+- Business logic in wrong location (controller, view)
+- Direct database access bypassing repositories
+- Circular dependencies
+
+**Naming Convention Violations (Minor to Major):**
+- File naming patterns (kebab-case, PascalCase)
+- Class/function/variable naming
+- Constant naming (UPPER_SNAKE_CASE)
+- Interface prefixing (I prefix in C#)
+
+**Documentation Requirements (Minor):**
+- Missing JSDoc/XMLDoc on public APIs
+- Undocumented complex functions
+- README updates for new features
+
+**Security Requirements (Major):**
+- Missing authentication on endpoints
+- Input validation gaps
+- Logging requirements for sensitive operations
+
+---
+
+## Compliance-Specific False Positives
+
+Do NOT flag:
+- Explicit override comments (`// claude-ignore: rule-name`)
+- Scope mismatch (rule doesn't apply to this file type)
+- Ambiguous rule (benefit of doubt to code)
+- Intentional deviation with documented reason
+- Framework exemption (framework provides required behavior)
+
+### Ignore Comment Patterns
+
+Respect these silencing patterns:
+```javascript
+// claude-ignore: no-console
+// eslint-disable-next-line rule-name
+// @ts-ignore: explanation
+```
+
+---
+
+## Rule Citation Guidelines
+
+Always include exact rule citation:
+
+- **Rule text**: Exact quoted text from instruction file
+- **Source**: File path and line number
+- **Keyword**: The strength keyword (MUST, SHOULD, MAY)
+
+Example: "The endpoint violates 'All API endpoints MUST have authentication' from CLAUDE.md:31"
+
+---
+
+## Compliance Score
+
+Include in output:
+
+```markdown
+### Compliance Score
+
+- Rules checked: 28
+- Rules passed: 24
+- Rules violated: 4
+- Compliance rate: 86%
+```
+
+---
+
+## Example Output
+
+See `examples/example-output.md` for a sample showing:
+- Missing authentication violation with diff fix
+- Business logic in controller with prompt fix
+- Missing JSDoc violation with diff fix
+
+---
+
+## Additional Resources
+
+### Reference Files
+
+For detailed compliance patterns:
+- **`references/compliance-patterns.md`** - Rule classification, common rule categories, checking process
+
+### Related Components
+
+- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
+- **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`
