@@ -267,4 +267,4 @@ Based on the code-review plugin by Boris Cherny (boris@anthropic.com)
 
 ## Version
 
-2.0.0
+2.0.1

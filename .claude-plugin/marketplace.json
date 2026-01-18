@@ -11,7 +11,7 @@
             "name": "code-review",
             "source": "./claude-code/plugins/code-review",
             "description": "Comprehensive 10-agent code review for Node.js and .NET projects with severity classification and language-specific checks",
-            "version": "2.0.0",
+            "version": "2.0.1",
             "keywords": [
                 "code-review",
                 "git",

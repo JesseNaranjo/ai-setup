@@ -26,7 +26,7 @@ Detect Node.js projects by checking for `package.json` in the repository.
 | **Performance** | Event loop blocking, memory leaks from closures/event listeners, inefficient array methods (forEach vs for), missing stream usage for large data |
 | **Architecture** | CommonJS vs ESM issues, circular imports, React hooks rules violations, improper TypeScript typing |
 | **Error Handling** | Unhandled promise rejections, missing `.catch()`, missing error boundaries (React), swallowed errors |
-| **Test Files** | `*.test.ts`, `*.spec.ts`, `*.test.js`, `*.spec.js`, `__tests__/` and `tests/` directories |
+| **Test Files** | `*.test.ts`, `*.spec.ts`, `*.test.js`, `*.spec.js`, `*-test.js`, `*-spec.js`, `__tests__/` and `tests/` directories |
 
 ### .NET (C#)
 
