@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for standalone invocation; commands may override (e.g., Sonnet for gaps mode)
 color: magenta
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.1
+version: 3.0.2
 ---
 
 # Security Review Agent

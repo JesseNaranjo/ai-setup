@@ -4,12 +4,7 @@ Patterns for checking compliance with AI Agent Instructions (CLAUDE.md, etc.).
 
 ## Instruction File Locations
 
-Check these files in order of priority:
-
-1. `CLAUDE.md` (project root)
-2. `.github/copilot-instructions.md`
-3. `.ai/AI-AGENT-INSTRUCTIONS.md`
-4. `docs/AI-INSTRUCTIONS.md`
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` Step 2 for the canonical search order.
 
 ## Rule Classification
 

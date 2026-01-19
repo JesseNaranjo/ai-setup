@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the performance agent to identify algorithmic complexity issues, blocking operations, memory allocation problems, and hot path inefficiencies."
   <commentary>User is experiencing slowness and wants to find the cause, which requires performance analysis.</commentary>
   </example>
-model: opus
+model: sonnet
 color: yellow
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.1
+version: 3.0.2
 ---
 
 # Performance Review Agent

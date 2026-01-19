@@ -2,6 +2,10 @@
 
 Load and apply project-specific settings from `.claude/code-review.local.md`.
 
+## Settings Timing
+
+Settings are loaded at command execution time, not at Claude Code startup. Changes to `.claude/code-review.local.md` take effect immediately on the next review command invocation - no restart required.
+
 ## Settings File Location
 
 ```

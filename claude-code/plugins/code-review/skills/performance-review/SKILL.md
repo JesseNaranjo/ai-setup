@@ -1,7 +1,7 @@
 ---
 name: performance-review
 description: This skill should be used when the user asks to "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", "latency issues", or mentions improving code performance.
-version: 3.0.1
+version: 3.0.2
 ---
 
 # Performance Code Review Skill
@@ -35,7 +35,7 @@ For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shar
 ### Agent Parameters
 
 - **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md`
-- **Model:** Opus (for thorough analysis)
+- **Model:** Sonnet (for efficient performance analysis)
 - **Modes:** thorough (first pass), gaps (second pass)
 
 ### Performance Categories Checked
@@ -151,6 +151,7 @@ For detailed performance patterns:
 
 ### Related Components
 
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md`
+- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md`
+- **Subagent Type:** `code-review:performance-agent` (for Task tool invocation)
 - **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
 - **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`

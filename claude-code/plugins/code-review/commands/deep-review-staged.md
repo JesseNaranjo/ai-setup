@@ -49,22 +49,26 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content g
 
 ## Step 4: Two-Phase Deep Review
 
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic and the **Agent Invocation Pattern** section in `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for the exact Task tool invocation format.
+
+**Agent invocation uses Task tool with subagent_type** (e.g., `code-review:compliance-agent`), not file paths directly.
+
 Deep review uses a sequential two-phase approach to reduce duplicates and improve gaps analysis.
 
 ### Phase 1: Thorough Review (8 agents in parallel)
 
 Launch all agents with **thorough** mode:
 
-| Agent | Model | MODE | Focus |
-|-------|-------|------|-------|
-| `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md` | Opus | thorough | Standards adherence |
-| `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md` | Opus | thorough | Logical errors, null refs, off-by-one |
-| `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` | Opus | thorough | Injection, auth, secrets, OWASP |
-| `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md` | Opus | thorough | Complexity, memory, hot paths, N+1 |
-| `${CLAUDE_PLUGIN_ROOT}/agents/architecture-agent.md` | Sonnet | thorough | Coupling, patterns, SOLID |
-| `${CLAUDE_PLUGIN_ROOT}/agents/api-contracts-agent.md` | Sonnet | thorough | Breaking changes, compatibility |
-| `${CLAUDE_PLUGIN_ROOT}/agents/error-handling-agent.md` | Sonnet | thorough | Try/catch gaps, resilience |
-| `${CLAUDE_PLUGIN_ROOT}/agents/test-coverage-agent.md` | Sonnet | thorough | Missing tests, test suggestions |
+| Agent | Subagent Type | Model | MODE | Focus |
+|-------|---------------|-------|------|-------|
+| Compliance | `code-review:compliance-agent` | Sonnet | thorough | Standards adherence |
+| Bug Detection | `code-review:bug-detection-agent` | Opus | thorough | Logical errors, null refs, off-by-one |
+| Security | `code-review:security-agent` | Opus | thorough | Injection, auth, secrets, OWASP |
+| Performance | `code-review:performance-agent` | Sonnet | thorough | Complexity, memory, hot paths, N+1 |
+| Architecture | `code-review:architecture-agent` | Sonnet | thorough | Coupling, patterns, SOLID |
+| API Contracts | `code-review:api-contracts-agent` | Sonnet | thorough | Breaking changes, compatibility |
+| Error Handling | `code-review:error-handling-agent` | Sonnet | thorough | Try/catch gaps, resilience |
+| Test Coverage | `code-review:test-coverage-agent` | Sonnet | thorough | Missing tests, test suggestions |
 
 Each agent receives:
 - The current branch name
@@ -82,12 +86,12 @@ Each agent receives:
 
 After Phase 1 completes, launch Sonnet agents with **gaps** mode, passing Phase 1 findings:
 
-| Agent | Model | MODE | Prior Findings Context |
-|-------|-------|------|------------------------|
-| `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md` | Sonnet | gaps | Phase 1 compliance issues |
-| `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md` | Sonnet | gaps | Phase 1 bug issues |
-| `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` | Sonnet | gaps | Phase 1 security issues |
-| `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md` | Sonnet | gaps | Phase 1 performance issues |
+| Agent | Subagent Type | Model | MODE | Prior Findings Context |
+|-------|---------------|-------|------|------------------------|
+| Compliance | `code-review:compliance-agent` | Sonnet | gaps | Phase 1 compliance issues |
+| Bug Detection | `code-review:bug-detection-agent` | Sonnet | gaps | Phase 1 bug issues |
+| Security | `code-review:security-agent` | Sonnet | gaps | Phase 1 security issues |
+| Performance | `code-review:performance-agent` | Sonnet | gaps | Phase 1 performance issues |
 
 Each gaps agent receives all Phase 1 inputs PLUS:
 - **previous_findings**: List of issues already flagged in this category from Phase 1
@@ -104,12 +108,12 @@ After Phase 1 and Phase 2 complete, launch 4 synthesis agents in parallel.
 
 See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 
-| Synthesis Agent | Input Categories | Cross-Cutting Question |
-|-----------------|-----------------|------------------------|
-| `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` | Security + Performance | "Do any security fixes introduce performance issues?" |
-| `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` | Architecture + Test Coverage | "Are architectural changes covered by tests?" |
-| `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
+| Synthesis Agent | Subagent Type | Input Categories | Cross-Cutting Question |
+|-----------------|---------------|-----------------|------------------------|
+| Synthesis | `code-review:synthesis-agent` | Security + Performance | "Do any security fixes introduce performance issues?" |
+| Synthesis | `code-review:synthesis-agent` | Architecture + Test Coverage | "Are architectural changes covered by tests?" |
+| Synthesis | `code-review:synthesis-agent` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
+| Synthesis | `code-review:synthesis-agent` | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
 
 Launch all 4 synthesis agents in parallel, each with their respective category pairs and findings from Phase 1 and Phase 2.
 

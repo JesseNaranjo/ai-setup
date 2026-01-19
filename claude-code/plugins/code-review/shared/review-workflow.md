@@ -28,10 +28,10 @@ Reference `shared/severity-definitions.md` for canonical severity definitions.
 
 | Agent | File | Model | Supported Modes |
 |-------|------|-------|-----------------|
-| Compliance | `agents/compliance-agent.md` | Opus | thorough, gaps, quick |
+| Compliance | `agents/compliance-agent.md` | Sonnet | thorough, gaps, quick |
 | Bug Detection | `agents/bug-detection-agent.md` | Opus | thorough, gaps, quick |
 | Security | `agents/security-agent.md` | Opus | thorough, gaps, quick |
-| Performance | `agents/performance-agent.md` | Opus | thorough, gaps, quick |
+| Performance | `agents/performance-agent.md` | Sonnet | thorough, gaps, quick |
 | Architecture | `agents/architecture-agent.md` | Sonnet | thorough, quick |
 | API Contracts | `agents/api-contracts-agent.md` | Sonnet | thorough, quick |
 | Error Handling | `agents/error-handling-agent.md` | Sonnet | thorough, quick |
@@ -55,7 +55,7 @@ This section defines the authoritative execution order for review pipelines. Eac
    - OUTPUT: Files to review, diffs, AI instructions, test files
 
 2. **Phase 1: Thorough Review** (8 agents in parallel)
-   - Launch: compliance, bug, security, performance (Opus) + architecture, api, error-handling, test-coverage (Sonnet)
+   - Launch: bug, security (Opus) + compliance, performance, architecture, api, error-handling, test-coverage (Sonnet)
    - MODE: `thorough` for all agents
    - WAIT: All 8 agents must complete before proceeding
    - OUTPUT: Phase 1 findings (grouped by category)
@@ -123,10 +123,10 @@ Deep review uses a **two-phase sequential approach** for Opus agents to reduce d
 
 | Agent | Model | MODE |
 |-------|-------|------|
-| compliance-agent | Opus | thorough |
+| compliance-agent | Sonnet | thorough |
 | bug-detection-agent | Opus | thorough |
 | security-agent | Opus | thorough |
-| performance-agent | Opus | thorough |
+| performance-agent | Sonnet | thorough |
 | architecture-agent | Sonnet | thorough |
 | api-contracts-agent | Sonnet | thorough |
 | error-handling-agent | Sonnet | thorough |
@@ -143,7 +143,7 @@ After Phase 1 completes, pass thorough findings to gaps mode agents:
 | security-agent | Sonnet | gaps | Phase 1 security findings |
 | performance-agent | Sonnet | gaps | Phase 1 performance findings |
 
-**Note**: Sonnet is used for gaps mode because this phase is constrained by prior findings context and explicit checklists in `gaps-mode-rules.md`, making it suitable for a more cost-efficient model while retaining quality. Phase 1 thorough mode (Opus) catches most issues; gaps mode focuses on subtle issues that complement those findings.
+**Note**: Sonnet is used for gaps mode because this phase is constrained by prior findings context and explicit checklists in `gaps-mode-rules.md`, making it suitable for a more cost-efficient model while retaining quality. Phase 1 thorough mode catches most issues; gaps mode focuses on subtle issues that complement those findings.
 
 Gaps mode agents receive prior findings to:
 - Skip issues already flagged (same file + overlapping lines)
@@ -359,12 +359,12 @@ Review execution varies by review type:
 #### Deep Review: Two-Phase Sequential Approach
 
 **Phase 1: Launch 8 agents with thorough mode in parallel**
-- All 4 Opus agents (compliance, bug-detection, security, performance) in thorough mode
-- All 4 Sonnet agents (architecture, api-contracts, error-handling, test-coverage) in thorough mode
+- 2 Opus agents (bug-detection, security) in thorough mode
+- 6 Sonnet agents (compliance, performance, architecture, api-contracts, error-handling, test-coverage) in thorough mode
 
 Wait for all Phase 1 agents to complete and collect their findings.
 
-**Phase 2: Launch 4 Opus agents with gaps mode in parallel**
+**Phase 2: Launch 4 Sonnet agents with gaps mode in parallel**
 
 Pass Phase 1 findings as context to gaps mode agents. Each agent receives findings from its own category:
 
@@ -456,10 +456,10 @@ Return findings as YAML per shared/output-schema-base.md.
 
 | Agent | Model (thorough) | Model (gaps) |
 |-------|------------------|--------------|
-| compliance-agent | opus | sonnet |
+| compliance-agent | sonnet | sonnet |
 | bug-detection-agent | opus | sonnet |
 | security-agent | opus | sonnet |
-| performance-agent | opus | sonnet |
+| performance-agent | sonnet | sonnet |
 | architecture-agent | sonnet | N/A |
 | api-contracts-agent | sonnet | N/A |
 | error-handling-agent | sonnet | N/A |
@@ -467,7 +467,8 @@ Return findings as YAML per shared/output-schema-base.md.
 | synthesis-agent | sonnet | N/A |
 
 **Important**: Always pass the `model` parameter explicitly when invoking Task:
-- Use `model: "opus"` for thorough mode (comprehensive analysis requires stronger reasoning)
+- Use `model: "opus"` for bug-detection and security agents in thorough mode (require nuanced judgment)
+- Use `model: "sonnet"` for compliance, performance, and all other agents in thorough mode (pattern-based detection)
 - Use `model: "sonnet"` for gaps mode (constrained task with prior findings context)
 - Use `model: "sonnet"` for synthesis agents (cross-category correlation)
 

@@ -49,14 +49,18 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content g
 
 ## Step 4: 4-Agent Quick Review
 
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic and the **Agent Invocation Pattern** section in `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for the exact Task tool invocation format.
+
+**Agent invocation uses Task tool with subagent_type** (e.g., `code-review:bug-detection-agent`), not file paths directly.
+
 Launch 4 agents in parallel with **quick** mode:
 
-| Agent | Model | MODE | Focus |
-|-------|-------|------|-------|
-| `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md` | Opus | quick | Obvious bugs, null refs, clear logical errors |
-| `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` | Opus | quick | Critical security issues, injection, hardcoded secrets |
-| `${CLAUDE_PLUGIN_ROOT}/agents/error-handling-agent.md` | Sonnet | quick | Missing error handling, swallowed exceptions |
-| `${CLAUDE_PLUGIN_ROOT}/agents/test-coverage-agent.md` | Sonnet | quick | Critical paths without tests |
+| Agent | Subagent Type | Model | MODE | Focus |
+|-------|---------------|-------|------|-------|
+| Bug Detection | `code-review:bug-detection-agent` | Opus | quick | Obvious bugs, null refs, clear logical errors |
+| Security | `code-review:security-agent` | Opus | quick | Critical security issues, injection, hardcoded secrets |
+| Error Handling | `code-review:error-handling-agent` | Sonnet | quick | Missing error handling, swallowed exceptions |
+| Test Coverage | `code-review:test-coverage-agent` | Sonnet | quick | Critical paths without tests |
 
 Each agent receives:
 - The current branch name
@@ -81,11 +85,11 @@ After the 4-agent review, launch 3 synthesis agents in parallel.
 
 See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 
-| Synthesis Agent | Input Categories | Cross-Cutting Question |
-|-----------------|-----------------|------------------------|
-| `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` | Security + Bugs | "Do security issues introduce or relate to bugs?" |
-| `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
+| Synthesis Agent | Subagent Type | Input Categories | Cross-Cutting Question |
+|-----------------|---------------|-----------------|------------------------|
+| Synthesis | `code-review:synthesis-agent` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
+| Synthesis | `code-review:synthesis-agent` | Security + Bugs | "Do security issues introduce or relate to bugs?" |
+| Synthesis | `code-review:synthesis-agent` | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
 
 Launch all 3 synthesis agents in parallel, each with their respective category pairs.
 

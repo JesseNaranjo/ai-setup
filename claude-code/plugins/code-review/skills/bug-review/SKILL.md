@@ -1,7 +1,7 @@
 ---
 name: bug-review
 description: This skill should be used when the user asks to "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", "debug this code", or wants to identify potential bugs in code.
-version: 3.0.1
+version: 3.0.2
 ---
 
 # Bug Detection Code Review Skill
@@ -143,6 +143,7 @@ For detailed bug patterns:
 
 ### Related Components
 
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md`
+- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md`
+- **Subagent Type:** `code-review:bug-detection-agent` (for Task tool invocation)
 - **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
 - **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`

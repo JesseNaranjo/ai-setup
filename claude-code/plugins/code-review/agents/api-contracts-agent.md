@@ -26,7 +26,7 @@ description: |
 model: sonnet
 color: green
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.1
+version: 3.0.2
 ---
 
 # API & Contracts Review Agent

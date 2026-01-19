@@ -1,7 +1,7 @@
 ---
 name: security-review
 description: This skill should be used when the user asks to "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", "OWASP check", or mentions reviewing code specifically for security concerns.
-version: 3.0.1
+version: 3.0.2
 ---
 
 # Security Code Review Skill
@@ -139,6 +139,7 @@ For detailed vulnerability patterns:
 
 ### Related Components
 
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md`
+- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md`
+- **Subagent Type:** `code-review:security-agent` (for Task tool invocation)
 - **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
 - **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`

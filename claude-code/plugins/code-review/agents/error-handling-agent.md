@@ -26,7 +26,7 @@ description: |
 model: sonnet
 color: orange
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.1
+version: 3.0.2
 ---
 
 # Error Handling Review Agent

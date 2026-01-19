@@ -14,7 +14,7 @@ custom_rules: []
 
 Copy this file to `.claude/code-review.local.md` in your project root, then customize the settings below.
 
-> **Important:** After modifying this file, restart Claude Code for changes to take effect.
+> **Note:** Settings are read each time a review command runs. No restart required.
 
 ## Configuration Options
 

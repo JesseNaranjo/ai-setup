@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.0.1) - a modular 9-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.0.2) - a modular 9-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -34,7 +34,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ```
 claude-code/plugins/code-review/
-├── .claude-plugin/plugin.json       # Plugin metadata (v3.0.1)
+├── .claude-plugin/plugin.json       # Plugin metadata (v3.0.2)
 ├── commands/                        # Slash command definitions
 │   ├── deep-review.md               # Deep file review (16 agent invocations)
 │   ├── deep-review-staged.md        # Deep staged review (16 agent invocations)
@@ -86,14 +86,18 @@ claude-code/plugins/code-review/
 │   ├── content-gathering-staged.md  # Staged content gathering
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── review-workflow.md           # Orchestration logic + agent invocation pattern
-│   ├── skill-common-workflow.md     # Common skill workflow steps (NEW)
+│   ├── skill-common-workflow.md     # Common skill workflow steps (lean, references details)
 │   ├── validation-rules.md          # Validation process
 │   ├── output-format.md             # Output templates (with fix_type)
 │   ├── output-generation.md         # Output generation and file writing
 │   ├── output-schema-base.md        # Base YAML schema for all agents
 │   ├── severity-definitions.md      # Severity classification
 │   ├── gaps-mode-rules.md           # Rules for gaps mode operation
-│   └── false-positives.md           # False positive rules
+│   ├── false-positives.md           # False positive rules
+│   └── references/                  # Detailed reference content (progressive disclosure)
+│       ├── scope-determination.md   # Detailed scope options and edge cases
+│       ├── validation-details.md    # Batch validation and false positive handling
+│       └── skill-troubleshooting.md # Common issues and solutions
 ├── templates/
 │   └── code-review.local.md.example # Settings template for users
 └── README.md
@@ -103,10 +107,10 @@ claude-code/plugins/code-review/
 
 | Agent | Model | Modes | Focus |
 |-------|-------|-------|-------|
-| compliance-agent | Opus | thorough, gaps, quick | AI instructions compliance |
+| compliance-agent | Sonnet | thorough, gaps, quick | AI instructions compliance |
 | bug-detection-agent | Opus | thorough, gaps, quick | Bugs & edge cases |
 | security-agent | Opus | thorough, gaps, quick | Security vulnerabilities |
-| performance-agent | Opus | thorough, gaps, quick | Performance issues |
+| performance-agent | Sonnet | thorough, gaps, quick | Performance issues |
 | architecture-agent | Sonnet | thorough, quick | Architecture patterns |
 | api-contracts-agent | Sonnet | thorough, quick | API compatibility |
 | error-handling-agent | Sonnet | thorough, quick | Error handling |
@@ -115,15 +119,15 @@ claude-code/plugins/code-review/
 
 ### Deep Review Pipeline
 
-1. **Phase 1** (8 agents parallel): Thorough mode review
-2. **Phase 2** (4 Opus agents parallel): Gaps mode with Phase 1 findings as context
+1. **Phase 1** (8 agents parallel): Thorough mode review (2 Opus, 6 Sonnet)
+2. **Phase 2** (4 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
 3. **Phase 3** (4 synthesis agents parallel): Cross-cutting concern detection
 4. **Validation**: All issues validated before output
 
 ### MODE Parameter
 
 - **thorough**: Comprehensive review, check all issues
-- **gaps**: Focus on subtle issues, receives prior findings to skip duplicates (Opus agents only)
+- **gaps**: Focus on subtle issues, receives prior findings to skip duplicates (uses Sonnet for cost efficiency)
 - **quick**: Fast pass on critical issues only
 
 ### Actionable Fix Formats
@@ -138,12 +142,16 @@ claude-code/plugins/code-review/
 - `shared/settings-loader.md` - Settings loading and application
 - `shared/input-validation-*.md` - Input validation for file/staged commands
 - `shared/content-gathering-*.md` - Content gathering for file/staged commands
+- `shared/context-discovery.md` - AI Agent Instructions and project type detection
 - `shared/review-workflow.md` - Orchestration, workflow steps, and agent invocation pattern
-- `shared/skill-common-workflow.md` - Shared workflow steps for skills (scope, context, validation, reporting)
+- `shared/skill-common-workflow.md` - Lean workflow steps for skills (references `shared/references/` for details)
 - `shared/validation-rules.md` - Issue validation process
-- `shared/output-format.md` - Output formatting templates
-- `shared/output-generation.md` - Output generation and file writing
-- `shared/false-positives.md` - False positive rules
+- `shared/output-schema-base.md` - Base YAML schema all agents must use
+- `shared/output-format.md` - Output formatting templates with fix_type
+- `shared/output-generation.md` - Output generation and file writing process
+- `shared/severity-definitions.md` - Severity classification (Critical, Major, Minor, Suggestion)
+- `shared/gaps-mode-rules.md` - Rules for gaps mode (deduplication, focus areas)
+- `shared/false-positives.md` - False positive rules to prevent invalid findings
 - `commands/*.md` - Define command interfaces (reference shared components)
 - `skills/*/SKILL.md` - Skill definitions (reference skill-common-workflow.md)
 - `templates/code-review.local.md.example` - User settings template
@@ -211,6 +219,6 @@ Skills reference `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for com
 
 ## Version Management
 
-Update version in both:
-- `claude-code/plugins/code-review/.claude-plugin/plugin.json`
-- `.claude-plugin/marketplace.json`
+Update version in both locations:
+- **Plugin**: `claude-code/plugins/code-review/.claude-plugin/plugin.json`
+- **Repository root**: `.claude-plugin/marketplace.json` (at repo root, not inside the plugin)

@@ -1,7 +1,7 @@
 ---
 name: compliance-review
 description: This skill should be used when the user asks to "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", "check naming conventions", or wants to ensure code follows project-specific rules and standards.
-version: 3.0.1
+version: 3.0.2
 ---
 
 # Compliance Code Review Skill
@@ -35,38 +35,18 @@ For detailed procedures on steps 1, 2 (project type detection), 4, and 5, see `$
 ### Agent Parameters
 
 - **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
-- **Model:** Opus (for accurate rule interpretation)
+- **Model:** Sonnet (for efficient compliance checking)
 - **Modes:** thorough (first pass), gaps (second pass)
 
 ### Instruction File Locations (Part of Step 2)
 
-Search for instruction files in this priority order:
-
-| Priority | File Path |
-|----------|-----------|
-| 1 | `CLAUDE.md` (project root) |
-| 2 | `[directory]/CLAUDE.md` (subdirectory overrides) |
-| 3 | `.github/copilot-instructions.md` |
-| 4 | `.ai/AI-AGENT-INSTRUCTIONS.md` |
-| 5 | `docs/AI-INSTRUCTIONS.md` |
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` Step 2 for the canonical search order.
 
 ---
 
 ## Rule Classification
 
-Identify rules by keyword strength:
-
-**MUST/MUST NOT Rules → Major severity:**
-- Keywords: MUST, MUST NOT, SHALL, SHALL NOT, REQUIRED, ALWAYS, NEVER
-- Example: "All API endpoints MUST have authentication"
-
-**SHOULD/SHOULD NOT Rules → Minor severity:**
-- Keywords: SHOULD, SHOULD NOT, RECOMMENDED, PREFER
-- Example: "Functions SHOULD have JSDoc comments"
-
-**MAY/CONSIDER Rules → Suggestion severity:**
-- Keywords: MAY, OPTIONAL, CONSIDER, CAN
-- Example: "You MAY use helper functions for common patterns"
+For rule classification (MUST/SHOULD/MAY keywords and severity mapping), see `references/compliance-patterns.md`.
 
 ---
 
@@ -174,6 +154,7 @@ For detailed compliance patterns:
 
 ### Related Components
 
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
+- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
+- **Subagent Type:** `code-review:compliance-agent` (for Task tool invocation)
 - **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
 - **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`

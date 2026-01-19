@@ -181,7 +181,7 @@ Targeted review skills for specific concerns:
 ```
 code-review/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin metadata (v3.0.1)
+│   └── plugin.json              # Plugin metadata (v3.0.2)
 ├── commands/
 │   ├── deep-review.md           # Deep file review (16 invocations)
 │   ├── deep-review-staged.md    # Deep staged review (16 invocations)
@@ -206,13 +206,25 @@ code-review/
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── dotnet.md                # .NET/C# checks
 ├── shared/
-│   ├── review-workflow.md       # Orchestration logic
-│   ├── validation-rules.md      # Validation process
-│   ├── output-format.md         # Output templates
-│   ├── output-schema-base.md    # Base YAML schema for all agents
-│   ├── severity-definitions.md  # Severity classification
-│   ├── gaps-mode-rules.md       # Rules for gaps mode operation
-│   └── context-discovery.md     # Context discovery instructions
+│   ├── content-gathering-files.md   # Content gathering for file reviews
+│   ├── content-gathering-staged.md  # Content gathering for staged reviews
+│   ├── context-discovery.md         # Context discovery instructions
+│   ├── false-positives.md           # False positive rules
+│   ├── gaps-mode-rules.md           # Rules for gaps mode operation
+│   ├── input-validation-files.md    # Input validation for file commands
+│   ├── input-validation-staged.md   # Input validation for staged commands
+│   ├── output-format.md             # Output templates
+│   ├── output-generation.md         # Output generation and file writing
+│   ├── output-schema-base.md        # Base YAML schema for all agents
+│   ├── review-workflow.md           # Orchestration logic
+│   ├── settings-loader.md           # Settings loading and application
+│   ├── severity-definitions.md      # Severity classification
+│   ├── skill-common-workflow.md     # Lean skill workflow (references details)
+│   ├── validation-rules.md          # Validation process
+│   └── references/                  # Detailed reference content
+│       ├── scope-determination.md   # Scope options and edge cases
+│       ├── validation-details.md    # Batch validation procedures
+│       └── skill-troubleshooting.md # Common issues and solutions
 └── README.md
 ```
 
@@ -220,14 +232,14 @@ code-review/
 
 | Agent | Model | Supported Modes | Color |
 |-------|-------|-----------------|-------|
-| compliance-agent | Opus | thorough, gaps, quick | blue |
+| compliance-agent | Sonnet | thorough, gaps, quick | blue |
 | bug-detection-agent | Opus | thorough, gaps, quick | red |
 | security-agent | Opus | thorough, gaps, quick | magenta |
-| performance-agent | Opus | thorough, gaps, quick | yellow |
+| performance-agent | Sonnet | thorough, gaps, quick | yellow |
 | architecture-agent | Sonnet | thorough, quick | cyan |
 | api-contracts-agent | Sonnet | thorough, quick | green |
 | error-handling-agent | Sonnet | thorough, quick | orange |
-| test-coverage-agent | Sonnet | thorough, quick | blue |
+| test-coverage-agent | Sonnet | thorough, quick | purple |
 | synthesis-agent | Sonnet | (cross-category) | cyan |
 
 > **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
@@ -369,7 +381,13 @@ Create a new `.md` file in `commands/` with the appropriate frontmatter.
 
 ## Version History
 
-- **3.0.1**: Modular architecture refactor
+- **3.0.2**: Documentation consistency update
+  - Fixed version references across documentation
+  - Corrected agent model table (compliance, performance → Sonnet)
+  - Fixed test-coverage-agent color (blue → purple)
+  - Clarified gaps mode uses Sonnet for cost efficiency
+- **3.0.1**: Switched compliance and performance agents to Sonnet model for cost efficiency
+- **3.0.0**: Modular architecture refactor
   - Extracted agents to individual files
   - Added MODE parameter (thorough, gaps, quick)
   - Separated language configs
