@@ -1,19 +1,15 @@
 ---
-name: deep-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Deep code review with 16 agent invocations (8 thorough + 4 gaps + 4 synthesis)
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet]"
+model: opus
 ---
 
-Provide a deep 9-agent code review for staged git changes. This uses all 9 agents with both thorough and gaps modes for maximum coverage.
+Perform a deep 9-agent code review for staged git changes. Execute all 9 agents with both thorough and gaps modes for maximum coverage.
 
-**Use this when**: You need the most comprehensive review before merging critical changes.
-
-Example usage:
-- `/deep-review-staged`
-- `/deep-review-staged --output-file review.md`
-- `/deep-review-staged --language nodejs` (force Node.js/TypeScript checks)
-- `/deep-review-staged --language dotnet` (force .NET/C# checks)
+Parse arguments from `$ARGUMENTS`:
+- Optional: `--output-file <path>` to specify output location
+- Optional: `--language nodejs|dotnet` to force language detection
 
 ---
 
@@ -82,23 +78,23 @@ Each agent receives:
 
 **Wait for all Phase 1 agents to complete before proceeding.**
 
-### Phase 2: Gaps Review with Context (4 Opus agents in parallel)
+### Phase 2: Gaps Review with Context (4 Sonnet agents in parallel)
 
-After Phase 1 completes, launch Opus agents with **gaps** mode, passing Phase 1 findings:
+After Phase 1 completes, launch Sonnet agents with **gaps** mode, passing Phase 1 findings:
 
 | Agent | Model | MODE | Prior Findings Context |
 |-------|-------|------|------------------------|
-| `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md` | Opus | gaps | Phase 1 compliance issues |
-| `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md` | Opus | gaps | Phase 1 bug issues |
-| `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` | Opus | gaps | Phase 1 security issues |
-| `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md` | Opus | gaps | Phase 1 performance issues |
+| `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md` | Sonnet | gaps | Phase 1 compliance issues |
+| `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md` | Sonnet | gaps | Phase 1 bug issues |
+| `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` | Sonnet | gaps | Phase 1 security issues |
+| `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md` | Sonnet | gaps | Phase 1 performance issues |
 
 Each gaps agent receives all Phase 1 inputs PLUS:
 - **previous_findings**: List of issues already flagged in this category from Phase 1
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
 
-**Note**: Phase 2 only uses the 4 Opus agents because Sonnet agents only support thorough and quick modes.
+**Note**: Sonnet is used for gaps mode because this phase is constrained by prior findings context and explicit checklists, making it suitable for a more cost-efficient model while retaining quality.
 
 ---
 

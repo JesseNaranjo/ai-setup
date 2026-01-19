@@ -1,29 +1,29 @@
 ---
 name: security-review
 description: This skill should be used when the user asks to "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", "OWASP check", or mentions reviewing code specifically for security concerns.
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Security Code Review Skill
 
-Perform a targeted security-focused code review to identify vulnerabilities, insecure coding patterns, and security misconfigurations.
+Identify vulnerabilities, insecure coding patterns, and security misconfigurations through targeted security-focused code review.
 
-## When This Skill Triggers
+## Applicable Contexts
 
-- Security audits or vulnerability scanning
-- Review for injection attacks (SQL, command, XSS)
-- Detection of hardcoded secrets or credentials
-- Authentication and authorization review
-- Cryptographic implementation review
-- Input validation checks
+- Security audits and vulnerability scanning
+- Injection attack detection (SQL, command, XSS)
+- Hardcoded secrets and credentials detection
+- Authentication and authorization verification
+- Cryptographic implementation analysis
+- Input validation assessment
 
 ## Process Overview
 
-1. **Determine scope** - What code needs security review
-2. **Gather context** - Project type, AI instructions, related code
-3. **Launch security agent** - Thorough mode, then gaps mode
-4. **Validate findings** - Filter false positives
-5. **Report results** - Severity-prioritized with fixes
+1. **Determine scope** - Identify code requiring security review
+2. **Gather context** - Collect project type, AI instructions, and related code
+3. **Launch security agent** - Execute thorough mode, then gaps mode
+4. **Validate findings** - Filter false positives from results
+5. **Report results** - Generate severity-prioritized output with fixes
 
 For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
 

@@ -1,23 +1,16 @@
 ---
-name: quick-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Quick code review with 7 agent invocations (4 review + 3 synthesis)
 argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet]"
+model: opus
 ---
 
-Provide a fast 4-agent code review for specific files. If a file has uncommitted changes, review those changes. If a file has no uncommitted changes, review the entire file.
+Perform a fast 4-agent code review for the specified files, focusing on bugs, security, error handling, and test coverage. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
-**Use this when**: You need a fast review of specific files, focusing on bugs, security, error handling, and test coverage.
-
-**For comprehensive review**: Use `/deep-review` instead (16 agent invocations with thorough + gaps + synthesis modes).
-
-**Required argument**: One or more file paths to review (space-separated)
-
-Example usage:
-- `/quick-review src/utils.ts`
-- `/quick-review src/api/handler.ts src/models/user.ts`
-- `/quick-review --output-file review.md src/feature.ts`
-- `/quick-review --language nodejs src/feature.ts` (force Node.js/TypeScript checks)
+Parse arguments from `$ARGUMENTS`:
+- Required: One or more file paths (space-separated)
+- Optional: `--output-file <path>` to specify output location
+- Optional: `--language nodejs|dotnet` to force language detection
 
 ---
 
@@ -128,7 +121,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROO
 
 **Categories to include in summary table**: 4 only (Bugs, Security, Error Handling, Test Coverage)
 
-**Footer note**: *For comprehensive review (compliance, performance, architecture, API), run `/deep-review <files>`*
+**Footer note**: *For comprehensive review, run `/deep-review <files>` or `/deep-review-staged` for staged changes.*
 
 ---
 

@@ -26,7 +26,7 @@ description: |
 model: opus
 color: red
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Bug Detection Review Agent

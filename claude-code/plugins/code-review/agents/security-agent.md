@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the security agent to scan for hardcoded secrets, API keys, passwords, and other exposed credentials in your code."
   <commentary>User asked specifically about hardcoded secrets, which is one of the key vulnerability types this agent detects.</commentary>
   </example>
-model: opus
+model: opus  # Default for standalone invocation; commands may override (e.g., Sonnet for gaps mode)
 color: magenta
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Security Review Agent

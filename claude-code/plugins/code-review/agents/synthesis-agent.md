@@ -26,7 +26,7 @@ description: |
 model: sonnet
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Cross-Agent Synthesis Agent
@@ -130,7 +130,7 @@ synthesis_input:
 
 ```
 Task(
-  subagent_type: "agents/synthesis-agent.md",
+  subagent_type: "code-review:synthesis-agent",
   model: "sonnet",
   prompt: """
 Analyze cross-cutting concerns between Security and Performance findings.
@@ -164,7 +164,7 @@ synthesis_input:
       diff: "[diff content]"
       full_content: "[full file]"
 
-Follow synthesis-agent.md instructions to identify cross-cutting concerns.
+Follow the synthesis-agent instructions to identify cross-cutting concerns.
 Return findings as cross_cutting_insights YAML list.
 """
 )

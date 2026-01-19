@@ -26,7 +26,7 @@ description: |
 model: sonnet
 color: purple
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Test Coverage Review Agent

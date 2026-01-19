@@ -1,30 +1,30 @@
 ---
 name: performance-review
 description: This skill should be used when the user asks to "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", "latency issues", or mentions improving code performance.
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Performance Code Review Skill
 
-Perform a targeted performance-focused code review to identify algorithmic inefficiencies, memory leaks, database query problems, and other performance bottlenecks.
+Identify algorithmic inefficiencies, memory leaks, database query problems, and other performance bottlenecks through targeted performance-focused code review.
 
-## When This Skill Triggers
+## Applicable Contexts
 
-- Performance optimization review
+- Performance optimization analysis
 - N+1 query detection
 - Memory leak identification
 - Algorithmic complexity analysis (Big O)
 - Database query optimization
 - Hot path identification and tuning
-- Async/await performance issues
+- Async/await performance issue detection
 
 ## Process Overview
 
-1. **Determine scope** - What code needs performance review
-2. **Gather context** - Project type, hot paths, database code
-3. **Launch performance agent** - Thorough mode, then gaps mode
-4. **Validate findings** - Filter micro-optimizations
-5. **Report results** - With complexity analysis and impact
+1. **Determine scope** - Identify code requiring performance review
+2. **Gather context** - Collect project type, hot paths, and database code
+3. **Launch performance agent** - Execute thorough mode, then gaps mode
+4. **Validate findings** - Filter micro-optimizations from results
+5. **Report results** - Generate output with complexity analysis and impact
 
 For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
 

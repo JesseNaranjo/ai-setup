@@ -1,30 +1,30 @@
 ---
 name: bug-review
 description: This skill should be used when the user asks to "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", "debug this code", or wants to identify potential bugs in code.
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Bug Detection Code Review Skill
 
-Perform a targeted bug-focused code review to identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs.
+Identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs through targeted bug-focused code review.
 
-## When This Skill Triggers
+## Applicable Contexts
 
-- Bug hunting or error detection
-- Null reference or undefined checks
+- Bug hunting and error detection
+- Null reference and undefined value checking
 - Race condition analysis
 - Off-by-one error detection
 - Edge case identification
 - Type coercion bug detection
-- Async/await correctness review
+- Async/await correctness verification
 
 ## Process Overview
 
-1. **Determine scope** - What code needs bug review
-2. **Gather context** - Project type, related tests, AI instructions
-3. **Launch bug agent** - Thorough mode, then gaps mode
-4. **Validate findings** - Filter theoretical bugs
-5. **Report results** - With reproduction conditions
+1. **Determine scope** - Identify code requiring bug review
+2. **Gather context** - Collect project type, related tests, and AI instructions
+3. **Launch bug agent** - Execute thorough mode, then gaps mode
+4. **Validate findings** - Filter theoretical bugs from results
+5. **Report results** - Generate output with reproduction conditions
 
 For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
 

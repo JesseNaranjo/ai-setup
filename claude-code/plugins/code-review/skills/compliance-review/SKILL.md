@@ -1,14 +1,14 @@
 ---
 name: compliance-review
 description: This skill should be used when the user asks to "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", "check naming conventions", or wants to ensure code follows project-specific rules and standards.
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Compliance Code Review Skill
 
-Perform a targeted compliance-focused code review against AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) to verify code adheres to project-specific rules and documented requirements.
+Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) and project-specific rules through targeted compliance-focused code review.
 
-## When This Skill Triggers
+## Applicable Contexts
 
 - CLAUDE.md compliance checking
 - Coding standards verification
@@ -20,13 +20,13 @@ Perform a targeted compliance-focused code review against AI Agent Instructions 
 
 ## Process Overview
 
-1. **Determine scope** - What code needs compliance review
-2. **Find AI Instructions** - Locate and parse all instruction files
-3. **Launch compliance agent** - Thorough mode, then gaps mode
-4. **Validate findings** - Confirm against exact rule text
-5. **Report results** - With exact rule citations
+1. **Determine scope** - Identify code requiring compliance review
+2. **Gather context** - Detect project type and locate all AI instruction files
+3. **Launch compliance agent** - Execute thorough mode, then gaps mode
+4. **Validate findings** - Confirm issues against exact rule text
+5. **Report results** - Generate output with exact rule citations
 
-For detailed procedures on steps 1, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
+For detailed procedures on steps 1, 2 (project type detection), 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
 
 ---
 
@@ -38,7 +38,7 @@ For detailed procedures on steps 1, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/
 - **Model:** Opus (for accurate rule interpretation)
 - **Modes:** thorough (first pass), gaps (second pass)
 
-### Instruction File Locations
+### Instruction File Locations (Part of Step 2)
 
 Search for instruction files in this priority order:
 
@@ -93,6 +93,19 @@ Identify rules by keyword strength:
 - Missing authentication on endpoints
 - Input validation gaps
 - Logging requirements for sensitive operations
+
+---
+
+## Auto-Validated Patterns
+
+These high-confidence patterns skip validation:
+
+| Pattern | Description |
+|---------|-------------|
+| `missing_authorize_attribute` | Controller action without `[Authorize]` when CLAUDE.md requires auth |
+| `wrong_case_filename` | File using wrong case pattern (e.g., PascalCase in Node.js project) |
+| `explicit_must_violation` | Code contradicts explicit "MUST" or "MUST NOT" rule with exact match |
+| `missing_required_jsdoc` | Public API without JSDoc when CLAUDE.md requires documentation |
 
 ---
 
@@ -162,4 +175,5 @@ For detailed compliance patterns:
 ### Related Components
 
 - **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
+- **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
 - **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`

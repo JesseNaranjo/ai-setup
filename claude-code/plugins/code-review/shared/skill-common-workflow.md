@@ -82,12 +82,23 @@ For each file being reviewed, search for corresponding test file:
 
 ### Agent Invocation Pattern
 
-Use the Task tool to launch agents. Note: Plugin agents are NOT registered as subagent types. Use "Explore" as the subagent_type and reference the agent file via `${CLAUDE_PLUGIN_ROOT}` in the prompt:
+Use the Task tool to launch agents. Plugin agents are registered as subagent types with the pattern `code-review:[agent-name]`:
+
+| Agent | Subagent Type |
+|-------|---------------|
+| Security | `code-review:security-agent` |
+| Bug Detection | `code-review:bug-detection-agent` |
+| Performance | `code-review:performance-agent` |
+| Compliance | `code-review:compliance-agent` |
+| Architecture | `code-review:architecture-agent` |
+| API Contracts | `code-review:api-contracts-agent` |
+| Error Handling | `code-review:error-handling-agent` |
+| Test Coverage | `code-review:test-coverage-agent` |
+| Synthesis | `code-review:synthesis-agent` |
 
 ```
 Task(
-  subagent_type: "Explore",
-  model: "opus",  // or "sonnet" per agent config
+  subagent_type: "code-review:security-agent",  // Use registered agent type
   description: "[Agent name] review for [scope]",
   prompt: """
 MODE: [thorough|gaps|quick]
@@ -109,7 +120,6 @@ ai_instructions:
 
 [Additional context specific to agent type]
 
-Follow ${CLAUDE_PLUGIN_ROOT}/agents/[agent-name].md instructions.
 Return findings as YAML per shared/output-schema-base.md.
 """
 )

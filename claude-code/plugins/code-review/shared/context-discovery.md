@@ -66,12 +66,17 @@ The override takes precedence over auto-detection.
 
 For each file being reviewed, find corresponding test files based on detected language.
 
-**Node.js/TypeScript test patterns** (see `languages/nodejs.md`):
+**Merge user-configured patterns:**
+
+If `additional_test_patterns` is provided in the settings file (`.claude/code-review.local.md`), merge these patterns with the default patterns below. User patterns are checked in addition to the defaults.
+
+**Node.js/TypeScript test patterns** (defaults from `languages/nodejs.md`):
 - `*.test.ts`, `*.spec.ts`
 - `*.test.js`, `*.spec.js`
 - `*-test.js`, `*-spec.js`
 - Files in `__tests__/` directories
 - Files in `tests/` directories
+- **Plus any patterns from `additional_test_patterns` setting**
 
 Search strategy:
 1. Same directory as source file
@@ -79,12 +84,13 @@ Search strategy:
 3. Parallel `tests/` directory
 4. Match by filename (e.g., `utils.ts` → `utils.test.ts`)
 
-**/.NET/C# test patterns** (see `languages/dotnet.md`):
+**/.NET/C# test patterns** (defaults from `languages/dotnet.md`):
 - `*.Tests.cs`
 - Files in `*Tests/` projects
 - Files in `*.UnitTests/` projects
 - Files in `*.IntegrationTests/` projects
 - Files in `tests/` directories
+- **Plus any patterns from `additional_test_patterns` setting**
 
 Search strategy:
 1. Test project with matching name (e.g., `Services` → `Services.Tests`)

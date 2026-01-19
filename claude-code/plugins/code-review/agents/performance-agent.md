@@ -26,7 +26,7 @@ description: |
 model: opus
 color: yellow
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.0
+version: 3.0.1
 ---
 
 # Performance Review Agent

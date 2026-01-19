@@ -181,7 +181,7 @@ Targeted review skills for specific concerns:
 ```
 code-review/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin metadata (v3.0.0)
+│   └── plugin.json              # Plugin metadata (v3.0.1)
 ├── commands/
 │   ├── deep-review.md           # Deep file review (16 invocations)
 │   ├── deep-review-staged.md    # Deep staged review (16 invocations)
@@ -229,6 +229,8 @@ code-review/
 | error-handling-agent | Sonnet | thorough, quick | orange |
 | test-coverage-agent | Sonnet | thorough, quick | blue |
 | synthesis-agent | Sonnet | (cross-category) | cyan |
+
+> **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
 
 ### MODE Parameter
 
@@ -367,7 +369,7 @@ Create a new `.md` file in `commands/` with the appropriate frontmatter.
 
 ## Version History
 
-- **3.0.0**: Modular architecture refactor
+- **3.0.1**: Modular architecture refactor
   - Extracted agents to individual files
   - Added MODE parameter (thorough, gaps, quick)
   - Separated language configs

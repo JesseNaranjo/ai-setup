@@ -1,20 +1,15 @@
 ---
-name: quick-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Quick code review with 7 agent invocations (4 review + 3 synthesis)
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet]"
+model: opus
 ---
 
-Provide a fast 4-agent code review for staged git changes. This is a quick review focusing on the most critical issues only.
+Perform a fast 4-agent code review for staged git changes, focusing on bugs, security, error handling, and test coverage.
 
-**Use this when**: You need a fast review before committing, focusing on bugs, security, error handling, and test coverage.
-
-**For comprehensive review**: Use `/deep-review-staged` instead (16 agent invocations with thorough + gaps + synthesis modes).
-
-Example usage:
-- `/quick-review-staged`
-- `/quick-review-staged --output-file review.md`
-- `/quick-review-staged --language nodejs` (force Node.js/TypeScript checks)
+Parse arguments from `$ARGUMENTS`:
+- Optional: `--output-file <path>` to specify output location
+- Optional: `--language nodejs|dotnet` to force language detection
 
 ---
 
@@ -146,6 +141,9 @@ Quick review should be extra conservative - skip theoretical edge cases.
 
 ## Notes
 
-- Use git CLI to interact with the repository.
-- Quick review is optimized for speed - use comprehensive review for thorough analysis.
+- Use git CLI to interact with the repository. Do not use GitHub CLI.
+- Quick review is optimized for speed - use `/deep-review-staged` for thorough analysis.
 - Focus on blocking issues that must be fixed before merge.
+- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
+- File paths should be relative to the repository root.
+- Line numbers should reference the lines in the working copy (not diff line numbers).
