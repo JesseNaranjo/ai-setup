@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the bug detection agent to analyze for race conditions, state management issues, and other concurrency-related bugs."
   <commentary>User mentioned race conditions and intermittent bugs, which are specific issues this agent is designed to detect.</commentary>
   </example>
-model: opus
+model: opus  # Deep analysis default. Commands: Sonnet for gaps mode (constrained task)
 color: red
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.2
+version: 3.0.3
 ---
 
 # Bug Detection Review Agent

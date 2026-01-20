@@ -23,7 +23,7 @@ The Code Review Plugin provides automated, in-depth code review using 9 speciali
 Comprehensive code review using all 9 agents (16 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
-/deep-review <file1> [file2] [...] [--output-file <path>]
+/deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>]
 ```
 
 ### `/deep-review-staged`
@@ -31,7 +31,7 @@ Comprehensive code review using all 9 agents (16 invocations) with thorough + ga
 Comprehensive code review of staged git changes using all 9 agents (16 invocations) with thorough + gaps modes.
 
 ```bash
-/deep-review-staged [--output-file <path>]
+/deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>]
 ```
 
 ### `/quick-review`
@@ -39,7 +39,7 @@ Comprehensive code review of staged git changes using all 9 agents (16 invocatio
 Fast 4-agent review of specific files focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review <file1> [file2] [...] [--output-file <path>]
+/quick-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>]
 ```
 
 ### `/quick-review-staged`
@@ -47,7 +47,7 @@ Fast 4-agent review of specific files focusing on critical issues (bugs, securit
 Fast 4-agent review of staged git changes focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review-staged [--output-file <path>]
+/quick-review-staged [--output-file <path>] [--language <nodejs|dotnet>]
 ```
 
 ## Configuration
@@ -69,9 +69,7 @@ Customize the plugin's behavior per-project by creating a settings file.
    .claude/*.local.md
    ```
 
-4. **Restart Claude Code** to apply the new settings
-
-> **Note:** Settings changes require restarting Claude Code to take effect.
+> **Note:** Settings are read each time a review command runs. No restart required.
 
 ### Settings File Format
 
@@ -181,7 +179,7 @@ Targeted review skills for specific concerns:
 ```
 code-review/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin metadata (v3.0.2)
+│   └── plugin.json              # Plugin metadata (v3.0.3)
 ├── commands/
 │   ├── deep-review.md           # Deep file review (16 invocations)
 │   ├── deep-review-staged.md    # Deep staged review (16 invocations)
@@ -379,8 +377,34 @@ Create a new `.md` file in `commands/` with the appropriate frontmatter.
 - For staged reviews: Changes staged with `git add`
 - For file reviews: Valid file paths
 
+## Troubleshooting
+
+### Common Issues
+
+**Plugin not running:**
+- Verify `.claude/code-review.local.md` has `enabled: true`
+- Check file exists in project root
+
+**No staged changes found:**
+- Run `git add` before using staged commands
+- Verify changes are staged with `git status`
+
+**Wrong language detected:**
+- Use `--language nodejs` or `--language dotnet` flag
+- Or set `language` in settings file
+
+**Too many findings:**
+- Increase `min_severity` to "major" or "critical"
+- Skip certain agents via `skip_agents` setting
+
+For more troubleshooting, see `shared/references/skill-troubleshooting.md`.
+
 ## Version History
 
+- **3.0.3**: Performance agent model upgrade
+  - Changed performance-agent model from Sonnet to Opus in thorough mode
+  - Deep review now runs 3 Opus / 5 Sonnet agents in Phase 1 (was 2 Opus / 6 Sonnet)
+  - Gaps mode still uses Sonnet for all agents (cost optimization)
 - **3.0.2**: Documentation consistency update
   - Fixed version references across documentation
   - Corrected agent model table (compliance, performance → Sonnet)

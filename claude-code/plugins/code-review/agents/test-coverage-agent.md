@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the test coverage agent to identify untested edge cases, boundary conditions, and error scenarios in your payment logic."
   <commentary>User mentioned untested edge cases in critical code, which is a key focus area of the test coverage agent.</commentary>
   </example>
-model: sonnet
+model: sonnet  # Cost-efficient for all modes. Commands: No override
 color: purple
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.2
+version: 3.0.3
 ---
 
 # Test Coverage Review Agent

@@ -41,7 +41,7 @@ Reference `shared/severity-definitions.md` for canonical severity definitions.
 
 Each agent accepts a MODE parameter:
 - **thorough**: Comprehensive review, check all issues
-- **gaps**: Focus on subtle issues that might be missed (Opus agents only)
+- **gaps**: Focus on subtle issues that might be missed, receives prior findings context
 - **quick**: Fast pass on critical issues only
 
 ## Orchestration Sequence
@@ -452,7 +452,9 @@ Return findings as YAML per shared/output-schema-base.md.
 )
 ```
 
-**Model Selection per Agent:**
+**Model Selection per Agent (Authoritative Source):**
+
+This table is the **single source of truth** for agent-to-model mapping. Commands reference this table rather than duplicating it.
 
 | Agent | Model (thorough) | Model (gaps) |
 |-------|------------------|--------------|

@@ -58,18 +58,9 @@ Deep review uses a sequential two-phase approach to reduce duplicates and improv
 
 ### Phase 1: Thorough Review (8 agents in parallel)
 
-Launch all agents with **thorough** mode:
+Launch all 8 agents with **thorough** mode. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Model Selection per Agent" table for model assignments.
 
-| Agent | Subagent Type | Model | MODE | Focus |
-|-------|---------------|-------|------|-------|
-| Compliance | `code-review:compliance-agent` | Sonnet | thorough | Standards adherence |
-| Bug Detection | `code-review:bug-detection-agent` | Opus | thorough | Logical errors, null refs, off-by-one |
-| Security | `code-review:security-agent` | Opus | thorough | Injection, auth, secrets, OWASP |
-| Performance | `code-review:performance-agent` | Opus | thorough | Complexity, memory, hot paths, N+1 |
-| Architecture | `code-review:architecture-agent` | Sonnet | thorough | Coupling, patterns, SOLID |
-| API Contracts | `code-review:api-contracts-agent` | Sonnet | thorough | Breaking changes, compatibility |
-| Error Handling | `code-review:error-handling-agent` | Sonnet | thorough | Try/catch gaps, resilience |
-| Test Coverage | `code-review:test-coverage-agent` | Sonnet | thorough | Missing tests, test suggestions |
+**Agents**: Compliance, Bug Detection, Security, Performance, Architecture, API Contracts, Error Handling, Test Coverage
 
 Each agent receives:
 - The current branch name
@@ -85,14 +76,9 @@ Each agent receives:
 
 ### Phase 2: Gaps Review with Context (4 Sonnet agents in parallel)
 
-After Phase 1 completes, launch Sonnet agents with **gaps** mode, passing Phase 1 findings:
+After Phase 1 completes, launch 4 agents with **gaps** mode (all use Sonnet), passing Phase 1 findings. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for model assignments.
 
-| Agent | Subagent Type | Model | MODE | Prior Findings Context |
-|-------|---------------|-------|------|------------------------|
-| Compliance | `code-review:compliance-agent` | Sonnet | gaps | Phase 1 compliance issues |
-| Bug Detection | `code-review:bug-detection-agent` | Sonnet | gaps | Phase 1 bug issues |
-| Security | `code-review:security-agent` | Sonnet | gaps | Phase 1 security issues |
-| Performance | `code-review:performance-agent` | Sonnet | gaps | Phase 1 performance issues |
+**Agents**: Compliance, Bug Detection, Security, Performance
 
 Each gaps agent receives all Phase 1 inputs PLUS:
 - **previous_findings**: List of issues already flagged in this category from Phase 1

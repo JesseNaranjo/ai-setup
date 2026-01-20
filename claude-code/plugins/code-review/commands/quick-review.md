@@ -55,14 +55,9 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic an
 
 **Agent invocation uses Task tool with subagent_type** (e.g., `code-review:bug-detection-agent`), not file paths directly.
 
-Launch 4 agents in parallel with **quick** mode:
+Launch 4 agents in parallel with **quick** mode. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Model Selection per Agent" table for model assignments.
 
-| Agent | Subagent Type | Model | MODE | Focus |
-|-------|---------------|-------|------|-------|
-| Bug Detection | `code-review:bug-detection-agent` | Opus | quick | Obvious bugs, null refs, clear logical errors |
-| Security | `code-review:security-agent` | Opus | quick | Critical security issues, injection, hardcoded secrets |
-| Error Handling | `code-review:error-handling-agent` | Sonnet | quick | Missing error handling, swallowed exceptions |
-| Test Coverage | `code-review:test-coverage-agent` | Sonnet | quick | Critical paths without tests |
+**Agents**: Bug Detection (Opus), Security (Opus), Error Handling (Sonnet), Test Coverage (Sonnet)
 
 Each agent receives:
 - The current branch name

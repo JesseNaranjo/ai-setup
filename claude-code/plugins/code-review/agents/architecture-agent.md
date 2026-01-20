@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the architecture agent to identify circular dependencies, tight coupling, layer violations, and other structural issues."
   <commentary>User mentioned coupling and dependencies, which are specific architectural concerns this agent detects.</commentary>
   </example>
-model: sonnet
+model: sonnet  # Cost-efficient for all modes. Commands: No override
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.2
+version: 3.0.3
 ---
 
 # Architecture Review Agent

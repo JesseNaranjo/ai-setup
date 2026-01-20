@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the synthesis agent to analyze the security findings against performance concerns and identify any fixes that could create new problems."
   <commentary>User asked specifically about security-performance interactions, which is one of the cross-cutting analysis pairs this agent handles.</commentary>
   </example>
-model: sonnet
+model: sonnet  # Cost-efficient for all modes. Commands: No override
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.2
+version: 3.0.3
 ---
 
 # Cross-Agent Synthesis Agent

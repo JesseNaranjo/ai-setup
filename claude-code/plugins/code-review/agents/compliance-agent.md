@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the compliance agent to verify adherence to your AI-AGENT-INSTRUCTIONS.md rules."
   <commentary>User specifically mentioned AI-AGENT-INSTRUCTIONS.md, a file type this agent is designed to check against.</commentary>
   </example>
-model: sonnet
+model: sonnet  # Cost-efficient for all modes. Commands: No override
 color: blue
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.2
+version: 3.0.3
 ---
 
 # AI Agent Instructions Compliance Review Agent

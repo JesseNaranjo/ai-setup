@@ -23,10 +23,10 @@ description: |
   assistant: "I'll use the API contracts agent to analyze the schema changes and identify any backward compatibility issues that could affect existing consumers."
   <commentary>User mentioned schema changes and client impact, which is precisely what this agent is designed to evaluate.</commentary>
   </example>
-model: sonnet
+model: sonnet  # Cost-efficient for all modes. Commands: No override
 color: green
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.2
+version: 3.0.3
 ---
 
 # API & Contracts Review Agent

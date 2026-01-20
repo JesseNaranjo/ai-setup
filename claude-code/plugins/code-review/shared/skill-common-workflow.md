@@ -60,7 +60,12 @@ For each file being reviewed, search for corresponding test file:
 
 ### Agent Invocation Pattern
 
-Use the Task tool to launch agents. Plugin agents are registered as subagent types:
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` section "Agent Invocation Pattern" for:
+- Complete Task invocation format with YAML prompt structure
+- Model selection per agent and mode
+- Two-pass pattern (thorough + gaps)
+
+**Quick Reference - Subagent Types:**
 
 | Agent | Subagent Type |
 |-------|---------------|
@@ -74,11 +79,12 @@ Use the Task tool to launch agents. Plugin agents are registered as subagent typ
 | Test Coverage | `code-review:test-coverage-agent` |
 | Synthesis | `code-review:synthesis-agent` |
 
-Example invocation:
+**Example invocation:**
 
 ```
 Task(
   subagent_type: "code-review:security-agent",
+  model: "opus",  // See review-workflow.md for model selection table
   description: "[Agent name] review for [scope]",
   prompt: """
 MODE: [thorough|gaps|quick]
@@ -102,24 +108,7 @@ Return findings as YAML per shared/output-schema-base.md.
 )
 ```
 
-### Two-Pass Pattern (Thorough + Gaps)
-
-For comprehensive reviews:
-
-**Pass 1 - Thorough Mode:** Comprehensive review of all issues
-
-**Pass 2 - Gaps Mode:** Focus on edge cases and subtle issues, receives `prior_findings` to skip duplicates
-
-```yaml
-# Gaps mode receives prior findings context:
-previous_findings:
-  - title: "Issue already found in thorough mode"
-    file: "src/services/OrderService.ts"
-    line: 45
-    category: "Performance"
-    severity: "Critical"
-    # Agent skips this and focuses on subtle issues
-```
+**Important**: Always pass the `model` parameter explicitly. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for the model selection table (Opus vs Sonnet per agent and mode).
 
 ---
 

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.0.2) - a modular 9-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.0.3) - a modular 9-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -34,7 +34,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ```
 claude-code/plugins/code-review/
-├── .claude-plugin/plugin.json       # Plugin metadata (v3.0.2)
+├── .claude-plugin/plugin.json       # Plugin metadata (v3.0.3)
 ├── commands/                        # Slash command definitions
 │   ├── deep-review.md               # Deep file review (16 agent invocations)
 │   ├── deep-review-staged.md        # Deep staged review (16 agent invocations)
@@ -219,6 +219,17 @@ Skills reference `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for com
 
 ## Version Management
 
-Update version in both locations:
-- **Plugin**: `claude-code/plugins/code-review/.claude-plugin/plugin.json`
-- **Repository root**: `.claude-plugin/marketplace.json` (at repo root, not inside the plugin)
+Update version in these locations when releasing:
+
+**Required:**
+- `claude-code/plugins/code-review/.claude-plugin/plugin.json` (plugin manifest)
+- `.claude-plugin/marketplace.json` (repository root)
+
+**Recommended (for consistency):**
+- All agent files: `agents/*.md` (9 files)
+- All skill files: `skills/*/SKILL.md` (4 files)
+
+**Quick verification:**
+```bash
+grep -r "version:" claude-code/plugins/code-review/ --include="*.md" --include="*.json"
+```
