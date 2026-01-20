@@ -235,7 +235,7 @@ code-review/
 | compliance-agent | Sonnet | thorough, gaps, quick | blue |
 | bug-detection-agent | Opus | thorough, gaps, quick | red |
 | security-agent | Opus | thorough, gaps, quick | magenta |
-| performance-agent | Sonnet | thorough, gaps, quick | yellow |
+| performance-agent | Opus | thorough, gaps, quick | yellow |
 | architecture-agent | Sonnet | thorough, quick | cyan |
 | api-contracts-agent | Sonnet | thorough, quick | green |
 | error-handling-agent | Sonnet | thorough, quick | orange |

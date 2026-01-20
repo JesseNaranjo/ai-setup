@@ -110,7 +110,7 @@ claude-code/plugins/code-review/
 | compliance-agent | Sonnet | thorough, gaps, quick | AI instructions compliance |
 | bug-detection-agent | Opus | thorough, gaps, quick | Bugs & edge cases |
 | security-agent | Opus | thorough, gaps, quick | Security vulnerabilities |
-| performance-agent | Sonnet | thorough, gaps, quick | Performance issues |
+| performance-agent | Opus | thorough, gaps, quick | Performance issues |
 | architecture-agent | Sonnet | thorough, quick | Architecture patterns |
 | api-contracts-agent | Sonnet | thorough, quick | API compatibility |
 | error-handling-agent | Sonnet | thorough, quick | Error handling |
@@ -119,7 +119,7 @@ claude-code/plugins/code-review/
 
 ### Deep Review Pipeline
 
-1. **Phase 1** (8 agents parallel): Thorough mode review (2 Opus, 6 Sonnet)
+1. **Phase 1** (8 agents parallel): Thorough mode review (3 Opus, 5 Sonnet)
 2. **Phase 2** (4 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
 3. **Phase 3** (4 synthesis agents parallel): Cross-cutting concern detection
 4. **Validation**: All issues validated before output

@@ -66,7 +66,7 @@ Launch all agents with **thorough** mode:
 | Compliance | `code-review:compliance-agent` | Sonnet | thorough | Standards adherence |
 | Bug Detection | `code-review:bug-detection-agent` | Opus | thorough | Logical errors, null refs, off-by-one |
 | Security | `code-review:security-agent` | Opus | thorough | Injection, auth, secrets, OWASP |
-| Performance | `code-review:performance-agent` | Sonnet | thorough | Complexity, memory, hot paths, N+1 |
+| Performance | `code-review:performance-agent` | Opus | thorough | Complexity, memory, hot paths, N+1 |
 | Architecture | `code-review:architecture-agent` | Sonnet | thorough | Coupling, patterns, SOLID |
 | API Contracts | `code-review:api-contracts-agent` | Sonnet | thorough | Breaking changes, compatibility |
 | Error Handling | `code-review:error-handling-agent` | Sonnet | thorough | Try/catch gaps, resilience |

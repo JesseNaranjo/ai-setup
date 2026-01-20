@@ -35,7 +35,7 @@ For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shar
 ### Agent Parameters
 
 - **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md`
-- **Model:** Sonnet (for efficient performance analysis)
+- **Model:** Opus (for deep performance analysis)
 - **Modes:** thorough (first pass), gaps (second pass)
 
 ### Performance Categories Checked
