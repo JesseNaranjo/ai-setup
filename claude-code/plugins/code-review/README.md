@@ -20,7 +20,7 @@ The Code Review Plugin provides automated, in-depth code review using 9 speciali
 
 ### `/deep-review`
 
-Deep 9-agent code review of specific files with thorough + gaps modes for maximum coverage.
+Comprehensive code review using all 9 agents (16 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
 /deep-review <file1> [file2] [...] [--output-file <path>]
@@ -28,7 +28,7 @@ Deep 9-agent code review of specific files with thorough + gaps modes for maximu
 
 ### `/deep-review-staged`
 
-Deep 9-agent code review of staged git changes with thorough + gaps modes for maximum coverage.
+Comprehensive code review of staged git changes using all 9 agents (16 invocations) with thorough + gaps modes.
 
 ```bash
 /deep-review-staged [--output-file <path>]
@@ -302,7 +302,7 @@ See `shared/output-format.md` for complete output templates.
 ## Code Review
 
 **Reviewed:** 5 file(s) | **Branch:** feature/new-auth
-**Review Depth:** Deep (9-agent analysis with thorough + gaps modes)
+**Review Depth:** Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)
 
 ### Summary
 

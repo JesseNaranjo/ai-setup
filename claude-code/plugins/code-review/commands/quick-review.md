@@ -1,4 +1,5 @@
 ---
+name: quick-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Quick code review with 7 agent invocations (4 review + 3 synthesis)
 argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet]"

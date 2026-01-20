@@ -17,10 +17,10 @@ All reviews start with this header:
 
 | Command | Review Depth Description |
 |---------|-------------------------|
-| `/deep-review` | Deep (9-agent analysis with thorough + gaps modes) |
-| `/deep-review-staged` | Deep (9-agent analysis with thorough + gaps modes) |
-| `/quick-review` | Quick (4-agent + 3 synthesis) |
-| `/quick-review-staged` | Quick (4-agent + 3 synthesis) |
+| `/deep-review` | Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis) |
+| `/deep-review-staged` | Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis) |
+| `/quick-review` | Quick (7 invocations: 4 review + 3 synthesis) |
+| `/quick-review-staged` | Quick (7 invocations: 4 review + 3 synthesis) |
 
 ## No Issues Found
 
@@ -311,7 +311,7 @@ Review saved to: [filepath]
 ## Code Review
 
 **Reviewed:** 3 file(s) | **Branch:** feature/user-auth
-**Review Depth:** Deep (9-agent analysis with thorough + gaps modes)
+**Review Depth:** Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)
 
 ### Summary
 

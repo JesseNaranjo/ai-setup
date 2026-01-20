@@ -1,11 +1,12 @@
 ---
+name: deep-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Deep code review with 16 agent invocations (8 thorough + 4 gaps + 4 synthesis)
 argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet]"
 model: opus
 ---
 
-Perform a deep 9-agent code review for the specified files. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a comprehensive code review using all 9 agents (16 invocations total) for the specified files. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
 Parse arguments from `$ARGUMENTS`:
 - Required: One or more file paths (space-separated)
@@ -146,7 +147,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
 
-**Review depth**: "Deep (9-agent analysis with thorough + gaps modes)"
+**Review depth**: "Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)"
 
 **Categories to include in summary table**: All 8 (Compliance, Bugs, Security, Performance, Architecture, API Contracts, Error Handling, Test Coverage)
 
