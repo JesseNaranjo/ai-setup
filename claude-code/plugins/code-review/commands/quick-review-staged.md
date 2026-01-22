@@ -54,6 +54,12 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic an
 
 **Agent invocation uses Task tool with subagent_type** (e.g., `code-review:bug-detection-agent`), not file paths directly.
 
+### Usage Tracking Initialization
+
+Before launching agents, initialize usage tracking per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
+1. Record `review_started_at` timestamp
+2. Initialize 2 phases: "Review", "Synthesis"
+
 Launch 4 agents in parallel with **quick** mode. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Model Selection per Agent" table for model assignments.
 
 **Agents**: Bug Detection (Opus), Security (Opus), Error Handling (Sonnet), Test Coverage (Sonnet)
@@ -73,6 +79,11 @@ Each agent receives:
 - Most obvious and impactful problems
 - Issues that would block a merge
 
+**Usage Tracking - Review Phase:**
+1. Record `phase_started_at` before launching agents
+2. For each agent: record `agent_started_at` before Task call, `agent_ended_at` and `task_id` after Task returns
+3. Record `phase_ended_at` when all agents complete
+
 ---
 
 ## Synthesis Phase: Cross-Agent Synthesis
@@ -88,6 +99,12 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 | Synthesis | `code-review:synthesis-agent` | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
 
 Launch all 3 synthesis agents in parallel, each with their respective category pairs.
+
+**Usage Tracking - Synthesis:**
+1. Record `phase_started_at` before launching synthesis agents
+2. For each synthesis agent: record `agent_started_at` before Task call, `agent_ended_at` and `task_id` after Task returns
+3. Record `phase_ended_at` when all agents complete
+4. Record `review_ended_at` timestamp
 
 **Output**: `cross_cutting_insights` list added to the issue pool before validation.
 
@@ -114,6 +131,14 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 ## Step 7: Generate Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
+
+**Generate Usage Summary first:**
+1. Generate Usage Summary from tracking data per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` Usage Summary Section
+2. Include Phase Breakdown: Review (4 agents), Synthesis (3 agents)
+3. Include Agent Timing Details in expandable section
+4. Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators
+
+**Then generate Code Review output:**
 
 **Review depth**: "Quick (4-agent + 3 synthesis)"
 

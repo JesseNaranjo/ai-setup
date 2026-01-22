@@ -4,6 +4,32 @@ Shared output generation and file writing logic for all review commands.
 
 ## Process
 
+### 0. Generate Usage Summary
+
+Before generating the Code Review output, generate the Usage Summary section:
+
+1. **Read tracking data**: Access the usage_tracking structure maintained during workflow execution
+2. **Calculate totals**:
+   - Total duration = review ended_at - review started_at
+   - Agents invoked = count of agents with status "completed" or "failed"
+   - Planned agents = total expected minus skipped agents
+3. **Calculate phase metrics**:
+   - Phase duration = phase ended_at - phase started_at
+   - Agents completed = count per phase
+   - Total findings = sum of findings_count per agent
+4. **Record findings_count**: For each agent, count the number of issues in their output and record as `findings_count`
+5. **Detect timing anomalies**:
+   - Opus agents: < 15s = too fast `[!]`, > 180s = too slow `[*]`
+   - Sonnet agents: < 10s = too fast `[!]`, > 120s = too slow `[*]`
+   - Synthesis agents: < 5s = too fast `[!]`, > 90s = too slow `[*]`
+6. **Format output**: Follow `shared/output-format.md` Usage Summary Section format
+
+**Output order:**
+1. Usage Summary (this step)
+2. Code Review header and content (next step)
+
+See `shared/usage-tracking.md` for the tracking schema and `shared/output-format.md` for the output format.
+
 ### 1. Generate Review Output
 
 Follow the format in `shared/output-format.md`:

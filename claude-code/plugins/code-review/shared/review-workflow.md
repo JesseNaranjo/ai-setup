@@ -85,6 +85,7 @@ This section defines the authoritative execution order for review pipelines. Eac
    - OUTPUT: Final issue list
 
 7. **Output**
+   - Generate Usage Summary from tracking data
    - Generate formatted report, write to file
 
 ### Quick Review Orchestration (7 agent invocations)
@@ -112,6 +113,72 @@ This section defines the authoritative execution order for review pipelines. Eac
 
 5. **Aggregation & Output**
    - Same as deep review
+
+## Usage Tracking Protocol
+
+Throughout the review workflow, maintain usage tracking to record agent invocations and timing. See `shared/usage-tracking.md` for the complete schema.
+
+### Initialization (Before Step 4)
+
+Before launching the first agent:
+
+1. Record `review_started_at` timestamp for the review
+2. Initialize the phases array based on review type:
+   - **Deep review**: 3 phases (Phase 1: 8 agents, Phase 2: 4 agents, Synthesis: 4 agents)
+   - **Quick review**: 2 phases (Review: 4 agents, Synthesis: 3 agents)
+3. Initialize each phase with an empty agents array
+
+### Recording Each Agent Invocation
+
+For every agent launch:
+
+1. **Before Task tool call**: Record `agent_started_at` timestamp
+2. **After Task tool returns**:
+   - Record `agent_ended_at` timestamp
+   - Calculate `agent_duration_seconds` = agent_ended_at - agent_started_at
+   - Record `task_id` from Task tool return (confirms actual invocation)
+   - Set `status` to "completed" (or "failed" if error)
+3. **For skipped agents** (via skip_agents setting):
+   - Set `status` to "skipped"
+   - Set `agent_duration_seconds` to 0
+   - No timestamps or task_id
+
+### Confirming Actual Invocation
+
+The Task tool returns a `task_id` when an agent completes. Record this ID as proof of actual invocation:
+- Present: Agent was actually invoked
+- Absent with duration: Agent may have failed
+
+### Parallel Execution Timing
+
+When agents run in parallel within a phase:
+- **phase_started_at**: Timestamp when first agent launched
+- **phase_ended_at**: Timestamp when last agent completed
+- **phase_duration_seconds**: phase_ended_at - phase_started_at
+- Individual agent durations are independent
+- Sum of individual durations may exceed phase duration (expected with parallelism)
+
+### Timing Anomaly Detection
+
+Flag potential issues based on timing:
+
+| Condition | Indicator | Concern |
+|-----------|-----------|---------|
+| Opus < 15s | `[!]` too fast | May have errored early |
+| Sonnet < 10s | `[!]` too fast | May have errored early |
+| Synthesis < 5s | `[!]` too fast | May have errored early |
+| Opus > 180s | `[*]` too slow | May be stuck |
+| Sonnet > 120s | `[*]` too slow | May be stuck |
+| Synthesis > 90s | `[*]` too slow | May be stuck |
+
+### Generating Usage Summary
+
+At the end of the workflow (before generating review output):
+
+1. Read from the usage_tracking structure maintained during workflow
+2. Format according to `shared/output-format.md` Usage Summary section
+3. Calculate phase totals and detect timing anomalies
+4. Include agent details in expandable section
 
 ## Review Configurations
 

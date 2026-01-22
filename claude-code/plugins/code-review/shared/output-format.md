@@ -2,6 +2,125 @@
 
 This document defines the output format for code review results.
 
+## Usage Summary Section
+
+The Usage Summary appears BEFORE the Code Review header to provide visibility into which agents were invoked and their timing.
+
+### Format
+
+```markdown
+## Usage Summary
+
+| Metric | Value |
+|--------|-------|
+| Review Type | Deep (16 invocations) |
+| Total Duration | 3m 5s |
+| Agents Invoked | 16 of 16 planned |
+
+### Phase Breakdown
+
+| Phase | Duration | Agents | Status |
+|-------|----------|--------|--------|
+| Phase 1: Thorough | 1m 44s | 8/8 | ✓ |
+| Phase 2: Gaps | 44s | 4/4 | ✓ |
+| Synthesis | 29s | 4/4 | ✓ |
+
+<details>
+<summary>Agent Timing Details</summary>
+
+**Phase 1: Thorough Review** (1m 44s)
+| Agent | Model | Duration | Findings | Status |
+|-------|-------|----------|----------|--------|
+| compliance-agent | sonnet | 27s | 2 | ✓ |
+| bug-detection-agent | opus | 1m 44s | 5 | ✓ |
+| security-agent | opus | 1m 12s | 3 | ✓ |
+| performance-agent | opus | 58s | 1 | ✓ |
+| architecture-agent | sonnet | 35s | 0 | ✓ |
+| api-contracts-agent | sonnet | 31s | 0 | ✓ |
+| error-handling-agent | sonnet | 28s | 2 | ✓ |
+| test-coverage-agent | sonnet | 33s | 4 | ✓ |
+
+**Phase 2: Gaps Review** (44s)
+| Agent | Model | Duration | Findings | Status |
+|-------|-------|----------|----------|--------|
+| compliance-agent | sonnet | 22s | 1 | ✓ |
+| bug-detection-agent | sonnet | 44s | 2 | ✓ |
+| security-agent | sonnet | 38s | 0 | ✓ |
+| performance-agent | sonnet | 41s | 1 | ✓ |
+
+**Synthesis** (29s)
+| Agent | Model | Duration | Findings | Status |
+|-------|-------|----------|----------|--------|
+| synthesis (Security+Performance) | sonnet | 25s | 1 | ✓ |
+| synthesis (Architecture+Test Coverage) | sonnet | 29s | 1 | ✓ |
+| synthesis (Bugs+Error Handling) | sonnet | 22s | 0 | ✓ |
+| synthesis (Compliance+Bugs) | sonnet | 27s | 0 | ✓ |
+
+</details>
+
+---
+```
+
+### Review Type Values
+
+| Command | Review Type Value |
+|---------|-------------------|
+| `/deep-review` | Deep (16 invocations) |
+| `/deep-review-staged` | Deep (16 invocations) |
+| `/quick-review` | Quick (7 invocations) |
+| `/quick-review-staged` | Quick (7 invocations) |
+
+### Status Indicators
+
+| Indicator | Meaning |
+|-----------|---------|
+| `✓` | Completed successfully |
+| `✗` | Failed |
+| `-` | Skipped (via skip_agents setting) |
+| `[!]` | Too fast (< 5s for Synthesis, < 10s for Sonnet, < 15s for Opus) |
+| `[*]` | Too slow (> 90s for Synthesis, > 120s for Sonnet, > 180s for Opus) |
+
+### Duration Formatting
+
+Format durations for readability:
+- Under 60 seconds: `27s`
+- 60+ seconds: `1m 44s`
+- 60+ minutes: `1h 5m 30s`
+
+### Quick Review Phase Names
+
+For quick reviews, use these phase names:
+- "Review" (instead of "Phase 1: Thorough")
+- "Synthesis"
+
+### Agents Invoked Calculation
+
+`Agents Invoked` = count of agents with status "completed" or "failed"
+`planned` = total expected agents for the review type (excluding skipped)
+
+Example with skip_agents:
+- Deep review with `skip_agents: ["architecture"]`
+- Expected: 15 planned (16 - 1 skipped)
+- Display: "15 of 15 planned"
+
+### Handling Anomalies
+
+When timing anomalies are detected, append the indicator to the status:
+
+```markdown
+| bug-detection-agent | opus | 8s | 0 | ✓ [!] |
+| security-agent | opus | 3m 45s | 7 | ✓ [*] |
+```
+
+### Partial/Interrupted Reviews
+
+If a review is interrupted before completion:
+- Show available data for completed agents
+- Use `(incomplete)` for phases that didn't finish
+- Example: "Agents Invoked: 10 of 16 planned (incomplete)"
+
+---
+
 ## Review Header
 
 All reviews start with this header:

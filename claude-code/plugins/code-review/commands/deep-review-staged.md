@@ -56,6 +56,12 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic an
 
 Deep review uses a sequential two-phase approach to reduce duplicates and improve gaps analysis.
 
+### Usage Tracking Initialization
+
+Before launching agents, initialize usage tracking per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
+1. Record `review_started_at` timestamp
+2. Initialize 3 phases: "Phase 1: Thorough Review", "Phase 2: Gaps Review", "Synthesis"
+
 ### Phase 1: Thorough Review (8 agents in parallel)
 
 Launch all 8 agents with **thorough** mode. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Model Selection per Agent" table for model assignments.
@@ -72,6 +78,11 @@ Each agent receives:
 - Related test files for context
 - MODE parameter: **thorough**
 
+**Usage Tracking - Phase 1:**
+1. Record `phase_started_at` before launching agents
+2. For each agent: record `agent_started_at` before Task call, `agent_ended_at` and `task_id` after Task returns
+3. Record `phase_ended_at` when all agents complete
+
 **Wait for all Phase 1 agents to complete before proceeding.**
 
 ### Phase 2: Gaps Review with Context (4 Sonnet agents in parallel)
@@ -86,6 +97,11 @@ Each gaps agent receives all Phase 1 inputs PLUS:
 See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
 
 **Note**: Sonnet is used for gaps mode because this phase is constrained by prior findings context and explicit checklists, making it suitable for a more cost-efficient model while retaining quality.
+
+**Usage Tracking - Phase 2:**
+1. Record `phase_started_at` before launching gaps agents
+2. For each agent: record `agent_started_at` before Task call, `agent_ended_at` and `task_id` after Task returns
+3. Record `phase_ended_at` when all agents complete
 
 ---
 
@@ -103,6 +119,12 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 | Synthesis | `code-review:synthesis-agent` | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
 
 Launch all 4 synthesis agents in parallel, each with their respective category pairs and findings from Phase 1 and Phase 2.
+
+**Usage Tracking - Synthesis:**
+1. Record `phase_started_at` before launching synthesis agents
+2. For each synthesis agent: record `agent_started_at` before Task call, `agent_ended_at` and `task_id` after Task returns
+3. Record `phase_ended_at` when all agents complete
+4. Record `review_ended_at` timestamp
 
 **Output**: `cross_cutting_insights` list added to the issue pool before validation.
 
@@ -130,6 +152,14 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 ## Step 8: Generate Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
+
+**Generate Usage Summary first:**
+1. Generate Usage Summary from tracking data per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` Usage Summary Section
+2. Include Phase Breakdown: Phase 1 (8 agents), Phase 2 (4 agents), Synthesis (4 agents)
+3. Include Agent Timing Details in expandable section
+4. Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators
+
+**Then generate Code Review output:**
 
 **Review depth**: "Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)"
 
