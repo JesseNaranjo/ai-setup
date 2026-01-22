@@ -8,14 +8,15 @@ version: 3.0.3
 
 Identify vulnerabilities, insecure coding patterns, and security misconfigurations through targeted security-focused code review.
 
-## Applicable Contexts
+## When to Use
 
-- Security audits and vulnerability scanning
-- Injection attack detection (SQL, command, XSS)
-- Hardcoded secrets and credentials detection
-- Authentication and authorization verification
-- Cryptographic implementation analysis
-- Input validation assessment
+Use this skill to:
+- Audit code for security vulnerabilities
+- Detect injection attacks (SQL, command, XSS)
+- Find hardcoded secrets and credentials
+- Verify authentication and authorization
+- Analyze cryptographic implementations
+- Assess input validation coverage
 
 ## Process Overview
 

@@ -1,0 +1,75 @@
+# Changelog
+
+All notable changes to the Code Review Plugin are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [3.0.3] - 2025-01-22
+
+### Changed
+- Updated skill SKILL.md files to use consistent imperative writing style
+- Shortened command descriptions to under 60 characters for better `/help` display
+- Added this CHANGELOG.md for tracking plugin changes
+
+### Fixed
+- Skill "Applicable Contexts" sections renamed to "When to Use" with action-oriented bullet points
+
+## [3.0.2] - 2025-01-XX
+
+### Changed
+- Updated performance-agent model from Sonnet to Opus for enhanced analysis accuracy
+- Enhanced code review documentation for comprehensive 9-agent analysis
+
+## [3.0.1] - 2025-01-XX
+
+### Added
+- Usage tracking initialization and summary generation for code reviews
+
+## [3.0.0] - 2025-01-XX
+
+### Added
+- **Synthesis Agent**: New cross-agent synthesis for detecting ripple effects and cross-cutting concerns
+- **Two-Phase Review Pipeline**: Sequential thorough → gaps approach with context passing
+- **Usage Tracking**: Agent invocation timing and anomaly detection
+- **Quick Review Synthesis**: 3 synthesis agents for quick reviews (7 total invocations)
+
+### Changed
+- Deep review now uses 16 agent invocations (8 thorough + 4 gaps + 4 synthesis)
+- Quick review now uses 7 agent invocations (4 review + 3 synthesis)
+- Gaps mode agents receive Phase 1 findings to avoid duplicates
+- All gaps mode agents use Sonnet for cost efficiency
+
+### Architecture
+- 9-agent modular architecture with parameterized MODE support
+- Agents: compliance, bug-detection, security, performance, architecture, api-contracts, error-handling, test-coverage, synthesis
+- Each agent has unique color for visual distinction in parallel execution
+
+## [2.x.x] - Previous Versions
+
+### Features
+- Initial 8-agent architecture
+- Basic thorough and quick review modes
+- Node.js/TypeScript and .NET/C# language support
+- Validation layer for false positive reduction
+- Severity classification (Critical, Major, Minor, Suggestion)
+- Consensus scoring for multi-agent flagged issues
+
+---
+
+## Version Locations
+
+When releasing a new version, update:
+
+**Required:**
+- `.claude-plugin/plugin.json` - Plugin manifest
+- Repository root `.claude-plugin/marketplace.json` (if applicable)
+
+**Recommended:**
+- `agents/*.md` - Agent frontmatter version field (9 files)
+- `skills/*/SKILL.md` - Skill frontmatter version field (4 files)
+
+**Verification:**
+```bash
+grep -r "version:" claude-code/plugins/code-review/ --include="*.md" --include="*.json" | head -20
+```

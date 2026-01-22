@@ -8,15 +8,16 @@ version: 3.0.3
 
 Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) and project-specific rules through targeted compliance-focused code review.
 
-## Applicable Contexts
+## When to Use
 
-- CLAUDE.md compliance checking
-- Coding standards verification
-- AI agent instructions review
-- Project guidelines validation
-- Convention adherence checking
-- Architecture pattern compliance
-- Naming convention verification
+Use this skill to:
+- Check code against CLAUDE.md rules
+- Verify coding standards adherence
+- Review AI agent instructions compliance
+- Validate project guidelines
+- Check convention adherence
+- Verify architecture pattern compliance
+- Check naming convention consistency
 
 ## Process Overview
 

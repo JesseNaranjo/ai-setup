@@ -8,15 +8,16 @@ version: 3.0.3
 
 Identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs through targeted bug-focused code review.
 
-## Applicable Contexts
+## When to Use
 
-- Bug hunting and error detection
-- Null reference and undefined value checking
-- Race condition analysis
-- Off-by-one error detection
-- Edge case identification
-- Type coercion bug detection
-- Async/await correctness verification
+Use this skill to:
+- Hunt for bugs and errors in code
+- Check for null reference and undefined values
+- Analyze race conditions
+- Detect off-by-one errors
+- Identify edge cases
+- Find type coercion bugs
+- Verify async/await correctness
 
 ## Process Overview
 

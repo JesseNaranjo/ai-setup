@@ -1,7 +1,7 @@
 ---
 name: deep-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Deep code review with 16 agent invocations (8 thorough + 4 gaps + 4 synthesis)
+description: Deep 16-agent review of staged changes
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet]"
 model: opus
 ---

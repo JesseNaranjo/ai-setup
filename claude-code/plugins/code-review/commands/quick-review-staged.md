@@ -1,7 +1,7 @@
 ---
 name: quick-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Quick code review with 7 agent invocations (4 review + 3 synthesis)
+description: Quick 7-agent review of staged changes
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet]"
 model: opus
 ---

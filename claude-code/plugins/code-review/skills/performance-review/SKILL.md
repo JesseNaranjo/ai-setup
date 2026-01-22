@@ -8,15 +8,16 @@ version: 3.0.3
 
 Identify algorithmic inefficiencies, memory leaks, database query problems, and other performance bottlenecks through targeted performance-focused code review.
 
-## Applicable Contexts
+## When to Use
 
-- Performance optimization analysis
-- N+1 query detection
-- Memory leak identification
-- Algorithmic complexity analysis (Big O)
-- Database query optimization
-- Hot path identification and tuning
-- Async/await performance issue detection
+Use this skill to:
+- Analyze code for performance bottlenecks
+- Detect N+1 query patterns
+- Identify memory leaks
+- Evaluate algorithmic complexity (Big O)
+- Optimize database queries
+- Find and tune hot paths
+- Detect async/await performance issues
 
 ## Process Overview
 
