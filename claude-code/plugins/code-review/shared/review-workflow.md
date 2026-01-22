@@ -523,17 +523,17 @@ Return findings as YAML per shared/output-schema-base.md.
 
 This table is the **single source of truth** for agent-to-model mapping. Commands reference this table rather than duplicating it.
 
-| Agent | Model (thorough) | Model (gaps) |
-|-------|------------------|--------------|
-| compliance-agent | sonnet | sonnet |
-| bug-detection-agent | opus | sonnet |
-| security-agent | opus | sonnet |
-| performance-agent | opus | sonnet |
-| architecture-agent | sonnet | N/A |
-| api-contracts-agent | sonnet | N/A |
-| error-handling-agent | sonnet | N/A |
-| test-coverage-agent | sonnet | N/A |
-| synthesis-agent | sonnet | N/A |
+| Agent | Model (thorough) | Model (gaps) | Model (quick) |
+|-------|------------------|--------------|---------------|
+| compliance-agent | sonnet | sonnet | N/A |
+| bug-detection-agent | opus | sonnet | opus |
+| security-agent | opus | sonnet | opus |
+| performance-agent | opus | sonnet | N/A |
+| architecture-agent | sonnet | N/A | N/A |
+| api-contracts-agent | sonnet | N/A | N/A |
+| error-handling-agent | sonnet | N/A | sonnet |
+| test-coverage-agent | sonnet | N/A | sonnet |
+| synthesis-agent | sonnet | N/A | sonnet |
 
 **Important**: Always pass the `model` parameter explicitly when invoking Task:
 - Use `model: "opus"` for bug-detection, security, and performance agents in thorough mode (require nuanced judgment)

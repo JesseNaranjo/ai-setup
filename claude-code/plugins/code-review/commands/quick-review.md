@@ -175,3 +175,4 @@ Quick review should be extra conservative - skip theoretical edge cases.
 - File paths should be relative to the repository root.
 - Line numbers should reference the lines in the actual file (not diff line numbers).
 - When reviewing full files (no changes), be more lenient - focus on clear bugs, not style issues.
+- Create a todo list before starting.

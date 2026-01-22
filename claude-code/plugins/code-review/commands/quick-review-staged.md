@@ -172,3 +172,4 @@ Quick review should be extra conservative - skip theoretical edge cases.
 - Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
 - File paths should be relative to the repository root.
 - Line numbers should reference the lines in the working copy (not diff line numbers).
+- Create a todo list before starting.
