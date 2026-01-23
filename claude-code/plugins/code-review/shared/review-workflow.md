@@ -13,29 +13,14 @@ This document defines the orchestration logic for the code review workflow. Agen
 
 ## Severity Classification
 
-Reference `shared/severity-definitions.md` for canonical severity definitions.
-
-| Severity | Action Required |
-|----------|-----------------|
-| **Critical** | Must fix before merge |
-| **Major** | Should fix before merge |
-| **Minor** | Can merge, fix soon |
-| **Suggestion** | Optional |
+See `shared/severity-definitions.md` for canonical severity definitions and examples.
 
 ## Agent Configuration
 
-### Available Agents
+The plugin includes 8 review agents plus a synthesis agent. Each agent supports specific modes (thorough, gaps, quick) with mode-specific model selection.
 
-| Agent | File | Model | Supported Modes |
-|-------|------|-------|-----------------|
-| Compliance | `agents/compliance-agent.md` | Sonnet | thorough, gaps, quick |
-| Bug Detection | `agents/bug-detection-agent.md` | Opus | thorough, gaps, quick |
-| Security | `agents/security-agent.md` | Opus | thorough, gaps, quick |
-| Performance | `agents/performance-agent.md` | Opus | thorough, gaps, quick |
-| Architecture | `agents/architecture-agent.md` | Sonnet | thorough, quick |
-| API Contracts | `agents/api-contracts-agent.md` | Sonnet | thorough, quick |
-| Error Handling | `agents/error-handling-agent.md` | Sonnet | thorough, quick |
-| Test Coverage | `agents/test-coverage-agent.md` | Sonnet | thorough, quick |
+**Agent Files**: See `agents/*.md` for individual agent definitions
+**Model Selection**: See "Model Selection per Agent (Authoritative Source)" table in Step 4 (Review Execution) section
 
 ### MODE Parameter
 
@@ -217,28 +202,50 @@ Gaps mode agents receive prior findings to:
 - Focus on subtle issues that might be missed
 - Find edge cases and boundary conditions
 
+**Synthesis Phase (4 Sonnet agents in parallel)**
+
+After Phase 2 completes, synthesis agents analyze cross-cutting concerns:
+
+| Agent | Model | Input Categories | Cross-Cutting Question |
+|-------|-------|-----------------|------------------------|
+| synthesis-agent | Sonnet | Security + Performance | "Do any security fixes introduce performance issues?" |
+| synthesis-agent | Sonnet | Architecture + Test Coverage | "Are architectural changes covered by tests?" |
+| synthesis-agent | Sonnet | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
+| synthesis-agent | Sonnet | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
+
 Total: 16 agent invocations (8 Phase 1 + 4 Phase 2 + 4 Synthesis), executed in three sequential phases to enable context passing.
 
 ### Quick Review (quick-review, quick-review-staged)
 
-Launch 4 agent invocations in parallel:
+Quick review uses a **single-phase parallel approach** optimized for speed, focusing on the most critical issue categories.
 
-| Agent | MODE |
-|-------|------|
-| bug-detection-agent | quick |
-| security-agent | quick |
-| error-handling-agent | quick |
-| test-coverage-agent | quick |
+**Review Phase (4 agents in parallel)**
 
-Quick review also includes **cross-agent synthesis** with 3 synthesis agents:
+| Agent | Model | MODE |
+|-------|-------|------|
+| bug-detection-agent | Opus | quick |
+| security-agent | Opus | quick |
+| error-handling-agent | Sonnet | quick |
+| test-coverage-agent | Sonnet | quick |
 
-| Input Categories | Cross-Cutting Question |
-|-----------------|------------------------|
-| Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| Security + Bugs | "Do security issues introduce or relate to bugs?" |
-| Bugs + Test Coverage | "Are identified bugs covered by tests?" |
+**Note**: Quick review uses only 4 of the 8 review agents, prioritizing bug detection and security (Opus for nuanced analysis) plus error handling and test coverage (Sonnet for pattern-based checks). Compliance, performance, architecture, and API contracts agents are excluded to optimize for speed.
 
-Total: 7 agent invocations (4 review + 3 synthesis).
+Quick mode agents focus on:
+- Critical and obvious issues only
+- Most impactful vulnerabilities and bugs
+- Clear gaps in error handling and test coverage
+
+**Synthesis Phase (3 Sonnet agents in parallel)**
+
+After review completes, synthesis agents analyze cross-cutting concerns:
+
+| Agent | Model | Input Categories | Cross-Cutting Question |
+|-------|-------|-----------------|------------------------|
+| synthesis-agent | Sonnet | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
+| synthesis-agent | Sonnet | Security + Bugs | "Do security issues introduce or relate to bugs?" |
+| synthesis-agent | Sonnet | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
+
+Total: 7 agent invocations (4 review + 3 synthesis), executed in two sequential phases.
 
 ## Settings Application
 

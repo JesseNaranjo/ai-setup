@@ -171,8 +171,8 @@ Quick review should be extra conservative - skip theoretical edge cases.
 ## Notes
 
 - Use git CLI to interact with the repository. Do not use GitHub CLI.
-- Quick review is optimized for speed - use `/deep-review` for thorough analysis
-- Focus on blocking issues that must be fixed before merge
+- Quick review is optimized for speed - use `/deep-review` for thorough analysis.
+- Focus on blocking issues that must be fixed before merge.
 - Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
 - File paths should be relative to the repository root.
 - Line numbers should reference the lines in the actual file (not diff line numbers).

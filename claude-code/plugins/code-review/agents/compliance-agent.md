@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the compliance agent to verify adherence to your AI-AGENT-INSTRUCTIONS.md rules."
   <commentary>User specifically mentioned AI-AGENT-INSTRUCTIONS.md, a file type this agent is designed to check against.</commentary>
   </example>
-model: sonnet  # Cost-efficient for all modes. Commands: No override
+model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
 color: blue
 tools: ["Read", "Grep", "Glob"]
 version: 3.0.3
@@ -35,17 +35,18 @@ Review code for compliance with CLAUDE.md and other AI Agent Instructions files 
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+This agent supports:
 
-- **thorough**: Find all compliance issues, check every rule against every changed file
-- **gaps**: Focus on subtle violations and edge cases that might be missed by a thorough review
-- **quick**: Fast pass on most critical/explicit rule violations only
+- **thorough**: Find all compliance issues, check every rule against every changed file (invoked in Phase 1 of deep review)
+- **gaps**: Focus on subtle violations and edge cases that might be missed by a thorough review (invoked in Phase 2 of deep review)
+
+*Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
 ## Input Required
 
 - List of files to review (with changes or full content)
 - All relevant AI Agent Instructions files (CLAUDE.md, AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md)
-- The MODE parameter (thorough, gaps, or quick)
+- The MODE parameter (thorough or gaps)
 
 ## Review Process
 
@@ -75,11 +76,6 @@ For each file being reviewed:
 - Check for subtle violations (almost compliant but not quite)
 - Look for rules that might be misinterpreted
 - Check edge cases and boundary conditions
-
-**quick mode:**
-- Only check explicit MUST/MUST NOT/ALWAYS/NEVER rules
-- Focus on the most critical violations
-- Skip guidelines and preferences
 
 ### Step 4: Report Violations
 

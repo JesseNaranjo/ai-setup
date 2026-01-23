@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the API contracts agent to analyze the schema changes and identify any backward compatibility issues that could affect existing consumers."
   <commentary>User mentioned schema changes and client impact, which is precisely what this agent is designed to evaluate.</commentary>
   </example>
-model: sonnet  # Cost-efficient for all modes. Commands: No override
+model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
 color: green
 tools: ["Read", "Grep", "Glob"]
 version: 3.0.3
@@ -35,18 +35,17 @@ Analyze code for API compatibility and contract compliance issues.
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+This agent supports:
 
-- **thorough**: Comprehensive API analysis including breaking changes, compatibility, versioning, and contract consistency
-- **quick**: Fast pass on obvious breaking changes only (removed methods, changed signatures, removed fields)
+- **thorough**: Comprehensive API analysis including breaking changes, compatibility, versioning, and contract consistency (invoked in Phase 1 of deep review)
 
-Note: This agent does not use "gaps" mode as API changes are generally binary (breaking or not).
+*Note: This agent does NOT use "gaps" mode (API changes are generally binary - breaking or not) and is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
 ## Input Required
 
 - Files to review (diffs and/or full content)
 - Related API definitions (if available)
-- The MODE parameter (thorough or quick)
+- The MODE parameter (thorough only)
 
 ## Review Process
 
@@ -73,12 +72,6 @@ Note: This agent does not use "gaps" mode as API changes are generally binary (b
   - API response schema changes
   - Configuration schema changes
 - Missing versioning on breaking changes
-
-**quick mode - Check for:**
-- Removed public methods or endpoints
-- Changed method signatures
-- Removed required fields from responses
-- Changed status codes for existing operations
 
 ### Step 2: Analyze API Surface
 

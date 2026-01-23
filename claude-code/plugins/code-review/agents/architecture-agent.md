@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the architecture agent to identify circular dependencies, tight coupling, layer violations, and other structural issues."
   <commentary>User mentioned coupling and dependencies, which are specific architectural concerns this agent detects.</commentary>
   </example>
-model: sonnet  # Cost-efficient for all modes. Commands: No override
+model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 version: 3.0.3
@@ -35,18 +35,17 @@ Analyze code for architectural issues affecting maintainability and scalability.
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+This agent supports:
 
-- **thorough**: Comprehensive architectural analysis including coupling, cohesion, SOLID principles, and design patterns
-- **quick**: Fast pass on obvious architectural violations only (god classes, tight coupling, layer violations)
+- **thorough**: Comprehensive architectural analysis including coupling, cohesion, SOLID principles, and design patterns (invoked in Phase 1 of deep review)
 
-Note: This agent does not use "gaps" mode as architectural issues are generally either present or not.
+*Note: This agent does NOT use "gaps" mode (architectural issues are generally either present or not) and is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
 ## Input Required
 
 - Files to review (diffs and/or full content)
 - Detected project type (Node.js, .NET, or both)
-- The MODE parameter (thorough or quick)
+- The MODE parameter (thorough only)
 
 ## Review Process
 
@@ -65,12 +64,6 @@ Note: This agent does not use "gaps" mode as architectural issues are generally 
 - Missing abstractions that hurt maintainability
 - Inappropriate intimacy between classes
 - Dead code and unused dependencies
-
-**quick mode - Check for:**
-- God classes/modules (too many responsibilities)
-- Obvious tight coupling (hard-coded dependencies)
-- Clear layer violations
-- Circular dependencies
 
 ### Step 2: Language-Specific Architecture Checks
 

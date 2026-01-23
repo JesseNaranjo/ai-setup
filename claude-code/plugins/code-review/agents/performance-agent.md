@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the performance agent to identify algorithmic complexity issues, blocking operations, memory allocation problems, and hot path inefficiencies."
   <commentary>User is experiencing slowness and wants to find the cause, which requires performance analysis.</commentary>
   </example>
-model: opus  # Deep analysis default. Commands: Sonnet for gaps mode (constrained task)
+model: opus  # Default for thorough. See review-workflow.md for authoritative model selection (sonnet for gaps)
 color: yellow
 tools: ["Read", "Grep", "Glob"]
 version: 3.0.3
@@ -35,17 +35,18 @@ Analyze code for performance issues that will have measurable impact.
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+This agent supports:
 
-- **thorough**: Comprehensive performance analysis including algorithmic complexity, memory usage, I/O patterns, and database access
-- **gaps**: Focus on subtle performance issues, hidden costs, and problems that might not be obvious
-- **quick**: Fast pass on critical performance issues only (O(n^2) algorithms, obvious memory leaks, blocking in async)
+- **thorough**: Comprehensive performance analysis including algorithmic complexity, memory usage, I/O patterns, and database access (invoked in Phase 1 of deep review)
+- **gaps**: Focus on subtle performance issues, hidden costs, and problems that might not be obvious (invoked in Phase 2 of deep review)
+
+*Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
 ## Input Required
 
 - Files to review (diffs and/or full content)
 - Detected project type (Node.js, .NET, or both)
-- The MODE parameter (thorough, gaps, or quick)
+- The MODE parameter (thorough or gaps)
 
 ## Review Process
 
@@ -69,12 +70,6 @@ This agent accepts a MODE parameter that controls review depth:
 - Unnecessary data copying
 - Premature optimization opportunities that matter
 - Batch operation opportunities
-
-**quick mode - Check for:**
-- O(n^2) nested loops on potentially large datasets
-- Obvious blocking calls in async code
-- Clear memory leaks (unclosed resources)
-- N+1 queries in obvious loops
 
 ### Step 2: Language-Specific Performance Checks
 
