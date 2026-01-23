@@ -14,14 +14,14 @@ Split on comma to get individual skill names.
 
 **If skill contains ":" (external plugin):**
 
-Claude native install path structure:
+Claude native install path structure (where `$HOME` is the user's home directory):
 ```
-~/.claude/plugins/cache/{source}/{plugin_name}/{version}/skills/{skill_name}/SKILL.md
+$HOME/.claude/plugins/cache/{source}/{plugin_name}/{version}/skills/{skill_name}/SKILL.md
 ```
 
 Example:
 ```
-~/.claude/plugins/cache/claude-plugins-official/superpowers/4.0.3/skills/brainstorming/SKILL.md
+$HOME/.claude/plugins/cache/claude-plugins-official/superpowers/4.0.3/skills/brainstorming/SKILL.md
 ```
 
 Resolution:
@@ -29,8 +29,10 @@ Resolution:
 superpowers:brainstorming
   → plugin_name = "superpowers"
   → skill_name = "brainstorming"
-  → Search: ~/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
+  → Search: $HOME/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
 ```
+
+**Note**: When using the Glob tool, resolve `$HOME` to the actual home directory path before constructing the glob pattern. The Glob tool does not perform environment variable expansion.
 
 **If skill has no ":" (plugin-local):**
 ```
@@ -55,7 +57,7 @@ If skill file not found after searching all paths:
    ```
    Warning: Skill '{plugin_name}:{skill_name}' not found.
    Searched paths:
-     - ~/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
+     - $HOME/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
    Continuing with remaining skills.
    ```
 

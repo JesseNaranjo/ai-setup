@@ -16,7 +16,7 @@ Parse arguments from `$ARGUMENTS`:
 
 ---
 
-## Step 0: Load Settings
+## Step 1: Load Settings
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md` for the settings loading process.
 
@@ -27,7 +27,7 @@ Check for `.claude/code-review.local.md` in the project root:
 
 ---
 
-## Step 1: Staged Changes Validation
+## Step 2: Staged Changes Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-staged.md` for the validation process.
 
@@ -35,7 +35,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-staged.md` for the validation
 
 ---
 
-## Step 2: Context Discovery
+## Step 3: Context Discovery
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 - AI Agent Instructions file patterns
@@ -44,13 +44,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 
 ---
 
-## Step 3: Content Gathering
+## Step 4: Content Gathering
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content gathering process.
 
 ---
 
-## Step 3.5: Skill Resolution (if --skills provided)
+## Step 5: Skill Resolution (if --skills provided)
 
 If `--skills` argument is present, resolve and extract skill content.
 
@@ -59,11 +59,11 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the resolution algorith
 For each skill in the comma-separated list:
 1. Resolve skill name to SKILL.md file path
 2. Read and extract methodology content
-3. Collect as `embedded_skills` for Step 4
+3. Collect as `embedded_skills` for Step 6
 
 ---
 
-## Step 4: 4-Agent Quick Review
+## Step 6: 4-Agent Quick Review
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic, the **Model Selection per Agent** table, and the **Agent Invocation Pattern** for the exact Task tool invocation format.
 
@@ -105,7 +105,7 @@ Each agent receives:
 
 ---
 
-## Synthesis Phase: Cross-Agent Synthesis
+## Step 7: Cross-Agent Synthesis
 
 After the 4-agent review, launch 3 synthesis agents in parallel.
 
@@ -174,7 +174,7 @@ Return findings as cross_cutting_insights YAML list per synthesis-agent.md schem
 
 ---
 
-## Step 5: Validation (Streamlined)
+## Step 8: Validation (Streamlined)
 
 Validate Critical and Major issues using batch validation by file. Minor issues and Suggestions are included without validation.
 
@@ -182,7 +182,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for validation process.
 
 ---
 
-## Step 6: Aggregation
+## Step 9: Aggregation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 - Filter invalid issues
@@ -192,7 +192,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 ---
 
-## Step 7: Generate Output
+## Step 10: Generate Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
 
@@ -212,7 +212,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROO
 
 ---
 
-## Step 8: Write Output
+## Step 11: Write Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` for write process.
 

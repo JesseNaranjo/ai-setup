@@ -17,7 +17,7 @@ Parse arguments from `$ARGUMENTS`:
 
 ---
 
-## Step 0: Load Settings
+## Step 1: Load Settings
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md` for the settings loading process.
 
@@ -28,7 +28,7 @@ Check for `.claude/code-review.local.md` in the project root:
 
 ---
 
-## Step 1: Input Validation
+## Step 2: Input Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-files.md` for the validation process.
 
@@ -36,7 +36,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-files.md` for the validation 
 
 ---
 
-## Step 2: Context Discovery
+## Step 3: Context Discovery
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 - AI Agent Instructions file patterns
@@ -45,13 +45,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 
 ---
 
-## Step 3: Content Gathering
+## Step 4: Content Gathering
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-files.md` for the content gathering process.
 
 ---
 
-## Step 3.5: Skill Resolution (if --skills provided)
+## Step 5: Skill Resolution (if --skills provided)
 
 If `--skills` argument is present, resolve and extract skill content.
 
@@ -60,11 +60,11 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the resolution algorith
 For each skill in the comma-separated list:
 1. Resolve skill name to SKILL.md file path
 2. Read and extract methodology content
-3. Collect as `embedded_skills` for Step 4
+3. Collect as `embedded_skills` for Step 6
 
 ---
 
-## Step 4: Two-Phase Deep Review
+## Step 6: Two-Phase Deep Review
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic, the **Model Selection per Agent** table, and the **Agent Invocation Pattern** for the exact Task tool invocation format.
 
@@ -126,7 +126,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
 
 ---
 
-## Step 5: Cross-Agent Synthesis
+## Step 7: Cross-Agent Synthesis
 
 After Phase 1 and Phase 2 complete, launch 4 synthesis agents in parallel.
 
@@ -196,7 +196,7 @@ Return findings as cross_cutting_insights YAML list per synthesis-agent.md schem
 
 ---
 
-## Step 6: Universal Validation
+## Step 8: Universal Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation process including:
 - Auto-validation patterns
@@ -205,7 +205,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation p
 
 ---
 
-## Step 7: Aggregation
+## Step 9: Aggregation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 - Filter invalid issues
@@ -215,7 +215,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 ---
 
-## Step 8: Generate Output
+## Step 10: Generate Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
 
@@ -233,7 +233,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROO
 
 ---
 
-## Step 9: Write Output
+## Step 11: Write Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` for write process.
 
