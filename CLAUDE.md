@@ -105,17 +105,19 @@ claude-code/plugins/code-review/
 
 ### 9-Agent Architecture with Modes
 
-| Agent | Model | Modes | Focus |
-|-------|-------|-------|-------|
-| compliance-agent | Sonnet | thorough, gaps, quick | AI instructions compliance |
-| bug-detection-agent | Opus | thorough, gaps, quick | Bugs & edge cases |
-| security-agent | Opus | thorough, gaps, quick | Security vulnerabilities |
-| performance-agent | Opus | thorough, gaps, quick | Performance issues |
-| architecture-agent | Sonnet | thorough, quick | Architecture patterns |
-| api-contracts-agent | Sonnet | thorough, quick | API compatibility |
-| error-handling-agent | Sonnet | thorough, quick | Error handling |
-| test-coverage-agent | Sonnet | thorough, quick | Test coverage |
-| synthesis-agent | Sonnet | (cross-category) | Cross-agent insights |
+| Agent | Model (thorough) | Model (gaps) | Model (quick) | Focus |
+|-------|------------------|--------------|---------------|-------|
+| compliance-agent | Sonnet | Sonnet | N/A | AI instructions compliance |
+| bug-detection-agent | Opus | Sonnet | Opus | Bugs & edge cases |
+| security-agent | Opus | Sonnet | Opus | Security vulnerabilities |
+| performance-agent | Opus | Sonnet | N/A | Performance issues |
+| architecture-agent | Sonnet | N/A | N/A | Architecture patterns |
+| api-contracts-agent | Sonnet | N/A | N/A | API compatibility |
+| error-handling-agent | Sonnet | N/A | Sonnet | Error handling |
+| test-coverage-agent | Sonnet | N/A | Sonnet | Test coverage |
+| synthesis-agent | Sonnet | N/A | Sonnet | Cross-agent insights |
+
+**Note**: Gaps mode uses Sonnet because it receives prior findings context and follows explicit checklists, reducing complexity. See `shared/review-workflow.md` for the authoritative model selection table.
 
 ### Deep Review Pipeline
 

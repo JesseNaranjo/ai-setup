@@ -63,6 +63,8 @@ Before launching agents, initialize usage tracking per `${CLAUDE_PLUGIN_ROOT}/sh
 
 Launch 4 agents in parallel with **quick** mode. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Model Selection per Agent" table for model assignments.
 
+**Critical**: When invoking each agent via Task tool, explicitly pass the `model` parameter per the authoritative table in `review-workflow.md`. The command's `model: opus` frontmatter applies to the orchestrator, not to individual agents.
+
 **Agents**: Bug Detection (Opus), Security (Opus), Error Handling (Sonnet), Test Coverage (Sonnet)
 
 Each agent receives:

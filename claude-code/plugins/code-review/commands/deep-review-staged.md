@@ -66,6 +66,8 @@ Before launching agents, initialize usage tracking per `${CLAUDE_PLUGIN_ROOT}/sh
 
 Launch all 8 agents with **thorough** mode. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Model Selection per Agent" table for model assignments.
 
+**Critical**: When invoking each agent via Task tool, explicitly pass the `model` parameter per the authoritative table in `review-workflow.md`. The command's `model: opus` frontmatter applies to the orchestrator, not to individual agents.
+
 **Agents**: Compliance, Bug Detection, Security, Performance, Architecture, API Contracts, Error Handling, Test Coverage
 
 Each agent receives:
