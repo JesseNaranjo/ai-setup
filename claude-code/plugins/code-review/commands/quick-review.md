@@ -121,6 +121,51 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 
 Launch all 3 synthesis agents in parallel, each with their respective category pairs.
 
+**Example Synthesis Invocation:**
+
+```
+Task(
+  subagent_type: "code-review:synthesis-agent",
+  model: "sonnet",
+  description: "Synthesis: Bugs + Error Handling",
+  prompt: """
+Analyze cross-cutting concerns between Bugs and Error Handling findings.
+
+synthesis_input:
+  category_a:
+    name: "Bugs"
+    findings:
+      # Include ALL bug detection findings
+      - title: "[Title from bug findings]"
+        file: "[path]"
+        line: [line]
+        severity: "[severity]"
+        description: "[description]"
+        fix_type: "[diff|prompt]"
+        fix_diff: |  # or fix_prompt
+          [fix content]
+
+  category_b:
+    name: "Error Handling"
+    findings:
+      # Include ALL error handling findings
+      - title: "[Title from error handling findings]"
+        ...
+
+  cross_cutting_question: "Do identified bugs have proper error handling in fix paths?"
+
+  files_content:
+    - path: "[file being reviewed]"
+      diff: |
+        [diff if has changes]
+      full_content: |
+        [full file content]
+
+Return findings as cross_cutting_insights YAML list per synthesis-agent.md schema.
+"""
+)
+```
+
 **Usage Tracking - Synthesis:**
 1. Record `phase_started_at` before launching synthesis agents
 2. For each synthesis agent: record `agent_started_at` before Task call, `agent_ended_at` and `task_id` after Task returns

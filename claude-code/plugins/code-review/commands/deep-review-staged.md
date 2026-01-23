@@ -139,6 +139,51 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 
 Launch all 4 synthesis agents in parallel, each with their respective category pairs and findings from Phase 1 and Phase 2.
 
+**Example Synthesis Invocation:**
+
+```
+Task(
+  subagent_type: "code-review:synthesis-agent",
+  model: "sonnet",
+  description: "Synthesis: Security + Performance",
+  prompt: """
+Analyze cross-cutting concerns between Security and Performance findings.
+
+synthesis_input:
+  category_a:
+    name: "Security"
+    findings:
+      # Include ALL Phase 1 + Phase 2 security findings
+      - title: "[Title from security findings]"
+        file: "[path]"
+        line: [line]
+        severity: "[severity]"
+        description: "[description]"
+        fix_type: "[diff|prompt]"
+        fix_diff: |  # or fix_prompt
+          [fix content]
+
+  category_b:
+    name: "Performance"
+    findings:
+      # Include ALL Phase 1 + Phase 2 performance findings
+      - title: "[Title from performance findings]"
+        ...
+
+  cross_cutting_question: "Do any security fixes introduce performance issues?"
+
+  files_content:
+    - path: "[file being reviewed]"
+      diff: |
+        [diff if has changes]
+      full_content: |
+        [full file content]
+
+Return findings as cross_cutting_insights YAML list per synthesis-agent.md schema.
+"""
+)
+```
+
 **Usage Tracking - Synthesis:**
 1. Record `phase_started_at` before launching synthesis agents
 2. For each synthesis agent: record `agent_started_at` before Task call, `agent_ended_at` and `task_id` after Task returns

@@ -124,6 +124,28 @@ claude-code/plugins/code-review/
 
 **Note**: Gaps mode uses Sonnet because it receives prior findings context and follows explicit checklists, reducing complexity. See `shared/review-workflow.md` for the authoritative model selection table.
 
+### Agent Colors
+
+Each agent has a unique color for visual identification during parallel execution:
+
+| Agent | Color |
+|-------|-------|
+| compliance-agent | blue |
+| bug-detection-agent | red |
+| security-agent | magenta |
+| performance-agent | yellow |
+| architecture-agent | cyan |
+| api-contracts-agent | green |
+| error-handling-agent | orange |
+| test-coverage-agent | purple |
+| synthesis-agent | white |
+
+**Color Usage Notes:**
+- All 8 review agents have unique colors within Phase 1
+- Phase 2 reuses colors from Phase 1 (compliance, bug, security, performance) but runs sequentially after Phase 1 completes
+- Synthesis phase runs 4 parallel instances of synthesis-agent, all using white (same agent type)
+- Color conflicts within a phase are avoided; color reuse across sequential phases is acceptable
+
 ### Deep Review Pipeline
 
 1. **Phase 1** (8 agents parallel): Thorough mode review (3 Opus, 5 Sonnet)
