@@ -138,13 +138,15 @@ For parallel agent execution within a phase:
 
 ## Timing Anomaly Detection
 
-Flag potential issues based on timing by agent model type:
+Flag potential issues based on timing by agent role:
 
-| Agent Type | Expected Range | Too Fast | Too Slow |
-|------------|---------------|----------|----------|
-| Opus agents | 30-120s | < 15s `[!]` | > 180s `[*]` |
-| Sonnet agents | 15-60s | < 10s `[!]` | > 120s `[*]` |
-| Synthesis agents | 10-45s | < 5s `[!]` | > 90s `[*]` |
+| Agent Role | Models Used | Expected Range | Too Fast | Too Slow |
+|------------|-------------|---------------|----------|----------|
+| Review agents (Opus) | opus | 30-120s | < 15s `[!]` | > 180s `[*]` |
+| Review agents (Sonnet) | sonnet | 15-60s | < 10s `[!]` | > 120s `[*]` |
+| Synthesis agents | sonnet | 10-45s | < 5s `[!]` | > 90s `[*]` |
+
+**Note:** Synthesis agents use Sonnet model but have different expected timing because they analyze aggregated findings rather than raw code. Use the "Agent Role" column to determine which thresholds apply.
 
 **Indicators:**
 - `[!]` = Agent may have errored or found nothing (too fast)

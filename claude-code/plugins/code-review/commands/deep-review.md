@@ -219,11 +219,67 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
 
-**Generate Usage Summary first:**
-1. Generate Usage Summary from tracking data per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` Usage Summary Section
-2. Include Phase Breakdown: Phase 1 (8 agents), Phase 2 (4 agents), Synthesis (4 agents)
-3. Include Agent Timing Details in expandable section
-4. Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators
+**REQUIRED: Generate Usage Summary FIRST (before any other output):**
+
+The Usage Summary MUST appear at the very beginning of the output file, before the Code Review header. This section is MANDATORY - outputs missing this section are INCOMPLETE.
+
+Generate in this exact format:
+```markdown
+## Usage Summary
+
+| Metric | Value |
+|--------|-------|
+| Review Type | Deep (16 invocations) |
+| Total Duration | [Xm Xs] |
+| Agents Invoked | [N] of 16 planned |
+
+### Phase Breakdown
+
+| Phase | Duration | Agents | Status |
+|-------|----------|--------|--------|
+| Phase 1: Thorough | [Xm Xs] | 8/8 | ✓ |
+| Phase 2: Gaps | [Xs] | 4/4 | ✓ |
+| Synthesis | [Xs] | 4/4 | ✓ |
+
+<details>
+<summary>Agent Timing Details</summary>
+
+**Phase 1: Thorough Review** ([duration])
+| Agent | Model | Duration | Findings | Status |
+|-------|-------|----------|----------|--------|
+| compliance-agent | sonnet | [Xs] | [N] | ✓ |
+| bug-detection-agent | opus | [Xs] | [N] | ✓ |
+| security-agent | opus | [Xs] | [N] | ✓ |
+| performance-agent | opus | [Xs] | [N] | ✓ |
+| architecture-agent | sonnet | [Xs] | [N] | ✓ |
+| api-contracts-agent | sonnet | [Xs] | [N] | ✓ |
+| error-handling-agent | sonnet | [Xs] | [N] | ✓ |
+| test-coverage-agent | sonnet | [Xs] | [N] | ✓ |
+
+**Phase 2: Gaps Review** ([duration])
+| Agent | Model | Duration | Findings | Status |
+|-------|-------|----------|----------|--------|
+| compliance-agent | sonnet | [Xs] | [N] | ✓ |
+| bug-detection-agent | sonnet | [Xs] | [N] | ✓ |
+| security-agent | sonnet | [Xs] | [N] | ✓ |
+| performance-agent | sonnet | [Xs] | [N] | ✓ |
+
+**Synthesis** ([duration])
+| Agent | Model | Duration | Findings | Status |
+|-------|-------|----------|----------|--------|
+| synthesis (Security+Performance) | sonnet | [Xs] | [N] | ✓ |
+| synthesis (Architecture+Test Coverage) | sonnet | [Xs] | [N] | ✓ |
+| synthesis (Bugs+Error Handling) | sonnet | [Xs] | [N] | ✓ |
+| synthesis (Compliance+Bugs) | sonnet | [Xs] | [N] | ✓ |
+
+</details>
+
+---
+```
+
+**IMPORTANT:** If the Usage Summary section is missing from the output, the review is INCOMPLETE and must be regenerated.
+
+Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`.
 
 **Then generate Code Review output:**
 

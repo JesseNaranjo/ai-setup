@@ -447,6 +447,7 @@ previous_findings:
   - title: "SQL injection in getUser"
     file: "src/db/users.ts"
     line: 23
+    range: null  # null for single-line issues, "start-end" for multi-line
     category: "Security"
     severity: "Critical"
     # Gaps agent should skip this - already flagged
@@ -518,6 +519,7 @@ previous_findings:
   - title: "Issue already found in thorough mode"
     file: "src/services/OrderService.ts"
     line: 45
+    range: "45-48"  # Line range if multi-line, null if single line
     category: "Performance"
     severity: "Critical"
 
