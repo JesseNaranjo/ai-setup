@@ -518,25 +518,9 @@ For more troubleshooting, see `shared/references/skill-troubleshooting.md`.
 
 ## Version History
 
-- **3.0.3**: Performance agent model upgrade
-  - Changed performance-agent model from Sonnet to Opus in thorough mode
-  - Deep review now runs 3 Opus / 5 Sonnet agents in Phase 1 (was 2 Opus / 6 Sonnet)
-  - Gaps mode still uses Sonnet for all agents (cost optimization)
-- **3.0.2**: Documentation consistency update
-  - Fixed version references across documentation
-  - Corrected agent model table (compliance, performance → Sonnet)
-  - Fixed test-coverage-agent color (blue → purple)
-  - Clarified gaps mode uses Sonnet for cost efficiency
-- **3.0.1**: Switched compliance and performance agents to Sonnet model for cost efficiency
-- **3.0.0**: Modular architecture refactor
-  - Extracted agents to individual files
-  - Added MODE parameter (thorough, gaps, quick)
-  - Separated language configs
-  - Added targeted review skills
-  - Added quick-review and deep-review commands
-- **2.0.1**: Bug fixes
-- **2.0.0**: 10-agent architecture with validation layer
-- **1.0.0**: Initial release
+See [CHANGELOG.md](CHANGELOG.md) for full version history and release notes.
+
+**Current Version:** 3.1.0
 
 ## Author
 

@@ -1,7 +1,7 @@
 ---
 name: bug-review
 description: This skill should be used when the user asks to "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", "debug this code", or wants to identify potential bugs in code.
-version: 3.0.3
+version: 3.1.0
 ---
 
 # Bug Detection Code Review Skill

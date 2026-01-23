@@ -5,6 +5,23 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2025-01-23
+
+### Added
+- **`--skills` option**: Embed skill methodologies in agent prompts (e.g., `--skills security-review,superpowers:brainstorming`)
+- **`--prompt` option**: Pass additional instructions to review agents
+- **Skill resolver**: New `shared/skill-resolver.md` for resolving skill names to SKILL.md files
+- **Usage tracking protocol**: New `shared/usage-tracking.md` for agent invocation timing and anomaly detection
+
+### Changed
+- Synthesis agent color changed to white for visual distinction
+- Enhanced model selection tables with quick mode mappings
+- Added synthesis invocation examples to review workflow documentation
+- Added agent color identification to review documentation
+- Clarified input validation and context discovery documentation
+- Enhanced output format for code review results
+- Added todo list creation step in quick review commands
+
 ## [3.0.3] - 2025-01-22
 
 ### Changed

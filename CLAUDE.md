@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.0.3) - a modular 9-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.1.0) - a modular 9-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -39,7 +39,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ```
 claude-code/plugins/code-review/
-├── .claude-plugin/plugin.json       # Plugin metadata (v3.0.3)
+├── .claude-plugin/plugin.json       # Plugin metadata (v3.1.0)
 ├── commands/                        # Slash command definitions
 │   ├── deep-review.md               # Deep file review (16 agent invocations)
 │   ├── deep-review-staged.md        # Deep staged review (16 agent invocations)
@@ -249,17 +249,66 @@ Skills reference `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for com
 
 ## Version Management
 
-Update version in these locations when releasing:
+### Release Process
 
-**Required:**
-- `claude-code/plugins/code-review/.claude-plugin/plugin.json` (plugin manifest)
-- `.claude-plugin/marketplace.json` (repository root)
+When preparing a new release:
 
-**Recommended (for consistency):**
-- All agent files: `agents/*.md` (9 files)
-- All skill files: `skills/*/SKILL.md` (4 files)
+1. **Find changes since last release:**
+   ```bash
+   # List git tags to find previous version
+   git tag -l --sort=-v:refname | head -5
 
-**Quick verification:**
-```bash
-grep -r "version:" claude-code/plugins/code-review/ --include="*.md" --include="*.json"
-```
+   # View commits since last tag (replace <prev> with previous version)
+   git log <prev>..HEAD --oneline -- claude-code/plugins/code-review/
+
+   # View files changed
+   git diff <prev>..HEAD --stat -- claude-code/plugins/code-review/
+   ```
+
+2. **Determine version bump:**
+   - **Patch (3.0.x)**: Bug fixes, documentation updates, minor enhancements
+   - **Minor (3.x.0)**: New features, new commands, new agents
+   - **Major (x.0.0)**: Breaking changes, architecture overhauls
+
+3. **Update CHANGELOG.md first:**
+   - Add new version section at top (after header)
+   - Document all Added, Changed, Fixed, Removed items
+   - Follow [Keep a Changelog](https://keepachangelog.com/) format
+   - **Base release notes on actual file changes (`git diff`), not commit messages** - commit messages may be incomplete or misleading
+
+4. **Update version in all locations:**
+
+   **Required:**
+   - `claude-code/plugins/code-review/.claude-plugin/plugin.json`
+   - `.claude-plugin/marketplace.json` (repository root)
+   - `claude-code/plugins/code-review/README.md` (Current Version line)
+   - `CLAUDE.md` version references (this file)
+
+   **Recommended:**
+   - All agent files: `agents/*.md` (9 files)
+   - All skill files: `skills/*/SKILL.md` (4 files)
+
+5. **Verify versions are consistent:**
+   ```bash
+   # Check version fields (replace <new> with new version)
+   grep -r "version.*<new>" claude-code/plugins/code-review/ --include="*.md" --include="*.json"
+
+   # Verify CHANGELOG has new section
+   head -10 claude-code/plugins/code-review/CHANGELOG.md
+
+   # Verify no old version remains in frontmatter
+   grep -r "version: <prev>" claude-code/plugins/code-review/ --include="*.md"
+   ```
+
+6. **Commit changes:**
+   ```bash
+   git add -A
+   git commit -m "Release v<new>: <summary of changes>"
+   ```
+
+7. **Create and push git tag:**
+   ```bash
+   git tag v<new>
+   git push origin main
+   git push origin v<new>
+   ```

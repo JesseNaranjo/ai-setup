@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
 color: green
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.3
+version: 3.1.0
 ---
 
 # API & Contracts Review Agent

@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for thorough/quick. See review-workflow.md for authoritative model selection (sonnet for gaps)
 color: red
 tools: ["Read", "Grep", "Glob"]
-version: 3.0.3
+version: 3.1.0
 ---
 
 # Bug Detection Review Agent
