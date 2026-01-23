@@ -261,11 +261,12 @@ Return cross-cutting insights as a YAML list. See `${CLAUDE_PLUGIN_ROOT}/shared/
 cross_cutting_insights:
   - title: "Brief descriptive title"
     related_findings:
-      - category1: "Title of related finding from first category"
-      - category2: "Title of related finding from second category"
-    # Both category1 and category2 are REQUIRED. If only one category has a finding, don't flag.
+      security: "Title of related finding from Security category"
+      performance: "Title of related finding from Performance category"
+    # Use lowercase category keys (see Category Key Mapping below)
+    # Both related findings are REQUIRED. If only one category has a finding, don't flag.
     insight: "What the cross-cutting concern is and why it matters"
-    category: "Primary category for this insight (Security|Performance|Architecture|Bugs|Error Handling|Test Coverage|Compliance)"
+    category: "Security"  # Primary category - use Title Case (see mapping below)
     severity: "Critical|Major|Minor|Suggestion"
     file: "path/to/file.ts"
     line: 42
@@ -276,13 +277,28 @@ cross_cutting_insights:
     fix_prompt: "..."  # if fix_type is prompt
 ```
 
+### Category Key Mapping
+
+Use lowercase keys in `related_findings` and Title Case values in `category`:
+
+| Display Name | related_findings Key | category Value |
+|--------------|---------------------|----------------|
+| Compliance | `compliance` | `Compliance` |
+| Bugs | `bugs` | `Bugs` |
+| Security | `security` | `Security` |
+| Performance | `performance` | `Performance` |
+| Architecture | `architecture` | `Architecture` |
+| API Contracts | `api_contracts` | `API Contracts` |
+| Error Handling | `error_handling` | `Error Handling` |
+| Test Coverage | `test_coverage` | `Test Coverage` |
+
 **Example - Security + Performance**:
 ```yaml
 cross_cutting_insights:
   - title: "Authentication check in hot path adds latency"
     related_findings:
-      - security: "Missing auth check on data endpoint"
-      - performance: "Hot path in /api/data with 1000+ calls/sec"
+      security: "Missing auth check on data endpoint"
+      performance: "Hot path in /api/data with 1000+ calls/sec"
     insight: "Adding auth check to /api/data (called 1000x/sec) will add ~50ms latency per request. Consider caching auth tokens or moving check to middleware."
     category: "Performance"
     severity: "Major"
@@ -297,8 +313,8 @@ cross_cutting_insights:
 cross_cutting_insights:
   - title: "New UserService interface lacks unit tests"
     related_findings:
-      - architecture: "Extract UserService interface for DI"
-      - test_coverage: "Existing UserService tests use concrete class only"
+      architecture: "Extract UserService interface for DI"
+      test_coverage: "Existing UserService tests use concrete class only"
     insight: "Architectural refactoring created IUserService interface but existing tests still use concrete class. Tests won't catch interface contract violations."
     category: "Test Coverage"
     severity: "Major"
@@ -313,8 +329,8 @@ cross_cutting_insights:
 cross_cutting_insights:
   - title: "Bug fix doesn't handle database connection failure"
     related_findings:
-      - bugs: "Null pointer in user lookup"
-      - error_handling: "Missing try-catch around database calls"
+      bugs: "Null pointer in user lookup"
+      error_handling: "Missing try-catch around database calls"
     insight: "The null check fix for user lookup doesn't handle the case where the database connection fails entirely - it will still throw an unhandled exception."
     category: "Error Handling"
     severity: "Major"
@@ -336,8 +352,8 @@ cross_cutting_insights:
 cross_cutting_insights:
   - title: "Compliance violation causes silent data corruption"
     related_findings:
-      - compliance: "Missing input validation per CLAUDE.md"
-      - bugs: "Truncation when input exceeds expected length"
+      compliance: "Missing input validation per CLAUDE.md"
+      bugs: "Truncation when input exceeds expected length"
     insight: "CLAUDE.md requires input validation, but the missing validation allows oversized input that triggers silent truncation - a compliance violation that directly causes a data corruption bug."
     category: "Bugs"
     severity: "Critical"

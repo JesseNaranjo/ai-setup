@@ -143,13 +143,17 @@ All reviews start with this header:
 
 ## No Issues Found
 
-When no issues are found after validation:
+When no issues are found after validation, list only the categories that were actually checked.
+
+### Deep Review (8 categories)
+
+For deep reviews (`/deep-review`, `/deep-review-staged`), list all 8 categories:
 
 ```markdown
 ## Code Review
 
 **Reviewed:** [N] file(s) | **Branch:** [branch-name]
-**Review Depth:** [review-depth-description]
+**Review Depth:** Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)
 
 No issues found. All checks passed:
 - Compliance (AI instructions)
@@ -166,15 +170,26 @@ Files reviewed:
 - [file2.ts]
 ```
 
-For quick reviews (4 agents + 3 synthesis), only list the categories that were checked:
+### Quick Review (4 categories + synthesis)
+
+For quick reviews (`/quick-review`, `/quick-review-staged`), list only the 4 categories that were checked:
 
 ```markdown
+## Code Review
+
+**Reviewed:** [N] file(s) | **Branch:** [branch-name]
+**Review Depth:** Quick (7 invocations: 4 review + 3 synthesis)
+
 No issues found. All checks passed:
 - Bug detection
 - Security analysis
 - Error handling
 - Test coverage
 - Cross-cutting synthesis
+
+Files reviewed:
+- [file1.ts]
+- [file2.ts]
 ```
 
 ## Issues Found

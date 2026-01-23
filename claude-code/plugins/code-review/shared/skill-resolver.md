@@ -13,12 +13,23 @@ Split on comma to get individual skill names.
 ### 2. Resolve to File Path
 
 **If skill contains ":" (external plugin):**
+
+Claude native install path structure:
+```
+~/.claude/plugins/cache/{source}/{plugin_name}/{version}/skills/{skill_name}/SKILL.md
+```
+
+Example:
+```
+~/.claude/plugins/cache/claude-plugins-official/superpowers/4.0.3/skills/brainstorming/SKILL.md
+```
+
+Resolution:
 ```
 superpowers:brainstorming
   → plugin_name = "superpowers"
   → skill_name = "brainstorming"
   → Search: ~/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
-  → Fallback: ~/.claude/plugins/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
 ```
 
 **If skill has no ":" (plugin-local):**
@@ -27,11 +38,36 @@ security-review
   → Look in: ${CLAUDE_PLUGIN_ROOT}/skills/{skill_name}/SKILL.md
 ```
 
+### 2.5. Version Selection
+
+When multiple versions of an external plugin are found:
+
+1. **Prefer most recently modified**: Select the SKILL.md file with the most recent modification timestamp
+2. **Rationale**: The most recently modified version typically corresponds to the latest installed or updated plugin
+
+This handles cases where a user has multiple plugin versions cached (e.g., after updates).
+
 ### 3. Handle Not Found
 
-If skill file not found:
-- Log warning: "Skill '{skill_name}' not found, skipping"
-- Continue with remaining skills
+If skill file not found after searching all paths:
+
+1. **Log detailed warning**:
+   ```
+   Warning: Skill '{plugin_name}:{skill_name}' not found.
+   Searched paths:
+     - ~/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
+   Continuing with remaining skills.
+   ```
+
+2. **Continue processing**: Do not fail the entire command - process remaining skills
+
+3. **Track failed skills**: Maintain list of skills that failed to resolve
+
+4. **Report in output**: If any skills failed to resolve, include a warning in the review output:
+   ```markdown
+   > **Warning:** The following skills could not be resolved and were skipped:
+   > - superpowers:nonexistent-skill
+   ```
 
 ### 4. Extract Methodology Content
 

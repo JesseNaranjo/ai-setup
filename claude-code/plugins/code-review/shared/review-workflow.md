@@ -666,8 +666,8 @@ Each synthesis agent receives:
 cross_cutting_insights:
   - title: "SQL injection fix uses unbounded query"
     related_findings:
-      - security: "SQL injection in getUser"
-      - performance: "Unbounded query in user lookup"
+      security: "SQL injection in getUser"
+      performance: "Unbounded query in user lookup"
     # Both categories required - if only one has a finding, don't flag as cross-cutting
     insight: "The parameterized query fix doesn't limit result set size, potential DoS"
     category: "Performance"
