@@ -2,7 +2,7 @@
 name: quick-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Quick 7-agent review of staged changes
-argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"]"
+argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
@@ -12,6 +12,7 @@ Parse arguments from `$ARGUMENTS`:
 - Optional: `--output-file <path>` to specify output location
 - Optional: `--language nodejs|dotnet` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
+- Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts (e.g., `--skills security-review,superpowers:brainstorming`)
 
 ---
 
@@ -49,6 +50,19 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content g
 
 ---
 
+## Step 3.5: Skill Resolution (if --skills provided)
+
+If `--skills` argument is present, resolve and extract skill content.
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the resolution algorithm.
+
+For each skill in the comma-separated list:
+1. Resolve skill name to SKILL.md file path
+2. Read and extract methodology content
+3. Collect as `embedded_skills` for Step 4
+
+---
+
 ## Step 4: 4-Agent Quick Review
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic and the **Agent Invocation Pattern** section in `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for the exact Task tool invocation format.
@@ -76,6 +90,7 @@ Each agent receives:
 - The AI Agent Instructions files relevant to each staged file
 - Related test files for context
 - MODE parameter: **quick**
+- Embedded skill methodologies from `--skills` argument (if provided)
 - Additional instructions from `--prompt` argument (combined with project instructions from settings)
 
 **Quick mode agents focus on**:

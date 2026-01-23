@@ -521,6 +521,15 @@ previous_findings:
     category: "Performance"
     severity: "Critical"
 
+// Embedded skills (from --skills argument):
+embedded_skills:
+  - name: "brainstorming"
+    source: "superpowers:brainstorming"
+    methodology: |
+      ## Brainstorming Methodology
+      Before flagging issues, explore multiple interpretations...
+      [extracted from SKILL.md]
+
 // Additional instructions (from settings file body + --prompt argument):
 additional_instructions: |
   # Project-Specific Instructions
@@ -568,6 +577,7 @@ Each agent receives:
 - Related test files
 - MODE parameter
 - Previous findings (gaps mode only, from same category)
+- Embedded skill methodologies (from `--skills` argument, if provided)
 - Additional instructions (from settings file body + `--prompt` argument)
 
 Each agent returns issues following the YAML schema defined in each agent file.

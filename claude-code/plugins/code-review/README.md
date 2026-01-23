@@ -23,7 +23,7 @@ The Code Review Plugin provides automated, in-depth code review using 9 speciali
 Comprehensive code review using all 9 agents (16 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
-/deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
+/deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ### `/deep-review-staged`
@@ -31,7 +31,7 @@ Comprehensive code review using all 9 agents (16 invocations) with thorough + ga
 Comprehensive code review of staged git changes using all 9 agents (16 invocations) with thorough + gaps modes.
 
 ```bash
-/deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
+/deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ### `/quick-review`
@@ -39,7 +39,7 @@ Comprehensive code review of staged git changes using all 9 agents (16 invocatio
 Fast 4-agent review of specific files focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
+/quick-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ### `/quick-review-staged`
@@ -47,7 +47,7 @@ Fast 4-agent review of specific files focusing on critical issues (bugs, securit
 Fast 4-agent review of staged git changes focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
+/quick-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ## Configuration
@@ -224,6 +224,59 @@ Then use `--prompt` for one-off additions:
 | Domain context | Explain what the code does and why it matters |
 | Known risks | Point agents toward specific threat models |
 | Review philosophy | Describe how to approach analysis (systematic, creative, etc.) |
+
+### Embedding Skills in Reviews
+
+Use `--skills` to embed skill methodologies directly into review agents. This gives agents access to specialized knowledge from other skills during the review.
+
+#### Syntax
+
+```bash
+--skills <skill1,skill2,...>
+```
+
+#### Skill References
+
+| Format | Example | Description |
+|--------|---------|-------------|
+| Plugin-local | `security-review` | Skills within the code-review plugin |
+| External plugin | `superpowers:brainstorming` | Skills from other plugins (plugin:skill) |
+
+#### Examples
+
+**Embed brainstorming methodology:**
+```bash
+/deep-review src/auth/*.ts --skills superpowers:brainstorming
+```
+Agents will explore multiple attack vectors and failure modes before flagging issues.
+
+**Combine multiple skills:**
+```bash
+/deep-review src/api/*.ts --skills security-review,superpowers:systematic-debugging
+```
+Agents receive both security patterns and systematic debugging methodology.
+
+**Use with --prompt:**
+```bash
+/deep-review src/payments.ts --skills superpowers:brainstorming --prompt "Focus on financial calculation precision"
+```
+Combines skill methodology with specific instructions.
+
+#### How It Works
+
+1. Skill names are resolved to SKILL.md files
+2. Methodology content is extracted (checklists, patterns, focus areas)
+3. Content is embedded in all agent prompts as `embedded_skills`
+4. Agents apply the methodology during their analysis
+
+#### Available Plugin Skills
+
+| Skill | Focus |
+|-------|-------|
+| `security-review` | Security vulnerabilities and OWASP patterns |
+| `performance-review` | Performance issues and optimization |
+| `bug-review` | Logical errors and edge cases |
+| `compliance-review` | CLAUDE.md and coding standards |
 
 ## Skills
 
