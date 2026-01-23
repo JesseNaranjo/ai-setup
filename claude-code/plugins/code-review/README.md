@@ -23,7 +23,7 @@ The Code Review Plugin provides automated, in-depth code review using 9 speciali
 Comprehensive code review using all 9 agents (16 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
-/deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>]
+/deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
 ```
 
 ### `/deep-review-staged`
@@ -31,7 +31,7 @@ Comprehensive code review using all 9 agents (16 invocations) with thorough + ga
 Comprehensive code review of staged git changes using all 9 agents (16 invocations) with thorough + gaps modes.
 
 ```bash
-/deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>]
+/deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
 ```
 
 ### `/quick-review`
@@ -39,7 +39,7 @@ Comprehensive code review of staged git changes using all 9 agents (16 invocatio
 Fast 4-agent review of specific files focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>]
+/quick-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
 ```
 
 ### `/quick-review-staged`
@@ -47,7 +47,7 @@ Fast 4-agent review of specific files focusing on critical issues (bugs, securit
 Fast 4-agent review of staged git changes focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review-staged [--output-file <path>] [--language <nodejs|dotnet>]
+/quick-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"]
 ```
 
 ## Configuration
@@ -157,9 +157,73 @@ This is a financial application. Pay extra attention to:
 
 ### Priority Order
 
-Command-line flags override settings file:
+Command-line flags extend or override settings file:
 1. `--output-file` overrides `output_dir`
 2. `--language` overrides `language`
+3. `--prompt` appends to project instructions (does not replace)
+
+### Additional Prompt Instructions
+
+Use `--prompt` to pass ad-hoc instructions to all review agents without editing your settings file. This is useful for:
+- Focusing reviews on specific concerns
+- Providing one-off context for a particular review
+- Experimenting with different review approaches
+
+#### Example: Brainstorming-Style Deep Exploration
+
+```bash
+/deep-review src/auth/*.ts --prompt "Before flagging issues, brainstorm multiple attack vectors and failure modes for each function. Consider: What assumptions does this code make? What happens if those assumptions are violated? What edge cases might the original developer have missed? Explore creatively before concluding."
+```
+
+#### Example: Systematic Checklist Approach
+
+```bash
+/quick-review-staged --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
+```
+
+#### Example: Domain-Specific Focus
+
+```bash
+/deep-review src/api/payments.ts --prompt "This is a payment processing module. Focus on: financial calculation precision, transaction atomicity, audit trail completeness, PCI compliance patterns. Flag anything that could lead to money loss or compliance violations."
+```
+
+#### Example: Threat Model Guidance
+
+```bash
+/deep-review src/api/*.ts --prompt "Assume an attacker has valid credentials but is trying to access other users' data. Focus on authorization checks, IDOR vulnerabilities, and data leakage in error messages."
+```
+
+#### Combining with Project Settings
+
+For persistent instructions, use the markdown body in `.claude/code-review.local.md`:
+
+```yaml
+---
+enabled: true
+---
+
+# Review Philosophy
+
+Apply brainstorming principles: explore multiple interpretations of each code path before concluding. Ask "what if?" for each assumption.
+
+Use systematic analysis: check each security category even when code appears safe.
+```
+
+Then use `--prompt` for one-off additions:
+
+```bash
+/deep-review src/auth/*.ts --prompt "Additionally, this PR introduces OAuth. Verify token handling follows OWASP guidelines."
+```
+
+#### Effective Prompt Strategies
+
+| Goal | Approach |
+|------|----------|
+| Thorough exploration | Describe the *mindset* you want agents to adopt |
+| Specific focus areas | List concrete categories or concerns to check |
+| Domain context | Explain what the code does and why it matters |
+| Known risks | Point agents toward specific threat models |
+| Review philosophy | Describe how to approach analysis (systematic, creative, etc.) |
 
 ## Skills
 

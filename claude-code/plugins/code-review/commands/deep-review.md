@@ -2,7 +2,7 @@
 name: deep-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Deep 16-agent code review with synthesis
-argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet]"
+argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"]"
 model: opus
 ---
 
@@ -12,6 +12,7 @@ Parse arguments from `$ARGUMENTS`:
 - Required: One or more file paths (space-separated)
 - Optional: `--output-file <path>` to specify output location
 - Optional: `--language nodejs|dotnet` to force language detection
+- Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 
 ---
 
@@ -81,6 +82,7 @@ Each agent receives:
 - For files without changes: the full file content
 - Related test files for context
 - MODE parameter: **thorough**
+- Additional instructions from `--prompt` argument (combined with project instructions from settings)
 
 **Usage Tracking - Phase 1:**
 1. Record `phase_started_at` before launching agents

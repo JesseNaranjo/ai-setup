@@ -19,6 +19,8 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 | `/quick-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
 | `/quick-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
 
+**Note:** All review commands also accept `--language nodejs|dotnet` and `--prompt "<instructions>"` to pass additional instructions to agents.
+
 ## Plugin Skills
 
 | Skill | Trigger Phrases |

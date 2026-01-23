@@ -521,6 +521,14 @@ previous_findings:
     category: "Performance"
     severity: "Critical"
 
+// Additional instructions (from settings file body + --prompt argument):
+additional_instructions: |
+  # Project-Specific Instructions
+  [content from .claude/code-review.local.md markdown body]
+
+  # Command-Line Instructions
+  [content from --prompt argument]
+
 Return findings as YAML per shared/output-schema-base.md.
 """
 )
@@ -560,6 +568,7 @@ Each agent receives:
 - Related test files
 - MODE parameter
 - Previous findings (gaps mode only, from same category)
+- Additional instructions (from settings file body + `--prompt` argument)
 
 Each agent returns issues following the YAML schema defined in each agent file.
 

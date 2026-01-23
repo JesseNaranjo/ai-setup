@@ -2,7 +2,7 @@
 name: quick-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Quick 7-agent review of staged changes
-argument-hint: "[--output-file <path>] [--language nodejs|dotnet]"
+argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"]"
 model: opus
 ---
 
@@ -11,6 +11,7 @@ Perform a fast 4-agent code review for staged git changes, focusing on bugs, sec
 Parse arguments from `$ARGUMENTS`:
 - Optional: `--output-file <path>` to specify output location
 - Optional: `--language nodejs|dotnet` to force language detection
+- Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 
 ---
 
@@ -75,6 +76,7 @@ Each agent receives:
 - The AI Agent Instructions files relevant to each staged file
 - Related test files for context
 - MODE parameter: **quick**
+- Additional instructions from `--prompt` argument (combined with project instructions from settings)
 
 **Quick mode agents focus on**:
 - Critical and Major severity issues only

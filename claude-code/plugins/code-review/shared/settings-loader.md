@@ -77,10 +77,11 @@ custom_rules: []
 
 ## Settings Priority
 
-Command-line flags override settings file:
+Command-line flags extend or override settings file:
 
 1. `--output-file` overrides `output_dir`
 2. `--language` overrides `language`
+3. `--prompt` appends to project instructions (does not replace)
 
 ## Example Usage
 
