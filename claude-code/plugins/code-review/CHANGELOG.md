@@ -5,6 +5,13 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.1] - 2025-01-23
+
+### Fixed
+- README directory structure comment showing outdated version (v3.0.3 → v3.1.1)
+- README Agent Configuration table: corrected supported modes for agents not used in quick review
+- README Agent Configuration table: fixed synthesis-agent color from cyan to white
+
 ## [3.1.0] - 2025-01-23
 
 ### Added

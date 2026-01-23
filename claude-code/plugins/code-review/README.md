@@ -296,7 +296,7 @@ Targeted review skills for specific concerns:
 ```
 code-review/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin metadata (v3.0.3)
+│   └── plugin.json              # Plugin metadata (v3.1.1)
 ├── commands/
 │   ├── deep-review.md           # Deep file review (16 invocations)
 │   ├── deep-review-staged.md    # Deep staged review (16 invocations)
@@ -347,15 +347,15 @@ code-review/
 
 | Agent | Model | Supported Modes | Color |
 |-------|-------|-----------------|-------|
-| compliance-agent | Sonnet | thorough, gaps, quick | blue |
+| compliance-agent | Sonnet | thorough, gaps | blue |
 | bug-detection-agent | Opus | thorough, gaps, quick | red |
 | security-agent | Opus | thorough, gaps, quick | magenta |
-| performance-agent | Opus | thorough, gaps, quick | yellow |
-| architecture-agent | Sonnet | thorough, quick | cyan |
-| api-contracts-agent | Sonnet | thorough, quick | green |
+| performance-agent | Opus | thorough, gaps | yellow |
+| architecture-agent | Sonnet | thorough | cyan |
+| api-contracts-agent | Sonnet | thorough | green |
 | error-handling-agent | Sonnet | thorough, quick | orange |
 | test-coverage-agent | Sonnet | thorough, quick | purple |
-| synthesis-agent | Sonnet | (cross-category) | cyan |
+| synthesis-agent | Sonnet | (cross-category) | white |
 
 > **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
 
@@ -520,7 +520,7 @@ For more troubleshooting, see `shared/references/skill-troubleshooting.md`.
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history and release notes.
 
-**Current Version:** 3.1.0
+**Current Version:** 3.1.1
 
 ## Author
 
