@@ -1,6 +1,6 @@
 # Context Discovery
 
-Instructions for the Haiku agent that gathers review context before the main review phase.
+Instructions for gathering review context before the main review phase.
 
 ## Agent Instructions
 

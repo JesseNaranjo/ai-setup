@@ -181,6 +181,7 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/severity-definitions.md` - Severity classification (Critical, Major, Minor, Suggestion)
 - `shared/gaps-mode-rules.md` - Rules for gaps mode (deduplication, focus areas)
 - `shared/false-positives.md` - False positive rules to prevent invalid findings
+- `shared/usage-tracking.md` - Usage tracking schema and protocol
 - `commands/*.md` - Define command interfaces (reference shared components)
 - `skills/*/SKILL.md` - Skill definitions (reference skill-common-workflow.md)
 - `templates/code-review.local.md.example` - User settings template

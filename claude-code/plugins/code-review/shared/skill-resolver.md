@@ -17,8 +17,8 @@ Split on comma to get individual skill names.
 superpowers:brainstorming
   → plugin_name = "superpowers"
   → skill_name = "brainstorming"
-  → Search: ~/.claude/plugins/cache/*/{plugin_name}/*/skills/{skill_name}/SKILL.md
-  → Fallback: ~/.claude/plugins/*/{plugin_name}/skills/{skill_name}/SKILL.md
+  → Search: ~/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
+  → Fallback: ~/.claude/plugins/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
 ```
 
 **If skill has no ":" (plugin-local):**

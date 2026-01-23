@@ -4,7 +4,7 @@ Shared input validation logic for staged review commands (`/deep-review-staged`,
 
 ## Process
 
-Launch a Haiku agent to check if there are any staged changes:
+Check if there are any staged changes:
 
 ### 1. Verify Git Repository
 

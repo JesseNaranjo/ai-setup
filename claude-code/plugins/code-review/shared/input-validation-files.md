@@ -4,7 +4,7 @@ Shared input validation logic for file-based review commands (`/deep-review`, `/
 
 ## Process
 
-Launch a Haiku agent to validate the input and check for changes:
+Validate the input and check for changes:
 
 ### 1. Parse Arguments
 
