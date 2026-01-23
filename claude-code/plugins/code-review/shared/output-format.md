@@ -166,7 +166,7 @@ Files reviewed:
 - [file2.ts]
 ```
 
-For quick reviews (4 agents), only list the categories that were checked:
+For quick reviews (4 agents + 3 synthesis), only list the categories that were checked:
 
 ```markdown
 No issues found. All checks passed:
@@ -174,6 +174,7 @@ No issues found. All checks passed:
 - Security analysis
 - Error handling
 - Test coverage
+- Cross-cutting synthesis
 ```
 
 ## Issues Found

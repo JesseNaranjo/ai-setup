@@ -27,6 +27,8 @@ To optimize cost and latency, issues are validated in batches grouped by file ra
 
 **Cross-cutting insights** (from synthesis-agent) always use **Opus** for validation.
 
+**Note for Quick Reviews:** Despite the quick review philosophy of using Sonnet where possible, cross-cutting insights still use Opus for validation because they represent novel connections between categories that require more nuanced judgment to validate. The time savings of Sonnet validation does not justify the risk of missing subtle cross-category interactions.
+
 ### Cross-Cutting Insight Validation
 
 Synthesis agents produce `cross_cutting_insights` that require special validation:
