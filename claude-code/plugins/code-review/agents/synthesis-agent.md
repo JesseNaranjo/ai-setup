@@ -185,15 +185,9 @@ Return findings as cross_cutting_insights YAML list.
 
 ### Using skill_instructions
 
-When `skill_instructions` is present in the prompt:
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply skill_instructions.
 
-**Methodology Instructions** (this agent receives methodology skills only):
-
-1. **methodology.approach**: Adopt this mindset throughout analysis
-2. **methodology.steps**: Follow these steps as part of your review process
-3. **methodology.questions**: Consider these questions when evaluating each potential finding
-
-**When skill_instructions is absent**: Proceed with standard review process defined in this agent.
+This agent receives methodology skills only. See the "Synthesis Agent Instructions" section for synthesis-specific guidance.
 
 ### Cross-Cutting Pairs
 

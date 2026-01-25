@@ -191,49 +191,15 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROO
 
 The Usage Summary MUST appear at the very beginning of the output file, before the Code Review header. This section is MANDATORY - outputs missing this section are INCOMPLETE.
 
-Generate in this exact format:
-```markdown
-## Usage Summary
-
-| Metric | Value |
-|--------|-------|
-| Review Type | Quick (7 invocations) |
-| Total Duration | [Xm Xs] |
-| Agents Invoked | [N] of 7 planned |
-
-### Phase Breakdown
-
-| Phase | Duration | Agents | Status |
-|-------|----------|--------|--------|
-| Review | [Xm Xs] | 4/4 | ✓ |
-| Synthesis | [Xs] | 3/3 | ✓ |
-
-<details>
-<summary>Agent Timing Details</summary>
-
-**Review Phase** ([duration])
-| Agent | Model | Duration | Findings | Status |
-|-------|-------|----------|----------|--------|
-| bug-detection-agent | opus | [Xs] | [N] | ✓ |
-| security-agent | opus | [Xs] | [N] | ✓ |
-| error-handling-agent | sonnet | [Xs] | [N] | ✓ |
-| test-coverage-agent | sonnet | [Xs] | [N] | ✓ |
-
-**Synthesis Phase** ([duration])
-| Agent | Model | Duration | Findings | Status |
-|-------|-------|----------|----------|--------|
-| synthesis (Bugs+Error Handling) | sonnet | [Xs] | [N] | ✓ |
-| synthesis (Security+Bugs) | sonnet | [Xs] | [N] | ✓ |
-| synthesis (Bugs+Test Coverage) | sonnet | [Xs] | [N] | ✓ |
-
-</details>
-
----
-```
-
-**IMPORTANT:** If the Usage Summary section is missing from the output, the review is INCOMPLETE and must be regenerated.
+Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` "Usage Summary Section":
+- Review Type: "Quick (7 invocations)"
+- Phases: "Review", "Synthesis" (use quick review phase names per output-format.md)
+- Include 4 review agents and 3 synthesis agents
+- Use model assignments from `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md`
 
 Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`.
+
+**IMPORTANT:** If the Usage Summary section is missing from the output, the review is INCOMPLETE and must be regenerated.
 
 **Then generate Code Review output:**
 
