@@ -10,44 +10,76 @@ For each skill in the `--skills` argument:
 
 Split on comma to get individual skill names.
 
-### 2. Resolve to File Path
+### 2. Load Skill via Skill() Tool (MANDATORY)
 
-**If skill contains ":" (external plugin):**
+**CRITICAL**: The orchestrator MUST invoke the Skill() tool for EVERY skill. Direct file read is NEVER the first approach—it is ONLY a fallback when the Skill() tool fails.
 
-Claude native install path structure (where `$HOME` is the user's home directory):
-```
-$HOME/.claude/plugins/cache/{source}/{plugin_name}/{version}/skills/{skill_name}/SKILL.md
-```
+For each skill name, the orchestrator MUST invoke the Skill() tool:
 
-Example:
 ```
-$HOME/.claude/plugins/cache/claude-plugins-official/superpowers/4.0.3/skills/brainstorming/SKILL.md
+Skill(skill: "{skill_name}")
 ```
 
-Resolution:
-```
-superpowers:brainstorming
-  → plugin_name = "superpowers"
-  → skill_name = "brainstorming"
-  → Search: $HOME/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
-```
+**Examples:**
+- `security-review` → `Skill(skill: "security-review")`
+- `superpowers:brainstorming` → `Skill(skill: "superpowers:brainstorming")`
 
-**Note**: When using the Glob tool, resolve `$HOME` to the actual home directory path before constructing the glob pattern. The Glob tool does not perform environment variable expansion.
+The Skill() tool will:
+1. Resolve the skill to its SKILL.md file
+2. Load the skill content into context
+3. Return the skill content for parsing
 
-**If skill has no ":" (plugin-local):**
-```
-security-review
-  → Look in: ${CLAUDE_PLUGIN_ROOT}/skills/{skill_name}/SKILL.md
-```
+**On Success:** Proceed to Step 4 (Parse Skill Content) with the loaded content.
 
-### 2.5. Version Selection
+### 2.5. Fallback: Direct File Read (On Skill() Tool Failure)
 
-When multiple versions of an external plugin are found:
+If the Skill() tool returns an error or fails to load the skill:
 
-1. **Prefer most recently modified**: Select the SKILL.md file with the most recent modification timestamp
-2. **Rationale**: The most recently modified version typically corresponds to the latest installed or updated plugin
+1. **Log warning**:
+   ```
+   Warning: Skill() tool failed for '{skill_name}'. Falling back to direct file read.
+   Error: {error_message}
+   ```
 
-This handles cases where a user has multiple plugin versions cached (e.g., after updates).
+2. **Attempt direct file resolution**:
+
+   **If skill contains ":" (external plugin):**
+
+   Claude native install path structure (where `$HOME` is the user's home directory):
+   ```
+   $HOME/.claude/plugins/cache/{source}/{plugin_name}/{version}/skills/{skill_name}/SKILL.md
+   ```
+
+   Example:
+   ```
+   $HOME/.claude/plugins/cache/claude-plugins-official/superpowers/4.0.3/skills/brainstorming/SKILL.md
+   ```
+
+   Resolution:
+   ```
+   superpowers:brainstorming
+     → plugin_name = "superpowers"
+     → skill_name = "brainstorming"
+     → Search: $HOME/.claude/plugins/cache/**/{plugin_name}/*/skills/{skill_name}/SKILL.md
+   ```
+
+   **Note**: When using the Glob tool, resolve `$HOME` to the actual home directory path before constructing the glob pattern. The Glob tool does not perform environment variable expansion.
+
+   **If skill has no ":" (plugin-local):**
+   ```
+   security-review
+     → Look in: ${CLAUDE_PLUGIN_ROOT}/skills/{skill_name}/SKILL.md
+   ```
+
+3. **Version selection** (when multiple external versions found):
+   - Prefer most recently modified SKILL.md file
+   - Rationale: Most recent version typically corresponds to latest installed plugin
+
+4. **Read file** using Read tool if path found
+
+5. **On fallback success**: Proceed to Step 4 (Parse Skill Content)
+
+6. **On fallback failure**: Proceed to Step 3 (Handle Not Found)
 
 ### 3. Handle Not Found
 

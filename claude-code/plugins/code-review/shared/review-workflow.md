@@ -381,6 +381,22 @@ project_instructions: |
 
 When `--skills` is provided, the orchestrator interprets the resolved skills and makes orchestration decisions. This section defines how skill data affects each phase of the review.
 
+### Skill Loading via Skill() Tool
+
+**CRITICAL**: The orchestrator (running as Opus) MUST use the Skill() tool to load each skill specified in the `--skills` argument. Direct file read is NEVER the first approach—it is ONLY a fallback when the Skill() tool fails.
+
+1. **FIRST**: Invoke `Skill(skill: "{skill_name}")` for each skill
+2. **ONLY IF Skill() tool fails**: Fall back to direct SKILL.md file read (see `skill-resolver.md`)
+3. **Parse**: Extract structured data from loaded skill content into `resolved_skills`
+
+This ensures proper skill registration and allows the Skill() tool to perform any necessary setup before content is parsed.
+
+**Example invocations:**
+```
+Skill(skill: "security-review")
+Skill(skill: "superpowers:brainstorming")
+```
+
 ### Agent Selection Adjustments
 
 Skills can affect which agents run and with what configuration:

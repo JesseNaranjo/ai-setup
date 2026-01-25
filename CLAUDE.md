@@ -175,6 +175,7 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
 - `shared/review-workflow.md` - Orchestration, workflow steps, skill-informed orchestration, and agent invocation pattern
 - `shared/skill-resolver.md` - Skill resolution and structured parsing for orchestrator interpretation
+- `shared/skill-loading.md` - Complete skill loading process (referenced by all commands)
 - `shared/skill-common-workflow.md` - Lean workflow steps for skills (references `shared/references/` for details)
 - `shared/validation-rules.md` - Issue validation process
 - `shared/output-schema-base.md` - Base YAML schema all agents must use
@@ -262,6 +263,8 @@ When `--skills` is provided to review commands, the orchestrator (running as Opu
 5. **Synthesis Adjustments**: Skill-specific cross-cutting questions may be added
 
 See `shared/review-workflow.md` "Skill-Informed Orchestration" section for implementation details.
+
+**Skill Loading:** The orchestrator MUST use the Skill() tool to load skills. Direct file read is only used as fallback if Skill() tool fails.
 
 ## Version Management
 
