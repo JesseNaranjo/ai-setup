@@ -44,12 +44,12 @@ For each issue, determine:
 
 ## Validator Model Assignment
 
-| Issue Severity | Validator Model |
-|---------------|-----------------|
-| Critical | Opus |
-| Major | Sonnet |
-| Minor | Haiku |
-| Suggestion | Haiku |
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for the authoritative validator model assignment table.
+
+Model assignment is based on **issue category** (not severity):
+- Security, Bugs, Performance issues → Opus validator
+- Compliance, Architecture, API Contracts, Error Handling, Test Coverage → Sonnet validator
+- Cross-cutting insights → Always Opus
 
 ## Deduplication Rules
 

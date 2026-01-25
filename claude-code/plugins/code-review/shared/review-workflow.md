@@ -440,10 +440,10 @@ skill_instructions:
 
 | Agent | Receives From |
 |-------|---------------|
-| security-agent | `security-review` focus_categories, ALL methodology skills |
-| bug-detection-agent | `bug-review` focus_categories, ALL methodology skills |
-| performance-agent | `performance-review` focus_categories, ALL methodology skills |
-| compliance-agent | `compliance-review` focus_categories, ALL methodology skills |
+| security-agent | `security-review` focus_areas, ALL methodology skills |
+| bug-detection-agent | `bug-review` focus_areas, ALL methodology skills |
+| performance-agent | `performance-review` focus_areas, ALL methodology skills |
+| compliance-agent | `compliance-review` focus_areas, ALL methodology skills |
 | Other agents | ALL methodology skills only |
 
 **Merging Multiple Skills:**
@@ -480,6 +480,30 @@ Skills can inform synthesis questions:
 - If `security-review` skill is active, add: "Do findings align with OWASP categories?"
 - If `performance-review` skill is active, add: "Are performance issues in hot paths?"
 - Methodology skills don't affect synthesis questions
+
+### Skill Instructions in Gaps Mode
+
+When `--skills` is provided, gaps mode agents receive the **same** `skill_instructions` as thorough mode agents.
+
+**Rationale:**
+- Gaps mode agents look for subtle issues that thorough mode missed
+- Skill-defined focus areas and checklists help gaps agents find category-specific edge cases
+- Methodology skills (e.g., `superpowers:brainstorming`) apply equally to gaps analysis
+
+**Skill Application to Gaps Mode:**
+
+| Skill Element | Applied to Gaps Mode? | Notes |
+|---------------|----------------------|-------|
+| `focus_areas` | Yes | Same focus areas help find subtle issues |
+| `checklist` | Yes | Gaps mode checks same items, looking for edge cases |
+| `auto_validated_patterns` | Yes | Auto-validated patterns skip validation regardless of mode |
+| `false_positive_rules` | Yes | Applied during gaps mode validation |
+| `methodology` | Yes | Methodology applies to all agent thinking |
+
+**Implementation:**
+- Gaps mode agents receive identical `skill_instructions` block as thorough mode
+- Validation phase applies skill-derived `auto_validated_patterns` to ALL findings (thorough + gaps)
+- Validation phase applies skill-derived `false_positive_rules` to ALL findings (thorough + gaps)
 
 ---
 

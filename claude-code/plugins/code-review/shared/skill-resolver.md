@@ -81,7 +81,7 @@ Read the SKILL.md file and parse it into structured data. The orchestrator uses 
 
 | Field | Source | Description |
 |-------|--------|-------------|
-| `focus_categories` | "Categories Checked" sections | List of categories with severity and specific checks |
+| `focus_areas` | "Categories Checked" sections | List of focus areas with severity and specific checks |
 | `auto_validated_patterns` | Pattern tables | Patterns that auto-validate (skip validation step) |
 | `false_positive_rules` | "False Positives" sections | Rules for what NOT to flag |
 | `priority_files` | "Scope Prioritization" sections | File patterns to prioritize |
@@ -111,7 +111,7 @@ resolved_skills:
     source: "security-review"  # Original reference
     type: "review"  # review | methodology
     primary_agent: "security-agent"  # null for methodology skills
-    focus_categories:
+    focus_areas:
       - name: "Injection Vulnerabilities"
         severity: "Critical"
         checks:
