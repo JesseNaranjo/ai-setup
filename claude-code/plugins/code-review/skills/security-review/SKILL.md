@@ -79,8 +79,13 @@ These high-confidence patterns skip validation:
 |---------|-------------|
 | `hardcoded_password` | `password = "..."` assignments |
 | `hardcoded_api_key` | `api_key = "..."` assignments |
+| `hardcoded_token` | `token = "..."`, `bearer = "..."` assignments |
+| `hardcoded_secret` | `secret = "..."`, `private_key = "..."` assignments |
+| `hardcoded_credentials` | `credentials = "..."`, `connection_string = "..."` assignments |
 | `sql_injection_concat` | SQL + string concatenation with user input |
+| `sql_injection_template` | SQL + template literal interpolation with user input |
 | `eval_untrusted` | `eval()` with request/user input |
+| `new_function_untrusted` | `new Function()` with request/user input |
 
 ---
 
