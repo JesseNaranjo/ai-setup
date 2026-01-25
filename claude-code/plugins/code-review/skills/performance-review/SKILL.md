@@ -1,7 +1,7 @@
 ---
 name: performance-review
 description: This skill should be used when the user asks to "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", "latency issues", or mentions improving code performance.
-version: 3.1.3
+version: 3.1.4
 ---
 
 # Performance Code Review Skill

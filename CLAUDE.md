@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.1.3) - a modular 9-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.1.4) - a modular 9-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -39,7 +39,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ```
 claude-code/plugins/code-review/
-├── .claude-plugin/plugin.json       # Plugin metadata (v3.1.3)
+├── .claude-plugin/plugin.json       # Plugin metadata (v3.1.4)
 ├── commands/                        # Thin orchestration documents (reference shared/)
 │   ├── deep-review.md               # Deep file review (16 agent invocations)
 │   ├── deep-review-staged.md        # Deep staged review (16 agent invocations)
@@ -313,14 +313,14 @@ When preparing a new release:
 
 5. **Verify versions are consistent:**
    ```bash
-   # Check version fields (replace <new> with new version)
-   grep -r "version.*<new>" claude-code/plugins/code-review/ --include="*.md" --include="*.json"
+   # Verify no old version remains (exclude CHANGELOG history)
+   grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
+
+   # Verify new version count (~17: 1 plugin.json + 1 marketplace.json + 1 README + 1 CLAUDE.md + 9 agents + 4 skills)
+   grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 
    # Verify CHANGELOG has new section
-   head -10 claude-code/plugins/code-review/CHANGELOG.md
-
-   # Verify no old version remains in frontmatter
-   grep -r "version: <prev>" claude-code/plugins/code-review/ --include="*.md"
+   head -20 claude-code/plugins/code-review/CHANGELOG.md
    ```
 
 6. **Commit changes:**

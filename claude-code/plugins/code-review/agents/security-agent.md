@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for thorough/quick. See review-workflow.md for authoritative model selection (sonnet for gaps)
 color: magenta
 tools: ["Read", "Grep", "Glob"]
-version: 3.1.3
+version: 3.1.4
 ---
 
 # Security Review Agent

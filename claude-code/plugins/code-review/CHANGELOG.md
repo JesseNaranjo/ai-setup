@@ -5,6 +5,20 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.4] - 2026-01-25
+
+### Changed
+- Refactored shared documentation to reduce context window usage (~35% reduction)
+- Created `shared/orchestration-sequence.md` for phase definitions and model selection
+- Created `shared/agent-invocation-pattern.md` for Task invocation template
+- Expanded `shared/agent-common-instructions.md` with MODE, false positives, gaps mode, and output schema
+- Updated all 9 agent files to reference common instructions instead of embedding duplicates
+- Updated all 4 command files to reference new shared files
+- Refactored `shared/review-workflow.md` to use references (783 → 506 lines)
+
+### Fixed
+- Eliminated duplicated content across agent files
+
 ## [3.1.3] - 2025-01-25
 
 ### Fixed
@@ -124,5 +138,9 @@ When releasing a new version, update:
 
 **Verification:**
 ```bash
-grep -r "version:" claude-code/plugins/code-review/ --include="*.md" --include="*.json" | head -20
+# Verify no old version remains (exclude CHANGELOG history)
+grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
+
+# Verify new version count (~17 expected)
+grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 ```
