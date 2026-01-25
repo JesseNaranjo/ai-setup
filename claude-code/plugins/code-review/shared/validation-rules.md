@@ -154,6 +154,8 @@ issues:
 
 Validators should check for these common false positive patterns:
 
+For the complete list of issues that should NOT be flagged, see `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+
 1. **Pre-existing issues**: The issue existed before the changes being reviewed
 2. **Context makes it correct**: The code appears wrong but has valid context
 3. **Handled elsewhere**: The issue is addressed in another part of the codebase
