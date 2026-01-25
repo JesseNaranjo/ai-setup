@@ -191,12 +191,38 @@ When multiple agents flag the same issue:
 - Use the highest severity among the merged issues
 - Add a consensus badge indicating multiple agents flagged it
 
-### 4. Consensus Scoring
+### 4. Consensus Detection Algorithm
 
-Add confidence indicators:
-- **[2 agents]**: Flagged by 2 agents independently
-- **[3+ agents]**: Flagged by 3 or more agents
-- No badge: Flagged by only 1 agent
+**Step 1: Group by file**
+Collect all validated issues from all agents, grouped by file path.
+
+**Step 2: Detect overlapping issues**
+Two issues overlap if same file AND line ranges intersect:
+- Issue A at line L1 (or range L1-L2, where L2 defaults to L1 if single line)
+- Issue B at line M1 (or range M1-M2)
+- Overlap: NOT (L2 < M1 OR M2 < L1)
+
+**Step 3: Build clusters**
+Group overlapping issues transitively (if A overlaps B and B overlaps C, cluster = {A, B, C}).
+
+**Step 4: Assign badges and merge**
+For each cluster with issues from N unique agents:
+- **[2 agents]**: N = 2
+- **[3+ agents]**: N >= 3
+- No badge: N = 1
+
+**Step 5: Merge cluster into single issue**
+- Severity: highest in cluster
+- Description: longest (most detailed)
+- Categories: combined (e.g., "Security, Bugs")
+- Badge: prepend to title
+
+**Example:**
+```
+security-agent: "SQL injection" at users.ts:45-48 (Critical)
+bug-detection-agent: "Unsanitized input" at users.ts:46 (Major)
+→ Merged: "[2 agents] SQL injection" at users.ts:45-48 (Critical, Security+Bugs)
+```
 
 ## Severity Classification
 

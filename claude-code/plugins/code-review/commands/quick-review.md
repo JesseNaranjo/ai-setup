@@ -241,9 +241,9 @@ Generate in this exact format:
 **Synthesis Phase** ([duration])
 | Agent | Model | Duration | Findings | Status |
 |-------|-------|----------|----------|--------|
+| synthesis (Bugs+Error Handling) | sonnet | [Xs] | [N] | ✓ |
 | synthesis (Security+Bugs) | sonnet | [Xs] | [N] | ✓ |
-| synthesis (Error Handling+Test Coverage) | sonnet | [Xs] | [N] | ✓ |
-| synthesis (Cross-cutting) | sonnet | [Xs] | [N] | ✓ |
+| synthesis (Bugs+Test Coverage) | sonnet | [Xs] | [N] | ✓ |
 
 </details>
 

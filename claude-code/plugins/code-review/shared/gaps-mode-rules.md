@@ -34,9 +34,20 @@ previous_findings:
 
 **Skip issues matching prior findings.** An issue is a duplicate if:
 
-1. **Same file AND overlapping line range (±5 lines)**
-   - Prior finding at line 45 → skip new findings at lines 40-50
-   - Prior finding at range "45-48" → skip new findings at lines 40-53
+1. **Same file AND within skip zone**
+
+   **Skip Zone Calculation:**
+   - Single-line finding (line N): skip zone = [N-5, N+5]
+   - Range finding (lines A-B): skip zone = [A-5, B+5]
+
+   **Overlap Detection:**
+   - New single-line finding at L overlaps if: L >= zone_start AND L <= zone_end
+   - New range finding X-Y overlaps if: NOT (Y < zone_start OR X > zone_end)
+
+   **Examples:**
+   - Prior at line 45 → zone [40, 50] → skip new findings touching lines 40-50
+   - Prior at range "45-48" → zone [40, 53] → skip new findings touching lines 40-53
+   - Prior at range "100-105" → zone [95, 110] → skip new findings touching lines 95-110
 
 2. **Same issue type on same function/method**
    - Prior "null check" finding in `processOrder()` → skip other null check findings in same function
