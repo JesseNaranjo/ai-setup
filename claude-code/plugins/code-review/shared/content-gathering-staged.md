@@ -18,13 +18,17 @@ git diff --cached
 git branch --show-current
 ```
 
-### 3. Read Full File Content
+### 3. Read Full File Content (Tiered)
 
-For each staged file, also read the full file content for broader context.
+For each staged file:
+- **Changed files (has_changes=true)**: Read full file content (critical tier)
+- **Unchanged files referenced in imports/context (has_changes=false)**: Read preview only (peripheral tier)
 
 ### 4. Read Related Test Files
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-common.md`.
+
+Test files are always treated as critical tier.
 
 ### 5. Create Summary
 
@@ -33,12 +37,31 @@ Summarize what changes are being made:
 - Brief description of the changes
 - Detected project type(s)
 - Related test files found
+- Tier classification summary
 
 ## Output
 
 Return to the review step:
 - Current branch name
-- Staged diff
-- Full file content for each staged file
-- Related test file contents
+- For each file:
+  - path
+  - has_changes (true/false)
+  - **tier**: "critical" or "peripheral"
+  - For **critical** files (has_changes=true):
+    - diff: full diff content
+    - full_content: full file content
+  - For **peripheral** files (has_changes=false):
+    - preview: first 50 lines of file
+    - line_count: total lines in file
+    - full_content_available: true
+- Related test files (always critical tier)
 - Summary of what's being reviewed
+
+### Tier Classification
+
+| File Type | Tier | Rationale |
+|-----------|------|-----------|
+| Files with staged changes | critical | Primary review focus |
+| Related test files | critical | Need full content for coverage analysis |
+| AI instruction files | critical | Always fully loaded |
+| Unchanged source files | peripheral | Context only - agents Read on-demand |

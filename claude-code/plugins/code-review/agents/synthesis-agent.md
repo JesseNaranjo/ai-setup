@@ -189,6 +189,26 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply 
 
 This agent receives methodology skills only. See the "Synthesis Agent Instructions" section for synthesis-specific guidance.
 
+### Using Tiered Context
+
+When files include tier information (staged reviews):
+
+**For `tier: "critical"` files:**
+- Full content is provided - analyze thoroughly
+- This is the primary review focus for cross-cutting analysis
+
+**For `tier: "peripheral"` files:**
+- Only a preview (first 50 lines) is provided
+- Use the preview to understand file purpose
+- If synthesis discovers cross-cutting relevance, use Read tool to get full content
+- Example: If ripple effect analysis discovers affected files, Read them
+
+**Cross-File Discovery:**
+```
+Grep(pattern: "import.*from|exports", path: "src/")
+Read(file_path: "src/shared/types.ts")  # Read if cross-cutting analysis needs it
+```
+
 ### Cross-Cutting Pairs
 
 **Deep Review Pairs** (used with 8 category agents):

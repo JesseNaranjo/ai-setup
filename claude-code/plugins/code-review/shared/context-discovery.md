@@ -116,6 +116,10 @@ discovery_results:
     dotnet:
       - "Services/UserService.cs"
 
+  detected_languages:
+    nodejs: ["src/api/handler.ts", "src/utils/helpers.ts"]
+    dotnet: ["Services/UserService.cs"]
+
   test_files:
     - source: "src/api/handler.ts"
       tests: ["src/api/__tests__/handler.test.ts"]
@@ -124,6 +128,8 @@ discovery_results:
 
   language_override: null  # or "nodejs" / "dotnet" if --language was used
 ```
+
+**Note:** The `detected_languages` field maps each detected language to its file list. This enables lazy loading of language configs - only load `languages/nodejs.md` if `detected_languages.nodejs` has files, and only load `languages/dotnet.md` if `detected_languages.dotnet` has files.
 
 ## Error Handling
 

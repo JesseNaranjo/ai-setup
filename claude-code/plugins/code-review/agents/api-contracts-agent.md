@@ -54,6 +54,26 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply 
 
 This agent receives methodology skills only (no primary review-focused skill).
 
+### Using Tiered Context
+
+When files include tier information (staged reviews):
+
+**For `tier: "critical"` files:**
+- Full content is provided - analyze thoroughly
+- This is the primary review focus
+
+**For `tier: "peripheral"` files:**
+- Only a preview (first 50 lines) is provided
+- Use the preview to understand file purpose
+- If cross-file analysis discovers relevance, use Read tool to get full content
+- Example: If API analysis discovers consumers of changed interface, Read them
+
+**Cross-File Discovery:**
+```
+Grep(pattern: "implements|extends|import.*Interface", path: "src/")
+Read(file_path: "src/services/consumer.ts")  # Read if API contract-relevant
+```
+
 ## Review Process
 
 ### Step 1: Identify API Categories (Based on MODE)

@@ -48,6 +48,11 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content gathering process.
 
+**Tiered Context:** Staged reviews use tiered context:
+- Changed files receive full content (critical tier)
+- Unchanged files receive preview + metadata (peripheral tier)
+- Agents can Read peripheral files on-demand if cross-file analysis discovers relevance
+
 ---
 
 ## Step 5: Skill Loading and Interpretation (if --skills provided)

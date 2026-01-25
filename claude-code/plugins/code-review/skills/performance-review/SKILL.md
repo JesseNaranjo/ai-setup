@@ -8,29 +8,6 @@ version: 3.1.3
 
 Identify algorithmic inefficiencies, memory leaks, database query problems, and other performance bottlenecks through targeted performance-focused code review.
 
-## When to Use
-
-Use this skill to:
-- Analyze code for performance bottlenecks
-- Detect N+1 query patterns
-- Identify memory leaks
-- Evaluate algorithmic complexity (Big O)
-- Optimize database queries
-- Find and tune hot paths
-- Detect async/await performance issues
-
-## Process Overview
-
-1. **Determine scope** - Identify code requiring performance review
-2. **Gather context** - Collect project type, hot paths, and database code
-3. **Launch performance agent** - Execute thorough mode, then gaps mode
-4. **Validate findings** - Filter micro-optimizations from results
-5. **Report results** - Generate output with complexity analysis and impact
-
-For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
-
----
-
 ## Performance-Specific Configuration
 
 ### Agent Parameters
@@ -143,16 +120,6 @@ See `examples/example-output.md` for a sample showing:
 
 ---
 
-## Additional Resources
+## Related Components
 
-### Reference Files
-
-For detailed performance patterns:
-- **`references/performance-patterns.md`** - N+1 queries, complexity issues, memory leaks, caching patterns
-
-### Related Components
-
-- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md`
-- **Subagent Type:** `code-review:performance-agent` (for Task tool invocation)
-- **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
-- **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`
+See `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md` for the agent definition.

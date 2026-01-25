@@ -8,29 +8,6 @@ version: 3.1.3
 
 Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) and project-specific rules through targeted compliance-focused code review.
 
-## When to Use
-
-Use this skill to:
-- Check code against CLAUDE.md rules
-- Verify coding standards adherence
-- Review AI agent instructions compliance
-- Validate project guidelines
-- Check convention adherence
-- Verify architecture pattern compliance
-- Check naming convention consistency
-
-## Process Overview
-
-1. **Determine scope** - Identify code requiring compliance review
-2. **Gather context** - Detect project type and locate all AI instruction files
-3. **Launch compliance agent** - Execute thorough mode, then gaps mode
-4. **Validate findings** - Confirm issues against exact rule text
-5. **Report results** - Generate output with exact rule citations
-
-For detailed procedures on steps 1, 2 (project type detection), 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
-
----
-
 ## Compliance-Specific Configuration
 
 ### Agent Parameters
@@ -146,16 +123,6 @@ See `examples/example-output.md` for a sample showing:
 
 ---
 
-## Additional Resources
+## Related Components
 
-### Reference Files
-
-For detailed compliance patterns:
-- **`references/compliance-patterns.md`** - Rule classification, common rule categories, checking process
-
-### Related Components
-
-- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
-- **Subagent Type:** `code-review:compliance-agent` (for Task tool invocation)
-- **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
-- **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`
+See `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md` for the agent definition.

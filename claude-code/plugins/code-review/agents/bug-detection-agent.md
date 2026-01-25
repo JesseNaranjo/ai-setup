@@ -55,6 +55,26 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply 
 
 This agent receives `bug-review` skill data as its primary review-focused skill.
 
+### Using Tiered Context
+
+When files include tier information (staged reviews):
+
+**For `tier: "critical"` files:**
+- Full content is provided - analyze thoroughly
+- This is the primary review focus
+
+**For `tier: "peripheral"` files:**
+- Only a preview (first 50 lines) is provided
+- Use the preview to understand file purpose
+- If cross-file analysis discovers relevance, use Read tool to get full content
+- Example: If bug analysis discovers this file contains shared logic, Read it
+
+**Cross-File Discovery:**
+```
+Grep(pattern: "OrderService", path: "src/")
+Read(file_path: "src/db/schema.ts")  # Read if relevant to bug analysis
+```
+
 ## Review Process
 
 ### Step 1: Identify Bug Categories (Based on MODE)

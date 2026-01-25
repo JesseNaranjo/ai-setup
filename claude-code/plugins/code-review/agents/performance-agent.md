@@ -55,6 +55,26 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply 
 
 This agent receives `performance-review` skill data as its primary review-focused skill.
 
+### Using Tiered Context
+
+When files include tier information (staged reviews):
+
+**For `tier: "critical"` files:**
+- Full content is provided - analyze thoroughly
+- This is the primary review focus
+
+**For `tier: "peripheral"` files:**
+- Only a preview (first 50 lines) is provided
+- Use the preview to understand file purpose
+- If cross-file analysis discovers relevance, use Read tool to get full content
+- Example: If performance analysis discovers this file contains queries, Read it
+
+**Cross-File Discovery:**
+```
+Grep(pattern: "findAll|query|SELECT", path: "src/")
+Read(file_path: "src/db/queries.ts")  # Read if performance-relevant
+```
+
 ## Review Process
 
 ### Step 1: Identify Performance Categories (Based on MODE)

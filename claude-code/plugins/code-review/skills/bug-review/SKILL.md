@@ -8,29 +8,6 @@ version: 3.1.3
 
 Identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs through targeted bug-focused code review.
 
-## When to Use
-
-Use this skill to:
-- Hunt for bugs and errors in code
-- Check for null reference and undefined values
-- Analyze race conditions
-- Detect off-by-one errors
-- Identify edge cases
-- Find type coercion bugs
-- Verify async/await correctness
-
-## Process Overview
-
-1. **Determine scope** - Identify code requiring bug review
-2. **Gather context** - Collect project type, related tests, and AI instructions
-3. **Launch bug agent** - Execute thorough mode, then gaps mode
-4. **Validate findings** - Filter theoretical bugs from results
-5. **Report results** - Generate output with reproduction conditions
-
-For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
-
----
-
 ## Bug-Specific Configuration
 
 ### Agent Parameters
@@ -135,16 +112,6 @@ See `examples/example-output.md` for a sample showing:
 
 ---
 
-## Additional Resources
+## Related Components
 
-### Reference Files
-
-For detailed bug patterns:
-- **`references/common-bugs.md`** - Null references, race conditions, async issues, type coercion, error handling
-
-### Related Components
-
-- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md`
-- **Subagent Type:** `code-review:bug-detection-agent` (for Task tool invocation)
-- **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
-- **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`
+See `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md` for the agent definition.

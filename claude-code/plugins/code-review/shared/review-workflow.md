@@ -707,6 +707,7 @@ project_type: nodejs  // or dotnet, or both
 files_to_review:
   - path: "src/services/OrderService.ts"
     has_changes: true
+    tier: "critical"
     diff: |
       @@ -45,8 +45,12 @@
       +  const orders = await Order.findAll();
@@ -716,6 +717,17 @@ files_to_review:
     full_content: |
       import { Order, OrderItem } from '../models';
       // ... full file content
+
+  # Peripheral files (for staged reviews - unchanged files for context)
+  - path: "src/db/schema.ts"
+    has_changes: false
+    tier: "peripheral"
+    preview: |
+      // Database schema definitions
+      import { Entity, Column } from 'typeorm';
+      // ... first 50 lines
+    line_count: 1250
+    full_content_available: true
 
 ai_instructions:
   - source: "CLAUDE.md"
@@ -935,14 +947,15 @@ Format results according to `shared/output-format.md`.
 
 ## Language-Specific Focus
 
-Agents apply language-specific checks based on per-file detection:
+Load language configs ONLY for detected languages to minimize context usage:
 
-- **Node.js/TypeScript files** (`.ts`, `.tsx`, `.js`, `.jsx`): See `languages/nodejs.md`
-- **.NET/C# files** (`.cs`): See `languages/dotnet.md`
+- If `detected_languages.nodejs` has files: Load `languages/nodejs.md`
+- If `detected_languages.dotnet` has files: Load `languages/dotnet.md`
+- Skip loading configs for languages not present in the review
 
 For mixed codebases (monorepos):
-- Each file is analyzed with its own language config
-- Agents receive file groupings by language
+- Each file receives only its relevant language config
+- Agents receive language-specific checks per file, not all configs
 - Cross-language issues (e.g., API contract mismatches) are handled by architecture and API agents
 
 ## False Positive Guidelines

@@ -8,28 +8,6 @@ version: 3.1.3
 
 Identify vulnerabilities, insecure coding patterns, and security misconfigurations through targeted security-focused code review.
 
-## When to Use
-
-Use this skill to:
-- Audit code for security vulnerabilities
-- Detect injection attacks (SQL, command, XSS)
-- Find hardcoded secrets and credentials
-- Verify authentication and authorization
-- Analyze cryptographic implementations
-- Assess input validation coverage
-
-## Process Overview
-
-1. **Determine scope** - Identify code requiring security review
-2. **Gather context** - Collect project type, AI instructions, and related code
-3. **Launch security agent** - Execute thorough mode, then gaps mode
-4. **Validate findings** - Filter false positives from results
-5. **Report results** - Generate severity-prioritized output with fixes
-
-For detailed procedures on steps 1, 2, 4, and 5, see `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`.
-
----
-
 ## Security-Specific Configuration
 
 ### Agent Parameters
@@ -112,18 +90,7 @@ Do NOT flag:
 
 ## OWASP Top 10 Quick Reference
 
-| OWASP Category | Key Patterns |
-|----------------|--------------|
-| A01 Broken Access Control | Missing authz checks, IDOR, directory traversal |
-| A02 Cryptographic Failures | Weak hashing, missing encryption, hardcoded keys |
-| A03 Injection | SQL concat, eval(), exec(), template injection |
-| A04 Insecure Design | Missing rate limits, business logic flaws |
-| A05 Security Misconfiguration | Debug enabled, default credentials, verbose errors |
-| A06 Vulnerable Components | Outdated dependencies (check with npm audit, dotnet list) |
-| A07 Auth Failures | Missing session validation, weak passwords |
-| A08 Data Integrity Failures | Unsafe deserialization, unsigned data |
-| A09 Logging Failures | Missing audit logs, logging sensitive data |
-| A10 SSRF | Unvalidated URL fetching, internal service access |
+For OWASP Top 10 reference, see `references/owasp-reference.md`.
 
 ---
 
@@ -136,16 +103,6 @@ See `examples/example-output.md` for a sample showing:
 
 ---
 
-## Additional Resources
+## Related Components
 
-### Reference Files
-
-For detailed vulnerability patterns:
-- **`references/common-vulnerabilities.md`** - OWASP vulnerabilities, injection patterns, auth issues, crypto problems
-
-### Related Components
-
-- **Agent Definition:** `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md`
-- **Subagent Type:** `code-review:security-agent` (for Task tool invocation)
-- **Language checks:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`, `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
-- **Common workflow:** `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md`
+See `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` for the agent definition.

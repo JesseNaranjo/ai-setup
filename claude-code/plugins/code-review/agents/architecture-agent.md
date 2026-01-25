@@ -54,6 +54,26 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply 
 
 This agent receives methodology skills only (no primary review-focused skill).
 
+### Using Tiered Context
+
+When files include tier information (staged reviews):
+
+**For `tier: "critical"` files:**
+- Full content is provided - analyze thoroughly
+- This is the primary review focus
+
+**For `tier: "peripheral"` files:**
+- Only a preview (first 50 lines) is provided
+- Use the preview to understand file purpose
+- If cross-file analysis discovers relevance, use Read tool to get full content
+- Example: If architecture analysis discovers module dependencies, Read them
+
+**Cross-File Discovery:**
+```
+Grep(pattern: "import.*from|require\\(", path: "src/")
+Read(file_path: "src/core/module.ts")  # Read if architecture-relevant
+```
+
 ## Review Process
 
 ### Step 1: Identify Architecture Categories (Based on MODE)
