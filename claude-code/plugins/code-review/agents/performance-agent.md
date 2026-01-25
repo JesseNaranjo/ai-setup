@@ -35,10 +35,11 @@ Analyze code for performance issues that will have measurable impact.
 
 ## MODE Parameter
 
-This agent supports:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Comprehensive performance analysis including algorithmic complexity, memory usage, I/O patterns, and database access (invoked in Phase 1 of deep review)
-- **gaps**: Focus on subtle performance issues, hidden costs, and problems that might not be obvious (invoked in Phase 2 of deep review)
+**Performance-specific modes:**
+- **thorough**: Algorithmic complexity, memory usage, I/O patterns, database access
+- **gaps**: Hidden N+1 queries, memory retention, cache invalidation, batch opportunities
 
 *Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
@@ -133,7 +134,9 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**Performance-specific fields:**
 
 ```yaml
 issues:
@@ -184,27 +187,20 @@ issues:
 
 ## Gaps Mode with Prior Findings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for input format and duplicate detection rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
 
-**Gaps Mode Behavior**:
-1. **Skip duplicates** per `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`
-2. **Focus on subtle issues**: Look for performance issues that thorough mode might miss:
-   - Hidden N+1 queries (lazy loading, nested loops with DB calls)
-   - Memory retention through closures or event listeners
-   - Inefficient serialization/deserialization
-   - Cache invalidation issues
-   - Unnecessary data copying
-   - Batch operation opportunities
-   - Hot path inefficiencies not obvious at first glance
-3. **Complement thorough**: Find performance issues in code paths not covered by prior findings
+**Performance-specific subtle issues:**
+- Hidden N+1 queries (lazy loading, nested loops with DB calls)
+- Memory retention through closures or event listeners
+- Inefficient serialization/deserialization
+- Cache invalidation issues, unnecessary data copying
+- Batch operation opportunities, hot path inefficiencies
 
 ## False Positive Guidelines
 
-Do NOT flag:
-- Pre-existing performance issues not introduced in the changes
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**Performance-specific exclusions:**
 - Micro-optimizations that won't have measurable impact
 - Performance issues in code that runs rarely
 - Code that prioritizes readability over minor performance gains
-- Theoretical issues that require unrealistic data scales
-- Performance concerns in test code or development-only paths
-- Issues already in previous_findings (gaps mode)

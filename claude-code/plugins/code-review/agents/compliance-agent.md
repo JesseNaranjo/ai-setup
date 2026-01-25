@@ -35,10 +35,11 @@ Review code for compliance with CLAUDE.md and other AI Agent Instructions files 
 
 ## MODE Parameter
 
-This agent supports:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Find all compliance issues, check every rule against every changed file (invoked in Phase 1 of deep review)
-- **gaps**: Focus on subtle violations and edge cases that might be missed by a thorough review (invoked in Phase 2 of deep review)
+**Compliance-specific modes:**
+- **thorough**: All compliance issues, every rule against every changed file
+- **gaps**: Subtle violations, edge cases, rules that might be misinterpreted
 
 *Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
@@ -110,7 +111,9 @@ For each violation found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**Compliance-specific fields:**
 
 ```yaml
 issues:
@@ -162,23 +165,20 @@ issues:
 
 ## Gaps Mode with Prior Findings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for input format and duplicate detection rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
 
-**Gaps Mode Behavior**:
-1. **Skip duplicates** per `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`
-2. **Focus on subtle issues**: Look for edge cases, rules that might be misinterpreted, almost-compliant code
-3. **Complement thorough**: Find issues that a thorough review might miss:
-   - Rules with exceptions that weren't properly applied
-   - Inconsistent application of guidelines across files
-   - Context-dependent violations (correct in one place, wrong in another)
-   - Subtle spirit-of-the-rule violations that technically pass
+**Compliance-specific subtle issues:**
+- Rules with exceptions that weren't properly applied
+- Inconsistent application of guidelines across files
+- Context-dependent violations (correct in one place, wrong in another)
+- Subtle spirit-of-the-rule violations that technically pass
 
 ## False Positive Guidelines
 
-Do NOT flag:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**Compliance-specific exclusions:**
 - Code that appears to violate a rule but has an explicit override comment
-- Pre-existing violations not introduced in the changes being reviewed
 - Ambiguous rules where the code could reasonably be compliant
 - Rules that don't apply to this file type or context
 - Style preferences not explicitly stated as rules
-- Issues already in previous_findings (gaps mode)

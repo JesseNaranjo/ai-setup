@@ -35,12 +35,13 @@ Analyze code for test coverage gaps and provide specific test recommendations.
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Comprehensive test coverage analysis including unit tests, integration tests, edge cases, and test quality
-- **quick**: Fast pass on critical test gaps only (new public functions without tests, critical paths untested)
+**Test coverage-specific modes:**
+- **thorough**: Unit tests, integration tests, edge cases, test quality
+- **quick**: New public functions without tests, critical paths untested
 
-Note: This agent does not use "gaps" mode as test coverage gaps are generally clear-cut.
+*Note: This agent does not use "gaps" mode as test coverage gaps are generally clear-cut.*
 
 ## Input Required
 
@@ -138,7 +139,9 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**Test coverage-specific fields:**
 
 ```yaml
 issues:
@@ -199,8 +202,9 @@ issues:
 
 ## False Positive Guidelines
 
-Do NOT flag:
-- Pre-existing test gaps not introduced in changes
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**Test coverage-specific exclusions:**
 - Private/internal implementation details
 - Code that's impractical to unit test (better suited for integration tests)
 - Code already covered by higher-level tests

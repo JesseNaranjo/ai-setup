@@ -35,12 +35,13 @@ Analyze code for error handling issues and resilience gaps.
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Comprehensive error handling analysis including exception handling, cleanup, propagation, and resilience patterns
-- **quick**: Fast pass on critical error handling issues only (swallowed exceptions, missing cleanup, crash-causing gaps)
+**Error handling-specific modes:**
+- **thorough**: Exception handling, cleanup, propagation, resilience patterns
+- **quick**: Swallowed exceptions, missing cleanup, crash-causing gaps
 
-Note: This agent does not use "gaps" mode as error handling issues are generally clear-cut.
+*Note: This agent does not use "gaps" mode as error handling issues are generally clear-cut.*
 
 ## Input Required
 
@@ -136,7 +137,9 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**Error handling-specific fields:**
 
 ```yaml
 issues:
@@ -186,10 +189,10 @@ issues:
 
 ## False Positive Guidelines
 
-Do NOT flag:
-- Pre-existing error handling issues not introduced in changes
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**Error handling-specific exclusions:**
 - Code where errors are intentionally ignored with explicit comments
-- Test code that doesn't need production error handling
 - Errors that are handled at a higher level
 - Internal code with documented error handling strategy
 - Logging-only catch blocks where that's the intended behavior

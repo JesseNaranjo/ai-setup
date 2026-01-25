@@ -44,7 +44,10 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content g
 
 ## Step 6: 4-Agent Quick Review
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic, the **Model Selection per Agent** table, and the **Agent Invocation Pattern**.
+See:
+- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for workflow steps and settings application
 
 ### Usage Tracking
 
@@ -71,7 +74,7 @@ Each agent receives staged diff, full file content, and AI Agent Instructions.
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 
-Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Quick Review Synthesis" section.
+Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
 
 ---
 

@@ -35,11 +35,12 @@ Analyze code for architectural issues affecting maintainability and scalability.
 
 ## MODE Parameter
 
-This agent supports:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Comprehensive architectural analysis including coupling, cohesion, SOLID principles, and design patterns (invoked in Phase 1 of deep review)
+**Architecture-specific modes:**
+- **thorough**: Coupling, cohesion, SOLID principles, design patterns
 
-*Note: This agent does NOT use "gaps" mode (architectural issues are generally either present or not) and is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
+*Note: This agent does NOT use "gaps" mode and is NOT invoked during quick reviews.*
 
 ## Input Required
 
@@ -164,7 +165,9 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**Architecture-specific fields:**
 
 ```yaml
 issues:
@@ -210,11 +213,10 @@ issues:
 
 ## False Positive Guidelines
 
-Do NOT flag:
-- Pre-existing architectural issues not introduced in the changes
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**Architecture-specific exclusions:**
 - Pragmatic compromises with clear justification
 - Patterns that are overkill for the scale of the project
-- Subjective style preferences
 - Architecture decisions already documented and justified
 - Temporary code with clear TODOs
-- Test code that doesn't need production-level architecture

@@ -35,11 +35,12 @@ Analyze code for API compatibility and contract compliance issues.
 
 ## MODE Parameter
 
-This agent supports:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Comprehensive API analysis including breaking changes, compatibility, versioning, and contract consistency (invoked in Phase 1 of deep review)
+**API contracts-specific modes:**
+- **thorough**: Breaking changes, compatibility, versioning, contract consistency
 
-*Note: This agent does NOT use "gaps" mode (API changes are generally binary - breaking or not) and is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
+*Note: This agent does NOT use "gaps" mode and is NOT invoked during quick reviews.*
 
 ## Input Required
 
@@ -122,7 +123,9 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**API contracts-specific fields:**
 
 ```yaml
 issues:
@@ -169,10 +172,11 @@ issues:
 
 ## False Positive Guidelines
 
-Do NOT flag:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**API contracts-specific exclusions:**
 - Internal/private API changes
 - Changes to APIs with no external consumers
 - Additive changes that don't break existing consumers
 - Changes that follow established deprecation process
-- Pre-existing API inconsistencies not introduced in changes
 - Beta/experimental APIs clearly marked as unstable

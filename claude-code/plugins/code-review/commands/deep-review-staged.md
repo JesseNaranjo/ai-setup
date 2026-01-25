@@ -44,7 +44,10 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content g
 
 ## Step 6: Two-Phase Deep Review
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for orchestration logic, the **Model Selection per Agent** table, and the **Agent Invocation Pattern**.
+See:
+- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for workflow steps and settings application
 
 ### Usage Tracking
 
@@ -74,7 +77,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 
-Launch 4 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Deep Review Synthesis" section.
+Launch 4 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
 
 ---
 

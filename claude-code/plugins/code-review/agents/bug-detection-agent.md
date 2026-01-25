@@ -35,11 +35,12 @@ Analyze code for bugs that will cause incorrect behavior at runtime.
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Comprehensive bug hunting across all code paths, looking for logical errors, null references, off-by-one errors, type mismatches
-- **gaps**: Focus on edge cases, boundary conditions, race conditions, and state management issues that might be missed
-- **quick**: Fast pass on most obvious and critical bugs only
+**Bug detection-specific modes:**
+- **thorough**: Comprehensive bug hunting - logical errors, null references, off-by-one errors, type mismatches
+- **gaps**: Edge cases, boundary conditions, race conditions, state management issues
+- **quick**: Most obvious and critical bugs only
 
 ## Input Required
 
@@ -134,7 +135,9 @@ For each bug found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**Bug detection-specific fields:**
 
 ```yaml
 issues:
@@ -182,26 +185,20 @@ issues:
 
 ## Gaps Mode with Prior Findings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for input format and duplicate detection rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
 
-**Gaps Mode Behavior**:
-1. **Skip duplicates** per `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`
-2. **Focus on subtle issues**: Look for edge cases that thorough mode might miss:
-   - Boundary conditions (empty arrays, zero values, max values)
-   - Race conditions in concurrent code
-   - State management issues (stale state, incorrect updates)
-   - Resource cleanup failures in error paths
-   - Time-of-check to time-of-use issues
-   - Integer overflow/underflow
-3. **Complement thorough**: Find bugs in code paths not covered by prior findings
+**Bug detection-specific subtle issues:**
+- Boundary conditions (empty arrays, zero values, max values)
+- Race conditions in concurrent code
+- State management issues (stale state, incorrect updates)
+- Resource cleanup failures in error paths
+- Time-of-check to time-of-use issues, integer overflow/underflow
 
 ## False Positive Guidelines
 
-Do NOT flag:
-- Pre-existing bugs not introduced in the changes being reviewed
-- Theoretical issues that require very specific conditions
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**Bug detection-specific exclusions:**
 - Code that appears buggy but is correct in context
-- Issues that the type system or linter will catch
 - Defensive code that handles edge cases (unless it has a bug)
 - Code with explicit comments explaining why it's correct
-- Issues already in previous_findings (gaps mode)

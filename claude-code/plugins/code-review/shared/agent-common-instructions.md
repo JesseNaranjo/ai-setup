@@ -50,3 +50,53 @@ When files include tier information (staged reviews):
 Grep(pattern: "[relevant pattern]", path: "src/")
 Read(file_path: "[discovered file]")  # Read if relevant to analysis
 ```
+
+## MODE Parameter (Common)
+
+All review agents accept a MODE parameter that controls review depth:
+
+- **thorough**: Comprehensive review checking all issues in the agent's domain
+- **gaps**: Focus on subtle issues that might be missed; receives prior findings context to skip duplicates
+- **quick**: Fast pass on critical issues only (highest-impact findings)
+
+See each agent file for mode-specific focus areas.
+
+## Universal False Positive Rules
+
+ALL agents MUST NOT flag:
+- Pre-existing issues not introduced in the changes being reviewed
+- Code with explicit ignore comments (lint-disable, eslint-ignore, etc.)
+- Theoretical issues that require very specific or unrealistic conditions to manifest
+- Issues that the type system, linter, or compiler will catch
+- Issues in test code or development-only paths unless specifically reviewing tests
+- Issues already in previous_findings (gaps mode only)
+
+See each agent file for category-specific false positive rules.
+
+## Gaps Mode Behavior (Common)
+
+When MODE=gaps, all agents follow this pattern:
+
+1. **Check previous_findings**: For each potential issue, check if it matches a prior finding (same file + overlapping line range). Skip if already flagged.
+2. **Apply skip zone**: See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for skip zone calculation (±5 lines)
+3. **Focus on subtle issues**: Prioritize edge cases, second-order effects, and issues that complement (don't duplicate) thorough mode findings
+4. **Complement, don't repeat**: Find issues in code paths not covered by prior findings
+
+See each agent file for category-specific gaps mode focus areas.
+
+## Output Schema
+
+All agents output YAML following `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md`.
+
+Each issue requires these base fields:
+- `title`: Brief description
+- `file`: File path relative to repo root
+- `line`: Primary line number
+- `range`: "start-end" for multi-line, null for single-line
+- `category`: Agent's category name
+- `severity`: Critical, Major, Minor, or Suggestion
+- `description`: Detailed explanation
+- `fix_type`: "diff" or "prompt"
+- `fix_diff` or `fix_prompt`: The suggested fix
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for severity classification rules.

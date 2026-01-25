@@ -84,6 +84,9 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── dotnet.md                    # .NET/C# checks
 ├── shared/
+│   ├── orchestration-sequence.md    # Phase definitions and model selection (authoritative)
+│   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
+│   ├── agent-common-instructions.md # Common MODE, false positives, gaps, output schema
 │   ├── command-common-steps.md      # Common workflow steps for all commands
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── input-validation-files.md    # File-based input validation
@@ -91,7 +94,7 @@ claude-code/plugins/code-review/
 │   ├── content-gathering-files.md   # File-based content gathering
 │   ├── content-gathering-staged.md  # Staged content gathering
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── review-workflow.md           # Orchestration logic + agent invocation pattern
+│   ├── review-workflow.md           # Workflow steps and settings application
 │   ├── skill-orchestration.md       # Skill-informed orchestration (loaded when --skills used)
 │   ├── skill-resolver.md            # Skill resolution and structured parsing
 │   ├── skill-common-workflow.md     # Common skill workflow steps (lean, references details)
@@ -113,10 +116,11 @@ claude-code/plugins/code-review/
 
 ### Agent Configuration
 
-See `shared/review-workflow.md` for the authoritative:
-- Agent-to-model mapping table ("Model Selection per Agent")
-- Deep/Quick review orchestration sequences
-- Usage tracking protocol
+See the following files for authoritative agent configuration:
+- `shared/orchestration-sequence.md` - Model selection table, phase definitions
+- `shared/agent-invocation-pattern.md` - Task invocation template
+- `shared/agent-common-instructions.md` - Common MODE, false positives, gaps behavior
+- `shared/review-workflow.md` - Usage tracking protocol, settings application
 
 ### Agent Colors
 
@@ -163,12 +167,15 @@ Each agent has a unique color for visual identification during parallel executio
 - `agents/*.md` - Individual agent definitions with MODE support
 - `languages/*.md` - Language-specific checks and patterns
 - `commands/*.md` - Thin orchestration documents referencing shared components
+- `shared/orchestration-sequence.md` - Phase definitions, model selection table (authoritative)
+- `shared/agent-invocation-pattern.md` - Task tool invocation template
+- `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps, output schema)
 - `shared/command-common-steps.md` - Common workflow steps shared by all commands
 - `shared/settings-loader.md` - Settings loading and application
 - `shared/input-validation-*.md` - Input validation for file/staged commands
 - `shared/content-gathering-*.md` - Content gathering for file/staged commands
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
-- `shared/review-workflow.md` - Orchestration, workflow steps, and agent invocation pattern
+- `shared/review-workflow.md` - Workflow steps and settings application
 - `shared/skill-orchestration.md` - Skill-informed orchestration (lazy-loaded when --skills used)
 - `shared/skill-resolver.md` - Skill resolution and structured parsing for orchestrator interpretation
 - `shared/skill-common-workflow.md` - Lean workflow steps for skills (references `shared/references/` for details)
@@ -215,15 +222,17 @@ When modifying the plugin:
 2. **Language-specific checks**: Edit files in `languages/` directory
 3. **Validation rules**: Edit `shared/validation-rules.md`
 4. **Output format**: Edit `shared/output-format.md`
-5. **Workflow orchestration**: Edit `shared/review-workflow.md`
-6. **Agent invocation pattern**: Edit `shared/review-workflow.md` (Agent Invocation Pattern section)
-7. **Common command steps**: Edit `shared/command-common-steps.md` (settings, context, validation, output)
-8. **Common skill steps**: Edit `shared/skill-common-workflow.md`
-9. **Command arguments**: Edit command YAML frontmatter in `commands/`
-10. **Skills**: Edit skill files in `skills/*/SKILL.md`
-11. **Skill references**: Add detailed patterns to `skills/*/references/`
-12. **Skill examples**: Add sample outputs to `skills/*/examples/`
-13. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
+5. **Workflow steps**: Edit `shared/review-workflow.md`
+6. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection)
+7. **Agent invocation pattern**: Edit `shared/agent-invocation-pattern.md`
+8. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, gaps)
+9. **Common command steps**: Edit `shared/command-common-steps.md` (settings, context, validation, output)
+10. **Common skill steps**: Edit `shared/skill-common-workflow.md`
+11. **Command arguments**: Edit command YAML frontmatter in `commands/`
+12. **Skills**: Edit skill files in `skills/*/SKILL.md`
+13. **Skill references**: Add detailed patterns to `skills/*/references/`
+14. **Skill examples**: Add sample outputs to `skills/*/examples/`
+15. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
 
 ## Skill Structure (Progressive Disclosure)
 

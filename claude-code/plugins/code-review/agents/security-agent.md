@@ -35,11 +35,12 @@ Analyze code for security vulnerabilities and weaknesses.
 
 ## MODE Parameter
 
-This agent accepts a MODE parameter that controls review depth:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
 
-- **thorough**: Comprehensive security analysis checking all OWASP categories, authentication, authorization, cryptography, and data handling
-- **gaps**: Focus on subtle security issues, defense-in-depth gaps, and vulnerabilities that might be missed by typical security reviews
-- **quick**: Fast pass on critical security issues only (injection, auth bypass, hardcoded secrets)
+**Security-specific modes:**
+- **thorough**: All OWASP categories, authentication, authorization, cryptography, data handling
+- **gaps**: Second-order injection, timing attacks, race conditions, defense-in-depth gaps
+- **quick**: Direct injection, obvious auth bypass, hardcoded secrets
 
 ## Input Required
 
@@ -139,7 +140,9 @@ For each vulnerability found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for base fields. Additional fields for this category:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
+
+**Security-specific fields:**
 
 ```yaml
 issues:
@@ -184,27 +187,20 @@ issues:
 
 ## Gaps Mode with Prior Findings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for input format and duplicate detection rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
 
-**Gaps Mode Behavior**:
-1. **Skip duplicates** per `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`
-2. **Focus on subtle issues**: Look for security issues that thorough mode might miss:
-   - Second-order injection (stored XSS, delayed command execution)
-   - Authorization edge cases (role escalation, missing checks on related resources)
-   - Timing attacks and side channels
-   - Race conditions that affect security
-   - Error messages leaking sensitive information
-   - Weak randomness in security-critical code
-   - Missing security headers, insecure defaults
-3. **Complement thorough**: Find vulnerabilities in code paths not covered by prior findings
+**Security-specific subtle issues:**
+- Second-order injection (stored XSS, delayed command execution)
+- Authorization edge cases (role escalation, missing checks)
+- Timing attacks, side channels, race conditions
+- Error messages leaking sensitive information
+- Weak randomness in security-critical code
 
 ## False Positive Guidelines
 
-Do NOT flag:
-- Pre-existing vulnerabilities not introduced in the changes being reviewed
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
+
+**Security-specific exclusions:**
 - Internal-only code with no untrusted input exposure
 - Code with explicit security comments explaining the design
-- Theoretical vulnerabilities requiring unrealistic attack scenarios
-- Security issues in test code or development-only paths
 - Vulnerabilities already mitigated elsewhere in the code
-- Issues already in previous_findings (gaps mode)

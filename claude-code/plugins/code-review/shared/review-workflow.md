@@ -4,6 +4,9 @@ This document defines the orchestration logic for the code review workflow. Agen
 
 ## Related Files
 
+- `shared/orchestration-sequence.md` - Phase definitions and model selection table
+- `shared/agent-invocation-pattern.md` - How to invoke agents via Task tool
+- `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps)
 - `agents/*.md` - Individual agent definitions with MODE parameter
 - `languages/nodejs.md` - Node.js/TypeScript specific checks
 - `languages/dotnet.md` - .NET/C# specific checks
@@ -20,84 +23,15 @@ See `shared/severity-definitions.md` for canonical severity definitions and exam
 The plugin includes 8 review agents plus a synthesis agent. Each agent supports specific modes (thorough, gaps, quick) with mode-specific model selection.
 
 **Agent Files**: See `agents/*.md` for individual agent definitions
-**Model Selection**: See "Model Selection per Agent (Authoritative Source)" table in Step 4 (Review Execution) section
-
-### MODE Parameter
-
-Each agent accepts a MODE parameter:
-- **thorough**: Comprehensive review, check all issues
-- **gaps**: Focus on subtle issues that might be missed, receives prior findings context
-- **quick**: Fast pass on critical issues only
+**Model Selection**: See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`
+**Common Instructions**: See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`
 
 ## Orchestration Sequence
 
-This section defines the authoritative execution order for review pipelines. Each step must complete before the next begins.
-
-### Deep Review Orchestration (16 agent invocations)
-
-1. **Steps 1-3: Input, Context, Content**
-   - Validate input, discover context, gather file content
-   - OUTPUT: Files to review, diffs, AI instructions, test files
-
-2. **Phase 1: Thorough Review** (8 agents in parallel)
-   - Launch: bug, security, performance (Opus) + compliance, architecture, api, error-handling, test-coverage (Sonnet)
-   - MODE: `thorough` for all agents
-   - WAIT: All 8 agents must complete before proceeding
-   - OUTPUT: Phase 1 findings (grouped by category)
-
-3. **Phase 2: Gaps Review** (4 Sonnet agents in parallel)
-   - Launch: compliance, bug, security, performance
-   - MODE: `gaps`
-   - Model: Sonnet (cost-optimized for constrained task with prior findings context)
-   - INPUT: Phase 1 findings passed as `previous_findings` (each agent receives only its own category)
-   - WAIT: All 4 agents must complete before proceeding
-   - OUTPUT: Phase 2 findings (subtle issues, edge cases)
-
-4. **Synthesis** (4 agents in parallel)
-   - Launch: 4 instances of synthesis-agent with different category pairs
-   - INPUT: ALL findings from Phase 1 AND Phase 2
-   - Pairs: Security+Performance, Architecture+Test Coverage, Bugs+Error Handling, Compliance+Bugs
-   - WAIT: All 4 synthesis agents must complete before proceeding
-   - OUTPUT: `cross_cutting_insights` list
-
-5. **Validation**
-   - INPUT: All issues from Phase 1 + Phase 2 + Synthesis
-   - Process: Batch validation by file (see `validation-rules.md`)
-   - OUTPUT: VALID/INVALID/DOWNGRADE verdict for each issue
-
-6. **Aggregation**
-   - Filter invalid issues, apply downgrades, deduplicate, add consensus badges
-   - OUTPUT: Final issue list
-
-7. **Output**
-   - Generate Usage Summary from tracking data
-   - Generate formatted report, write to file
-
-### Quick Review Orchestration (7 agent invocations)
-
-1. **Steps 1-3: Input, Context, Content**
-   - Same as deep review
-   - OUTPUT: Files to review, diffs, AI instructions, test files
-
-2. **Review** (4 agents in parallel)
-   - Launch: bug, security, error-handling, test-coverage
-   - MODE: `quick` for all agents
-   - WAIT: All 4 agents must complete before proceeding
-   - OUTPUT: Quick review findings
-
-3. **Synthesis** (3 agents in parallel)
-   - Launch: 3 instances of synthesis-agent with different category pairs
-   - INPUT: All findings from step 2
-   - Pairs: Bugs+Error Handling, Security+Bugs, Bugs+Test Coverage
-   - WAIT: All 3 synthesis agents must complete before proceeding
-   - OUTPUT: `cross_cutting_insights` list
-
-4. **Validation**
-   - Critical/Major issues only (Minor and Suggestions skip validation)
-   - OUTPUT: VALID/INVALID/DOWNGRADE verdict
-
-5. **Aggregation & Output**
-   - Same as deep review
+See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative execution sequences including:
+- Deep review phase definitions (16 agent invocations)
+- Quick review phase definitions (7 agent invocations)
+- Model selection table per agent and mode
 
 ## Usage Tracking Protocol
 
@@ -167,85 +101,10 @@ At the end of the workflow (before generating review output):
 
 ## Review Configurations
 
-### Deep Review (deep-review, deep-review-staged)
-
-Deep review uses a **two-phase sequential approach** for Opus agents to reduce duplicates and improve gaps analysis:
-
-**Phase 1: Thorough Review (8 agents in parallel)**
-
-| Agent | Model | MODE |
-|-------|-------|------|
-| compliance-agent | Sonnet | thorough |
-| bug-detection-agent | Opus | thorough |
-| security-agent | Opus | thorough |
-| performance-agent | Opus | thorough |
-| architecture-agent | Sonnet | thorough |
-| api-contracts-agent | Sonnet | thorough |
-| error-handling-agent | Sonnet | thorough |
-| test-coverage-agent | Sonnet | thorough |
-
-**Phase 2: Gaps Review with Context (4 Sonnet agents in parallel)**
-
-After Phase 1 completes, pass thorough findings to gaps mode agents:
-
-| Agent | Model | MODE | Context |
-|-------|-------|------|---------|
-| compliance-agent | Sonnet | gaps | Phase 1 compliance findings |
-| bug-detection-agent | Sonnet | gaps | Phase 1 bug findings |
-| security-agent | Sonnet | gaps | Phase 1 security findings |
-| performance-agent | Sonnet | gaps | Phase 1 performance findings |
-
-**Note**: Sonnet is used for gaps mode because this phase is constrained by prior findings context and explicit checklists in `gaps-mode-rules.md`, making it suitable for a more cost-efficient model while retaining quality. Phase 1 thorough mode catches most issues; gaps mode focuses on subtle issues that complement those findings.
-
-Gaps mode agents receive prior findings to:
-- Skip issues already flagged (same file + overlapping lines)
-- Focus on subtle issues that might be missed
-- Find edge cases and boundary conditions
-
-**Synthesis Phase (4 Sonnet agents in parallel)**
-
-After Phase 2 completes, synthesis agents analyze cross-cutting concerns:
-
-| Agent | Model | Input Categories | Cross-Cutting Question |
-|-------|-------|-----------------|------------------------|
-| synthesis-agent | Sonnet | Security + Performance | "Do any security fixes introduce performance issues?" |
-| synthesis-agent | Sonnet | Architecture + Test Coverage | "Are architectural changes covered by tests?" |
-| synthesis-agent | Sonnet | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| synthesis-agent | Sonnet | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
-
-Total: 16 agent invocations (8 Phase 1 + 4 Phase 2 + 4 Synthesis), executed in three sequential phases to enable context passing.
-
-### Quick Review (quick-review, quick-review-staged)
-
-Quick review uses a **single-phase parallel approach** optimized for speed, focusing on the most critical issue categories.
-
-**Review Phase (4 agents in parallel)**
-
-| Agent | Model | MODE |
-|-------|-------|------|
-| bug-detection-agent | Opus | quick |
-| security-agent | Opus | quick |
-| error-handling-agent | Sonnet | quick |
-| test-coverage-agent | Sonnet | quick |
-
-**Note**: Quick review uses only 4 of the 8 review agents, prioritizing bug detection and security (Opus for nuanced analysis) plus error handling and test coverage (Sonnet for pattern-based checks). Compliance, performance, architecture, and API contracts agents are excluded to optimize for speed.
-
-Quick mode agents focus on:
-- Critical and obvious issues only
-- Most impactful vulnerabilities and bugs
-- Clear gaps in error handling and test coverage
-
-**Synthesis Phase (3 Sonnet agents in parallel)**
-
-After review completes, synthesis agents analyze cross-cutting concerns:
-
-| Agent | Model | Input Categories | Cross-Cutting Question |
-|-------|-------|-----------------|------------------------|
-| synthesis-agent | Sonnet | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| synthesis-agent | Sonnet | Security + Bugs | "Do security issues introduce or relate to bugs?" |
-| synthesis-agent | Sonnet | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
-
-Total: 7 agent invocations (4 review + 3 synthesis), executed in two sequential phases.
+See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for:
+- Deep review phase definitions and model selection
+- Quick review phase definitions and model selection
+- Synthesis phase category pairs
 
 ## Settings Application
 
@@ -479,148 +338,12 @@ Launch 4 agents with quick mode in parallel. No gaps phase.
 
 #### Agent Invocation Pattern
 
-Use the Task tool to launch each agent. Plugin agents are registered as subagent types with the pattern `code-review:[agent-name]`:
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for:
+- Subagent type mapping
+- Task invocation template with full prompt structure
+- Common agent input fields
 
-| Agent | Subagent Type |
-|-------|---------------|
-| Security | `code-review:security-agent` |
-| Bug Detection | `code-review:bug-detection-agent` |
-| Performance | `code-review:performance-agent` |
-| Compliance | `code-review:compliance-agent` |
-| Architecture | `code-review:architecture-agent` |
-| API Contracts | `code-review:api-contracts-agent` |
-| Error Handling | `code-review:error-handling-agent` |
-| Test Coverage | `code-review:test-coverage-agent` |
-| Synthesis | `code-review:synthesis-agent` |
-
-Here is the exact invocation pattern:
-
-```
-Task(
-  subagent_type: "code-review:security-agent",  // Use registered agent type
-  model: "opus",  // See model selection table below
-  description: "[Agent name] review for [scope]",
-  prompt: """
-MODE: thorough  // or gaps, quick
-
-project_type: nodejs  // or dotnet, or both
-
-files_to_review:
-  - path: "src/services/OrderService.ts"
-    has_changes: true
-    tier: "critical"
-    diff: |
-      @@ -45,8 +45,12 @@
-      +  const orders = await Order.findAll();
-      +  for (const order of orders) {
-      +    order.items = await OrderItem.findByOrderId(order.id);
-      +  }
-    full_content: |
-      import { Order, OrderItem } from '../models';
-      // ... full file content
-
-  # Peripheral files (for staged reviews - unchanged files for context)
-  - path: "src/db/schema.ts"
-    has_changes: false
-    tier: "peripheral"
-    preview: |
-      // Database schema definitions
-      import { Entity, Column } from 'typeorm';
-      // ... first 50 lines
-    line_count: 1250
-    full_content_available: true
-
-ai_instructions:
-  - source: "CLAUDE.md"
-    content: |
-      ## Security
-      - All API endpoints MUST have authentication
-
-related_tests:
-  - path: "src/services/OrderService.test.ts"
-    content: |
-      describe('OrderService', () => { ... });
-
-// For gaps mode only:
-previous_findings:
-  - title: "Issue already found in thorough mode"
-    file: "src/services/OrderService.ts"
-    line: 45
-    range: "45-48"  # Line range if multi-line, null if single line
-    category: "Performance"
-    severity: "Critical"
-
-// Skill-derived instructions (from --skills argument, orchestrator-interpreted):
-skill_instructions:
-  focus_areas:
-    - "OWASP Top 10 vulnerabilities"
-  checklist:
-    - category: "Injection Vulnerabilities"
-      severity: "Critical"
-      items: ["SQL injection", "Command injection", "XSS"]
-  auto_validate:
-    - "hardcoded_password"
-  false_positive_rules:
-    - "Passwords in test files"
-  methodology:
-    approach: "Explore multiple interpretations before concluding"
-    steps:
-      - "Consider why code might be correct"
-      - "Brainstorm failure modes"
-    questions:
-      - "What assumptions does this code make?"
-
-// Additional instructions (from settings file body + --prompt argument):
-additional_instructions: |
-  # Project-Specific Instructions
-  [content from .claude/code-review.local.md markdown body]
-
-  # Command-Line Instructions
-  [content from --prompt argument]
-
-Return findings as YAML per shared/output-schema-base.md.
-"""
-)
-```
-
-**Model Selection per Agent (Authoritative Source):**
-
-This table is the **single source of truth** for agent-to-model mapping. Commands reference this table rather than duplicating it.
-
-| Agent | Model (thorough) | Model (gaps) | Model (quick) |
-|-------|------------------|--------------|---------------|
-| compliance-agent | sonnet | sonnet | N/A |
-| bug-detection-agent | opus | sonnet | opus |
-| security-agent | opus | sonnet | opus |
-| performance-agent | opus | sonnet | N/A |
-| architecture-agent | sonnet | N/A | N/A |
-| api-contracts-agent | sonnet | N/A | N/A |
-| error-handling-agent | sonnet | N/A | sonnet |
-| test-coverage-agent | sonnet | N/A | sonnet |
-| synthesis-agent | sonnet | N/A | sonnet |
-
-**Important**: Always pass the `model` parameter explicitly when invoking Task:
-- Use `model: "opus"` for bug-detection, security, and performance agents in thorough mode (require nuanced judgment)
-- Use `model: "sonnet"` for compliance and all other agents in thorough mode (pattern-based detection)
-- Use `model: "sonnet"` for gaps mode (constrained task with prior findings context)
-- Use `model: "sonnet"` for synthesis agents (cross-category correlation)
-
-**Note**: Gaps mode uses Sonnet because it receives prior findings context and follows explicit checklists, reducing the complexity of the task.
-
-#### Common Agent Input
-
-Each agent receives:
-- Current branch name
-- Files to review (diffs and/or full content)
-- Detected project type(s) and language per file
-- Relevant AI Agent Instructions files
-- Related test files
-- MODE parameter
-- Previous findings (gaps mode only, from same category)
-- Skill-derived instructions (from `--skills` argument, orchestrator-interpreted per agent)
-- Additional instructions (from settings file body + `--prompt` argument)
-
-Each agent returns issues following the YAML schema defined in each agent file.
+**Model Selection**: See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model selection table.
 
 #### Pre-Existing Issue Detection (For Staged/Diff Reviews)
 

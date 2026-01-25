@@ -277,7 +277,7 @@ Report insights that weren't caught by individual agents.
 
 ## Output Schema
 
-Return cross-cutting insights as a YAML list. See `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` for fix_type selection rules.
+Return cross-cutting insights as a YAML list. See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema and fix_type selection rules.
 
 ```yaml
 cross_cutting_insights:
