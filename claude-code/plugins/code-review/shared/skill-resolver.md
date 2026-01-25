@@ -103,6 +103,68 @@ Read the SKILL.md file and parse it into structured data. The orchestrator uses 
 4. **Preserve category structure** - Keep hierarchy (category → checks)
 5. **Extract severity from context** - If a category mentions "Critical" or "Major", capture it
 
+#### Parsing Execution Steps
+
+For each resolved SKILL.md file, execute these steps to extract structured data:
+
+**Step 4.1: Read and Split**
+1. Read the SKILL.md file content using the Read tool
+2. Identify YAML frontmatter (content between first two `---` markers)
+3. Extract body content (everything after the closing `---`)
+
+**Step 4.2: Extract Focus Areas**
+Search the body for sections with headers containing severity indicators:
+
+```
+Pattern: ## [Section Name] (Critical|Major|Minor)
+Pattern: ### [Section Name] (Critical|Major|Minor):
+```
+
+For each matching section:
+1. Extract section name before the parentheses as `focus_area.name`
+2. Extract severity from parentheses as `focus_area.severity`
+3. Parse bullet points (lines starting with `-`) under the section as `focus_area.checks[]`
+
+**Example:**
+Section "### Injection Vulnerabilities (Critical):" with bullets becomes:
+```yaml
+focus_areas:
+  - name: "Injection Vulnerabilities"
+    severity: "Critical"
+    checks:
+      - "SQL injection via string concatenation"
+      - "Command injection through shell execution"
+```
+
+**Step 4.3: Extract Auto-Validated Patterns**
+Search for a section header containing "Auto-Validated" and a markdown table:
+
+1. Find the table with columns containing "Pattern" and "Description"
+2. For each data row (skip header and separator):
+   - Column 1 (inside backticks) → `id`
+   - Column 2 → `description`
+
+**Step 4.4: Extract False Positive Rules**
+Search for a section header containing "False Positive":
+
+1. Find all bullet points in that section
+2. Each bullet (text after `- `) becomes an entry in `false_positive_rules[]`
+
+**Step 4.5: Determine Skill Type**
+Based on skill name:
+- If name matches `security-review|performance-review|bug-review|compliance-review` → `type: "review"`
+- Otherwise → `type: "methodology"`
+
+**Step 4.6: Assign Primary Agent**
+
+| Skill Name | Primary Agent |
+|------------|---------------|
+| security-review | security-agent |
+| performance-review | performance-agent |
+| bug-review | bug-detection-agent |
+| compliance-review | compliance-agent |
+| (methodology) | null |
+
 ### 5. Build Resolved Skills Structure
 
 ```yaml

@@ -46,6 +46,19 @@ This agent supports:
 - Files to review (diffs and/or full content)
 - Related API definitions (if available)
 - The MODE parameter (thorough only)
+- **skill_instructions** (optional): Skill-derived methodology
+
+### Using skill_instructions
+
+When `skill_instructions` is present in the prompt:
+
+**Methodology Instructions** (this agent receives methodology skills only):
+
+1. **methodology.approach**: Adopt this mindset throughout analysis
+2. **methodology.steps**: Follow these steps as part of your review process
+3. **methodology.questions**: Consider these questions when evaluating each potential finding
+
+**When skill_instructions is absent**: Proceed with standard review process defined in this agent.
 
 ## Review Process
 

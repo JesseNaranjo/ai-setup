@@ -47,6 +47,29 @@ This agent accepts a MODE parameter that controls review depth:
 - Detected project type (Node.js, .NET, or both)
 - Related test files for context
 - The MODE parameter (thorough, gaps, or quick)
+- **skill_instructions** (optional): Skill-derived focus areas and methodology
+
+### Using skill_instructions
+
+When `skill_instructions` is present in the prompt, apply it as follows:
+
+**Primary Agent Instructions** (this agent receives `bug-review` skill data):
+
+1. **focus_areas**: Prioritize checking these categories FIRST before standard checks. Structure findings around these areas where applicable.
+
+2. **checklist**: For each checklist category, explicitly verify EVERY item. If an item is clean (no issues found), still acknowledge it was checked. Report: "Checked [item]: No issues found" for clean items.
+
+3. **auto_validate**: Issues matching these pattern IDs should include `auto_validated: true` in output. These skip the validation phase.
+
+4. **false_positive_rules**: Apply these as ADDITIONAL false positive filters beyond the standard rules in this agent.
+
+**Methodology Instructions** (from methodology skills like `superpowers:brainstorming`):
+
+1. **methodology.approach**: Adopt this mindset throughout analysis
+2. **methodology.steps**: Follow these steps as part of your review process
+3. **methodology.questions**: Consider these questions when evaluating each potential finding
+
+**When skill_instructions is absent**: Proceed with standard review process defined in this agent.
 
 ## Review Process
 

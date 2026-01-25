@@ -505,6 +505,74 @@ When `--skills` is provided, gaps mode agents receive the **same** `skill_instru
 - Validation phase applies skill-derived `auto_validated_patterns` to ALL findings (thorough + gaps)
 - Validation phase applies skill-derived `false_positive_rules` to ALL findings (thorough + gaps)
 
+### skill_instructions Generation Algorithm
+
+When `--skills` is provided, generate `skill_instructions` for each agent BEFORE launching agents in Step 4.
+
+**Generation Step 1: Initialize per-agent containers**
+
+Create empty skill_instructions structures for each of the 9 agents:
+```yaml
+agent_skill_instructions:
+  security-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  bug-detection-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  performance-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  compliance-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  architecture-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  api-contracts-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  error-handling-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  test-coverage-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  synthesis-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+```
+
+**Generation Step 2: Process each resolved skill**
+
+For each skill in `resolved_skills`:
+
+**If skill.type == "review":**
+1. Identify target agent from `skill.primary_agent`
+2. Append all items from `skill.focus_areas` to `agent_skill_instructions[target_agent].focus_areas`
+3. Build checklist entries from focus_areas:
+   ```yaml
+   checklist:
+     - category: [focus_area.name]
+       severity: [focus_area.severity]
+       items: [focus_area.checks]
+   ```
+4. Append `skill.auto_validated_patterns[].id` to `agent_skill_instructions[target_agent].auto_validate`
+5. Append `skill.false_positive_rules` to `agent_skill_instructions[target_agent].false_positive_rules`
+
+**If skill.type == "methodology":**
+1. For EACH agent (all 9):
+   - Set `agent_skill_instructions[agent].methodology` to `skill.methodology`
+   - If methodology already exists, append to existing steps and questions
+
+**Generation Step 3: Build final skill_instructions block**
+
+When constructing the Task prompt for each agent, include the `skill_instructions:` block only if any field is non-empty:
+
+```yaml
+skill_instructions:
+  focus_areas: [from agent_skill_instructions[agent].focus_areas]
+  checklist: [from agent_skill_instructions[agent].checklist]
+  auto_validate: [from agent_skill_instructions[agent].auto_validate]
+  false_positive_rules: [from agent_skill_instructions[agent].false_positive_rules]
+  methodology: [from agent_skill_instructions[agent].methodology, if not null]
+```
+
+Omit the entire `skill_instructions:` block if all fields are empty (no skills provided or no applicable data for this agent).
+
+**Generation Step 4: Store patterns for validation phase**
+
+Before launching agents, store combined auto-validation data for use in Step 5 (Validation):
+```yaml
+skill_validation_context:
+  auto_validate_patterns: [union of all auto_validate from all skills]
+  false_positive_rules: [union of all false_positive_rules from all skills]
+```
+
+Pass this context to the validation step to enable skill-derived auto-validation.
+
 ---
 
 ## Workflow Steps

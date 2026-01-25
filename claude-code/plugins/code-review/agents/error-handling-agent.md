@@ -47,6 +47,19 @@ Note: This agent does not use "gaps" mode as error handling issues are generally
 - Files to review (diffs and/or full content)
 - Detected project type (Node.js, .NET, or both)
 - The MODE parameter (thorough or quick)
+- **skill_instructions** (optional): Skill-derived methodology
+
+### Using skill_instructions
+
+When `skill_instructions` is present in the prompt:
+
+**Methodology Instructions** (this agent receives methodology skills only):
+
+1. **methodology.approach**: Adopt this mindset throughout analysis
+2. **methodology.steps**: Follow these steps as part of your review process
+3. **methodology.questions**: Consider these questions when evaluating each potential finding
+
+**When skill_instructions is absent**: Proceed with standard review process defined in this agent.
 
 ## Review Process
 

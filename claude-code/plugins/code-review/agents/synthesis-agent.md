@@ -181,6 +181,19 @@ Return findings as cross_cutting_insights YAML list.
 - All findings from two input categories (provided via `synthesis_input.category_a.findings` and `synthesis_input.category_b.findings`)
 - The file diffs/content being reviewed
 - The cross-cutting question to answer (specified via `cross_cutting_question`)
+- **skill_instructions** (optional): Skill-derived methodology
+
+### Using skill_instructions
+
+When `skill_instructions` is present in the prompt:
+
+**Methodology Instructions** (this agent receives methodology skills only):
+
+1. **methodology.approach**: Adopt this mindset throughout analysis
+2. **methodology.steps**: Follow these steps as part of your review process
+3. **methodology.questions**: Consider these questions when evaluating each potential finding
+
+**When skill_instructions is absent**: Proceed with standard review process defined in this agent.
 
 ### Cross-Cutting Pairs
 
