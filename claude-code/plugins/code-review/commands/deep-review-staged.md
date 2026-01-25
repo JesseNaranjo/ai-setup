@@ -123,12 +123,9 @@ After Phase 1 and Phase 2 complete, launch 4 synthesis agents in parallel.
 
 See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 
-| Synthesis Agent | Subagent Type | Input Categories | Cross-Cutting Question |
-|-----------------|---------------|-----------------|------------------------|
-| Synthesis | `code-review:synthesis-agent` | Security + Performance | "Do any security fixes introduce performance issues?" |
-| Synthesis | `code-review:synthesis-agent` | Architecture + Test Coverage | "Are architectural changes covered by tests?" |
-| Synthesis | `code-review:synthesis-agent` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| Synthesis | `code-review:synthesis-agent` | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Deep Review Synthesis (4 agents in parallel)" section for:
+- The 4 category pairs and cross-cutting questions
+- Synthesis agent input/output format
 
 Launch all 4 synthesis agents in parallel, each with their respective category pairs and findings from Phase 1 and Phase 2.
 

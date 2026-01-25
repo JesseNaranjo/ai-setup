@@ -106,11 +106,9 @@ After the 4-agent review, launch 3 synthesis agents in parallel.
 
 See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for full agent definition.
 
-| Synthesis Agent | Subagent Type | Input Categories | Cross-Cutting Question |
-|-----------------|---------------|-----------------|------------------------|
-| Synthesis | `code-review:synthesis-agent` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| Synthesis | `code-review:synthesis-agent` | Security + Bugs | "Do security issues introduce or relate to bugs?" |
-| Synthesis | `code-review:synthesis-agent` | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Quick Review Synthesis (3 agents in parallel)" section for:
+- The 3 category pairs and cross-cutting questions
+- Synthesis agent input/output format
 
 Launch all 3 synthesis agents in parallel, each with their respective category pairs.
 
