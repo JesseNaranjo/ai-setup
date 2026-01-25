@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
 color: white
 tools: ["Read", "Grep", "Glob"]
-version: 3.1.2
+version: 3.1.3
 ---
 
 # Cross-Agent Synthesis Agent

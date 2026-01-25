@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for thorough. See review-workflow.md for authoritative model selection (sonnet for gaps)
 color: yellow
 tools: ["Read", "Grep", "Glob"]
-version: 3.1.2
+version: 3.1.3
 ---
 
 # Performance Review Agent
