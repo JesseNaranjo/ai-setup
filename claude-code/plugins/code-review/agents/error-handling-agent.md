@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
 color: orange
 tools: ["Read", "Grep", "Glob"]
-version: 3.1.1
+version: 3.1.2
 ---
 
 # Error Handling Review Agent

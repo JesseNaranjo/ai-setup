@@ -5,6 +5,30 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.2] - 2025-01-25
+
+### Added
+- **Skill-informed orchestration**: Comprehensive documentation for how `--skills` affects agent prompt generation, validation, and synthesis phases
+- **New shared documentation files**:
+  - `shared/skill-loading.md`: Centralized skill loading process requiring Skill() tool as primary method
+  - `shared/skill-instructions-usage.md`: How agents apply `skill_instructions` (focus_areas, checklists, methodology)
+  - `shared/content-gathering-common.md`: Common steps for reading related test files
+- **Security review skill patterns**: 5 new high-confidence auto-validated patterns:
+  - `hardcoded_token`, `hardcoded_secret`, `hardcoded_credentials`
+  - `sql_injection_template`, `new_function_untrusted`
+- **Consensus detection algorithm**: Detailed 5-step algorithm with overlap detection formulas and merge examples
+- **`engines` field**: Added to plugin.json for Claude Code version compatibility
+
+### Changed
+- **Skill resolver**: Now mandates Skill() tool as primary loading method with direct file read as fallback only
+- **All 9 agents**: Added `skill_instructions` support documentation for applying skill-derived focus areas and methodology
+- **Gaps mode rules**: Enhanced skip zone calculations with explicit formulas and overlap detection examples
+- **Commands**: Refactored to reference shared skill-loading.md and review-workflow.md, reducing duplication (~280 lines removed)
+- **Validation rules**: Added cross-reference to false-positives.md for complete false positive patterns
+
+### Fixed
+- CHANGELOG placeholder dates (2025-01-XX) replaced with actual release dates
+
 ## [3.1.1] - 2025-01-23
 
 ### Fixed
@@ -39,18 +63,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Skill "Applicable Contexts" sections renamed to "When to Use" with action-oriented bullet points
 
-## [3.0.2] - 2025-01-XX
+## [3.0.2] - 2025-01-21
 
 ### Changed
 - Updated performance-agent model from Sonnet to Opus for enhanced analysis accuracy
 - Enhanced code review documentation for comprehensive 9-agent analysis
 
-## [3.0.1] - 2025-01-XX
+## [3.0.1] - 2025-01-21
 
 ### Added
 - Usage tracking initialization and summary generation for code reviews
 
-## [3.0.0] - 2025-01-XX
+## [3.0.0] - 2025-01-20
 
 ### Added
 - **Synthesis Agent**: New cross-agent synthesis for detecting ripple effects and cross-cutting concerns
