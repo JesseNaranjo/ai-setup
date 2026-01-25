@@ -185,34 +185,17 @@ Return findings as cross_cutting_insights YAML list.
 
 ### Using skill_instructions
 
-When `skill_instructions` is present, apply methodology skills as follows:
-
-1. **methodology.approach**: Adopt this mindset throughout cross-category analysis
-2. **methodology.steps**: Follow these steps when identifying cross-cutting concerns
-3. **methodology.questions**: Consider these questions when evaluating potential ripple effects between categories
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for methodology-only skill_instructions processing.
 
 **Note**: Synthesis agents do NOT receive primary agent skill data (focus_areas, checklist, auto_validate, false_positive_rules) since they operate on findings from other agents rather than reviewing code directly.
 
-When `skill_instructions` is absent, proceed with standard synthesis process.
-
 ### Using Tiered Context
 
-When files include tier information (staged reviews):
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
 
-**For `tier: "critical"` files:**
-- Full content is provided - analyze thoroughly
-- This is the primary review focus for cross-cutting analysis
-
-**For `tier: "peripheral"` files:**
-- Only a preview (first 50 lines) is provided
-- Use the preview to understand file purpose
-- If synthesis discovers cross-cutting relevance, use Read tool to get full content
-- Example: If ripple effect analysis discovers affected files, Read them
-
-**Cross-File Discovery:**
+**Agent-specific cross-file pattern:** If ripple effect analysis discovers affected files, Read them.
 ```
 Grep(pattern: "import.*from|exports", path: "src/")
-Read(file_path: "src/shared/types.ts")  # Read if cross-cutting analysis needs it
 ```
 
 ### Cross-Cutting Pairs

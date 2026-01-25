@@ -52,34 +52,17 @@ Note: This agent does not use "gaps" mode as test coverage gaps are generally cl
 
 ### Using skill_instructions
 
-When `skill_instructions` is present, apply methodology skills as follows:
-
-1. **methodology.approach**: Adopt this mindset throughout analysis
-2. **methodology.steps**: Follow these steps as part of your review process
-3. **methodology.questions**: Consider these questions when evaluating each potential finding
-
-When `skill_instructions` is absent, proceed with standard review process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for methodology-only skill_instructions processing.
 
 This agent receives methodology skills only (no primary review-focused skill).
 
 ### Using Tiered Context
 
-When files include tier information (staged reviews):
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
 
-**For `tier: "critical"` files:**
-- Full content is provided - analyze thoroughly
-- This is the primary review focus
-
-**For `tier: "peripheral"` files:**
-- Only a preview (first 50 lines) is provided
-- Use the preview to understand file purpose
-- If cross-file analysis discovers relevance, use Read tool to get full content
-- Example: If test coverage analysis discovers untested code paths, Read them
-
-**Cross-File Discovery:**
+**Agent-specific cross-file pattern:** If test coverage analysis discovers untested code paths, Read them.
 ```
 Grep(pattern: "describe|test|it\\(", path: "src/")
-Read(file_path: "src/__tests__/utils.test.ts")  # Read if test coverage-relevant
 ```
 
 ## Review Process

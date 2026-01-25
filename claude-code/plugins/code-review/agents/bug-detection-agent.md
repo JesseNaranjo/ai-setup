@@ -51,40 +51,17 @@ This agent accepts a MODE parameter that controls review depth:
 
 ### Using skill_instructions
 
-When `skill_instructions` is present in the prompt, apply it as follows:
-
-1. **focus_areas**: Prioritize checking these categories FIRST before standard checks. Structure findings around these areas where applicable.
-2. **checklist**: For each checklist category, explicitly verify EVERY item. If an item is clean (no issues found), acknowledge it was checked.
-3. **auto_validate**: Issues matching these pattern IDs should include `auto_validated: true` in output.
-4. **false_positive_rules**: Apply these as ADDITIONAL false positive filters beyond this agent's standard rules.
-
-For methodology skills (like `superpowers:brainstorming`):
-1. **methodology.approach**: Adopt this mindset throughout analysis
-2. **methodology.steps**: Follow these steps as part of your review process
-3. **methodology.questions**: Consider these questions when evaluating each potential finding
-
-When `skill_instructions` is absent, proceed with standard review process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for full skill_instructions processing.
 
 This agent receives `bug-review` skill data as its primary review-focused skill.
 
 ### Using Tiered Context
 
-When files include tier information (staged reviews):
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
 
-**For `tier: "critical"` files:**
-- Full content is provided - analyze thoroughly
-- This is the primary review focus
-
-**For `tier: "peripheral"` files:**
-- Only a preview (first 50 lines) is provided
-- Use the preview to understand file purpose
-- If cross-file analysis discovers relevance, use Read tool to get full content
-- Example: If bug analysis discovers this file contains shared logic, Read it
-
-**Cross-File Discovery:**
+**Agent-specific cross-file pattern:** If bug analysis discovers a file contains shared logic, Read it.
 ```
 Grep(pattern: "OrderService", path: "src/")
-Read(file_path: "src/db/schema.ts")  # Read if relevant to bug analysis
 ```
 
 ## Review Process

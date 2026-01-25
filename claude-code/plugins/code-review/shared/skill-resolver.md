@@ -2,6 +2,16 @@
 
 Resolve skill names to SKILL.md files and parse them into structured data for orchestrator interpretation.
 
+## Skill Loading Efficiency
+
+The skill resolution process is designed for context efficiency:
+
+1. **Metadata phase**: Only name and description are evaluated to determine applicability
+2. **Content phase**: Full SKILL.md content is loaded only for applicable skills
+3. **Reference phase**: Files in `references/` and `examples/` are loaded on-demand
+
+This progressive disclosure pattern minimizes context window usage while maintaining full capability access.
+
 ## Resolution Algorithm
 
 For each skill in the `--skills` argument:

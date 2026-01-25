@@ -51,34 +51,17 @@ Note: This agent does not use "gaps" mode as error handling issues are generally
 
 ### Using skill_instructions
 
-When `skill_instructions` is present, apply methodology skills as follows:
-
-1. **methodology.approach**: Adopt this mindset throughout analysis
-2. **methodology.steps**: Follow these steps as part of your review process
-3. **methodology.questions**: Consider these questions when evaluating each potential finding
-
-When `skill_instructions` is absent, proceed with standard review process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for methodology-only skill_instructions processing.
 
 This agent receives methodology skills only (no primary review-focused skill).
 
 ### Using Tiered Context
 
-When files include tier information (staged reviews):
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
 
-**For `tier: "critical"` files:**
-- Full content is provided - analyze thoroughly
-- This is the primary review focus
-
-**For `tier: "peripheral"` files:**
-- Only a preview (first 50 lines) is provided
-- Use the preview to understand file purpose
-- If cross-file analysis discovers relevance, use Read tool to get full content
-- Example: If error handling analysis discovers error propagation paths, Read them
-
-**Cross-File Discovery:**
+**Agent-specific cross-file pattern:** If error handling analysis discovers error propagation paths, Read them.
 ```
 Grep(pattern: "throw|catch|Error", path: "src/")
-Read(file_path: "src/utils/errors.ts")  # Read if error handling-relevant
 ```
 
 ## Review Process
