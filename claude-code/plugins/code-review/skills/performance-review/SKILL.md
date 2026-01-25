@@ -8,13 +8,9 @@ version: 3.1.3
 
 Identify algorithmic inefficiencies, memory leaks, database query problems, and other performance bottlenecks through targeted performance-focused code review.
 
-## Performance-Specific Configuration
+## Agent Configuration
 
-### Agent Parameters
-
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md`
-- **Model:** Opus (for deep performance analysis)
-- **Modes:** thorough (first pass), gaps (second pass)
+Uses **performance-agent** (Opus in thorough mode, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
 
 ### Performance Categories Checked
 
@@ -59,13 +55,9 @@ Identify algorithmic inefficiencies, memory leaks, database query problems, and 
 
 ## Auto-Validated Patterns
 
-These high-confidence patterns skip validation:
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-| Pattern | Description |
-|---------|-------------|
-| `n_plus_one_query` | Loop + await + findOne/findById/query |
-| `nested_loop_includes` | Nested for + `.includes()`/`.indexOf()` |
-| `select_star_in_loop` | Loop + `SELECT *` |
+**Performance patterns:** `n_plus_one_query`, `nested_loop_includes`, `select_star_in_loop`
 
 ---
 
@@ -87,14 +79,14 @@ For N+1 and query performance detection, also read:
 
 ---
 
-## Performance-Specific False Positives
+## False Positives
 
-Do NOT flag:
-- O(n^2) on max 10 items (not a problem)
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+
+**Performance-specific additions** - do NOT flag:
+- O(n^2) on small bounded data (max 10 items)
 - Startup/initialization code (one-time cost)
-- Debug/logging code (functionality > performance)
 - Code with caching/memoization elsewhere
-- Test code (doesn't need optimization)
 - Theoretical improvements requiring benchmark proof
 
 ---

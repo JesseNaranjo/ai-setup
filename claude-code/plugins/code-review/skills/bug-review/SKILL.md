@@ -8,13 +8,9 @@ version: 3.1.3
 
 Identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs through targeted bug-focused code review.
 
-## Bug-Specific Configuration
+## Agent Configuration
 
-### Agent Parameters
-
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md`
-- **Model:** Opus (for thorough bug detection)
-- **Modes:** thorough (first pass), gaps (second pass)
+Uses **bug-detection-agent** (Opus in thorough/quick modes, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
 
 ### Bug Categories Checked
 
@@ -58,13 +54,9 @@ Identify logical errors, null reference issues, race conditions, off-by-one erro
 
 ## Auto-Validated Patterns
 
-These high-confidence patterns skip validation:
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-| Pattern | Description |
-|---------|-------------|
-| `empty_catch_block` | `catch (e) { }` with no handling |
-| `missing_await` | async call without await |
-| `null_dereference` | Access after optional chain or guard |
+**Bug patterns:** `empty_catch_block`, `missing_await`, `null_dereference`
 
 ---
 
@@ -78,15 +70,15 @@ When investigating a specific bug:
 
 ---
 
-## Bug-Specific False Positives
+## False Positives
 
-Do NOT flag:
-- Guarded elsewhere (null check happens in caller)
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+
+**Bug-specific additions** - do NOT flag:
+- Guarded elsewhere (null check in caller)
 - Framework guarantee (framework ensures non-null)
-- Intentional behavior (bug is expected behavior)
+- Intentional behavior (documented as expected)
 - Unreachable conditions (requires impossible state)
-- Test-only code (bugs in test helpers less critical)
-- Theoretical bugs requiring unrealistic preconditions
 
 ---
 

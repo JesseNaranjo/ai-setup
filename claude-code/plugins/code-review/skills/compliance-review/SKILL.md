@@ -8,13 +8,9 @@ version: 3.1.3
 
 Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) and project-specific rules through targeted compliance-focused code review.
 
-## Compliance-Specific Configuration
+## Agent Configuration
 
-### Agent Parameters
-
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md`
-- **Model:** Sonnet (for efficient compliance checking)
-- **Modes:** thorough (first pass), gaps (second pass)
+Uses **compliance-agent** (Sonnet in all modes). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
 
 ### Instruction File Locations (Part of Step 2)
 
@@ -56,34 +52,21 @@ For rule classification (MUST/SHOULD/MAY keywords and severity mapping), see `re
 
 ## Auto-Validated Patterns
 
-These high-confidence patterns skip validation:
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-| Pattern | Description |
-|---------|-------------|
-| `missing_authorize_attribute` | Controller action without `[Authorize]` when CLAUDE.md requires auth |
-| `wrong_case_filename` | File using wrong case pattern (e.g., PascalCase in Node.js project) |
-| `explicit_must_violation` | Code contradicts explicit "MUST" or "MUST NOT" rule with exact match |
-| `missing_required_jsdoc` | Public API without JSDoc when CLAUDE.md requires documentation |
+**Compliance patterns:** `missing_authorize_attribute`, `wrong_case_filename`, `explicit_must_violation`, `missing_required_jsdoc`
 
 ---
 
-## Compliance-Specific False Positives
+## False Positives
 
-Do NOT flag:
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+
+**Compliance-specific additions** - do NOT flag:
 - Explicit override comments (`// claude-ignore: rule-name`)
 - Scope mismatch (rule doesn't apply to this file type)
-- Ambiguous rule (benefit of doubt to code)
-- Intentional deviation with documented reason
-- Framework exemption (framework provides required behavior)
-
-### Ignore Comment Patterns
-
-Respect these silencing patterns:
-```javascript
-// claude-ignore: no-console
-// eslint-disable-next-line rule-name
-// @ts-ignore: explanation
-```
+- Ambiguous rules (benefit of doubt to code)
+- Framework exemptions (framework provides required behavior)
 
 ---
 

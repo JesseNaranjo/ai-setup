@@ -8,13 +8,9 @@ version: 3.1.3
 
 Identify vulnerabilities, insecure coding patterns, and security misconfigurations through targeted security-focused code review.
 
-## Security-Specific Configuration
+## Agent Configuration
 
-### Agent Parameters
-
-- **Agent:** `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md`
-- **Model:** Opus (for thorough vulnerability detection)
-- **Modes:** thorough (first pass), gaps (second pass)
+Uses **security-agent** (Opus in thorough mode, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
 
 ### Security Categories Checked
 
@@ -51,19 +47,9 @@ Identify vulnerabilities, insecure coding patterns, and security misconfiguratio
 
 ## Auto-Validated Patterns
 
-These high-confidence patterns skip validation:
+High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-| Pattern | Description |
-|---------|-------------|
-| `hardcoded_password` | `password = "..."` assignments |
-| `hardcoded_api_key` | `api_key = "..."` assignments |
-| `hardcoded_token` | `token = "..."`, `bearer = "..."` assignments |
-| `hardcoded_secret` | `secret = "..."`, `private_key = "..."` assignments |
-| `hardcoded_credentials` | `credentials = "..."`, `connection_string = "..."` assignments |
-| `sql_injection_concat` | SQL + string concatenation with user input |
-| `sql_injection_template` | SQL + template literal interpolation with user input |
-| `eval_untrusted` | `eval()` with request/user input |
-| `new_function_untrusted` | `new Function()` with request/user input |
+**Security patterns:** `hardcoded_password`, `hardcoded_api_key`, `hardcoded_token`, `hardcoded_secret`, `hardcoded_credentials`, `sql_injection_concat`, `sql_injection_template`, `eval_untrusted`, `new_function_untrusted`
 
 ---
 
@@ -77,14 +63,13 @@ When reviewing directories, automatically prioritize:
 
 ---
 
-## Security-Specific False Positives
+## False Positives
 
-Do NOT flag:
-- Security issues in test files (usually intentional)
-- Internal-only code with no untrusted input exposure
-- Code with explicit security comments explaining design
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+
+**Security-specific additions** - do NOT flag:
 - Placeholder values (`"changeme"`, `"TODO"`)
-- Vulnerabilities already mitigated elsewhere
+- Vulnerabilities explicitly mitigated elsewhere (documented upstream protection)
 
 ---
 
