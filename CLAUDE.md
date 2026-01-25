@@ -175,7 +175,6 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
 - `shared/review-workflow.md` - Orchestration, workflow steps, skill-informed orchestration, and agent invocation pattern
 - `shared/skill-resolver.md` - Skill resolution and structured parsing for orchestrator interpretation
-- `shared/skill-loading.md` - Complete skill loading process (referenced by all commands)
 - `shared/skill-common-workflow.md` - Lean workflow steps for skills (references `shared/references/` for details)
 - `shared/validation-rules.md` - Issue validation process
 - `shared/output-schema-base.md` - Base YAML schema all agents must use

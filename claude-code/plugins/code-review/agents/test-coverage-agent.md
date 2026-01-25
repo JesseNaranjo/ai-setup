@@ -52,7 +52,13 @@ Note: This agent does not use "gaps" mode as test coverage gaps are generally cl
 
 ### Using skill_instructions
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply skill_instructions.
+When `skill_instructions` is present, apply methodology skills as follows:
+
+1. **methodology.approach**: Adopt this mindset throughout analysis
+2. **methodology.steps**: Follow these steps as part of your review process
+3. **methodology.questions**: Consider these questions when evaluating each potential finding
+
+When `skill_instructions` is absent, proceed with standard review process.
 
 This agent receives methodology skills only (no primary review-focused skill).
 

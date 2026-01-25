@@ -51,7 +51,19 @@ This agent supports:
 
 ### Using skill_instructions
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply skill_instructions.
+When `skill_instructions` is present in the prompt, apply it as follows:
+
+1. **focus_areas**: Prioritize checking these categories FIRST before standard checks. Structure findings around these areas where applicable.
+2. **checklist**: For each checklist category, explicitly verify EVERY item. If an item is clean (no issues found), acknowledge it was checked.
+3. **auto_validate**: Issues matching these pattern IDs should include `auto_validated: true` in output.
+4. **false_positive_rules**: Apply these as ADDITIONAL false positive filters beyond this agent's standard rules.
+
+For methodology skills (like `superpowers:brainstorming`):
+1. **methodology.approach**: Adopt this mindset throughout analysis
+2. **methodology.steps**: Follow these steps as part of your review process
+3. **methodology.questions**: Consider these questions when evaluating each potential finding
+
+When `skill_instructions` is absent, proceed with standard review process.
 
 This agent receives `performance-review` skill data as its primary review-focused skill.
 

@@ -57,7 +57,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content g
 
 ## Step 5: Skill Loading and Interpretation (if --skills provided)
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-loading.md` for the complete skill loading process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the complete skill resolution and loading process.
 
 ---
 

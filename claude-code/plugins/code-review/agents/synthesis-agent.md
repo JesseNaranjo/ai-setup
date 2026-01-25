@@ -185,9 +185,15 @@ Return findings as cross_cutting_insights YAML list.
 
 ### Using skill_instructions
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-instructions-usage.md` for how to apply skill_instructions.
+When `skill_instructions` is present, apply methodology skills as follows:
 
-This agent receives methodology skills only. See the "Synthesis Agent Instructions" section for synthesis-specific guidance.
+1. **methodology.approach**: Adopt this mindset throughout cross-category analysis
+2. **methodology.steps**: Follow these steps when identifying cross-cutting concerns
+3. **methodology.questions**: Consider these questions when evaluating potential ripple effects between categories
+
+**Note**: Synthesis agents do NOT receive primary agent skill data (focus_areas, checklist, auto_validate, false_positive_rules) since they operate on findings from other agents rather than reviewing code directly.
+
+When `skill_instructions` is absent, proceed with standard synthesis process.
 
 ### Using Tiered Context
 

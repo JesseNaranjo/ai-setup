@@ -26,7 +26,9 @@ For each staged file:
 
 ### 4. Read Related Test Files
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-common.md`.
+Read related test files (from Context Discovery step) for context:
+- **Node.js**: See `languages/nodejs.md` for test file patterns
+- **.NET**: See `languages/dotnet.md` for test file patterns
 
 Test files are always treated as critical tier.
 
