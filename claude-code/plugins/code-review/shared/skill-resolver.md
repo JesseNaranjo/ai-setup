@@ -1,6 +1,6 @@
 # Skill Resolver
 
-Resolve skill names to SKILL.md files and extract methodology content for embedding in agent prompts.
+Resolve skill names to SKILL.md files and parse them into structured data for orchestrator interpretation.
 
 ## Resolution Algorithm
 
@@ -71,37 +71,106 @@ If skill file not found after searching all paths:
    > - superpowers:nonexistent-skill
    ```
 
-### 4. Extract Methodology Content
+### 4. Parse Skill Content
 
-Read the SKILL.md file and extract relevant sections:
+Read the SKILL.md file and parse it into structured data. The orchestrator uses this structured data to generate agent-specific instructions.
 
-**Include:**
-- Category/checklist sections (e.g., "Security Categories Checked")
-- Methodology descriptions
-- Pattern lists and examples
-- Focus areas
+#### Structured Data Extraction
 
-**Exclude:**
-- YAML frontmatter
-- "When to Use" section
-- "Process Overview" section (interactive workflow)
-- References to other files
+**For review-focused skills (security-review, performance-review, bug-review, compliance-review):**
 
-### 5. Format for Embedding
+| Field | Source | Description |
+|-------|--------|-------------|
+| `focus_categories` | "Categories Checked" sections | List of categories with severity and specific checks |
+| `auto_validated_patterns` | Pattern tables | Patterns that auto-validate (skip validation step) |
+| `false_positive_rules` | "False Positives" sections | Rules for what NOT to flag |
+| `priority_files` | "Scope Prioritization" sections | File patterns to prioritize |
+| `primary_agent` | Skill name mapping | Which agent this skill primarily targets |
+
+**For methodology-focused skills (superpowers:brainstorming, superpowers:systematic-debugging, etc.):**
+
+| Field | Source | Description |
+|-------|--------|-------------|
+| `methodology` | Main content | Approach/mindset description |
+| `steps` | Numbered lists or workflow sections | Ordered steps to follow |
+| `questions` | Question-based sections | Exploratory questions to ask |
+
+#### Parsing Rules
+
+1. **Strip YAML frontmatter** - Not included in parsed output
+2. **Ignore "When to Use" sections** - These are for skill selection, not execution
+3. **Ignore "Process Overview" sections** - Interactive workflow, not applicable to batch review
+4. **Preserve category structure** - Keep hierarchy (category → checks)
+5. **Extract severity from context** - If a category mentions "Critical" or "Major", capture it
+
+### 5. Build Resolved Skills Structure
 
 ```yaml
-embedded_skills:
-  - name: "{skill_name}"
-    source: "{original_skill_reference}"
-    methodology: |
-      {extracted content}
+resolved_skills:
+  - name: "security-review"
+    source: "security-review"  # Original reference
+    type: "review"  # review | methodology
+    primary_agent: "security-agent"  # null for methodology skills
+    focus_categories:
+      - name: "Injection Vulnerabilities"
+        severity: "Critical"
+        checks:
+          - "SQL injection via string concatenation"
+          - "Command injection via exec/spawn"
+          - "XSS via innerHTML or dangerouslySetInnerHTML"
+      - name: "Authentication Weaknesses"
+        severity: "Critical"
+        checks:
+          - "Hardcoded credentials"
+          - "Weak token generation"
+    auto_validated_patterns:
+      - id: "hardcoded_password"
+        pattern: "password\\s*=\\s*[\"'][^\"']+[\"']"
+        description: "Hardcoded password assignments"
+      - id: "sql_concat"
+        pattern: "\\+.*\\$\\{.*\\}.*FROM|WHERE"
+        description: "SQL string concatenation with variables"
+    false_positive_rules:
+      - "Passwords in test files or fixtures"
+      - "SQL in ORM query builders"
+      - "Example code in documentation"
+    priority_files:
+      patterns:
+        - "**/auth/**"
+        - "**/login/**"
+        - "**/password/**"
+        - "**/api/**"
+
+  - name: "brainstorming"
+    source: "superpowers:brainstorming"
+    type: "methodology"
+    primary_agent: null  # Applies to all agents
+    methodology:
+      approach: "Explore multiple interpretations before concluding"
+      mindset: "Question assumptions, consider edge cases"
+      steps:
+        - "Identify what the code is trying to do"
+        - "Consider why it might be correct"
+        - "Brainstorm ways it could fail"
+        - "Evaluate likelihood of each failure mode"
+      questions:
+        - "What assumptions does this code make?"
+        - "What happens if those assumptions are violated?"
+        - "Are there edge cases the developer might have missed?"
 ```
 
 ## Usage
 
-Commands call this resolver in Step 3.5 (after Content Gathering, before Review Execution):
+Commands call this resolver in Step 5 (Skill Loading and Interpretation):
 
 1. Parse `--skills` from arguments
-2. For each skill, resolve and extract using this algorithm
-3. Collect all embedded_skills entries
-4. Pass to Step 4 for inclusion in agent prompts
+2. For each skill, resolve file path and read content
+3. Parse content into structured `resolved_skills` entries
+4. Store for orchestration decisions in subsequent steps
+
+The orchestrator (command running as Opus) then:
+- Uses `primary_agent` to route skill-specific checks
+- Generates tailored `skill_instructions` per agent
+- Applies `auto_validated_patterns` during validation phase
+- Applies `false_positive_rules` across all agents
+- Uses `methodology` skills universally for all agent invocations

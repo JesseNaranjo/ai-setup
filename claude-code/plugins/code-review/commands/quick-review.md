@@ -51,16 +51,24 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-files.md` for the content ga
 
 ---
 
-## Step 5: Skill Resolution (if --skills provided)
+## Step 5: Skill Loading and Interpretation (if --skills provided)
 
-If `--skills` argument is present, resolve and extract skill content.
+If `--skills` argument is present, load and interpret skill content for orchestration.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the resolution algorithm.
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the resolution algorithm and structured parsing.
 
 For each skill in the comma-separated list:
 1. Resolve skill name to SKILL.md file path
-2. Read and extract methodology content
-3. Collect as `embedded_skills` for Step 6
+2. Parse skill into structured representation (`resolved_skills`)
+3. Store for orchestration decisions in Step 6
+
+### Skill-Informed Orchestration
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` "Skill-Informed Orchestration" section for how the orchestrator uses resolved skills to:
+- Generate agent-specific `skill_instructions` (tailored per agent)
+- Apply `auto_validated_patterns` during validation
+- Apply `false_positive_rules` across agents
+- Use methodology skills universally for all agent invocations
 
 ---
 
@@ -92,7 +100,7 @@ Each agent receives:
 - For files without changes: the full file content
 - Related test files for context
 - MODE parameter: **quick**
-- Embedded skill methodologies from `--skills` argument (if provided)
+- Skill-derived instructions from Step 5 (tailored per agent from `--skills` argument)
 - Additional instructions from `--prompt` argument (combined with project instructions from settings)
 
 **Quick mode agents focus on**:

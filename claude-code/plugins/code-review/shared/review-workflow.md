@@ -377,6 +377,112 @@ project_instructions: |
   This is a high-security financial application...
 ```
 
+## Skill-Informed Orchestration
+
+When `--skills` is provided, the orchestrator interprets the resolved skills and makes orchestration decisions. This section defines how skill data affects each phase of the review.
+
+### Agent Selection Adjustments
+
+Skills can affect which agents run and with what configuration:
+
+**Override skip_agents:**
+- If a skill has `primary_agent: "security-agent"` and security-agent is in `skip_agents`, the orchestrator may warn but does not auto-override
+- Explicit user configuration takes precedence
+
+**Model Selection:**
+- Skills do not change the model selection per agent
+- The authoritative model table in "Model Selection per Agent" section always applies
+
+### Agent Prompt Generation
+
+Instead of passing raw skill content to agents via `embedded_skills`, the orchestrator generates tailored `skill_instructions` for each agent.
+
+**Template for skill_instructions:**
+
+```yaml
+skill_instructions:
+  # For review-focused skills targeting this agent
+  focus_areas:
+    - "OWASP Top 10 vulnerabilities"
+    - "Injection attacks (SQL, command, XSS)"
+  checklist:
+    - category: "Injection Vulnerabilities"
+      severity: "Critical"
+      items:
+        - "SQL injection via string concatenation"
+        - "Command injection via exec/spawn"
+    - category: "Authentication Weaknesses"
+      severity: "Critical"
+      items:
+        - "Hardcoded credentials"
+        - "Weak token generation"
+  auto_validate:
+    - "hardcoded_password"
+    - "sql_concat"
+  false_positive_rules:
+    - "Passwords in test files or fixtures"
+    - "SQL in ORM query builders"
+
+  # For methodology skills (applies to all agents)
+  methodology:
+    approach: "Explore multiple interpretations before concluding"
+    mindset: "Question assumptions, consider edge cases"
+    steps:
+      - "Identify what the code is trying to do"
+      - "Consider why it might be correct"
+      - "Brainstorm ways it could fail"
+    questions:
+      - "What assumptions does this code make?"
+      - "What happens if those assumptions are violated?"
+```
+
+**Generation Rules:**
+
+| Agent | Receives From |
+|-------|---------------|
+| security-agent | `security-review` focus_categories, ALL methodology skills |
+| bug-detection-agent | `bug-review` focus_categories, ALL methodology skills |
+| performance-agent | `performance-review` focus_categories, ALL methodology skills |
+| compliance-agent | `compliance-review` focus_categories, ALL methodology skills |
+| Other agents | ALL methodology skills only |
+
+**Merging Multiple Skills:**
+
+When multiple skills are provided (e.g., `--skills security-review,superpowers:brainstorming`):
+
+1. **focus_areas**: Union of all applicable focus areas
+2. **checklist**: Union of all applicable checklists
+3. **auto_validate**: Union of all patterns
+4. **false_positive_rules**: Union of all rules
+5. **methodology**: Include all methodology skills in sequence
+
+### Validation Phase Adjustments
+
+Skills affect validation through:
+
+**Auto-Validated Patterns:**
+- Issues matching `auto_validated_patterns` skip the validation subagent
+- They are automatically marked as VALID
+- Rationale: These patterns are high-confidence findings that don't need secondary verification
+
+**False Positive Rules:**
+- Pass `false_positive_rules` to the validation prompt
+- Validator uses these as additional context for INVALID verdicts
+
+### Synthesis Phase Adjustments
+
+Skills can inform synthesis questions:
+
+**Default Cross-Cutting Questions:**
+- Use the standard questions defined in review-workflow.md
+
+**With Skills:**
+- If `security-review` skill is active, add: "Do findings align with OWASP categories?"
+- If `performance-review` skill is active, add: "Are performance issues in hot paths?"
+- Methodology skills don't affect synthesis questions
+
+---
+
 ## Workflow Steps
 
 ### Step 1: Input Validation
@@ -523,14 +629,25 @@ previous_findings:
     category: "Performance"
     severity: "Critical"
 
-// Embedded skills (from --skills argument):
-embedded_skills:
-  - name: "brainstorming"
-    source: "superpowers:brainstorming"
-    methodology: |
-      ## Brainstorming Methodology
-      Before flagging issues, explore multiple interpretations...
-      [extracted from SKILL.md]
+// Skill-derived instructions (from --skills argument, orchestrator-interpreted):
+skill_instructions:
+  focus_areas:
+    - "OWASP Top 10 vulnerabilities"
+  checklist:
+    - category: "Injection Vulnerabilities"
+      severity: "Critical"
+      items: ["SQL injection", "Command injection", "XSS"]
+  auto_validate:
+    - "hardcoded_password"
+  false_positive_rules:
+    - "Passwords in test files"
+  methodology:
+    approach: "Explore multiple interpretations before concluding"
+    steps:
+      - "Consider why code might be correct"
+      - "Brainstorm failure modes"
+    questions:
+      - "What assumptions does this code make?"
 
 // Additional instructions (from settings file body + --prompt argument):
 additional_instructions: |
@@ -579,7 +696,7 @@ Each agent receives:
 - Related test files
 - MODE parameter
 - Previous findings (gaps mode only, from same category)
-- Embedded skill methodologies (from `--skills` argument, if provided)
+- Skill-derived instructions (from `--skills` argument, orchestrator-interpreted per agent)
 - Additional instructions (from settings file body + `--prompt` argument)
 
 Each agent returns issues following the YAML schema defined in each agent file.

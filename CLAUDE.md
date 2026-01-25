@@ -22,7 +22,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 **Note:** All review commands also accept:
 - `--language nodejs|dotnet` to force language detection
 - `--prompt "<instructions>"` to pass additional instructions to agents
-- `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
+- `--skills <skill1,skill2,...>` to enable skill-informed orchestration (orchestrator interprets skills and generates tailored `skill_instructions` per agent)
 
 ## Plugin Skills
 
@@ -90,7 +90,8 @@ claude-code/plugins/code-review/
 │   ├── content-gathering-files.md   # File-based content gathering
 │   ├── content-gathering-staged.md  # Staged content gathering
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── review-workflow.md           # Orchestration logic + agent invocation pattern
+│   ├── review-workflow.md           # Orchestration logic + skill-informed orchestration + agent invocation pattern
+│   ├── skill-resolver.md            # Skill resolution and structured parsing
 │   ├── skill-common-workflow.md     # Common skill workflow steps (lean, references details)
 │   ├── validation-rules.md          # Validation process
 │   ├── output-format.md             # Output templates (with fix_type)
@@ -172,7 +173,8 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/input-validation-*.md` - Input validation for file/staged commands
 - `shared/content-gathering-*.md` - Content gathering for file/staged commands
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
-- `shared/review-workflow.md` - Orchestration, workflow steps, and agent invocation pattern
+- `shared/review-workflow.md` - Orchestration, workflow steps, skill-informed orchestration, and agent invocation pattern
+- `shared/skill-resolver.md` - Skill resolution and structured parsing for orchestrator interpretation
 - `shared/skill-common-workflow.md` - Lean workflow steps for skills (references `shared/references/` for details)
 - `shared/validation-rules.md` - Issue validation process
 - `shared/output-schema-base.md` - Base YAML schema all agents must use
@@ -246,6 +248,20 @@ skills/skill-name/
 ```
 
 Skills reference `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures (determining scope, gathering context, validating findings, and reporting results) to avoid duplication across skills.
+
+## Skill-Informed Orchestration
+
+When `--skills` is provided to review commands, the orchestrator (running as Opus) interprets skill content and makes orchestration decisions:
+
+1. **Skill Resolution**: Skills are resolved to SKILL.md files via `shared/skill-resolver.md`
+2. **Structured Parsing**: Skills are parsed into structured data (focus_categories, auto_validated_patterns, false_positive_rules, methodology)
+3. **Agent-Specific Instructions**: The orchestrator generates tailored `skill_instructions` per agent:
+   - Review skills (security-review, etc.) target their primary agent with checklists and focus areas
+   - Methodology skills (superpowers:brainstorming, etc.) apply universally to all agents
+4. **Validation Adjustments**: Auto-validated patterns skip validation; false positive rules filter findings
+5. **Synthesis Adjustments**: Skill-specific cross-cutting questions may be added
+
+See `shared/review-workflow.md` "Skill-Informed Orchestration" section for implementation details.
 
 ## Version Management
 

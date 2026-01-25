@@ -227,7 +227,7 @@ Then use `--prompt` for one-off additions:
 
 ### Embedding Skills in Reviews
 
-Use `--skills` to embed skill methodologies directly into review agents. This gives agents access to specialized knowledge from other skills during the review.
+Use `--skills` to enhance reviews with skill-specific knowledge and methodologies. The orchestrator interprets skill content and generates tailored instructions for each agent.
 
 #### Syntax
 
@@ -248,13 +248,13 @@ Use `--skills` to embed skill methodologies directly into review agents. This gi
 ```bash
 /deep-review src/auth/*.ts --skills superpowers:brainstorming
 ```
-Agents will explore multiple attack vectors and failure modes before flagging issues.
+All agents will explore multiple interpretations and failure modes before flagging issues.
 
 **Combine multiple skills:**
 ```bash
 /deep-review src/api/*.ts --skills security-review,superpowers:systematic-debugging
 ```
-Agents receive both security patterns and systematic debugging methodology.
+Security agent receives targeted security checklists; all agents receive debugging methodology.
 
 **Use with --prompt:**
 ```bash
@@ -265,18 +265,30 @@ Combines skill methodology with specific instructions.
 #### How It Works
 
 1. Skill names are resolved to SKILL.md files
-2. Methodology content is extracted (checklists, patterns, focus areas)
-3. Content is embedded in all agent prompts as `embedded_skills`
-4. Agents apply the methodology during their analysis
+2. Skills are parsed into structured data (categories, patterns, rules, methodology)
+3. The orchestrator generates tailored `skill_instructions` per agent:
+   - **Review skills** (security-review, etc.) → Targeted to their primary agent with focus areas and checklists
+   - **Methodology skills** (brainstorming, etc.) → Applied universally to all agents
+4. Auto-validated patterns skip the validation step for high-confidence findings
+5. False positive rules are applied across all agents
+
+#### Benefits of Skill-Informed Orchestration
+
+| Benefit | Description |
+|---------|-------------|
+| **Agent-specific tailoring** | Security skills target security-agent; methodology applies to all |
+| **Smarter validation** | Auto-validated patterns reduce unnecessary validation overhead |
+| **Reduced false positives** | Skill-defined rules filter out known false positive patterns |
+| **Skill-informed synthesis** | Cross-cutting analysis considers skill-specific concerns |
 
 #### Available Plugin Skills
 
-| Skill | Focus |
-|-------|-------|
-| `security-review` | Security vulnerabilities and OWASP patterns |
-| `performance-review` | Performance issues and optimization |
-| `bug-review` | Logical errors and edge cases |
-| `compliance-review` | CLAUDE.md and coding standards |
+| Skill | Primary Agent | Focus |
+|-------|---------------|-------|
+| `security-review` | security-agent | Security vulnerabilities and OWASP patterns |
+| `performance-review` | performance-agent | Performance issues and optimization |
+| `bug-review` | bug-detection-agent | Logical errors and edge cases |
+| `compliance-review` | compliance-agent | CLAUDE.md and coding standards |
 
 ## Skills
 
