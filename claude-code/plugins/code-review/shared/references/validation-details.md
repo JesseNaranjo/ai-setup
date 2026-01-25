@@ -44,12 +44,7 @@ For each issue, determine:
 
 ## Validator Model Assignment
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for the authoritative validator model assignment table.
-
-Model assignment is based on **issue category** (not severity):
-- Security, Bugs, Performance issues → Opus validator
-- Compliance, Architecture, API Contracts, Error Handling, Test Coverage → Sonnet validator
-- Cross-cutting insights → Always Opus
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for the authoritative validator model assignment table and category-to-model mapping.
 
 ## Deduplication Rules
 

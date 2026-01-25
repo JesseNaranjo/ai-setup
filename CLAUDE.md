@@ -40,7 +40,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 ```
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata (v3.1.3)
-├── commands/                        # Slash command definitions
+├── commands/                        # Thin orchestration documents (reference shared/)
 │   ├── deep-review.md               # Deep file review (16 agent invocations)
 │   ├── deep-review-staged.md        # Deep staged review (16 agent invocations)
 │   ├── quick-review.md              # Quick file review (7 invocations)
@@ -84,6 +84,7 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── dotnet.md                    # .NET/C# checks
 ├── shared/
+│   ├── command-common-steps.md      # Common workflow steps for all commands
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── input-validation-files.md    # File-based input validation
 │   ├── input-validation-staged.md   # Staged input validation
@@ -161,6 +162,8 @@ Each agent has a unique color for visual identification during parallel executio
 
 - `agents/*.md` - Individual agent definitions with MODE support
 - `languages/*.md` - Language-specific checks and patterns
+- `commands/*.md` - Thin orchestration documents referencing shared components
+- `shared/command-common-steps.md` - Common workflow steps shared by all commands
 - `shared/settings-loader.md` - Settings loading and application
 - `shared/input-validation-*.md` - Input validation for file/staged commands
 - `shared/content-gathering-*.md` - Content gathering for file/staged commands
@@ -177,7 +180,6 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/gaps-mode-rules.md` - Rules for gaps mode (deduplication, focus areas)
 - `shared/false-positives.md` - False positive rules to prevent invalid findings
 - `shared/usage-tracking.md` - Usage tracking schema and protocol
-- `commands/*.md` - Define command interfaces (reference shared components)
 - `skills/*/SKILL.md` - Skill definitions (reference skill-common-workflow.md)
 - `templates/code-review.local.md.example` - User settings template
 
@@ -215,12 +217,13 @@ When modifying the plugin:
 4. **Output format**: Edit `shared/output-format.md`
 5. **Workflow orchestration**: Edit `shared/review-workflow.md`
 6. **Agent invocation pattern**: Edit `shared/review-workflow.md` (Agent Invocation Pattern section)
-7. **Common skill steps**: Edit `shared/skill-common-workflow.md`
-8. **Command arguments**: Edit command YAML frontmatter in `commands/`
-9. **Skills**: Edit skill files in `skills/*/SKILL.md`
-10. **Skill references**: Add detailed patterns to `skills/*/references/`
-11. **Skill examples**: Add sample outputs to `skills/*/examples/`
-12. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
+7. **Common command steps**: Edit `shared/command-common-steps.md` (settings, context, validation, output)
+8. **Common skill steps**: Edit `shared/skill-common-workflow.md`
+9. **Command arguments**: Edit command YAML frontmatter in `commands/`
+10. **Skills**: Edit skill files in `skills/*/SKILL.md`
+11. **Skill references**: Add detailed patterns to `skills/*/references/`
+12. **Skill examples**: Add sample outputs to `skills/*/examples/`
+13. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
 
 ## Skill Structure (Progressive Disclosure)
 
