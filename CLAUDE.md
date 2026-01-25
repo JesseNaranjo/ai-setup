@@ -90,7 +90,8 @@ claude-code/plugins/code-review/
 │   ├── content-gathering-files.md   # File-based content gathering
 │   ├── content-gathering-staged.md  # Staged content gathering
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── review-workflow.md           # Orchestration logic + skill-informed orchestration + agent invocation pattern
+│   ├── review-workflow.md           # Orchestration logic + agent invocation pattern
+│   ├── skill-orchestration.md       # Skill-informed orchestration (loaded when --skills used)
 │   ├── skill-resolver.md            # Skill resolution and structured parsing
 │   ├── skill-common-workflow.md     # Common skill workflow steps (lean, references details)
 │   ├── validation-rules.md          # Validation process
@@ -164,7 +165,8 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/input-validation-*.md` - Input validation for file/staged commands
 - `shared/content-gathering-*.md` - Content gathering for file/staged commands
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
-- `shared/review-workflow.md` - Orchestration, workflow steps, skill-informed orchestration, and agent invocation pattern
+- `shared/review-workflow.md` - Orchestration, workflow steps, and agent invocation pattern
+- `shared/skill-orchestration.md` - Skill-informed orchestration (lazy-loaded when --skills used)
 - `shared/skill-resolver.md` - Skill resolution and structured parsing for orchestrator interpretation
 - `shared/skill-common-workflow.md` - Lean workflow steps for skills (references `shared/references/` for details)
 - `shared/validation-rules.md` - Issue validation process
@@ -252,7 +254,7 @@ When `--skills` is provided to review commands, the orchestrator (running as Opu
 4. **Validation Adjustments**: Auto-validated patterns skip validation; false positive rules filter findings
 5. **Synthesis Adjustments**: Skill-specific cross-cutting questions may be added
 
-See `shared/review-workflow.md` "Skill-Informed Orchestration" section for implementation details.
+See `shared/skill-orchestration.md` for implementation details.
 
 **Skill Loading:** The orchestrator MUST use the Skill() tool to load skills. Direct file read is only used as fallback if Skill() tool fails.
 
