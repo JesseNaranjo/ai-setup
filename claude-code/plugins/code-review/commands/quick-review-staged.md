@@ -18,10 +18,7 @@ Parse arguments from `$ARGUMENTS`:
 
 ## Common Steps (Steps 1, 3, 5)
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` for:
-- **Step 1**: Load Settings
-- **Step 3**: Context Discovery
-- **Step 5**: Skill Loading and Interpretation
+See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
 ---
 
@@ -80,12 +77,9 @@ Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 
 ## Steps 8-11: Validation, Aggregation, Output
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` for:
-- **Validation Phase** (Step 8): Critical/Major only; Minor and Suggestions skip validation
-- **Aggregation Phase** (Step 9)
-- **Output Generation** (Step 10): Review Type: "Quick (7 invocations)", Categories: 4 only
-- **Write Output** (Step 11)
-- **False Positives**: Quick review should be extra conservative - skip theoretical edge cases
-- **Notes** (line numbers reference working copy, not diff)
+See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
-**Footer note**: *For comprehensive review (compliance, performance, architecture, API), run `/deep-review-staged`*
+**Output config:** Review Type: "Quick (7 invocations)", Categories: 4 only
+**Note:** Quick review should be extra conservative - skip theoretical edge cases.
+
+*For comprehensive review (compliance, performance, architecture, API), run `/deep-review-staged`*

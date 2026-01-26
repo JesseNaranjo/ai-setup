@@ -10,7 +10,7 @@ Identify logical errors, null reference issues, race conditions, off-by-one erro
 
 ## Agent Configuration
 
-Uses **bug-detection-agent** (Opus in thorough/quick modes, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
+Uses **bug-detection-agent** (Opus in thorough/quick modes, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
 
 ### Common Workflow Steps
 

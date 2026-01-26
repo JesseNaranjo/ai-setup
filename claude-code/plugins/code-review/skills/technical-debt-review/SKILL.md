@@ -10,7 +10,7 @@ Identify accumulated technical debt including deprecated dependencies, outdated 
 
 ## Agent Configuration
 
-Uses **technical-debt-agent** (Sonnet in both thorough and gaps modes). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
+Uses **technical-debt-agent** (Sonnet in both thorough and gaps modes). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
 
 ### Common Workflow Steps
 

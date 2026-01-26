@@ -30,6 +30,16 @@ To optimize cost and latency, issues are validated in batches grouped by file ra
 
 **Note for Quick Reviews:** Despite the quick review philosophy of using Sonnet where possible, cross-cutting insights still use Opus for validation because they represent novel connections between categories that require more nuanced judgment to validate. The time savings of Sonnet validation does not justify the risk of missing subtle cross-category interactions.
 
+### Quick Review Validation Scope
+
+Quick reviews validate **Critical and Major severity issues only**. Minor issues and Suggestions skip the validation phase entirely to optimize for speed. This means:
+
+- Critical/Major issues: Full validation with appropriate model
+- Minor issues: Auto-accepted without validation
+- Suggestions: Auto-accepted without validation
+
+This differs from deep reviews, which validate all severity levels.
+
 ### Cross-Cutting Insight Validation
 
 Synthesis agents produce `cross_cutting_insights` that require special validation:
@@ -118,6 +128,15 @@ Some high-confidence patterns skip validation entirely and are marked `auto_vali
 | `sql_injection_template` | `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*\$\{.*(?:req\|request\|params\|query\|body\|input\|user)` | SQL with template literal interpolation of user input |
 | `eval_untrusted` | `eval\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)` | eval() with untrusted input |
 | `new_function_untrusted` | `new\s+Function\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)` | new Function() with untrusted input |
+
+**Compliance patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `missing_authorize_attribute` | `\[(?:Http(?:Get\|Post\|Put\|Delete\|Patch)\|Route)\][^[]*(?<!\[Authorize\])\s*public\s+(?:async\s+)?(?:Task<)?(?:IActionResult\|ActionResult)` | ASP.NET endpoint without [Authorize] attribute |
+| `wrong_case_filename` | N/A (detected via filesystem comparison) | Filename violates project naming convention |
+| `explicit_must_violation` | N/A (detected via rule matching) | Code violates a MUST rule from AI instructions |
+| `missing_required_jsdoc` | `export\s+(?:async\s+)?function\s+\w+\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{(?!\s*/\*\*)` | Exported function without JSDoc comment |
 
 **Bug patterns (always valid):**
 

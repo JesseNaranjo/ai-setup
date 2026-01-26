@@ -10,7 +10,7 @@ Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions,
 
 ## Agent Configuration
 
-Uses **compliance-agent** (Sonnet in all modes). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
+Uses **compliance-agent** (Sonnet in all modes). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
 
 ### Instruction File Locations (Part of Step 2)
 
