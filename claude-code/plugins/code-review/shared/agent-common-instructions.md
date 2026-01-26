@@ -78,7 +78,7 @@ See each agent file for mode-specific focus areas.
 
 ## False Positive Rules
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md` for the complete list of issues that should NOT be flagged.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section for the complete list of issues that should NOT be flagged.
 
 See each agent file for category-specific false positive exclusions.
 

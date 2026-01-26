@@ -85,7 +85,7 @@ For N+1 and query performance detection, also read:
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section.
 
 **Performance-specific additions** - do NOT flag:
 - O(n^2) on small bounded data (max 10 items)

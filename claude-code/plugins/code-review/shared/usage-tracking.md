@@ -69,7 +69,7 @@ Before launching the first agent:
 
 1. Record `review_started_at` timestamp for the review
 2. Initialize the phases array based on review type:
-   - **Deep review**: Phase 1 (9 agents), Phase 2 (5 agents), Synthesis (4 agents)
+   - **Deep review**: Phase 1 (9 agents), Phase 2 (5 agents), Synthesis (5 agents)
    - **Quick review**: Review (4 agents), Synthesis (3 agents)
 
 ### Recording Each Agent Invocation
@@ -154,7 +154,7 @@ Flag potential issues based on timing by agent role:
 
 ## Review Type Configurations
 
-### Deep Review (18 invocations)
+### Deep Review (19 invocations)
 
 ```yaml
 phases:

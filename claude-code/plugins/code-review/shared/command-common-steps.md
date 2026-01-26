@@ -22,9 +22,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 
 ---
 
-## Step 5: Skill Loading and Interpretation (if --skills provided)
+## Step 5: Skill Loading and Interpretation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the complete skill resolution and loading process.
+**Skip this step entirely if `--skills` argument was not provided.**
+
+If `--skills` is provided:
+1. See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for skill resolution
+2. See `${CLAUDE_PLUGIN_ROOT}/shared/skill-orchestration.md` for orchestration adjustments
 
 ---
 
@@ -89,7 +93,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for:
 
 ## False Positives
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md` for issues that should NOT be flagged.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section for issues that should NOT be flagged.
 
 ---
 

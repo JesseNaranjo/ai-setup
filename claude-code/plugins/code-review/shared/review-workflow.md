@@ -29,7 +29,7 @@ The plugin includes 9 review agents plus a synthesis agent. Each agent supports 
 ## Orchestration Sequence
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative execution sequences including:
-- Deep review phase definitions (18 agent invocations)
+- Deep review phase definitions (19 agent invocations)
 - Quick review phase definitions (7 agent invocations)
 - Model selection table per agent and mode
 
@@ -43,7 +43,7 @@ Before launching the first agent:
 
 1. Record `review_started_at` timestamp for the review
 2. Initialize the phases array based on review type:
-   - **Deep review**: 3 phases (Phase 1: 9 agents, Phase 2: 5 agents, Synthesis: 4 agents)
+   - **Deep review**: 3 phases (Phase 1: 9 agents, Phase 2: 5 agents, Synthesis: 5 agents)
    - **Quick review**: 2 phases (Review: 4 agents, Synthesis: 3 agents)
 3. Initialize each phase with an empty agents array
 
@@ -255,39 +255,24 @@ See `agents/architecture-agent.md` for detailed cross-file analysis triggers and
 After the review phase and before validation, launch **synthesis agents** that analyze findings across categories to identify cross-cutting concerns.
 
 **Purpose**: Catch issues that span multiple review categories, such as:
-- Security fixes that introduce performance regressions
 - Architectural changes lacking test coverage
 - Bug fixes that break API contracts or lack error handling
+- Security fixes that introduce performance regressions
 
-#### Deep Review Synthesis (4 agents in parallel)
-
-| Agent | Input Categories | Cross-Cutting Question |
-|-------|-----------------|------------------------|
-| `agents/synthesis-agent.md` | Security + Performance | "Do any security fixes introduce performance issues?" |
-| `agents/synthesis-agent.md` | Architecture + Test Coverage | "Are architectural changes covered by tests?" |
-| `agents/synthesis-agent.md` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| `agents/synthesis-agent.md` | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" |
-
-#### Quick Review Synthesis (3 agents in parallel)
-
-| Agent | Input Categories | Cross-Cutting Question |
-|-------|-----------------|------------------------|
-| `agents/synthesis-agent.md` | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" |
-| `agents/synthesis-agent.md` | Security + Bugs | "Do security issues introduce or relate to bugs?" |
-| `agents/synthesis-agent.md` | Bugs + Test Coverage | "Are identified bugs covered by tests?" |
+**Synthesis Configuration:** See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative category pair definitions for both deep and quick reviews.
 
 Each synthesis agent receives:
 - All findings from both input categories
-- The file diffs/content being reviewed
 - Context about what each category found
+- The file diffs/content being reviewed
 
 **Synthesis Agent Output**:
 ```yaml
 cross_cutting_insights:
   - title: "SQL injection fix uses unbounded query"
     related_findings:
-      security: "SQL injection in getUser"
       performance: "Unbounded query in user lookup"
+      security: "SQL injection in getUser"
     # Both categories required - if only one has a finding, don't flag as cross-cutting
     insight: "The parameterized query fix doesn't limit result set size, potential DoS"
     category: "Performance"
@@ -341,7 +326,7 @@ For mixed codebases (monorepos):
 
 ## False Positive Guidelines
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md` for the complete list of issues that should NOT be flagged.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section for the complete list of issues that should NOT be flagged.
 
 ## Notes
 

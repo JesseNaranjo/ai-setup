@@ -13,9 +13,9 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 
 | Metric | Value |
 |--------|-------|
-| Review Type | Deep (18 invocations) |
+| Review Type | Deep (19 invocations) |
 | Total Duration | 3m 5s |
-| Agents Invoked | 18 of 18 planned |
+| Agents Invoked | 19 of 19 planned |
 
 ### Phase Breakdown
 
@@ -23,7 +23,7 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 |-------|----------|--------|--------|
 | Phase 1: Thorough | 1m 44s | 9/9 | ✓ |
 | Phase 2: Gaps | 44s | 5/5 | ✓ |
-| Synthesis | 29s | 4/4 | ✓ |
+| Synthesis | 29s | 5/5 | ✓ |
 
 <details>
 <summary>Agent Timing Details</summary>
@@ -67,8 +67,8 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 
 | Command | Review Type Value |
 |---------|-------------------|
-| `/deep-review` | Deep (18 invocations) |
-| `/deep-review-staged` | Deep (18 invocations) |
+| `/deep-review` | Deep (19 invocations) |
+| `/deep-review-staged` | Deep (19 invocations) |
 | `/quick-review` | Quick (7 invocations) |
 | `/quick-review-staged` | Quick (7 invocations) |
 
@@ -138,8 +138,8 @@ All reviews start with this header:
 
 | Command | Review Depth Description |
 |---------|-------------------------|
-| `/deep-review` | Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis) |
-| `/deep-review-staged` | Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis) |
+| `/deep-review` | Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis) |
+| `/deep-review-staged` | Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis) |
 | `/quick-review` | Quick (7 invocations: 4 review + 3 synthesis) |
 | `/quick-review-staged` | Quick (7 invocations: 4 review + 3 synthesis) |
 
@@ -155,7 +155,7 @@ For deep reviews (`/deep-review`, `/deep-review-staged`), list all 8 categories:
 ## Code Review
 
 **Reviewed:** [N] file(s) | **Branch:** [branch-name]
-**Review Depth:** Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis)
+**Review Depth:** Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis)
 
 No issues found. All checks passed:
 - API Contracts
@@ -448,7 +448,7 @@ Review saved to: [filepath]
 ## Code Review
 
 **Reviewed:** 3 file(s) | **Branch:** feature/user-auth
-**Review Depth:** Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis)
+**Review Depth:** Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis)
 
 ### Summary
 

@@ -20,7 +20,7 @@ The Code Review Plugin provides automated, in-depth code review using 10 special
 
 ### `/deep-review`
 
-Comprehensive code review using all 10 agents (18 invocations) with thorough + gaps modes for maximum coverage.
+Comprehensive code review using all 10 agents (19 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
 /deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -28,7 +28,7 @@ Comprehensive code review using all 10 agents (18 invocations) with thorough + g
 
 ### `/deep-review-staged`
 
-Comprehensive code review of staged git changes using all 10 agents (18 invocations) with thorough + gaps modes.
+Comprehensive code review of staged git changes using all 10 agents (19 invocations) with thorough + gaps modes.
 
 ```bash
 /deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -312,8 +312,8 @@ code-review/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata (v3.2.0)
 ├── commands/
-│   ├── deep-review.md           # Deep file review (18 invocations)
-│   ├── deep-review-staged.md    # Deep staged review (18 invocations)
+│   ├── deep-review.md           # Deep file review (19 invocations)
+│   ├── deep-review-staged.md    # Deep staged review (19 invocations)
 │   ├── quick-review.md          # Quick file review (7 invocations)
 │   └── quick-review-staged.md   # Quick staged review (7 invocations)
 ├── agents/                      # Modular agent definitions
@@ -340,7 +340,6 @@ code-review/
 │   ├── content-gathering-files.md   # Content gathering for file reviews
 │   ├── content-gathering-staged.md  # Content gathering for staged reviews
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── false-positives.md           # False positive rules
 │   ├── gaps-mode-rules.md           # Rules for gaps mode operation
 │   ├── input-validation-files.md    # Input validation for file commands
 │   ├── input-validation-staged.md   # Input validation for staged commands
@@ -433,7 +432,7 @@ See `shared/output-format.md` for complete output templates.
 ## Code Review
 
 **Reviewed:** 5 file(s) | **Branch:** feature/new-auth
-**Review Depth:** Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis)
+**Review Depth:** Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis)
 
 ### Summary
 

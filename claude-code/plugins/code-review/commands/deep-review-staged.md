@@ -1,12 +1,12 @@
 ---
 name: deep-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Deep 18-agent review of staged changes
+description: Deep 19-agent review of staged changes
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a comprehensive code review using all 9 agents (18 invocations total) for staged git changes. Execute agents with both thorough and gaps modes for maximum coverage.
+Perform a comprehensive code review using all 9 agents (19 invocations total) for staged git changes. Execute agents with both thorough and gaps modes for maximum coverage.
 
 Parse arguments from `$ARGUMENTS`:
 - Optional: `--output-file <path>` to specify output location (default: `.deep-review-staged.md`)
@@ -70,11 +70,11 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
 
 ---
 
-## Step 7: Cross-Agent Synthesis (4 agents in parallel)
+## Step 7: Cross-Agent Synthesis (5 agents in parallel)
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 
-Launch 4 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
+Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
 
 ---
 
@@ -82,4 +82,4 @@ Launch 4 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
-**Output config:** Review Type: "Deep (18 invocations)", Categories: All 9
+**Output config:** Review Type: "Deep (19 invocations)", Categories: All 9

@@ -1,12 +1,12 @@
 ---
 name: deep-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Deep 18-agent code review with synthesis
+description: Deep 19-agent code review with synthesis
 argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a comprehensive code review using all 9 agents (18 invocations total) for the specified files. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a comprehensive code review using all 9 agents (19 invocations total) for the specified files. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
 Parse arguments from `$ARGUMENTS`:
 - Required: One or more file paths (space-separated)
@@ -64,11 +64,11 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
 
 ---
 
-## Step 7: Cross-Agent Synthesis (4 agents in parallel)
+## Step 7: Cross-Agent Synthesis (5 agents in parallel)
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 
-Launch 4 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
+Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
 
 ---
 
@@ -76,4 +76,4 @@ Launch 4 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
-**Output config:** Review Type: "Deep (18 invocations)", Categories: All 9
+**Output config:** Review Type: "Deep (19 invocations)", Categories: All 9

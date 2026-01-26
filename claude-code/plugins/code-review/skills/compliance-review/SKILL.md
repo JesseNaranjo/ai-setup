@@ -60,7 +60,7 @@ High-confidence patterns that skip validation. For full definitions, see `${CLAU
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section.
 
 **Compliance-specific additions** - do NOT flag:
 - Explicit override comments (`// claude-ignore: rule-name`)

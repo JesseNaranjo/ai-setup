@@ -14,7 +14,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Command | Description |
 |---------|-------------|
-| `/deep-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (9 agents) → Phase 2 (5 gaps agents) → Synthesis (4 agents) |
+| `/deep-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (9 agents) → Phase 2 (5 gaps agents) → Synthesis (5 agents) |
 | `/deep-review-staged [--output-file <path>]` | Deep review of staged git changes with full pipeline |
 | `/quick-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
 | `/quick-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
@@ -28,10 +28,10 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
-| `security-review` | "security review", "check for vulnerabilities", "audit security" |
-| `performance-review` | "check performance", "find slow code", "optimize" |
 | `bug-review` | "find bugs", "check for errors", "find edge cases" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+| `performance-review` | "check performance", "find slow code", "optimize" |
+| `security-review` | "security review", "check for vulnerabilities", "audit security" |
 | `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
 
 ## Architecture
@@ -42,34 +42,22 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata (v3.2.0)
 ├── commands/                        # Thin orchestration documents (reference shared/)
-│   ├── deep-review.md               # Deep file review (18 agent invocations)
-│   ├── deep-review-staged.md        # Deep staged review (18 agent invocations)
+│   ├── deep-review.md               # Deep file review (19 agent invocations)
+│   ├── deep-review-staged.md        # Deep staged review (19 agent invocations)
 │   ├── quick-review.md              # Quick file review (7 invocations)
 │   └── quick-review-staged.md       # Quick staged review (7 invocations)
 ├── agents/                          # Modular agent definitions (10 agents)
-│   ├── compliance-agent.md          # AI instructions compliance
-│   ├── bug-detection-agent.md       # Logical errors & edge cases
-│   ├── security-agent.md            # Security vulnerabilities
-│   ├── performance-agent.md         # Performance issues
-│   ├── architecture-agent.md        # Architecture patterns
 │   ├── api-contracts-agent.md       # API compatibility
+│   ├── architecture-agent.md        # Architecture patterns
+│   ├── bug-detection-agent.md       # Logical errors & edge cases
+│   ├── compliance-agent.md          # AI instructions compliance
 │   ├── error-handling-agent.md      # Error handling gaps
-│   ├── test-coverage-agent.md       # Test coverage gaps
+│   ├── performance-agent.md         # Performance issues
+│   ├── security-agent.md            # Security vulnerabilities
+│   ├── synthesis-agent.md           # Cross-agent insights
 │   ├── technical-debt-agent.md      # Technical debt detection
-│   └── synthesis-agent.md           # Cross-agent insights
+│   └── test-coverage-agent.md       # Test coverage gaps
 ├── skills/                          # Targeted review skills (progressive disclosure)
-│   ├── security-review/
-│   │   ├── SKILL.md                 # Core skill instructions
-│   │   ├── references/              # Detailed patterns (loaded on-demand)
-│   │   │   └── common-vulnerabilities.md
-│   │   └── examples/                # Sample output format
-│   │       └── example-output.md
-│   ├── performance-review/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   │   └── performance-patterns.md
-│   │   └── examples/
-│   │       └── example-output.md
 │   ├── bug-review/
 │   │   ├── SKILL.md
 │   │   ├── references/
@@ -81,6 +69,18 @@ claude-code/plugins/code-review/
 │   │   ├── references/
 │   │   │   └── compliance-patterns.md
 │   │   └── examples/
+│   │       └── example-output.md
+│   ├── performance-review/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   │   └── performance-patterns.md
+│   │   └── examples/
+│   │       └── example-output.md
+│   ├── security-review/
+│   │   ├── SKILL.md                 # Core skill instructions
+│   │   ├── references/              # Detailed patterns (loaded on-demand)
+│   │   │   └── common-vulnerabilities.md
+│   │   └── examples/                # Sample output format
 │   │       └── example-output.md
 │   └── technical-debt-review/
 │       ├── SKILL.md
@@ -112,7 +112,6 @@ claude-code/plugins/code-review/
 │   ├── output-schema-base.md        # Base YAML schema for all agents
 │   ├── severity-definitions.md      # Severity classification
 │   ├── gaps-mode-rules.md           # Rules for gaps mode operation
-│   ├── false-positives.md           # False positive rules
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── scope-determination.md   # Detailed scope options and edge cases
 │       ├── validation-details.md    # Batch validation and false positive handling
@@ -136,28 +135,28 @@ Each agent has a unique color for visual identification during parallel executio
 
 | Agent | Color |
 |-------|-------|
-| compliance-agent | blue |
-| bug-detection-agent | red |
-| security-agent | magenta |
-| performance-agent | yellow |
-| architecture-agent | cyan |
 | api-contracts-agent | green |
+| architecture-agent | cyan |
+| bug-detection-agent | red |
+| compliance-agent | blue |
 | error-handling-agent | orange |
-| test-coverage-agent | purple |
-| technical-debt-agent | brown |
+| performance-agent | yellow |
+| security-agent | magenta |
 | synthesis-agent | white |
+| technical-debt-agent | brown |
+| test-coverage-agent | purple |
 
 **Color Usage Notes:**
 - All 9 review agents have unique colors within Phase 1
 - Phase 2 reuses colors from Phase 1 (compliance, bug, security, performance, technical-debt) but runs sequentially after Phase 1 completes
-- Synthesis phase runs 4 parallel instances of synthesis-agent, all using white (same agent type)
+- Synthesis phase runs 5 parallel instances of synthesis-agent, all using white (same agent type)
 - Color conflicts within a phase are avoided; color reuse across sequential phases is acceptable
 
 ### Deep Review Pipeline
 
 1. **Phase 1** (9 agents parallel): Thorough mode review (4 Opus, 5 Sonnet)
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
-3. **Phase 3** (4 synthesis agents parallel): Cross-cutting concern detection
+3. **Phase 3** (5 synthesis agents parallel): Cross-cutting concern detection
 4. **Validation**: All issues validated before output
 
 ### MODE Parameter
@@ -194,7 +193,6 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/output-generation.md` - Output generation and file writing process
 - `shared/severity-definitions.md` - Severity classification (Critical, Major, Minor, Suggestion)
 - `shared/gaps-mode-rules.md` - Rules for gaps mode (deduplication, focus areas)
-- `shared/false-positives.md` - False positive rules to prevent invalid findings
 - `shared/usage-tracking.md` - Usage tracking schema and protocol
 - `skills/*/SKILL.md` - Skill definitions (reference skill-common-workflow.md)
 - `templates/code-review.local.md.example` - User settings template
@@ -242,6 +240,42 @@ When modifying the plugin:
 13. **Skill references**: Add detailed patterns to `skills/*/references/`
 14. **Skill examples**: Add sample outputs to `skills/*/examples/`
 15. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
+
+## Coding Conventions
+
+### Alphabetical Ordering
+
+**REQUIRED:** Always list agents, categories, and similar items in alphabetical order to avoid preferential treatment or implicit assumptions.
+
+Apply alphabetical ordering to:
+- Agent listings in orchestration documents (e.g., `orchestration-sequence.md`)
+- Category pairs in synthesis configurations (order by first category)
+- Tables with agent/skill names (e.g., Agent Colors table, Model Selection table)
+- Bullet lists of agents or categories
+- YAML keys within related_findings and similar structures
+- Directory structure listings in documentation
+
+**Examples:**
+
+Agent listings:
+```
+# Correct (alphabetical)
+- Launch: api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage
+
+# Incorrect (not alphabetical)
+- Launch: bug, performance, security, technical-debt, api, architecture, compliance, error-handling, test-coverage
+```
+
+Category pairs (alphabetize by first category):
+```
+# Correct
+- Pairs: Architecture+Test Coverage, Bugs+Error Handling, Compliance+Technical Debt, Performance+Security
+
+# Incorrect
+- Pairs: Security+Performance, Architecture+Test Coverage, Bugs+Error Handling, Compliance+Bugs
+```
+
+**Rationale:** Alphabetical ordering ensures consistent, neutral presentation without implying priority or importance. It also makes it easier to find specific items in long lists.
 
 ## Skill Structure (Progressive Disclosure)
 

@@ -76,7 +76,7 @@ When reviewing directories, automatically prioritize:
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section.
 
 **Technical Debt-specific additions** - do NOT flag:
 - Dependencies intentionally pinned with documented reason

@@ -76,7 +76,7 @@ When investigating a specific bug:
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md`.
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section.
 
 **Bug-specific additions** - do NOT flag:
 - Guarded elsewhere (null check in caller)
