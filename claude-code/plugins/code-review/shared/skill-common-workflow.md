@@ -22,35 +22,18 @@ For detailed decision points and edge case handling, see `${CLAUDE_PLUGIN_ROOT}/
 
 **Goal:** Collect all information needed for accurate analysis.
 
-### Project Type Detection
+See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
+- Project type detection rules
+- AI Agent Instructions file patterns
+- Test file patterns per language
 
-| Project Type | Detection Method |
-|--------------|------------------|
-| Node.js/TypeScript | `package.json` exists in project root |
-| .NET/C# | `*.csproj`, `*.sln`, or `*.slnx` exists |
+**Quick Reference:**
 
-### Find AI Agent Instructions
-
-Search in priority order:
-
-| Priority | Location |
-|----------|----------|
-| 1 | `CLAUDE.md` (project root) |
-| 2 | `[directory]/CLAUDE.md` (subdirectory overrides) |
-| 3 | `.github/copilot-instructions.md` |
-| 4 | `.ai/AI-AGENT-INSTRUCTIONS.md` |
-| 5 | `docs/AI-INSTRUCTIONS.md` |
-
-### Find Related Test Files
-
-| Project Type | Test File Patterns |
-|--------------|-------------------|
-| Node.js | `*.test.ts`, `*.spec.ts`, `__tests__/*.ts` |
-| .NET | `*Tests.cs`, `*Test.cs`, `*.Tests/*.cs` |
-
-For each file being reviewed, search for corresponding test file:
-- `src/services/OrderService.ts` → `src/services/OrderService.test.ts`
-- `src/Services/OrderService.cs` → `tests/Services/OrderServiceTests.cs`
+| Detection | File/Pattern |
+|-----------|-------------|
+| Node.js | `package.json` |
+| .NET | `*.csproj`, `*.sln` |
+| Test files | See `languages/*.md` |
 
 ---
 
@@ -58,57 +41,14 @@ For each file being reviewed, search for corresponding test file:
 
 **Goal:** Execute the review via a specialized agent.
 
-### Agent Invocation Pattern
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for:
+- Complete Task invocation format
+- Model selection per agent
+- Subagent type mapping
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` section "Agent Invocation Pattern" for:
-- Complete Task invocation format with YAML prompt structure
-- Model selection per agent and mode
+See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for:
 - Two-pass pattern (thorough + gaps)
-
-**Quick Reference - Subagent Types:**
-
-| Agent | Subagent Type |
-|-------|---------------|
-| Security | `code-review:security-agent` |
-| Bug Detection | `code-review:bug-detection-agent` |
-| Performance | `code-review:performance-agent` |
-| Compliance | `code-review:compliance-agent` |
-| Architecture | `code-review:architecture-agent` |
-| API Contracts | `code-review:api-contracts-agent` |
-| Error Handling | `code-review:error-handling-agent` |
-| Test Coverage | `code-review:test-coverage-agent` |
-| Synthesis | `code-review:synthesis-agent` |
-
-**Example invocation:**
-
-```
-Task(
-  subagent_type: "code-review:security-agent",
-  model: "opus",  // See review-workflow.md for model selection table
-  description: "[Agent name] review for [scope]",
-  prompt: """
-MODE: [thorough|gaps|quick]
-project_type: [nodejs|dotnet]
-
-files_to_review:
-  - path: "src/file.ts"
-    has_changes: [true|false]
-    diff: |
-      [diff content if has_changes]
-    full_content: |
-      [full file content]
-
-ai_instructions:
-  - source: "CLAUDE.md"
-    content: |
-      [relevant instructions]
-
-Return findings as YAML per shared/output-schema-base.md.
-"""
-)
-```
-
-**Important**: Always pass the `model` parameter explicitly. See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for the model selection table (Opus vs Sonnet per agent and mode).
+- Model selection table
 
 ---
 
@@ -116,13 +56,10 @@ Return findings as YAML per shared/output-schema-base.md.
 
 **Goal:** Filter false positives and confirm real issues.
 
-### Quick Reference
-
-- **Auto-validated patterns**: High-confidence issues skip validation (defined per skill)
-- **Batch validation**: Group issues by file, one validator per file
-- **Verdict options**: VALID, INVALID, or DOWNGRADE
-
-For detailed validation process, batch procedures, and false positive indicators, see `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-details.md`.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for:
+- Auto-validated patterns
+- Batch validation process
+- Verdict options (VALID, INVALID, DOWNGRADE)
 
 ---
 

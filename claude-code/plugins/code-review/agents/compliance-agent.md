@@ -43,24 +43,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 
 *Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
-## Input Required
+## Input
 
-- List of files to review (with changes or full content)
-- All relevant AI Agent Instructions files (CLAUDE.md, AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md)
-- The MODE parameter (thorough or gaps)
-- **skill_instructions** (optional): Skill-derived focus areas and methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives `compliance-review` skill data as its primary review-focused skill. Also requires all relevant AI Agent Instructions files (CLAUDE.md, AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md).
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for full skill_instructions processing.
-
-This agent receives `compliance-review` skill data as its primary review-focused skill.
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If compliance check needs to verify naming patterns, Read it.
+**Cross-file discovery:** If compliance check needs to verify naming patterns, Read related files.
 ```
 Grep(pattern: "export class|export function", path: "src/")
 ```

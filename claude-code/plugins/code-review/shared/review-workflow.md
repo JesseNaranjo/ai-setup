@@ -108,133 +108,17 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for:
 
 ## Settings Application
 
-Settings from `.claude/code-review.local.md` affect the workflow at specific points. This section documents how each setting is processed.
+See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md` for complete setting definitions, defaults, and implementation details.
 
-### skip_agents (Agent Filtering)
+**Quick Reference:**
 
-**Applied in:** Step 4 (Review Execution), before launching agents
-
-**Implementation:**
-```
-Before launching each agent:
-1. Get the agent name (e.g., "compliance", "security", "performance")
-2. Check if agent name is in skip_agents list
-3. If yes: Skip this agent, do not launch it
-4. If no: Launch agent as normal
-```
-
-**Example:**
-```yaml
-skip_agents: ["architecture", "api-contracts"]
-```
-
-With this setting, deep review launches only 6 Phase 1 agents (instead of 8), reducing total invocations.
-
-**Adjustment to counts:**
-- Deep review: `(8 - skipped_count)` Phase 1 + `4` Phase 2 + `4` Synthesis
-- Quick review: `(4 - skipped_count)` Review + `3` Synthesis
-
-### min_severity (Severity Filtering)
-
-**Applied in:** Step 6 (Aggregation), after validation
-
-**Implementation:**
-```
-After validation completes:
-1. Parse min_severity setting (default: "suggestion")
-2. Define severity order: critical > major > minor > suggestion
-3. For each validated issue:
-   - If issue.severity < min_severity: Remove from output
-   - If issue.severity >= min_severity: Keep in output
-```
-
-**Severity comparison:**
-| min_severity | Included Severities |
-|--------------|---------------------|
-| `suggestion` | All (critical, major, minor, suggestion) |
-| `minor` | critical, major, minor |
-| `major` | critical, major |
-| `critical` | critical only |
-
-**Example:**
-```yaml
-min_severity: "major"
-```
-
-This filters out Minor and Suggestion issues from the final report.
-
-### additional_test_patterns (Test Pattern Merging)
-
-**Applied in:** Step 2 (Context Discovery), when finding related test files
-
-**Implementation:**
-```
-When finding related test files:
-1. Load default test patterns from languages/*.md
-2. Get additional_test_patterns from settings (default: [])
-3. Merge patterns: combined = default_patterns + additional_test_patterns
-4. Use combined patterns for test file discovery
-```
-
-**Example:**
-```yaml
-additional_test_patterns:
-  - "**/*.integration.ts"
-  - "**/*.e2e.ts"
-```
-
-These patterns are merged with default patterns like `*.test.ts`, `*.spec.ts`.
-
-### custom_rules (Custom Rule Passing)
-
-**Applied in:** Step 4 (Review Execution), when launching compliance-agent
-
-**Implementation:**
-```
-When launching compliance-agent:
-1. Get custom_rules from settings (default: [])
-2. If custom_rules is not empty:
-   - Add "Custom Rules" section to agent prompt
-   - Include each rule with pattern, message, and severity
-3. Agent checks these rules in addition to CLAUDE.md rules
-```
-
-**Agent prompt addition:**
-```yaml
-# Include in compliance-agent prompt:
-custom_rules:
-  - pattern: "console\\.log"
-    message: "Remove console.log statements before committing"
-    severity: "minor"
-```
-
-**Example settings:**
-```yaml
-custom_rules:
-  - pattern: "\\bTODO\\b"
-    message: "Resolve TODO comments before merging"
-    severity: "suggestion"
-```
-
-### Project Instructions (Markdown Body)
-
-**Applied in:** Step 4 (Review Execution), to all agents
-
-**Implementation:**
-```
-After loading settings file:
-1. Extract markdown body (content after YAML frontmatter)
-2. If body is not empty:
-   - Add to all agent prompts as "Project-Specific Instructions"
-   - This provides context about the project's conventions and exceptions
-```
-
-**Agent prompt addition:**
-```
-project_instructions: |
-  # Project Context
-  This is a high-security financial application...
-```
+| Setting | Applied In | Purpose |
+|---------|-----------|---------|
+| `skip_agents` | Step 4 | Filter agents from review |
+| `min_severity` | Step 6 | Filter output severity |
+| `custom_rules` | Step 4 | Add to compliance agent |
+| `additional_test_patterns` | Step 2 | Extend test file discovery |
+| Project instructions (markdown body) | Step 4 | Add context to all agents |
 
 ## Skill-Informed Orchestration
 
@@ -484,16 +368,7 @@ For mixed codebases (monorepos):
 
 ## False Positive Guidelines
 
-Do NOT flag these (across all agents):
-
-- Pre-existing issues not introduced in the changes being reviewed
-- Code that appears problematic but is actually correct in context
-- Pedantic nitpicks that a senior engineer would not flag
-- Issues that a linter/type checker will catch
-- General quality concerns not explicitly required by AI Agent Instructions
-- Issues with explicit ignore comments (lint-disable, etc.)
-- Theoretical issues that require specific conditions to manifest
-- Subjective style preferences not mandated by guidelines
+See `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md` for the complete list of issues that should NOT be flagged.
 
 ## Notes
 

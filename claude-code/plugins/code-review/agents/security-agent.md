@@ -42,24 +42,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **gaps**: Second-order injection, timing attacks, race conditions, defense-in-depth gaps
 - **quick**: Direct injection, obvious auth bypass, hardcoded secrets
 
-## Input Required
+## Input
 
-- Files to review (diffs and/or full content)
-- Detected project type (Node.js, .NET, or both)
-- The MODE parameter (thorough, gaps, or quick)
-- **skill_instructions** (optional): Skill-derived focus areas and methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives `security-review` skill data as its primary review-focused skill.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for full skill_instructions processing.
-
-This agent receives `security-review` skill data as its primary review-focused skill.
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If security analysis discovers a file handles auth/input, Read it.
+**Cross-file discovery:** If analysis discovers a file handles auth/input, Read it.
 ```
 Grep(pattern: "sanitize|escape|validate", path: "src/")
 ```

@@ -176,24 +176,18 @@ Return findings as cross_cutting_insights YAML list.
 )
 ```
 
-## Input Required
+## Input
 
-- All findings from two input categories (provided via `synthesis_input.category_a.findings` and `synthesis_input.category_b.findings`)
-- The file diffs/content being reviewed
-- The cross-cutting question to answer (specified via `cross_cutting_question`)
-- **skill_instructions** (optional): Skill-derived methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent operates on findings from other agents, receiving:
+- `synthesis_input.category_a.findings` - Findings from first category
+- `synthesis_input.category_b.findings` - Findings from second category
+- `cross_cutting_question` - The question to answer
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for methodology-only skill_instructions processing.
+**Note**: Synthesis agents receive methodology skills only (no primary skill data).
 
-**Note**: Synthesis agents do NOT receive primary agent skill data (focus_areas, checklist, auto_validate, false_positive_rules) since they operate on findings from other agents rather than reviewing code directly.
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If ripple effect analysis discovers affected files, Read them.
+**Cross-file discovery:** If ripple effect analysis discovers affected files, Read them.
 ```
 Grep(pattern: "import.*from|exports", path: "src/")
 ```

@@ -2,6 +2,21 @@
 
 This document contains shared instructions for all review agents. Agents reference this file instead of duplicating content.
 
+## Standard Agent Input
+
+All review agents receive the following inputs. Agents should NOT repeat this in their own documentation.
+
+**Required inputs:**
+- **Files to review**: Diffs and/or full content (see Using Tiered Context below)
+- **Detected project type**: Node.js, .NET, or both
+- **MODE parameter**: thorough, gaps, or quick (see MODE Parameter below)
+
+**Optional inputs:**
+- **skill_instructions**: Skill-derived focus areas and methodology (see below)
+- **previous_findings**: Prior findings for gaps mode deduplication
+
+**Available tools:** `["Read", "Grep", "Glob"]`
+
 ## Using skill_instructions (Full Version)
 
 For agents that receive review-focused skills (security-agent, bug-detection-agent, performance-agent, compliance-agent):

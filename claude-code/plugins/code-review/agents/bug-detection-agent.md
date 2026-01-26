@@ -42,25 +42,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **gaps**: Edge cases, boundary conditions, race conditions, state management issues
 - **quick**: Most obvious and critical bugs only
 
-## Input Required
+## Input
 
-- Files to review (diffs and/or full content)
-- Detected project type (Node.js, .NET, or both)
-- Related test files for context
-- The MODE parameter (thorough, gaps, or quick)
-- **skill_instructions** (optional): Skill-derived focus areas and methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives `bug-review` skill data as its primary review-focused skill. Also uses related test files for context.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for full skill_instructions processing.
-
-This agent receives `bug-review` skill data as its primary review-focused skill.
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If bug analysis discovers a file contains shared logic, Read it.
+**Cross-file discovery:** If analysis discovers a file contains shared logic, Read it.
 ```
 Grep(pattern: "OrderService", path: "src/")
 ```

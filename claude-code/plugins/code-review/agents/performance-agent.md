@@ -43,24 +43,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 
 *Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
-## Input Required
+## Input
 
-- Files to review (diffs and/or full content)
-- Detected project type (Node.js, .NET, or both)
-- The MODE parameter (thorough or gaps)
-- **skill_instructions** (optional): Skill-derived focus areas and methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives `performance-review` skill data as its primary review-focused skill.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for full skill_instructions processing.
-
-This agent receives `performance-review` skill data as its primary review-focused skill.
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If performance analysis discovers a file contains queries, Read it.
+**Cross-file discovery:** If analysis discovers a file contains database queries, Read it.
 ```
 Grep(pattern: "findAll|query|SELECT", path: "src/")
 ```

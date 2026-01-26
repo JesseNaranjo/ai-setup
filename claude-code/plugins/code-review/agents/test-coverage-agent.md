@@ -43,25 +43,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 
 *Note: This agent does not use "gaps" mode as test coverage gaps are generally clear-cut.*
 
-## Input Required
+## Input
 
-- Files to review (diffs and/or full content)
-- Related test files for context
-- Detected project type (Node.js, .NET, or both)
-- The MODE parameter (thorough or quick)
-- **skill_instructions** (optional): Skill-derived methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives methodology skills only (no primary review-focused skill). Also uses related test files for context.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for methodology-only skill_instructions processing.
-
-This agent receives methodology skills only (no primary review-focused skill).
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If test coverage analysis discovers untested code paths, Read them.
+**Cross-file discovery:** If analysis discovers untested code paths, Read related test files.
 ```
 Grep(pattern: "describe|test|it\\(", path: "src/")
 ```

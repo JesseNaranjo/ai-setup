@@ -42,24 +42,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 
 *Note: This agent does NOT use "gaps" mode and is NOT invoked during quick reviews.*
 
-## Input Required
+## Input
 
-- Files to review (diffs and/or full content)
-- Related API definitions (if available)
-- The MODE parameter (thorough only)
-- **skill_instructions** (optional): Skill-derived methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives methodology skills only (no primary review-focused skill). Also uses related API definitions if available.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for methodology-only skill_instructions processing.
-
-This agent receives methodology skills only (no primary review-focused skill).
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If API analysis discovers consumers of changed interface, Read them.
+**Cross-file discovery:** If analysis discovers consumers of changed interface, Read them.
 ```
 Grep(pattern: "implements|extends|import.*Interface", path: "src/")
 ```

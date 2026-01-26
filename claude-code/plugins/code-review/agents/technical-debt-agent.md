@@ -43,23 +43,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 
 *Note: This agent does NOT use "quick" mode and is NOT invoked during quick reviews.*
 
-## Input Required
+## Input
 
-- Files to review (diffs and/or full content)
-- Detected project type (Node.js, .NET, or both)
-- The MODE parameter (thorough or gaps)
-- **previous_findings** (gaps mode only): Findings from Phase 1 to avoid duplicates
-- **skill_instructions** (optional): Skill-derived methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives `technical-debt-review` skill data as its primary review-focused skill. Also uses related test files to identify untested deprecated code.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for skill_instructions processing.
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If debt analysis discovers dependency issues, check package files:
+**Cross-file discovery:** If analysis discovers dependency issues, check package files.
 ```
 Read(file_path: "package.json")  # Node.js
 Read(file_path: "*.csproj")       # .NET

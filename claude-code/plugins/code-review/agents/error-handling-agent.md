@@ -43,24 +43,13 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 
 *Note: This agent does not use "gaps" mode as error handling issues are generally clear-cut.*
 
-## Input Required
+## Input
 
-- Files to review (diffs and/or full content)
-- Detected project type (Node.js, .NET, or both)
-- The MODE parameter (thorough or quick)
-- **skill_instructions** (optional): Skill-derived methodology
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-### Using skill_instructions
+**Agent-specific:** This agent receives methodology skills only (no primary review-focused skill).
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for methodology-only skill_instructions processing.
-
-This agent receives methodology skills only (no primary review-focused skill).
-
-### Using Tiered Context
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for tiered context processing.
-
-**Agent-specific cross-file pattern:** If error handling analysis discovers error propagation paths, Read them.
+**Cross-file discovery:** If analysis discovers error propagation paths, Read them.
 ```
 Grep(pattern: "throw|catch|Error", path: "src/")
 ```
