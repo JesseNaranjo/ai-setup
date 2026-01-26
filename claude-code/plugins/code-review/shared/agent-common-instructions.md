@@ -76,17 +76,11 @@ All review agents accept a MODE parameter that controls review depth:
 
 See each agent file for mode-specific focus areas.
 
-## Universal False Positive Rules
+## False Positive Rules
 
-ALL agents MUST NOT flag:
-- Pre-existing issues not introduced in the changes being reviewed
-- Code with explicit ignore comments (lint-disable, eslint-ignore, etc.)
-- Theoretical issues that require very specific or unrealistic conditions to manifest
-- Issues that the type system, linter, or compiler will catch
-- Issues in test code or development-only paths unless specifically reviewing tests
-- Issues already in previous_findings (gaps mode only)
+See `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md` for the complete list of issues that should NOT be flagged.
 
-See each agent file for category-specific false positive rules.
+See each agent file for category-specific false positive exclusions.
 
 ## Gaps Mode Behavior (Common)
 

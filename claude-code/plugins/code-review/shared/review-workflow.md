@@ -186,39 +186,12 @@ Verify:
 
 ### Step 4: Review Execution
 
-Review execution varies by review type:
+Review execution varies by review type. See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative phase definitions including:
+- Deep review phases (Phase 1: 9 agents thorough, Phase 2: 5 agents gaps)
+- Quick review phases (4 agents quick)
+- Model selection per agent and mode
 
-#### Deep Review: Two-Phase Sequential Approach
-
-**Phase 1: Launch 8 agents with thorough mode in parallel**
-- 3 Opus agents (bug-detection, security, performance) in thorough mode
-- 5 Sonnet agents (compliance, architecture, api-contracts, error-handling, test-coverage) in thorough mode
-
-Wait for all Phase 1 agents to complete and collect their findings.
-
-**Phase 2: Launch 4 Sonnet agents with gaps mode in parallel**
-
-Pass Phase 1 findings as context to gaps mode agents. Each agent receives findings from its own category:
-
-```yaml
-previous_findings:
-  - title: "SQL injection in getUser"
-    file: "src/db/users.ts"
-    line: 23
-    range: null  # null for single-line issues, "start-end" for multi-line
-    category: "Security"
-    severity: "Critical"
-    # Gaps agent should skip this - already flagged
-```
-
-Gaps mode agents use this context to:
-- Skip issues that match prior findings (same file + overlapping line ranges)
-- Focus analysis on areas not yet covered
-- Find subtle issues that complement thorough findings
-
-#### Quick Review: Single-Phase Parallel
-
-Launch 4 agents with quick mode in parallel. No gaps phase.
+For `previous_findings` format used in gaps mode, see `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`.
 
 #### Agent Invocation Pattern
 

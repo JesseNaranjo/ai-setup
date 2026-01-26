@@ -354,7 +354,6 @@ code-review/
 │   ├── validation-rules.md          # Validation process
 │   └── references/                  # Detailed reference content
 │       ├── scope-determination.md   # Scope options and edge cases
-│       ├── validation-details.md    # Batch validation procedures
 │       └── skill-troubleshooting.md # Common issues and solutions
 └── README.md
 ```

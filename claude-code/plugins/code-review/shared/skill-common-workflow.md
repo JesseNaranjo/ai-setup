@@ -120,7 +120,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for:
 
 For detailed procedures:
 - **`references/scope-determination.md`** - Detailed scope options and edge cases
-- **`references/validation-details.md`** - Batch validation and false positive handling
+- **`${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`** - Batch validation, auto-validation patterns, and false positive handling
 - **`references/skill-troubleshooting.md`** - Common issues and solutions
 
 ### Related Files

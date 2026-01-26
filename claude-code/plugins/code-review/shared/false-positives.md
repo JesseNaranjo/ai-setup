@@ -39,6 +39,7 @@ Issues that should NOT be flagged by review agents.
 - General code quality concerns unless explicitly required in AI Agent Instructions
 - Theoretical edge cases that are extremely unlikely in practice
 - Suggestions for features or patterns not in scope
+- Issues in test code or development-only paths unless specifically reviewing tests
 
 ## Quick vs Deep Review Differences
 
