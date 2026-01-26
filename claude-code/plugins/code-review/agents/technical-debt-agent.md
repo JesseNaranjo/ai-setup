@@ -26,7 +26,7 @@ description: |
 model: opus  # Thorough mode. See review-workflow.md for authoritative model selection per mode
 color: brown
 tools: ["Read", "Grep", "Glob"]
-version: 3.1.4
+version: 3.2.0
 ---
 
 # Technical Debt Review Agent

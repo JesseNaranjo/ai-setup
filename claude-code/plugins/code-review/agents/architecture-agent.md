@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.1.4
+version: 3.2.0
 ---
 
 # Architecture Review Agent

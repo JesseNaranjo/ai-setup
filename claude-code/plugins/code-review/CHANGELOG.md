@@ -5,6 +5,25 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-01-26
+
+### Added
+- **Technical Debt Agent**: New 10th agent for detecting deprecated dependencies, outdated patterns, dead code, and TODO/FIXME accumulation
+- **Technical Debt Review Skill**: New `technical-debt-review` skill with comprehensive patterns and examples
+- **Language-specific technical debt patterns**: Added Node.js and .NET specific technical debt checks
+
+### Changed
+- **10-agent architecture**: Upgraded from 9-agent to 10-agent architecture
+- **Orchestration sequences**: Updated deep review to include technical debt agent (Phase 1: 9 agents, Phase 2: 5 agents)
+- **DRY optimization**: Consolidated duplicated content to authoritative sources (~2,250 tokens saved per deep review):
+  - Replaced inline false positive rules with reference to `shared/false-positives.md`
+  - Replaced inline phase descriptions with reference to `shared/orchestration-sequence.md`
+  - Deleted redundant `shared/references/validation-details.md` (content in `validation-rules.md`)
+  - Updated `skill-common-workflow.md` reference
+
+### Fixed
+- Added missing test code exclusion rule to `shared/false-positives.md`
+
 ## [3.1.4] - 2026-01-25
 
 ### Changed

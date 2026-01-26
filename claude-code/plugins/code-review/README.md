@@ -310,7 +310,7 @@ Targeted review skills for specific concerns:
 ```
 code-review/
 ├── .claude-plugin/
-│   └── plugin.json              # Plugin metadata (v3.1.4)
+│   └── plugin.json              # Plugin metadata (v3.2.0)
 ├── commands/
 │   ├── deep-review.md           # Deep file review (18 invocations)
 │   ├── deep-review-staged.md    # Deep staged review (18 invocations)
@@ -536,7 +536,7 @@ For more troubleshooting, see `shared/references/skill-troubleshooting.md`.
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history and release notes.
 
-**Current Version:** 3.1.4
+**Current Version:** 3.2.0
 
 ## Author
 
