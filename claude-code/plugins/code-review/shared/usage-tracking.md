@@ -69,7 +69,7 @@ Before launching the first agent:
 
 1. Record `review_started_at` timestamp for the review
 2. Initialize the phases array based on review type:
-   - **Deep review**: Phase 1 (8 agents), Phase 2 (4 agents), Synthesis (4 agents)
+   - **Deep review**: Phase 1 (9 agents), Phase 2 (5 agents), Synthesis (4 agents)
    - **Quick review**: Review (4 agents), Synthesis (3 agents)
 
 ### Recording Each Agent Invocation
@@ -154,17 +154,17 @@ Flag potential issues based on timing by agent role:
 
 ## Review Type Configurations
 
-### Deep Review (16 invocations)
+### Deep Review (18 invocations)
 
 ```yaml
 phases:
   - name: "Phase 1: Thorough Review"
-    expected_agents: 8
-    agents: [compliance, bug-detection, security, performance, architecture, api-contracts, error-handling, test-coverage]
+    expected_agents: 9
+    agents: [api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage]
 
   - name: "Phase 2: Gaps Review"
-    expected_agents: 4
-    agents: [compliance, bug-detection, security, performance]
+    expected_agents: 5
+    agents: [bug-detection, compliance, performance, security, technical-debt]
 
   - name: "Synthesis"
     expected_agents: 4
@@ -177,7 +177,7 @@ phases:
 phases:
   - name: "Review"
     expected_agents: 4
-    agents: [bug-detection, security, error-handling, test-coverage]
+    agents: [bug-detection, error-handling, security, test-coverage]
 
   - name: "Synthesis"
     expected_agents: 3

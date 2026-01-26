@@ -20,7 +20,7 @@ See `shared/severity-definitions.md` for canonical severity definitions and exam
 
 ## Agent Configuration
 
-The plugin includes 8 review agents plus a synthesis agent. Each agent supports specific modes (thorough, gaps, quick) with mode-specific model selection.
+The plugin includes 9 review agents plus a synthesis agent. Each agent supports specific modes (thorough, gaps, quick) with mode-specific model selection.
 
 **Agent Files**: See `agents/*.md` for individual agent definitions
 **Model Selection**: See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`
@@ -29,7 +29,7 @@ The plugin includes 8 review agents plus a synthesis agent. Each agent supports 
 ## Orchestration Sequence
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative execution sequences including:
-- Deep review phase definitions (16 agent invocations)
+- Deep review phase definitions (18 agent invocations)
 - Quick review phase definitions (7 agent invocations)
 - Model selection table per agent and mode
 
@@ -43,7 +43,7 @@ Before launching the first agent:
 
 1. Record `review_started_at` timestamp for the review
 2. Initialize the phases array based on review type:
-   - **Deep review**: 3 phases (Phase 1: 8 agents, Phase 2: 4 agents, Synthesis: 4 agents)
+   - **Deep review**: 3 phases (Phase 1: 9 agents, Phase 2: 5 agents, Synthesis: 4 agents)
    - **Quick review**: 2 phases (Review: 4 agents, Synthesis: 3 agents)
 3. Initialize each phase with an empty agents array
 

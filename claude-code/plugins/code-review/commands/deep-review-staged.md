@@ -1,12 +1,12 @@
 ---
 name: deep-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Deep 16-agent review of staged changes
+description: Deep 18-agent review of staged changes
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a comprehensive code review using all 9 agents (16 invocations total) for staged git changes. Execute agents with both thorough and gaps modes for maximum coverage.
+Perform a comprehensive code review using all 9 agents (18 invocations total) for staged git changes. Execute agents with both thorough and gaps modes for maximum coverage.
 
 Parse arguments from `$ARGUMENTS`:
 - Optional: `--output-file <path>` to specify output location (default: `.deep-review-staged.md`)
@@ -55,19 +55,19 @@ Initialize per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
 - Record `review_started_at` timestamp
 - Initialize 3 phases: "Phase 1: Thorough Review", "Phase 2: Gaps Review", "Synthesis"
 
-### Phase 1: Thorough Review (8 agents in parallel)
+### Phase 1: Thorough Review (9 agents in parallel)
 
-Launch all 8 agents with **thorough** mode. See review-workflow.md for model assignments.
+Launch all 9 agents with **thorough** mode. See review-workflow.md for model assignments.
 
-**Agents**: Compliance, Bug Detection, Security, Performance, Architecture, API Contracts, Error Handling, Test Coverage
+**Agents**: API Contracts, Architecture, Bug Detection, Compliance, Error Handling, Performance, Security, Technical Debt, Test Coverage
 
 Each agent receives staged diff, full file content, and AI Agent Instructions.
 
-### Phase 2: Gaps Review (4 Sonnet agents in parallel)
+### Phase 2: Gaps Review (5 Sonnet agents in parallel)
 
-After Phase 1 completes, launch 4 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
+After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
 
-**Agents**: Compliance, Bug Detection, Security, Performance
+**Agents**: Bug Detection, Compliance, Performance, Security, Technical Debt
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
 
@@ -86,7 +86,7 @@ Launch 4 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` for:
 - **Validation Phase** (Step 8)
 - **Aggregation Phase** (Step 9)
-- **Output Generation** (Step 10): Review Type: "Deep (16 invocations)", Categories: All 8
+- **Output Generation** (Step 10): Review Type: "Deep (18 invocations)", Categories: All 9
 - **Write Output** (Step 11)
 - **False Positives**
 - **Notes** (line numbers reference working copy, not diff)

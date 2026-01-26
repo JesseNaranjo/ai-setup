@@ -13,16 +13,16 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 
 | Metric | Value |
 |--------|-------|
-| Review Type | Deep (16 invocations) |
+| Review Type | Deep (18 invocations) |
 | Total Duration | 3m 5s |
-| Agents Invoked | 16 of 16 planned |
+| Agents Invoked | 18 of 18 planned |
 
 ### Phase Breakdown
 
 | Phase | Duration | Agents | Status |
 |-------|----------|--------|--------|
-| Phase 1: Thorough | 1m 44s | 8/8 | ✓ |
-| Phase 2: Gaps | 44s | 4/4 | ✓ |
+| Phase 1: Thorough | 1m 44s | 9/9 | ✓ |
+| Phase 2: Gaps | 44s | 5/5 | ✓ |
 | Synthesis | 29s | 4/4 | ✓ |
 
 <details>
@@ -31,30 +31,32 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 **Phase 1: Thorough Review** (1m 44s)
 | Agent | Model | Duration | Findings | Status |
 |-------|-------|----------|----------|--------|
-| compliance-agent | sonnet | 27s | 2 | ✓ |
-| bug-detection-agent | opus | 1m 44s | 5 | ✓ |
-| security-agent | opus | 1m 12s | 3 | ✓ |
-| performance-agent | opus | 58s | 1 | ✓ |
-| architecture-agent | sonnet | 35s | 0 | ✓ |
 | api-contracts-agent | sonnet | 31s | 0 | ✓ |
+| architecture-agent | sonnet | 35s | 0 | ✓ |
+| bug-detection-agent | opus | 1m 44s | 5 | ✓ |
+| compliance-agent | sonnet | 27s | 2 | ✓ |
 | error-handling-agent | sonnet | 28s | 2 | ✓ |
+| performance-agent | opus | 58s | 1 | ✓ |
+| security-agent | opus | 1m 12s | 3 | ✓ |
+| technical-debt-agent | opus | 52s | 2 | ✓ |
 | test-coverage-agent | sonnet | 33s | 4 | ✓ |
 
 **Phase 2: Gaps Review** (44s)
 | Agent | Model | Duration | Findings | Status |
 |-------|-------|----------|----------|--------|
-| compliance-agent | sonnet | 22s | 1 | ✓ |
 | bug-detection-agent | sonnet | 44s | 2 | ✓ |
-| security-agent | sonnet | 38s | 0 | ✓ |
+| compliance-agent | sonnet | 22s | 1 | ✓ |
 | performance-agent | sonnet | 41s | 1 | ✓ |
+| security-agent | sonnet | 38s | 0 | ✓ |
+| technical-debt-agent | sonnet | 36s | 1 | ✓ |
 
 **Synthesis** (29s)
 | Agent | Model | Duration | Findings | Status |
 |-------|-------|----------|----------|--------|
-| synthesis (Security+Performance) | sonnet | 25s | 1 | ✓ |
 | synthesis (Architecture+Test Coverage) | sonnet | 29s | 1 | ✓ |
 | synthesis (Bugs+Error Handling) | sonnet | 22s | 0 | ✓ |
 | synthesis (Compliance+Bugs) | sonnet | 27s | 0 | ✓ |
+| synthesis (Security+Performance) | sonnet | 25s | 1 | ✓ |
 
 </details>
 
@@ -65,8 +67,8 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 
 | Command | Review Type Value |
 |---------|-------------------|
-| `/deep-review` | Deep (16 invocations) |
-| `/deep-review-staged` | Deep (16 invocations) |
+| `/deep-review` | Deep (18 invocations) |
+| `/deep-review-staged` | Deep (18 invocations) |
 | `/quick-review` | Quick (7 invocations) |
 | `/quick-review-staged` | Quick (7 invocations) |
 
@@ -136,8 +138,8 @@ All reviews start with this header:
 
 | Command | Review Depth Description |
 |---------|-------------------------|
-| `/deep-review` | Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis) |
-| `/deep-review-staged` | Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis) |
+| `/deep-review` | Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis) |
+| `/deep-review-staged` | Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis) |
 | `/quick-review` | Quick (7 invocations: 4 review + 3 synthesis) |
 | `/quick-review-staged` | Quick (7 invocations: 4 review + 3 synthesis) |
 
@@ -153,16 +155,16 @@ For deep reviews (`/deep-review`, `/deep-review-staged`), list all 8 categories:
 ## Code Review
 
 **Reviewed:** [N] file(s) | **Branch:** [branch-name]
-**Review Depth:** Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)
+**Review Depth:** Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis)
 
 No issues found. All checks passed:
-- Compliance (AI instructions)
-- Bugs (logical errors, edge cases)
-- Security
-- Performance
-- Architecture
 - API Contracts
+- Architecture
+- Bugs (logical errors, edge cases)
+- Compliance (AI instructions)
 - Error Handling
+- Performance
+- Security
 - Test Coverage
 
 Files reviewed:
@@ -182,8 +184,8 @@ For quick reviews (`/quick-review`, `/quick-review-staged`), list only the 4 cat
 
 No issues found. All checks passed:
 - Bug detection
-- Security analysis
 - Error handling
+- Security analysis
 - Test coverage
 - Cross-cutting synthesis
 
@@ -206,13 +208,13 @@ When issues are found:
 
 | Category | Critical | Major | Minor | Suggestions |
 |----------|----------|-------|-------|-------------|
-| Compliance | 0 | 0 | 0 | 0 |
-| Bugs | 0 | 0 | 0 | 0 |
-| Security | 0 | 0 | 0 | 0 |
-| Performance | 0 | 0 | 0 | 0 |
-| Architecture | 0 | 0 | 0 | 0 |
 | API Contracts | 0 | 0 | 0 | 0 |
+| Architecture | 0 | 0 | 0 | 0 |
+| Bugs | 0 | 0 | 0 | 0 |
+| Compliance | 0 | 0 | 0 | 0 |
 | Error Handling | 0 | 0 | 0 | 0 |
+| Performance | 0 | 0 | 0 | 0 |
+| Security | 0 | 0 | 0 | 0 |
 | Test Coverage | 0 | 0 | 0 | 0 |
 | **Total** | **0** | **0** | **0** | **0** |
 
@@ -319,13 +321,13 @@ Use inline code format:
 ### Category Badge
 
 Use inline code format:
-- `` `Compliance` ``
-- `` `Bugs` ``
-- `` `Security` ``
-- `` `Performance` ``
-- `` `Architecture` ``
 - `` `API Contracts` ``
+- `` `Architecture` ``
+- `` `Bugs` ``
+- `` `Compliance` ``
 - `` `Error Handling` ``
+- `` `Performance` ``
+- `` `Security` ``
 - `` `Test Coverage` ``
 
 ### Consensus Badge
@@ -446,19 +448,19 @@ Review saved to: [filepath]
 ## Code Review
 
 **Reviewed:** 3 file(s) | **Branch:** feature/user-auth
-**Review Depth:** Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)
+**Review Depth:** Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis)
 
 ### Summary
 
 | Category | Critical | Major | Minor | Suggestions |
 |----------|----------|-------|-------|-------------|
-| Compliance | 0 | 1 | 0 | 0 |
-| Bugs | 0 | 1 | 1 | 0 |
-| Security | 1 | 0 | 0 | 0 |
-| Performance | 0 | 0 | 1 | 1 |
-| Architecture | 0 | 0 | 0 | 0 |
 | API Contracts | 0 | 0 | 0 | 0 |
+| Architecture | 0 | 0 | 0 | 0 |
+| Bugs | 0 | 1 | 1 | 0 |
+| Compliance | 0 | 1 | 0 | 0 |
 | Error Handling | 0 | 1 | 0 | 0 |
+| Performance | 0 | 0 | 1 | 1 |
+| Security | 1 | 0 | 0 | 0 |
 | Test Coverage | 0 | 0 | 0 | 2 |
 | **Total** | **1** | **3** | **2** | **3** |
 

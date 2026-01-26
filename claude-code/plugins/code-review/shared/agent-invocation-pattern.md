@@ -8,15 +8,16 @@ Plugin agents are registered as subagent types with the pattern `code-review:[ag
 
 | Agent | Subagent Type |
 |-------|---------------|
-| Security | `code-review:security-agent` |
-| Bug Detection | `code-review:bug-detection-agent` |
-| Performance | `code-review:performance-agent` |
-| Compliance | `code-review:compliance-agent` |
-| Architecture | `code-review:architecture-agent` |
 | API Contracts | `code-review:api-contracts-agent` |
+| Architecture | `code-review:architecture-agent` |
+| Bug Detection | `code-review:bug-detection-agent` |
+| Compliance | `code-review:compliance-agent` |
 | Error Handling | `code-review:error-handling-agent` |
-| Test Coverage | `code-review:test-coverage-agent` |
+| Performance | `code-review:performance-agent` |
+| Security | `code-review:security-agent` |
 | Synthesis | `code-review:synthesis-agent` |
+| Technical Debt | `code-review:technical-debt-agent` |
+| Test Coverage | `code-review:test-coverage-agent` |
 
 ## Invocation Template
 
@@ -115,7 +116,7 @@ Return findings as YAML per shared/output-schema-base.md.
 See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the authoritative model selection table.
 
 **Important**: Always pass the `model` parameter explicitly when invoking Task:
-- Use `model: "opus"` for bug-detection, security, and performance agents in thorough mode (require nuanced judgment)
+- Use `model: "opus"` for bug-detection, performance, security, and technical-debt agents in thorough mode (require nuanced judgment)
 - Use `model: "sonnet"` for compliance and all other agents in thorough mode (pattern-based detection)
 - Use `model: "sonnet"` for gaps mode (constrained task with prior findings context)
 - Use `model: "sonnet"` for synthesis agents (cross-category correlation)
