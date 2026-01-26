@@ -24,6 +24,7 @@ To optimize cost and latency, issues are validated in batches grouped by file ra
 | API Contracts | Sonnet |
 | Error Handling | Sonnet |
 | Test Coverage | Sonnet |
+| Technical Debt | Sonnet |
 
 **Cross-cutting insights** (from synthesis-agent) always use **Opus** for validation.
 
@@ -133,6 +134,16 @@ Some high-confidence patterns skip validation entirely and are marked `auto_vali
 | `nested_loop_includes` | `for\s*\([^)]*\)[\s\S]*?for\s*\([^)]*\)[\s\S]*?\.(?:includes\|indexOf)\s*\(` | O(n²) nested loop with includes/indexOf |
 | `select_star_in_loop` | `(?:for\|while\|forEach)[\s\S]*?SELECT\s+\*` | SELECT * inside a loop |
 | `n_plus_one_query` | `(?:for\|while\|forEach\|\.map\|\.forEach)[\s\S]{0,200}(?:findOne\|findById\|query\|execute\|fetch)` | Database query inside iteration (N+1) |
+
+**Technical Debt patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `deprecated_npm_package` | N/A (detected via `npm ls` output) | npm package with deprecation warning |
+| `todo_without_issue` | `(?:\/\/\|#)\s*TODO(?:\([^)]*\))?:?\s+(?!.*(?:#\d+\|ISSUE-\|JIRA-\|TICKET-))` | TODO/FIXME without issue reference |
+| `commented_out_code` | `^(?:\s*(?:\/\/\|#).*\n){10,}` | 10+ consecutive lines of commented code |
+| `hack_comment` | `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?` | Explicit HACK/WORKAROUND/XXX marker |
+| `outdated_callback` | `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)` | Callback pattern in async context |
 
 **Notes on pattern matching:**
 - Patterns are case-insensitive for SQL keywords

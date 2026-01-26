@@ -85,3 +85,18 @@ Detect Node.js projects by checking for `package.json` in the repository root or
 | Missing edge case tests | Functions without tests for null, empty, boundary values |
 | Async test issues | Tests not properly awaiting async operations |
 | Test isolation | Tests sharing state, order-dependent tests |
+
+### Technical Debt {#debt}
+
+| Issue Type | Description |
+|------------|-------------|
+| Deprecated dependencies | Packages with npm deprecation warnings, major version 2+ behind |
+| Callback patterns | Callbacks instead of async/await in modern codebases |
+| Class components | React class components in React 18+ projects |
+| CommonJS in ESM | `require()` usage in ESM-configured projects (`"type": "module"`) |
+| Legacy bundler config | Webpack 4 config, Gulp/Grunt in modern projects |
+| Outdated TypeScript | TS <4.0 patterns, pre-strict mode code, excessive `any` usage |
+| TODO/FIXME debt | Comments without issue tracking references |
+| Commented code | Large blocks of commented-out code (10+ lines) |
+| Event emitter abuse | Excessive event-driven patterns where direct calls suffice |
+| Monolithic modules | Single files with 1000+ lines or 50+ exports |

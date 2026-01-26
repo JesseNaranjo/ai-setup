@@ -69,3 +69,13 @@ Opportunities for improvement, not problems:
 | **Error Handling** | Crash on invalid input | Missing retry on transient error | Generic error message | Add error codes |
 | **Test Coverage** | No tests for auth flow | Missing edge case test | Low branch coverage | Add property tests |
 | **Compliance** | Violates MUST rule | Violates SHOULD rule | Inconsistent with guideline | Could follow suggestion |
+| **Technical Debt** | Deprecated dependency with CVE | Major version 2+ behind | TODO without tracking | Modernization opportunity |
+
+---
+
+## Technical Debt Severity Guidelines
+
+- **Critical**: Deprecated dependency with known vulnerabilities (CVE), removed API usage requiring immediate migration, blocking modernization path
+- **Major**: Major version 2+ behind with breaking changes pending, scalability blocker in production, extensive workaround code affecting multiple files
+- **Minor**: Outdated patterns that still work correctly, TODO/FIXME without urgency or tracking, minor documentation gaps
+- **Suggestion**: Code modernization opportunity, style improvements, optional refactoring for consistency

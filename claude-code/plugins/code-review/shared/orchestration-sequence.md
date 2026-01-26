@@ -2,20 +2,20 @@
 
 This document defines the authoritative execution sequences for review pipelines.
 
-## Deep Review Orchestration (16 agent invocations)
+## Deep Review Orchestration (18 agent invocations)
 
 1. **Steps 1-3: Input, Context, Content**
    - Validate input, discover context, gather file content
    - OUTPUT: Files to review, diffs, AI instructions, test files
 
-2. **Phase 1: Thorough Review** (8 agents in parallel)
-   - Launch: bug, security, performance (Opus) + compliance, architecture, api, error-handling, test-coverage (Sonnet)
+2. **Phase 1: Thorough Review** (9 agents in parallel)
+   - Launch: bug, security, performance, technical-debt (Opus) + compliance, architecture, api, error-handling, test-coverage (Sonnet)
    - MODE: `thorough` for all agents
    - WAIT: All 8 agents must complete before proceeding
    - OUTPUT: Phase 1 findings (grouped by category)
 
-3. **Phase 2: Gaps Review** (4 Sonnet agents in parallel)
-   - Launch: compliance, bug, security, performance
+3. **Phase 2: Gaps Review** (5 Sonnet agents in parallel)
+   - Launch: compliance, bug, security, performance, technical-debt
    - MODE: `gaps`
    - Model: Sonnet (cost-optimized for constrained task)
    - INPUT: Phase 1 findings passed as `previous_findings`
@@ -25,7 +25,7 @@ This document defines the authoritative execution sequences for review pipelines
 4. **Synthesis** (4 agents in parallel)
    - Launch: 4 instances of synthesis-agent with category pairs
    - INPUT: ALL findings from Phase 1 AND Phase 2
-   - Pairs: Security+Performance, Architecture+Test Coverage, Bugs+Error Handling, Compliance+Bugs
+   - Pairs: Security+Performance, Architecture+Test Coverage, Bugs+Error Handling, Technical Debt+Compliance
    - WAIT: All 4 must complete
    - OUTPUT: `cross_cutting_insights` list
 
@@ -59,4 +59,5 @@ This document defines the authoritative execution sequences for review pipelines
 | api-contracts-agent | sonnet | N/A | N/A |
 | error-handling-agent | sonnet | N/A | sonnet |
 | test-coverage-agent | sonnet | N/A | sonnet |
+| technical-debt-agent | opus | sonnet | N/A |
 | synthesis-agent | sonnet | N/A | sonnet |

@@ -1,17 +1,17 @@
 # Code Review Plugin
 
-Modular 9-agent code review with parameterized modes for Node.js and .NET projects.
+Modular 10-agent code review with parameterized modes for Node.js and .NET projects.
 
 ## Overview
 
-The Code Review Plugin provides automated, in-depth code review using 9 specialized agents that analyze code from different perspectives. Each agent supports multiple review modes (thorough, gaps, quick) for flexible review depth.
+The Code Review Plugin provides automated, in-depth code review using 10 specialized agents that analyze code from different perspectives. Each agent supports multiple review modes (thorough, gaps, quick) for flexible review depth.
 
 ### Key Features
 
-- **Modular 9-Agent Architecture**: Each agent is a separate file in `agents/` for easy customization
+- **Modular 10-Agent Architecture**: Each agent is a separate file in `agents/` for easy customization
 - **Parameterized Modes**: thorough, gaps, and quick modes for different review depths
 - **Language-Aware**: Specialized checks for Node.js/TypeScript and .NET/C# (configs in `languages/`)
-- **Targeted Skills**: Security, performance, bug, and compliance review skills
+- **Targeted Skills**: Security, performance, bug, compliance, and technical debt review skills
 - **Validation Layer**: Every issue is independently validated to reduce false positives
 - **Severity Classification**: Issues categorized as Critical, Major, Minor, or Suggestion
 - **Consensus Scoring**: Issues flagged by multiple agents get higher confidence
@@ -20,7 +20,7 @@ The Code Review Plugin provides automated, in-depth code review using 9 speciali
 
 ### `/deep-review`
 
-Comprehensive code review using all 9 agents (16 invocations) with thorough + gaps modes for maximum coverage.
+Comprehensive code review using all 10 agents (18 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
 /deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -28,7 +28,7 @@ Comprehensive code review using all 9 agents (16 invocations) with thorough + ga
 
 ### `/deep-review-staged`
 
-Comprehensive code review of staged git changes using all 9 agents (16 invocations) with thorough + gaps modes.
+Comprehensive code review of staged git changes using all 10 agents (18 invocations) with thorough + gaps modes.
 
 ```bash
 /deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -83,8 +83,8 @@ enabled: true
 # Default output directory (default: "." = project root)
 output_dir: "."
 
-# Agents to skip (options: compliance, bugs, security, performance,
-#                         architecture, api-contracts, error-handling, test-coverage)
+# Agents to skip (options: compliance, bugs, security, performance, architecture,
+#                         api-contracts, error-handling, test-coverage, technical-debt)
 skip_agents: []
 
 # Minimum severity to report (options: critical, major, minor, suggestion)
@@ -289,6 +289,7 @@ Combines skill methodology with specific instructions.
 | `performance-review` | performance-agent | Performance issues and optimization |
 | `bug-review` | bug-detection-agent | Logical errors and edge cases |
 | `compliance-review` | compliance-agent | CLAUDE.md and coding standards |
+| `technical-debt-review` | technical-debt-agent | Deprecated code, outdated patterns, dead code |
 
 ## Skills
 
@@ -300,6 +301,7 @@ Targeted review skills for specific concerns:
 | `performance-review` | "check performance", "find slow code", "optimize" |
 | `bug-review` | "find bugs", "check for errors", "find edge cases" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+| `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
 
 ## Architecture
 
@@ -310,8 +312,8 @@ code-review/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata (v3.1.4)
 ├── commands/
-│   ├── deep-review.md           # Deep file review (16 invocations)
-│   ├── deep-review-staged.md    # Deep staged review (16 invocations)
+│   ├── deep-review.md           # Deep file review (18 invocations)
+│   ├── deep-review-staged.md    # Deep staged review (18 invocations)
 │   ├── quick-review.md          # Quick file review (7 invocations)
 │   └── quick-review-staged.md   # Quick staged review (7 invocations)
 ├── agents/                      # Modular agent definitions
@@ -323,12 +325,14 @@ code-review/
 │   ├── api-contracts-agent.md   # API compatibility
 │   ├── error-handling-agent.md  # Error handling gaps
 │   ├── test-coverage-agent.md   # Test coverage gaps
+│   ├── technical-debt-agent.md  # Technical debt detection
 │   └── synthesis-agent.md       # Cross-agent insights
 ├── skills/                      # Targeted review skills
 │   ├── security-review/
 │   ├── performance-review/
 │   ├── bug-review/
-│   └── compliance-review/
+│   ├── compliance-review/
+│   └── technical-debt-review/
 ├── languages/                   # Language-specific configs
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── dotnet.md                # .NET/C# checks
@@ -367,6 +371,7 @@ code-review/
 | api-contracts-agent | Sonnet | thorough | green |
 | error-handling-agent | Sonnet | thorough, quick | orange |
 | test-coverage-agent | Sonnet | thorough, quick | purple |
+| technical-debt-agent | Opus | thorough, gaps | brown |
 | synthesis-agent | Sonnet | (cross-category) | white |
 
 > **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
@@ -385,8 +390,8 @@ Each agent accepts a MODE parameter:
 
 | Command | Agents | Mode Invocations | Total Invocations |
 |---------|--------|------------------|-------------------|
-| `/deep-review` | All 9 | thorough (8) + gaps (4) + synthesis (4) | 16 |
-| `/deep-review-staged` | All 9 | thorough (8) + gaps (4) + synthesis (4) | 16 |
+| `/deep-review` | All 10 | thorough (9) + gaps (5) + synthesis (4) | 18 |
+| `/deep-review-staged` | All 10 | thorough (9) + gaps (5) + synthesis (4) | 18 |
 | `/quick-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 | `/quick-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 
@@ -429,7 +434,7 @@ See `shared/output-format.md` for complete output templates.
 ## Code Review
 
 **Reviewed:** 5 file(s) | **Branch:** feature/new-auth
-**Review Depth:** Deep (16 invocations: 8 thorough + 4 gaps + 4 synthesis)
+**Review Depth:** Deep (18 invocations: 9 thorough + 5 gaps + 4 synthesis)
 
 ### Summary
 

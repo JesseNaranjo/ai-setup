@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.1.4) - a modular 9-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.1.4) - a modular 10-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -14,7 +14,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Command | Description |
 |---------|-------------|
-| `/deep-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (8 agents) → Phase 2 (4 gaps agents) → Synthesis (4 agents) |
+| `/deep-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (9 agents) → Phase 2 (5 gaps agents) → Synthesis (4 agents) |
 | `/deep-review-staged [--output-file <path>]` | Deep review of staged git changes with full pipeline |
 | `/quick-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
 | `/quick-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
@@ -32,6 +32,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 | `performance-review` | "check performance", "find slow code", "optimize" |
 | `bug-review` | "find bugs", "check for errors", "find edge cases" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+| `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
 
 ## Architecture
 
@@ -41,11 +42,11 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata (v3.1.4)
 ├── commands/                        # Thin orchestration documents (reference shared/)
-│   ├── deep-review.md               # Deep file review (16 agent invocations)
-│   ├── deep-review-staged.md        # Deep staged review (16 agent invocations)
+│   ├── deep-review.md               # Deep file review (18 agent invocations)
+│   ├── deep-review-staged.md        # Deep staged review (18 agent invocations)
 │   ├── quick-review.md              # Quick file review (7 invocations)
 │   └── quick-review-staged.md       # Quick staged review (7 invocations)
-├── agents/                          # Modular agent definitions (9 agents)
+├── agents/                          # Modular agent definitions (10 agents)
 │   ├── compliance-agent.md          # AI instructions compliance
 │   ├── bug-detection-agent.md       # Logical errors & edge cases
 │   ├── security-agent.md            # Security vulnerabilities
@@ -54,7 +55,8 @@ claude-code/plugins/code-review/
 │   ├── api-contracts-agent.md       # API compatibility
 │   ├── error-handling-agent.md      # Error handling gaps
 │   ├── test-coverage-agent.md       # Test coverage gaps
-│   └── synthesis-agent.md           # Cross-agent insights (NEW)
+│   ├── technical-debt-agent.md      # Technical debt detection
+│   └── synthesis-agent.md           # Cross-agent insights
 ├── skills/                          # Targeted review skills (progressive disclosure)
 │   ├── security-review/
 │   │   ├── SKILL.md                 # Core skill instructions
@@ -74,10 +76,16 @@ claude-code/plugins/code-review/
 │   │   │   └── common-bugs.md
 │   │   └── examples/
 │   │       └── example-output.md
-│   └── compliance-review/
+│   ├── compliance-review/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   │   └── compliance-patterns.md
+│   │   └── examples/
+│   │       └── example-output.md
+│   └── technical-debt-review/
 │       ├── SKILL.md
 │       ├── references/
-│       │   └── compliance-patterns.md
+│       │   └── technical-debt-patterns.md
 │       └── examples/
 │           └── example-output.md
 ├── languages/                       # Language-specific configs
@@ -136,18 +144,19 @@ Each agent has a unique color for visual identification during parallel executio
 | api-contracts-agent | green |
 | error-handling-agent | orange |
 | test-coverage-agent | purple |
+| technical-debt-agent | brown |
 | synthesis-agent | white |
 
 **Color Usage Notes:**
-- All 8 review agents have unique colors within Phase 1
-- Phase 2 reuses colors from Phase 1 (compliance, bug, security, performance) but runs sequentially after Phase 1 completes
+- All 9 review agents have unique colors within Phase 1
+- Phase 2 reuses colors from Phase 1 (compliance, bug, security, performance, technical-debt) but runs sequentially after Phase 1 completes
 - Synthesis phase runs 4 parallel instances of synthesis-agent, all using white (same agent type)
 - Color conflicts within a phase are avoided; color reuse across sequential phases is acceptable
 
 ### Deep Review Pipeline
 
-1. **Phase 1** (8 agents parallel): Thorough mode review (3 Opus, 5 Sonnet)
-2. **Phase 2** (4 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
+1. **Phase 1** (9 agents parallel): Thorough mode review (4 Opus, 5 Sonnet)
+2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
 3. **Phase 3** (4 synthesis agents parallel): Cross-cutting concern detection
 4. **Validation**: All issues validated before output
 
@@ -308,15 +317,15 @@ When preparing a new release:
    - `CLAUDE.md` version references (this file)
 
    **Recommended:**
-   - All agent files: `agents/*.md` (9 files)
-   - All skill files: `skills/*/SKILL.md` (4 files)
+   - All agent files: `agents/*.md` (10 files)
+   - All skill files: `skills/*/SKILL.md` (5 files)
 
 5. **Verify versions are consistent:**
    ```bash
    # Verify no old version remains (exclude CHANGELOG history)
    grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-   # Verify new version count (~17: 1 plugin.json + 1 marketplace.json + 1 README + 1 CLAUDE.md + 9 agents + 4 skills)
+   # Verify new version count (~19: 1 plugin.json + 1 marketplace.json + 1 README + 1 CLAUDE.md + 10 agents + 5 skills)
    grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 
    # Verify CHANGELOG has new section

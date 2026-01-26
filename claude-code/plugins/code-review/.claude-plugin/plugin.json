@@ -1,6 +1,6 @@
 {
     "name": "code-review",
-    "description": "Modular 9-agent code review with sequential gaps analysis, cross-agent synthesis, and actionable fixes for Node.js and .NET projects",
+    "description": "Modular 10-agent code review with sequential gaps analysis, cross-agent synthesis, and actionable fixes for Node.js and .NET projects",
     "version": "3.1.4",
     "author": {
         "name": "Jesse Naranjo",

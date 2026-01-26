@@ -81,6 +81,7 @@ skill_instructions:
 | bug-detection-agent | `bug-review` focus_areas, ALL methodology skills |
 | performance-agent | `performance-review` focus_areas, ALL methodology skills |
 | compliance-agent | `compliance-review` focus_areas, ALL methodology skills |
+| technical-debt-agent | `technical-debt-review` focus_areas, ALL methodology skills |
 | Other agents | ALL methodology skills only |
 
 **Merging Multiple Skills:**
@@ -148,7 +149,7 @@ When `--skills` is provided, generate `skill_instructions` for each agent BEFORE
 
 **Generation Step 1: Initialize per-agent containers**
 
-Create empty skill_instructions structures for each of the 9 agents:
+Create empty skill_instructions structures for each of the 10 agents:
 ```yaml
 agent_skill_instructions:
   security-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
@@ -159,6 +160,7 @@ agent_skill_instructions:
   api-contracts-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
   error-handling-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
   test-coverage-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  technical-debt-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
   synthesis-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
 ```
 
@@ -180,7 +182,7 @@ For each skill in `resolved_skills`:
 5. Append `skill.false_positive_rules` to `agent_skill_instructions[target_agent].false_positive_rules`
 
 **If skill.type == "methodology":**
-1. For EACH agent (all 9):
+1. For EACH agent (all 10):
    - Set `agent_skill_instructions[agent].methodology` to `skill.methodology`
    - If methodology already exists, append to existing steps and questions
 

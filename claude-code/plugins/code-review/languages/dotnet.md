@@ -87,3 +87,18 @@ Detect .NET projects by checking for any of these files:
 | Async test issues | Tests not properly handling async operations |
 | Test isolation | Tests sharing state, database state not reset between tests |
 | Missing mock verification | Mocks set up but not verified |
+
+### Technical Debt {#debt}
+
+| Issue Type | Description |
+|------------|-------------|
+| Deprecated NuGet packages | Packages marked obsolete, discontinued libraries |
+| Pre-.NET 6 patterns | `WebClient`, sync-over-async, old configuration patterns |
+| Obsolete attributes | Code using `[Obsolete]` APIs without migration plan |
+| Legacy serialization | `BinaryFormatter`, non-JSON serialization in modern code |
+| Task.Result usage | Sync-over-async patterns blocking threads (`.Result`, `.Wait()`) |
+| Pre-nullable context | Code not using nullable reference types (`#nullable enable`) |
+| TODO/FIXME debt | Comments without issue tracking references |
+| Commented code | Large blocks of commented-out code (10+ lines) |
+| Static class abuse | Static classes preventing testability and DI |
+| Missing async suffix | Async methods without `Async` suffix convention |
