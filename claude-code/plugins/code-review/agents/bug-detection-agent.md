@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the bug detection agent to analyze for race conditions, state management issues, and other concurrency-related bugs."
   <commentary>User mentioned race conditions and intermittent bugs, which are specific issues this agent is designed to detect.</commentary>
   </example>
-model: opus  # Default for thorough/quick. See review-workflow.md for authoritative model selection (sonnet for gaps)
+model: opus  # Default for thorough/quick. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
 color: red
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0

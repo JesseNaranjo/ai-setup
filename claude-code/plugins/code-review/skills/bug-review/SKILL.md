@@ -12,6 +12,10 @@ Identify logical errors, null reference issues, race conditions, off-by-one erro
 
 Uses **bug-detection-agent** (Opus in thorough/quick modes, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
 
+### Common Workflow Steps
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for scope determination, context gathering, validation, and reporting procedures.
+
 ### Bug Categories Checked
 
 **Null/Undefined References (Major to Critical):**

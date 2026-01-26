@@ -12,6 +12,10 @@ Identify vulnerabilities, insecure coding patterns, and security misconfiguratio
 
 Uses **security-agent** (Opus in thorough mode, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
 
+### Common Workflow Steps
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for scope determination, context gathering, validation, and reporting procedures.
+
 ### Security Categories Checked
 
 **Injection Vulnerabilities (Critical):**

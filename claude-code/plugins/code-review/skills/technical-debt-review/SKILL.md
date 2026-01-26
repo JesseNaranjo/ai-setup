@@ -12,6 +12,10 @@ Identify accumulated technical debt including deprecated dependencies, outdated 
 
 Uses **technical-debt-agent** (Sonnet in both thorough and gaps modes). See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for authoritative model configuration.
 
+### Common Workflow Steps
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for scope determination, context gathering, validation, and reporting procedures.
+
 ### Technical Debt Categories Checked
 
 **Deprecated Dependencies (Critical/Major):**

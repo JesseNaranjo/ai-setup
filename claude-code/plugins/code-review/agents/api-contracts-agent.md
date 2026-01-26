@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the API contracts agent to analyze the schema changes and identify any backward compatibility issues that could affect existing consumers."
   <commentary>User mentioned schema changes and client impact, which is precisely what this agent is designed to evaluate.</commentary>
   </example>
-model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
+model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: green
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0

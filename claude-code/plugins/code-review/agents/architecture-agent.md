@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the architecture agent to identify circular dependencies, tight coupling, layer violations, and other structural issues."
   <commentary>User mentioned coupling and dependencies, which are specific architectural concerns this agent detects.</commentary>
   </example>
-model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
+model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0

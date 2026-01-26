@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the performance agent to identify algorithmic complexity issues, blocking operations, memory allocation problems, and hot path inefficiencies."
   <commentary>User is experiencing slowness and wants to find the cause, which requires performance analysis.</commentary>
   </example>
-model: opus  # Default for thorough. See review-workflow.md for authoritative model selection (sonnet for gaps)
+model: opus  # Default for thorough. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
 color: yellow
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0

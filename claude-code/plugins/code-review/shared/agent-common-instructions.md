@@ -82,14 +82,9 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/false-positives.md` for the complete list of i
 
 See each agent file for category-specific false positive exclusions.
 
-## Gaps Mode Behavior (Common)
+## Gaps Mode Behavior
 
-When MODE=gaps, all agents follow this pattern:
-
-1. **Check previous_findings**: For each potential issue, check if it matches a prior finding (same file + overlapping line range). Skip if already flagged.
-2. **Apply skip zone**: See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for skip zone calculation (±5 lines)
-3. **Focus on subtle issues**: Prioritize edge cases, second-order effects, and issues that complement (don't duplicate) thorough mode findings
-4. **Complement, don't repeat**: Find issues in code paths not covered by prior findings
+When MODE=gaps, follow all rules in `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`.
 
 See each agent file for category-specific gaps mode focus areas.
 

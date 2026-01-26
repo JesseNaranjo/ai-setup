@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the test coverage agent to identify untested edge cases, boundary conditions, and error scenarios in your payment logic."
   <commentary>User mentioned untested edge cases in critical code, which is a key focus area of the test coverage agent.</commentary>
   </example>
-model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
+model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: purple
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0

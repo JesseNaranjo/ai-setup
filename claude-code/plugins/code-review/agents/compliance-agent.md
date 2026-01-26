@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the compliance agent to verify adherence to your AI-AGENT-INSTRUCTIONS.md rules."
   <commentary>User specifically mentioned AI-AGENT-INSTRUCTIONS.md, a file type this agent is designed to check against.</commentary>
   </example>
-model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
+model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: blue
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0

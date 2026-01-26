@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the technical debt agent to check for deprecated dependencies, outdated packages, and identify modernization opportunities."
   <commentary>User asked about dependencies, which is a key technical debt category.</commentary>
   </example>
-model: opus  # Thorough mode. See review-workflow.md for authoritative model selection per mode
+model: opus  # Thorough mode. See orchestration-sequence.md for authoritative model selection per mode
 color: brown
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0

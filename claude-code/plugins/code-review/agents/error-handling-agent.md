@@ -23,7 +23,7 @@ description: |
   assistant: "I'll use the error handling agent to verify proper cleanup in error paths, check for finally blocks, and ensure resources are released on failure."
   <commentary>User asked about resource cleanup during errors, which is a key error handling concern this agent addresses.</commentary>
   </example>
-model: sonnet  # Default. See review-workflow.md for authoritative model selection per mode
+model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: orange
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.0
