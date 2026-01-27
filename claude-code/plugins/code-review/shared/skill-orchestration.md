@@ -2,21 +2,11 @@
 
 When `--skills` is provided, the orchestrator interprets the resolved skills and makes orchestration decisions. This document defines how skill data affects each phase of the review.
 
-## Skill Loading via Skill() Tool
+## Skill Loading
 
-**CRITICAL**: The orchestrator (running as Opus) MUST use the Skill() tool to load each skill specified in the `--skills` argument. Direct file read is NEVER the first approach—it is ONLY a fallback when the Skill() tool fails.
+**CRITICAL**: See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the mandatory skill loading protocol (Skill() tool first, file read fallback only on failure).
 
-1. **FIRST**: Invoke `Skill(skill: "{skill_name}")` for each skill
-2. **ONLY IF Skill() tool fails**: Fall back to direct SKILL.md file read (see `skill-resolver.md`)
-3. **Parse**: Extract structured data from loaded skill content into `resolved_skills`
-
-This ensures proper skill registration and allows the Skill() tool to perform any necessary setup before content is parsed.
-
-**Example invocations:**
-```
-Skill(skill: "security-review")
-Skill(skill: "superpowers:brainstorming")
-```
+After loading, extract structured data from each skill into `resolved_skills` for orchestration decisions.
 
 ## Agent Selection Adjustments
 
@@ -28,7 +18,7 @@ Skills can affect which agents run and with what configuration:
 
 **Model Selection:**
 - Skills do not change the model selection per agent
-- The authoritative model table in `review-workflow.md` "Model Selection per Agent" section always applies
+- The authoritative model table in `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` always applies
 
 ## Agent Prompt Generation
 

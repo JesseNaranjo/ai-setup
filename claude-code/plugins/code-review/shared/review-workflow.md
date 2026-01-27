@@ -151,34 +151,9 @@ See `agents/architecture-agent.md` for detailed cross-file analysis triggers and
 
 ### Synthesis Phase: Cross-Agent Synthesis
 
-After the review phase and before validation, launch **synthesis agents** that analyze findings across categories to identify cross-cutting concerns.
-
-**Purpose**: Catch issues that span multiple review categories, such as:
-- Architectural changes lacking test coverage
-- Bug fixes that break API contracts or lack error handling
-- Security fixes that introduce performance regressions
-
-**Synthesis Configuration:** See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative category pair definitions for both deep and quick reviews.
-
-Each synthesis agent receives:
-- All findings from both input categories
-- Context about what each category found
-- The file diffs/content being reviewed
-
-**Synthesis Agent Output**:
-```yaml
-cross_cutting_insights:
-  - title: "SQL injection fix uses unbounded query"
-    related_findings:
-      performance: "Unbounded query in user lookup"
-      security: "SQL injection in getUser"
-    # Both categories required - if only one has a finding, don't flag as cross-cutting
-    insight: "The parameterized query fix doesn't limit result set size, potential DoS"
-    category: "Performance"
-    severity: "Major"
-    file: "src/db/users.ts"
-    line: 25
-```
+For synthesis phase orchestration, category pairs, and invocation format:
+- See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for category pair definitions
+- See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for invocation parameters and output format
 
 Synthesis insights are added to the issue pool before validation.
 
