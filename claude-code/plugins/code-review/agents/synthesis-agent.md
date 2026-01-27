@@ -51,130 +51,15 @@ This agent does not use the MODE parameter. Unlike the 8 review agents that supp
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for the complete orchestration sequence.
 
-## Parameterized Invocation
+## Invocation
 
-This agent is designed to be invoked **multiple times in parallel** with different category pairs. Each invocation receives different parameters specifying which categories to analyze.
+This agent is invoked multiple times in parallel with different category pairs.
+Each invocation receives a `synthesis_input` structure specifying categories to analyze.
 
-### Invocation Parameters
-
-When launching this agent, the orchestrating command MUST provide:
-
-```yaml
-# Required parameters for each synthesis agent invocation:
-synthesis_input:
-  category_a:
-    name: "Security"                # First category to analyze
-    findings: [...]                 # All findings from category_a (Phase 1 + Phase 2)
-  category_b:
-    name: "Performance"             # Second category to analyze
-    findings: [...]                 # All findings from category_b (Phase 1 + Phase 2)
-  cross_cutting_question: "Do any security fixes introduce performance issues?"
-  files_content: [...]              # File diffs and full content for context
-```
-
-### Parallel Invocation Pattern
-
-Commands launch 4 instances of this agent simultaneously, each with different parameters:
-
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                    4 Parallel Synthesis Invocations                     │
-├─────────────────────────────────────────────────────────────────────────┤
-│ Instance 1: category_a=Security, category_b=Performance                 │
-│ Instance 2: category_a=Architecture, category_b=Test Coverage           │
-│ Instance 3: category_a=Bugs, category_b=Error Handling                  │
-│ Instance 4: category_a=Compliance, category_b=Bugs                      │
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
-Each instance operates independently and returns its own `cross_cutting_insights` list. The orchestrating command merges all results.
-
-### Invocation Format (Required)
-
-When invoking this agent, use the following YAML structure in the prompt:
-
-```yaml
-# REQUIRED: Synthesis agent invocation format
-synthesis_input:
-  category_a:
-    name: "Security"
-    findings:
-      - title: "SQL injection in getUser"
-        file: "src/db/users.ts"
-        line: 23
-        severity: "Critical"
-        description: "User input concatenated into SQL query"
-        fix_type: "diff"
-        fix_diff: |
-          - const query = `SELECT * FROM users WHERE id = ${userId}`;
-          + const query = 'SELECT * FROM users WHERE id = ?';
-          + const result = await db.query(query, [userId]);
-
-  category_b:
-    name: "Performance"
-    findings:
-      - title: "N+1 query in user list"
-        file: "src/services/users.ts"
-        line: 45
-        severity: "Major"
-        description: "Database query inside forEach loop"
-        fix_type: "prompt"
-        fix_prompt: "Batch the user queries using WHERE IN clause"
-
-  cross_cutting_question: "Do any security fixes introduce performance issues?"
-
-  files_content:
-    - path: "src/db/users.ts"
-      diff: |
-        @@ -20,6 +20,8 @@
-        +  const query = `SELECT * FROM users WHERE id = ${userId}`;
-        +  return await db.query(query);
-      full_content: "[full file content here]"
-```
-
-### Example Task Tool Invocation
-
-```
-Task(
-  subagent_type: "code-review:synthesis-agent",
-  model: "sonnet",
-  prompt: """
-Analyze cross-cutting concerns between Security and Performance findings.
-
-synthesis_input:
-  category_a:
-    name: "Security"
-    findings:
-      - title: "SQL injection in getUser"
-        file: "src/db/users.ts"
-        line: 23
-        severity: "Critical"
-        description: "User input concatenated into SQL query"
-        fix_type: "diff"
-        fix_diff: |
-          - const query = `SELECT * FROM users WHERE id = ${userId}`;
-          + const query = 'SELECT * FROM users WHERE id = ?';
-
-  category_b:
-    name: "Performance"
-    findings:
-      - title: "N+1 query in user list"
-        file: "src/services/users.ts"
-        line: 45
-        severity: "Major"
-
-  cross_cutting_question: "Do any security fixes introduce performance issues?"
-
-  files_content:
-    - path: "src/db/users.ts"
-      diff: "[diff content]"
-      full_content: "[full file]"
-
-Follow the synthesis-agent instructions to identify cross-cutting concerns.
-Return findings as cross_cutting_insights YAML list.
-"""
-)
-```
+See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for:
+- Full invocation parameter specification
+- Parallel invocation pattern diagram
+- Example Task tool invocation
 
 ## Input
 
@@ -195,10 +80,11 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 | Input Categories | Cross-Cutting Question | What to Look For |
 |-----------------|------------------------|------------------|
-| Security + Performance | "Do any security fixes introduce performance issues?" | Parameterized queries without limits, encryption adding latency, auth checks in hot paths |
 | Architecture + Test Coverage | "Are architectural changes covered by tests?" | New abstractions without tests, refactored code with broken test coverage, missing integration tests |
 | Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" | Bug fixes that need error handling, error paths that could trigger identified bugs |
 | Compliance + Bugs | "Do compliance violations introduce or mask bugs?" | Compliance violations that cause incorrect behavior, compliance rules that prevent bug detection |
+| Compliance + Technical Debt | "Do compliance violations indicate or worsen technical debt?" | Compliance rules masking debt, debt causing compliance issues |
+| Performance + Security | "Do any security fixes introduce performance issues?" | Parameterized queries without limits, encryption adding latency, auth checks in hot paths |
 
 **Quick Review Pairs** (used with 4 category agents):
 
@@ -319,61 +205,6 @@ cross_cutting_insights:
     line: 15
     fix_type: "prompt"
     fix_prompt: "Implement token caching for auth check in src/api/data.ts:15. Use in-memory cache with 5-minute TTL to avoid repeated auth validation. Add cache invalidation on logout."
-```
-
-**Example - Architecture + Test Coverage**:
-```yaml
-cross_cutting_insights:
-  - title: "New UserService interface lacks unit tests"
-    related_findings:
-      architecture: "Extract UserService interface for DI"
-      test_coverage: "Existing UserService tests use concrete class only"
-    insight: "Architectural refactoring created IUserService interface but existing tests still use concrete class. Tests won't catch interface contract violations."
-    category: "Test Coverage"
-    severity: "Major"
-    file: "src/interfaces/IUserService.ts"
-    line: 1
-    fix_type: "prompt"
-    fix_prompt: "Add interface contract tests for IUserService in src/interfaces/__tests__/IUserService.test.ts. Test that all implementations (UserService, MockUserService) satisfy the interface contract. Update existing UserService tests to use the interface type."
-```
-
-**Example - Bugs + Error Handling**:
-```yaml
-cross_cutting_insights:
-  - title: "Bug fix doesn't handle database connection failure"
-    related_findings:
-      bugs: "Null pointer in user lookup"
-      error_handling: "Missing try-catch around database calls"
-    insight: "The null check fix for user lookup doesn't handle the case where the database connection fails entirely - it will still throw an unhandled exception."
-    category: "Error Handling"
-    severity: "Major"
-    file: "src/services/auth.ts"
-    line: 78
-    fix_type: "diff"
-    fix_diff: |
-      - if (!user) {
-      -   throw new Error('User not found');
-      - }
-      + if (!user) {
-      +   throw new UserNotFoundError(userId);
-      + }
-      + // Note: Database errors should be caught at the repository layer
-```
-
-**Example - Compliance + Bugs** (deep review only):
-```yaml
-cross_cutting_insights:
-  - title: "Compliance violation causes silent data corruption"
-    related_findings:
-      compliance: "Missing input validation per CLAUDE.md"
-      bugs: "Truncation when input exceeds expected length"
-    insight: "CLAUDE.md requires input validation, but the missing validation allows oversized input that triggers silent truncation - a compliance violation that directly causes a data corruption bug."
-    category: "Bugs"
-    severity: "Critical"
-    file: "src/handlers/import.ts"
-    line: 45
-    fix_type: "prompt"
-    fix_prompt: "Add input validation to src/handlers/import.ts:45 as required by AI Agent Instructions. Validate input length before processing, return descriptive error for oversized input, and add test coverage for boundary conditions."
 ```
 
 ## Guidelines

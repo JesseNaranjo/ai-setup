@@ -41,7 +41,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **thorough**: Algorithmic complexity, memory usage, I/O patterns, database access
 - **gaps**: Hidden N+1 queries, memory retention, cache invalidation, batch opportunities
 
-*Note: This agent is not invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
+*Note: This agent is not invoked during quick reviews.*
 
 ## Input
 

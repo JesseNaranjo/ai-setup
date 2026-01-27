@@ -41,7 +41,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **thorough**: All compliance issues, every rule against every changed file
 - **gaps**: Subtle violations, edge cases, rules that might be misinterpreted
 
-*Note: This agent is not invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
+*Note: This agent is not invoked during quick reviews.*
 
 ## Input
 

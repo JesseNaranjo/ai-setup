@@ -41,7 +41,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **thorough**: Exception handling, cleanup, propagation, resilience patterns
 - **quick**: Swallowed exceptions, missing cleanup, crash-causing gaps
 
-*Note: This agent does not use "gaps" mode as error handling issues are generally clear-cut.*
+*Note: This agent does not use "gaps" mode.*
 
 ## Input
 

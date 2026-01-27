@@ -41,7 +41,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **thorough**: Unit tests, integration tests, edge cases, test quality
 - **quick**: New public functions without tests, critical paths untested
 
-*Note: This agent does not use "gaps" mode as test coverage gaps are generally clear-cut.*
+*Note: This agent does not use "gaps" mode.*
 
 ## Input
 

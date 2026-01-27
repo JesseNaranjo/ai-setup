@@ -86,14 +86,18 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` for write process.
 
 After the review phase completes, launch synthesis agents in parallel.
 
-See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for:
-- Full agent definition
+See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for:
 - Invocation format (required YAML structure)
+- Parallel invocation pattern diagram
 - Example Task tool invocation
+
+See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for:
+- Full agent definition and analysis logic
+- Cross-cutting pairs and questions
+- Output schema and guidelines
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for:
 - Category pairs and cross-cutting questions (Deep Review vs Quick Review)
-- Synthesis agent input/output format
 - Model selection (Sonnet)
 
 **Output**: `cross_cutting_insights` list added to the issue pool before validation.
