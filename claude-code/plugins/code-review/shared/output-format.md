@@ -2,6 +2,13 @@
 
 This document defines the output format for code review results.
 
+## Related Files
+
+- `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` - Output generation and file writing process
+- `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` - Canonical severity definitions
+- `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md` - Usage tracking schema and timing anomaly thresholds
+- `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` - Validation and aggregation rules
+
 ## Usage Summary Section
 
 The Usage Summary appears BEFORE the Code Review header to provide visibility into which agents were invoked and their timing.

@@ -258,7 +258,7 @@ bug-detection-agent: "Unsanitized input" at users.ts:46 (Major)
 
 ## Severity Classification
 
-Reference `shared/severity-definitions.md` for canonical severity definitions.
+Reference `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for canonical severity definitions.
 
 | Severity | Action Required |
 |----------|-----------------|

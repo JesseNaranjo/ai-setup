@@ -118,7 +118,7 @@ Focus on issues that thorough mode commonly misses:
 Gaps mode returns issues using the **same output schema** as thorough mode.
 
 - Only return NEW issues not present in `previous_findings`
-- Use identical YAML format from `shared/output-schema-base.md`
+- Use identical YAML format from `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md`
 - Apply same severity classification rules
 - Include fix_type and fix_diff/fix_prompt as normal
 

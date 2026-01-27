@@ -67,3 +67,10 @@ Return to the review step:
 | Related test files | critical | Need full content for coverage analysis |
 | AI instruction files | critical | Always fully loaded |
 | Unchanged source files | peripheral | Context only - agents Read on-demand |
+
+## Tiered Context Behavior
+
+Staged reviews use tiered context to balance thoroughness with context efficiency:
+- Changed files receive full content (critical tier)
+- Unchanged files receive preview + metadata (peripheral tier)
+- Agents can Read peripheral files on-demand if cross-file analysis discovers relevance

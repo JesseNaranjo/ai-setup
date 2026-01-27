@@ -2,6 +2,14 @@
 
 This document defines how to invoke review agents via the Task tool.
 
+## Related Files
+
+- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` - Phase definitions and model selection table
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps)
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` - Workflow orchestration and settings application
+- `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md` - YAML schema for agent output
+- `${CLAUDE_PLUGIN_ROOT}/agents/*.md` - Individual agent definitions
+
 ## Subagent Types
 
 Plugin agents are registered as subagent types with the pattern `code-review:[agent-name]`:
@@ -106,7 +114,7 @@ additional_instructions: |
   # Command-Line Instructions
   [content from --prompt argument]
 
-Return findings as YAML per shared/output-schema-base.md.
+Return findings as YAML per ${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md.
 """
 )
 ```

@@ -2,7 +2,7 @@
 
 All review agents return issues using this base YAML schema. Individual agents extend this with category-specific fields.
 
-Reference `shared/severity-definitions.md` for severity classification and `shared/output-format.md` for final output formatting.
+Reference `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for severity classification and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for final output formatting.
 
 ## Required Base Fields
 
@@ -46,7 +46,7 @@ issues:
 - `"Error Handling"` - Error handling gaps
 - `"Test Coverage"` - Missing tests
 
-**severity** (required): See `shared/severity-definitions.md` for full criteria.
+**severity** (required): See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for full criteria.
 - `"Critical"` - Must fix before merge
 - `"Major"` - Should fix before merge
 - `"Minor"` - Can merge, fix soon

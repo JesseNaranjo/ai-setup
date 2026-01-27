@@ -2,21 +2,23 @@
 
 This document defines the orchestration logic for the code review workflow. Agent definitions, language configs, validation rules, and output formats are in separate files.
 
+**Note:** Commands use `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` for step definitions (Steps 1-11). This file provides detailed orchestration logic referenced during Step 6 (Review Execution).
+
 ## Related Files
 
-- `shared/orchestration-sequence.md` - Phase definitions and model selection table
-- `shared/agent-invocation-pattern.md` - How to invoke agents via Task tool
-- `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps)
-- `agents/*.md` - Individual agent definitions with MODE parameter
-- `languages/nodejs.md` - Node.js/TypeScript specific checks
-- `languages/dotnet.md` - .NET/C# specific checks
-- `shared/validation-rules.md` - Validation process and rules
-- `shared/output-format.md` - Output formatting templates
-- `shared/severity-definitions.md` - Canonical severity definitions
+- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` - Phase definitions and model selection table
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` - How to invoke agents via Task tool
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps)
+- `${CLAUDE_PLUGIN_ROOT}/agents/*.md` - Individual agent definitions with MODE parameter
+- `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` - Node.js/TypeScript specific checks
+- `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md` - .NET/C# specific checks
+- `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` - Validation process and rules
+- `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` - Output formatting templates
+- `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` - Canonical severity definitions
 
 ## Severity Classification
 
-See `shared/severity-definitions.md` for canonical severity definitions and examples.
+See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for canonical severity definitions and examples.
 
 ## Agent Configuration
 
@@ -35,69 +37,11 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative e
 
 ## Usage Tracking Protocol
 
-Throughout the review workflow, maintain usage tracking to record agent invocations and timing. See `shared/usage-tracking.md` for the complete schema.
-
-### Initialization (Before Step 4)
-
-Before launching the first agent:
-
-1. Record `review_started_at` timestamp for the review
-2. Initialize the phases array based on review type:
-   - **Deep review**: 3 phases (Phase 1: 9 agents, Phase 2: 5 agents, Synthesis: 5 agents)
-   - **Quick review**: 2 phases (Review: 4 agents, Synthesis: 3 agents)
-3. Initialize each phase with an empty agents array
-
-### Recording Each Agent Invocation
-
-For every agent launch:
-
-1. **Before Task tool call**: Record `agent_started_at` timestamp
-2. **After Task tool returns**:
-   - Record `agent_ended_at` timestamp
-   - Calculate `agent_duration_seconds` = agent_ended_at - agent_started_at
-   - Record `task_id` from Task tool return (confirms actual invocation)
-   - Set `status` to "completed" (or "failed" if error)
-3. **For skipped agents** (via skip_agents setting):
-   - Set `status` to "skipped"
-   - Set `agent_duration_seconds` to 0
-   - No timestamps or task_id
-
-### Confirming Actual Invocation
-
-The Task tool returns a `task_id` when an agent completes. Record this ID as proof of actual invocation:
-- Present: Agent was actually invoked
-- Absent with duration: Agent may have failed
-
-### Parallel Execution Timing
-
-When agents run in parallel within a phase:
-- **phase_started_at**: Timestamp when first agent launched
-- **phase_ended_at**: Timestamp when last agent completed
-- **phase_duration_seconds**: phase_ended_at - phase_started_at
-- Individual agent durations are independent
-- Sum of individual durations may exceed phase duration (expected with parallelism)
-
-### Timing Anomaly Detection
-
-Flag potential issues based on timing:
-
-| Condition | Indicator | Concern |
-|-----------|-----------|---------|
-| Opus < 15s | `[!]` too fast | May have errored early |
-| Sonnet < 10s | `[!]` too fast | May have errored early |
-| Synthesis < 5s | `[!]` too fast | May have errored early |
-| Opus > 180s | `[*]` too slow | May be stuck |
-| Sonnet > 120s | `[*]` too slow | May be stuck |
-| Synthesis > 90s | `[*]` too slow | May be stuck |
-
-### Generating Usage Summary
-
-At the end of the workflow (before generating review output):
-
-1. Read from the usage_tracking structure maintained during workflow
-2. Format according to `shared/output-format.md` Usage Summary section
-3. Calculate phase totals and detect timing anomalies
-4. Include agent details in expandable section
+See `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md` for the complete tracking schema and recording protocol including:
+- Initialization before launching agents
+- Recording each agent invocation (timestamps, task_id, status)
+- Phase timing for parallel execution
+- Timing anomaly detection thresholds
 
 ## Review Configurations
 
@@ -135,56 +79,11 @@ This file contains:
 
 ---
 
-## Workflow Steps
+## Orchestration Details
 
-### Step 1: Input Validation
+This section provides orchestration-specific details that supplement the workflow steps defined in `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
-Verify:
-- Current directory is a git repository
-- Files/changes exist to review
-- Parse command arguments
-
-### Step 2: Context Discovery
-
-1. Find all AI Agent Instructions files:
-   - `CLAUDE.md` files (root and directories)
-   - `.ai/AI-AGENT-INSTRUCTIONS.md` files
-   - `.github/copilot-instructions.md` files
-
-2. Detect project type and language per file:
-
-   **Per-File Language Detection:**
-   For each file being reviewed, detect its language:
-
-   - **By extension**:
-     - `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, `.cjs` → Node.js/TypeScript
-     - `.cs` → .NET/C#
-     - `.py` → Python (future support)
-
-   - **By nearest project file**:
-     - Walk up directories to find `package.json` or `*.csproj`
-     - Use that project's language config
-
-   - **For monorepos/mixed codebases**:
-     - Apply language-specific checks PER FILE
-     - Group files by language when reporting to agents
-     - Example context: "Node.js files: [a.ts, b.ts], .NET files: [c.cs]"
-
-   **Language Override:**
-   Commands accept `--language` parameter to force detection:
-   - `--language nodejs` - Force Node.js/TypeScript checks for all files
-   - `--language dotnet` - Force .NET/C# checks for all files
-
-3. Find related test files based on detected project type(s)
-
-### Step 3: Content Gathering
-
-1. Get current branch name
-2. For files with changes: get diff AND full file content
-3. For files without changes: get full file content
-4. Read related test files for context
-
-### Step 4: Review Execution
+### Review Execution
 
 Review execution varies by review type. See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative phase definitions including:
 - Deep review phases (Phase 1: 9 agents thorough, Phase 2: 5 agents gaps)
@@ -193,7 +92,7 @@ Review execution varies by review type. See `${CLAUDE_PLUGIN_ROOT}/shared/orches
 
 For `previous_findings` format used in gaps mode, see `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`.
 
-#### Agent Invocation Pattern
+### Agent Invocation Pattern
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for:
 - Subagent type mapping
@@ -202,7 +101,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for:
 
 **Model Selection**: See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model selection table.
 
-#### Pre-Existing Issue Detection (For Staged/Diff Reviews)
+### Pre-Existing Issue Detection (For Staged/Diff Reviews)
 
 **CRITICAL**: When reviewing staged changes or diffs, agents must only flag issues in CHANGED lines.
 
@@ -282,34 +181,6 @@ cross_cutting_insights:
 ```
 
 Synthesis insights are added to the issue pool before validation.
-
-### Step 5: Validation
-
-For each issue from the review phases, launch a validation subagent.
-
-See `shared/validation-rules.md` for:
-- Validator model assignment
-- Validation prompt template
-- Common false positive checks
-
-### Step 6: Aggregation
-
-1. Remove issues marked INVALID
-2. Apply severity downgrades
-3. Deduplicate by file+line range
-4. Add consensus badges for multi-agent issues
-
-See `shared/validation-rules.md` for full aggregation rules.
-
-### Step 7: Generate Output
-
-Format results according to `shared/output-format.md`.
-
-### Step 8: Write Output
-
-1. Display formatted review in terminal
-2. Write to output file (default or specified via --output-file)
-3. Print "Review saved to: [filepath]"
 
 ## Language-Specific Focus
 

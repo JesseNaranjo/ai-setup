@@ -2,6 +2,15 @@
 
 This document contains shared workflow steps referenced by all review commands (deep-review, deep-review-staged, quick-review, quick-review-staged).
 
+## Step Numbering Scheme
+
+Commands use a consistent 11-step workflow:
+- **Steps 1, 3, 5**: Defined here (shared across all commands)
+- **Steps 2, 4, 6-7**: Defined inline in each command (command-specific)
+- **Steps 8-11**: Defined here (shared across all commands)
+
+**Related File**: `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` provides detailed orchestration logic for review execution (Step 6).
+
 ## Step 1: Load Settings
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md` for the settings loading process.
@@ -32,7 +41,7 @@ If `--skills` is provided:
 
 ---
 
-## Validation Phase
+## Step 8: Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation process including:
 - Auto-validation patterns
@@ -41,7 +50,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation p
 
 ---
 
-## Aggregation Phase
+## Step 9: Aggregation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 - Filter invalid issues
@@ -51,7 +60,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 ---
 
-## Output Generation
+## Step 10: Output Generation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
 
@@ -67,7 +76,7 @@ Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared
 
 ---
 
-## Write Output
+## Step 11: Write Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` for write process.
 

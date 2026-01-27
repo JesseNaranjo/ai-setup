@@ -5,6 +5,20 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.1] - 2026-01-26
+
+### Fixed
+- CHANGELOG Version Locations skill count (4 → 5 files)
+- Command description inconsistency in quick-review-staged (added "code")
+- CLAUDE.md version count documentation (accurate file breakdown: ~21 files)
+
+### Changed
+- Moved tiered context explanation from staged commands to `content-gathering-staged.md`
+- Consolidated workflow step numbering with clear scheme in `command-common-steps.md` (Steps 1, 3, 5, 8-11)
+- Added cross-reference note to `review-workflow.md` clarifying relationship with command steps
+- Added "Related Files" sections to `agent-invocation-pattern.md` and `output-format.md`
+- Standardized all path references to use `${CLAUDE_PLUGIN_ROOT}/shared/...` format consistently
+
 ## [3.2.0] - 2026-01-26
 
 ### Added
@@ -153,7 +167,7 @@ When releasing a new version, update:
 
 **Recommended:**
 - `agents/*.md` - Agent frontmatter version field (9 files)
-- `skills/*/SKILL.md` - Skill frontmatter version field (4 files)
+- `skills/*/SKILL.md` - Skill frontmatter version field (5 files)
 
 **Verification:**
 ```bash

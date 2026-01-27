@@ -22,17 +22,17 @@ Before generating the Code Review output, generate the Usage Summary section:
    - Opus agents: < 15s = too fast `[!]`, > 180s = too slow `[*]`
    - Sonnet agents: < 10s = too fast `[!]`, > 120s = too slow `[*]`
    - Synthesis agents: < 5s = too fast `[!]`, > 90s = too slow `[*]`
-6. **Format output**: Follow `shared/output-format.md` Usage Summary Section format
+6. **Format output**: Follow `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` Usage Summary Section format
 
 **Output order:**
 1. Usage Summary (this step)
 2. Code Review header and content (next step)
 
-See `shared/usage-tracking.md` for the tracking schema and `shared/output-format.md` for the output format.
+See `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md` for the tracking schema and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for the output format.
 
 ### 1. Generate Review Output
 
-Follow the format in `shared/output-format.md`:
+Follow the format in `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`:
 
 1. **Header**: Use the review depth description provided by the command
 2. **Summary Table**: Include only the categories that were reviewed
@@ -63,7 +63,7 @@ At the end, print: "Review saved to: [filepath]"
 
 ## Fix Formatting Rules
 
-See `shared/output-format.md` for complete details:
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for complete details:
 
 - **fix_type: diff** for single-location fixes ≤10 lines
   - Show inline diff block with `-` and `+` lines

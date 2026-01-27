@@ -1,7 +1,7 @@
 ---
 name: deep-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Deep 19-agent review of staged changes
+description: Deep 19-agent code review of staged changes
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
@@ -30,12 +30,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-staged.md` for the validation
 
 ## Step 4: Content Gathering
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content gathering process.
-
-**Tiered Context:** Staged reviews use tiered context:
-- Changed files receive full content (critical tier)
-- Unchanged files receive preview + metadata (peripheral tier)
-- Agents can Read peripheral files on-demand if cross-file analysis discovers relevance
+See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content gathering process and tiered context behavior.
 
 ---
 

@@ -186,4 +186,4 @@ phases:
 
 ## Integration
 
-This tracking is maintained as internal state during workflow execution and converted to the Usage Summary output format (see `shared/output-format.md`) before generating the review output.
+This tracking is maintained as internal state during workflow execution and converted to the Usage Summary output format (see `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`) before generating the review output.
