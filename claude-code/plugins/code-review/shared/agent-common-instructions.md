@@ -19,7 +19,7 @@ All review agents receive the following inputs. Agents should NOT repeat this in
 
 ## Using skill_instructions (Full Version)
 
-For agents that receive review-focused skills (security-agent, bug-detection-agent, performance-agent, compliance-agent):
+For agents that receive review-focused skills (architecture-agent, bug-detection-agent, compliance-agent, performance-agent, security-agent, technical-debt-agent):
 
 When `skill_instructions` is present in the prompt, apply it as follows:
 
@@ -37,7 +37,7 @@ When `skill_instructions` is absent, proceed with standard review process.
 
 ## Using skill_instructions (Methodology Only)
 
-For agents that receive only methodology skills (architecture-agent, api-contracts-agent, error-handling-agent, test-coverage-agent, synthesis-agent):
+For agents that receive only methodology skills (api-contracts-agent, error-handling-agent, test-coverage-agent, synthesis-agent):
 
 When `skill_instructions` is present, apply methodology skills as follows:
 

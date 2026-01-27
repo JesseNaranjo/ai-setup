@@ -48,10 +48,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Agent-specific:** This agent receives `bug-review` skill data as its primary review-focused skill. Also uses related test files for context.
 
-**Cross-file discovery:** If analysis discovers a file contains shared logic, Read it.
-```
-Grep(pattern: "OrderService", path: "src/")
-```
+**Cross-file discovery:** Trace shared logic when analysis discovers cross-module dependencies.
 
 ## Review Process
 
@@ -81,21 +78,13 @@ Grep(pattern: "OrderService", path: "src/")
 - Obvious type errors
 - Missing return statements
 
-### Step 2: Language-Specific Checks
+### Step 2: Language-Specific Bug Checks
 
 **Node.js/TypeScript:**
-- Unhandled promise rejections
-- Async/await misuse (missing await, unhandled errors)
-- `this` binding issues in callbacks
-- Type coercion bugs with `==` vs `===`
-- Event loop blocking operations
+See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#bugs` for detailed checks.
 
 **.NET/C#:**
-- Null reference exceptions (missing null checks)
-- IDisposable objects not disposed
-- Async deadlocks (using .Result or .Wait() on tasks)
-- LINQ deferred execution causing multiple enumerations
-- Collection modification during iteration
+See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#bugs` for detailed checks.
 
 ### Step 3: Analyze Code Paths
 

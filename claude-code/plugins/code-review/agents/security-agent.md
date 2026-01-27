@@ -24,7 +24,7 @@ description: |
   <commentary>User asked specifically about hardcoded secrets, which is one of the key vulnerability types this agent detects.</commentary>
   </example>
 model: opus  # Default for thorough/quick. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
-color: magenta
+color: purple
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.1
 ---
@@ -48,10 +48,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Agent-specific:** This agent receives `security-review` skill data as its primary review-focused skill.
 
-**Cross-file discovery:** If analysis discovers a file handles auth/input, Read it.
-```
-Grep(pattern: "sanitize|escape|validate", path: "src/")
-```
+**Cross-file discovery:** Trace auth and input handling across security boundaries.
 
 ## Review Process
 
@@ -87,22 +84,10 @@ Grep(pattern: "sanitize|escape|validate", path: "src/")
 ### Step 2: Language-Specific Security Checks
 
 **Node.js/TypeScript:**
-- Prototype pollution via user input
-- ReDoS (Regular Expression Denial of Service)
-- Dynamic code execution with untrusted input
-- Insecure JWT handling
-- XSS via template literals
-- Command injection via shell execution
-- Path traversal in file operations
+See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#security` for detailed checks.
 
 **.NET/C#:**
-- SQL injection via string concatenation
-- Insecure deserialization of untrusted data
-- Hardcoded connection strings
-- Missing `[Authorize]` attributes on controllers
-- Path traversal in file operations
-- XXE in XML parsing
-- Weak cryptographic algorithms
+See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#security` for detailed checks.
 
 ### Step 3: Analyze Security Boundaries
 

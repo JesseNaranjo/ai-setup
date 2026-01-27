@@ -41,7 +41,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **thorough**: All compliance issues, every rule against every changed file
 - **gaps**: Subtle violations, edge cases, rules that might be misinterpreted
 
-*Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
+*Note: This agent is not invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
 ## Input
 
@@ -49,10 +49,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Agent-specific:** This agent receives `compliance-review` skill data as its primary review-focused skill. Also requires all relevant AI Agent Instructions files (CLAUDE.md, AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md).
 
-**Cross-file discovery:** If compliance check needs to verify naming patterns, Read related files.
-```
-Grep(pattern: "export class|export function", path: "src/")
-```
+**Cross-file discovery:** Verify naming patterns across files when compliance rules require it.
 
 ## Review Process
 

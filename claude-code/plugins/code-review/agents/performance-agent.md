@@ -24,7 +24,7 @@ description: |
   <commentary>User is experiencing slowness and wants to find the cause, which requires performance analysis.</commentary>
   </example>
 model: opus  # Default for thorough. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
-color: yellow
+color: green
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.1
 ---
@@ -41,7 +41,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **thorough**: Algorithmic complexity, memory usage, I/O patterns, database access
 - **gaps**: Hidden N+1 queries, memory retention, cache invalidation, batch opportunities
 
-*Note: This agent is NOT invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
+*Note: This agent is not invoked during quick reviews. See `review-workflow.md` for invocation patterns.*
 
 ## Input
 
@@ -49,10 +49,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Agent-specific:** This agent receives `performance-review` skill data as its primary review-focused skill.
 
-**Cross-file discovery:** If analysis discovers a file contains database queries, Read it.
-```
-Grep(pattern: "findAll|query|SELECT", path: "src/")
-```
+**Cross-file discovery:** Trace database query patterns across data access layers.
 
 ## Review Process
 
@@ -80,23 +77,10 @@ Grep(pattern: "findAll|query|SELECT", path: "src/")
 ### Step 2: Language-Specific Performance Checks
 
 **Node.js/TypeScript:**
-- Event loop blocking (CPU-intensive sync operations)
-- Memory leaks from unclosed event listeners
-- Closures capturing large objects unnecessarily
-- Inefficient array methods in hot paths
-- Missing stream usage for large data
-- Unnecessary re-renders in React (missing memo, inline objects)
-- Promise.all vs sequential await
+See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#performance` for detailed checks.
 
 **.NET/C#:**
-- Boxing/unboxing overhead with value types
-- LINQ in tight loops (use manual iteration)
-- Excessive allocations (object creation in loops)
-- Missing ConfigureAwait(false) in library code
-- N+1 Entity Framework queries (Include vs lazy loading)
-- Synchronous I/O blocking thread pool
-- String concatenation in loops (use StringBuilder)
-- Large object heap allocations
+See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#performance` for detailed checks.
 
 ### Step 3: Analyze Hot Paths
 

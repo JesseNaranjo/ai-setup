@@ -20,7 +20,7 @@ To optimize cost and latency, issues are validated in batches grouped by file ra
 | Bugs | Opus |
 | Security | Opus |
 | Performance | Opus |
-| Architecture | Sonnet |
+| Architecture | Opus |
 | API Contracts | Sonnet |
 | Error Handling | Sonnet |
 | Test Coverage | Sonnet |
@@ -258,14 +258,7 @@ bug-detection-agent: "Unsanitized input" at users.ts:46 (Major)
 
 ## Severity Classification
 
-Reference `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for canonical severity definitions.
-
-| Severity | Action Required |
-|----------|-----------------|
-| **Critical** | Must fix before merge |
-| **Major** | Should fix before merge |
-| **Minor** | Can merge, fix soon |
-| **Suggestion** | Optional |
+Reference `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for canonical severity definitions and action requirements.
 
 ## Do NOT Validate These (Skip Validation)
 

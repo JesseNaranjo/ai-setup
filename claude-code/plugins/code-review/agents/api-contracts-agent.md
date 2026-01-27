@@ -24,7 +24,7 @@ description: |
   <commentary>User mentioned schema changes and client impact, which is precisely what this agent is designed to evaluate.</commentary>
   </example>
 model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
-color: green
+color: cyan
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.1
 ---
@@ -40,7 +40,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 **API contracts-specific modes:**
 - **thorough**: Breaking changes, compatibility, versioning, contract consistency
 
-*Note: This agent does NOT use "gaps" mode and is NOT invoked during quick reviews.*
+*Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
 
 ## Input
 
@@ -48,10 +48,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Agent-specific:** This agent receives methodology skills only (no primary review-focused skill). Also uses related API definitions if available.
 
-**Cross-file discovery:** If analysis discovers consumers of changed interface, Read them.
-```
-Grep(pattern: "implements|extends|import.*Interface", path: "src/")
-```
+**Cross-file discovery:** Trace interface consumers when analyzing contract changes.
 
 ## Review Process
 

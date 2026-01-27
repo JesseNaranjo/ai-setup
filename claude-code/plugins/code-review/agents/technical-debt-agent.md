@@ -41,7 +41,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 - **thorough**: Comprehensive debt discovery across all 6 categories
 - **gaps**: Focus on subtle debt missed in thorough pass, receives prior findings
 
-*Note: This agent does NOT use "quick" mode and is NOT invoked during quick reviews.*
+*Note: This agent does not use "quick" mode and is not invoked during quick reviews.*
 
 ## Input
 
@@ -49,11 +49,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Agent-specific:** This agent receives `technical-debt-review` skill data as its primary review-focused skill. Also uses related test files to identify untested deprecated code.
 
-**Cross-file discovery:** If analysis discovers dependency issues, check package files.
-```
-Read(file_path: "package.json")  # Node.js
-Read(file_path: "*.csproj")       # .NET
-```
+**Cross-file discovery:** Check package files when analysis discovers dependency issues.
 
 ## Review Process
 
@@ -125,7 +121,7 @@ For each identified debt item:
 3. Identify dependencies and blockers
 4. Consider migration path complexity
 
-### Step 3.5: Cross-File Analysis (When Needed)
+### Step 4: Cross-File Analysis (When Needed)
 
 Perform cross-file analysis when the reviewed code suggests wider debt issues:
 - Import/export statements referencing deprecated modules
@@ -140,7 +136,7 @@ When cross-file analysis is warranted:
 3. Read package.json, *.csproj to check dependency versions
 4. Check for TODO/FIXME patterns across files
 
-### Step 4: Report Technical Debt Issues
+### Step 5: Report Technical Debt Issues
 
 For each issue found, report:
 - **Issue title**: Brief description of the technical debt

@@ -133,15 +133,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the authoritati
 
 ## Common Agent Input
 
-Each agent receives:
-- Current branch name
-- Files to review (diffs and/or full content)
-- Detected project type(s) and language per file
-- Relevant AI Agent Instructions files
-- Related test files
-- MODE parameter
-- Previous findings (gaps mode only, from same category)
-- Skill-derived instructions (from `--skills` argument, orchestrator-interpreted per agent)
-- Additional instructions (from settings file body + `--prompt` argument)
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs (files, project type, MODE, skill_instructions, previous_findings).
 
 Each agent returns issues following the YAML schema defined in each agent file.

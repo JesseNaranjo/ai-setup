@@ -1,7 +1,7 @@
 ---
 name: architecture-agent
 description: |
-  This agent should be used when reviewing code for architectural issues. Detects coupling problems, SOLID violations, anti-patterns, layer violations, and maintainability concerns.
+  This agent should be used when reviewing code for architectural issues. Detects coupling problems, SOLID/DRY/YAGNI violations, anti-patterns, layer violations, and maintainability concerns.
 
   <example>
   Context: User has completed a major refactoring and wants architectural review.
@@ -23,8 +23,8 @@ description: |
   assistant: "I'll use the architecture agent to identify circular dependencies, tight coupling, layer violations, and other structural issues."
   <commentary>User mentioned coupling and dependencies, which are specific architectural concerns this agent detects.</commentary>
   </example>
-model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
-color: cyan
+model: opus  # Thorough mode. See orchestration-sequence.md for authoritative model selection per mode
+color: yellow
 tools: ["Read", "Grep", "Glob"]
 version: 3.2.1
 ---
@@ -40,18 +40,15 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 **Architecture-specific modes:**
 - **thorough**: Coupling, cohesion, SOLID principles, design patterns
 
-*Note: This agent does NOT use "gaps" mode and is NOT invoked during quick reviews.*
+*Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
 
 ## Input
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-**Agent-specific:** This agent receives methodology skills only (no primary review-focused skill).
+**Agent-specific:** This agent receives `architecture-principles-review` skill data as its primary review-focused skill.
 
-**Cross-file discovery:** If analysis discovers module dependencies, Read them.
-```
-Grep(pattern: "import.*from|require\\(", path: "src/")
-```
+**Cross-file discovery:** Trace module dependencies when analysis discovers imports.
 
 ## Review Process
 
@@ -70,26 +67,24 @@ Grep(pattern: "import.*from|require\\(", path: "src/")
 - Missing abstractions that hurt maintainability
 - Inappropriate intimacy between classes
 - Dead code and unused dependencies
+- DRY (Don't Repeat Yourself) violations
+  - Duplicated code blocks (>10 lines, >80% similarity)
+  - Copy-pasted logic with minor variations
+  - Repeated configuration values that should be constants
+  - Similar utility functions across modules
+- YAGNI (You Ain't Gonna Need It) violations
+  - Unused abstractions (interfaces with single implementation, never extended)
+  - Over-engineered patterns (factory for single product type)
+  - Speculative generality (parameters/options never used)
+  - Premature optimization structures
 
 ### Step 2: Language-Specific Architecture Checks
 
 **Node.js/TypeScript:**
-- Circular imports causing initialization issues
-- CommonJS and ESM mixing problems
-- React hooks rules violations (conditional hooks, missing deps)
-- Improper TypeScript typing (`any` abuse)
-- Barrel file abuse causing bundle bloat
-- God modules with too many exports
-- Missing dependency injection
+See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#architecture` for detailed checks.
 
 **.NET/C#:**
-- DI anti-patterns (service locator, captive dependencies)
-- Missing interfaces preventing testability
-- Controller bloat (business logic in controllers)
-- Improper layering (UI -> Data access)
-- Static abuse preventing testing
-- Missing repository pattern where needed
-- Anemic domain models
+See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#architecture` for detailed checks.
 
 ### Step 3: Analyze Code Structure
 
@@ -98,7 +93,7 @@ Grep(pattern: "import.*from|require\\(", path: "src/")
 3. Evaluate cohesion within components
 4. Look for design pattern misuse or missing patterns
 
-### Step 3.5: Cross-File Analysis (When Needed)
+### Step 4: Cross-File Analysis (When Needed)
 
 Perform cross-file analysis automatically when the reviewed code suggests cross-cutting concerns. Trigger cross-file analysis when you observe:
 - Import/export statements that reference other project files
@@ -137,7 +132,7 @@ When cross-file analysis is warranted:
 - File defines an interface → check implementations
 - File modifies a shared type → check all usages
 
-### Step 4: Report Architecture Issues
+### Step 5: Report Architecture Issues
 
 For each issue found, report:
 - **Issue title**: Brief description of the architectural issue
@@ -198,6 +193,38 @@ issues:
     impact: "Difficult to test, modify, or extend any single feature without risk"
     fix_type: "prompt"
     fix_prompt: "Refactor UserService.ts into separate services: 1) Create AuthService with login/logout/validateSession methods, 2) Create ProfileService with updateProfile/getProfile methods, 3) Create NotificationService with sendEmail/sendPush methods, 4) Create BillingService with payment-related methods. Update imports in all consumers and add dependency injection."
+```
+
+**Example DRY violation**:
+```yaml
+issues:
+  - title: "Duplicated validation logic across handlers"
+    file: "src/handlers/orders.ts"
+    line: 45
+    range: "45-60"
+    category: "Architecture"
+    severity: "Minor"
+    description: "Order validation logic duplicated in createOrder, updateOrder, and submitOrder handlers with minor variations"
+    principle: "DRY (Don't Repeat Yourself)"
+    impact: "Bug fixes must be applied in 3 places, risk of inconsistent behavior"
+    fix_type: "prompt"
+    fix_prompt: "Extract common validation logic into a shared validateOrder function in src/validators/orderValidator.ts. Replace duplicate code in createOrder (lines 45-60), updateOrder (lines 112-127), and submitOrder (lines 89-104) with calls to the new validator."
+```
+
+**Example YAGNI violation**:
+```yaml
+issues:
+  - title: "Over-engineered factory pattern for single implementation"
+    file: "src/factories/NotificationFactory.ts"
+    line: 1
+    range: "1-45"
+    category: "Architecture"
+    severity: "Suggestion"
+    description: "NotificationFactory creates only EmailNotification, never extended. INotification interface has single implementation."
+    principle: "YAGNI (You Ain't Gonna Need It)"
+    impact: "Unnecessary indirection increases complexity without benefit"
+    fix_type: "prompt"
+    fix_prompt: "Simplify notification creation by removing NotificationFactory and INotification interface. Replace factory calls with direct EmailNotification instantiation. If other notification types are needed later, the abstraction can be reintroduced."
 ```
 
 ## False Positive Guidelines

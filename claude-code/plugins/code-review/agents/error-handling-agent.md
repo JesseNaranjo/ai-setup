@@ -49,10 +49,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Agent-specific:** This agent receives methodology skills only (no primary review-focused skill).
 
-**Cross-file discovery:** If analysis discovers error propagation paths, Read them.
-```
-Grep(pattern: "throw|catch|Error", path: "src/")
-```
+**Cross-file discovery:** Trace error propagation paths across module boundaries.
 
 ## Review Process
 
@@ -86,20 +83,10 @@ Grep(pattern: "throw|catch|Error", path: "src/")
 ### Step 2: Language-Specific Error Handling Checks
 
 **Node.js/TypeScript:**
-- Unhandled promise rejections
-- Promises without `.catch()` or try/catch
-- Missing error event handlers on streams/emitters
-- Async functions without error handling
-- Missing error boundaries in React
-- Swallowed errors in callbacks
+See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#errors` for detailed checks.
 
 **.NET/C#:**
-- Missing exception handling on I/O operations
-- Swallowed exceptions (empty catch)
-- Tasks not awaited (fire-and-forget without error handling)
-- Missing try-finally for IDisposable cleanup
-- Generic exception catching (catch Exception instead of specific)
-- Re-throwing with `throw ex` instead of `throw` (loses stack)
+See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#errors` for detailed checks.
 
 ### Step 3: Analyze Error Flows
 

@@ -46,11 +46,7 @@ issues:
 - `"Error Handling"` - Error handling gaps
 - `"Test Coverage"` - Missing tests
 
-**severity** (required): See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for full criteria.
-- `"Critical"` - Must fix before merge
-- `"Major"` - Should fix before merge
-- `"Minor"` - Can merge, fix soon
-- `"Suggestion"` - Optional improvement
+**severity** (required): See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for classification criteria and examples.
 
 **description** (required): Explanation of the issue. Include:
 - What the problem is

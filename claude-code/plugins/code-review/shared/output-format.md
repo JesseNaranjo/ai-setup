@@ -39,7 +39,7 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 | Agent | Model | Duration | Findings | Status |
 |-------|-------|----------|----------|--------|
 | api-contracts-agent | sonnet | 31s | 0 | ✓ |
-| architecture-agent | sonnet | 35s | 0 | ✓ |
+| architecture-agent | opus | 35s | 0 | ✓ |
 | bug-detection-agent | opus | 1m 44s | 5 | ✓ |
 | compliance-agent | sonnet | 27s | 2 | ✓ |
 | error-handling-agent | sonnet | 28s | 2 | ✓ |

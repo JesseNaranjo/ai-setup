@@ -10,7 +10,7 @@ This document defines the authoritative execution sequences for review pipelines
 
 2. **Phase 1: Thorough Review** (9 agents in parallel)
    - Launch: api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage
-   - Models: bug-detection, performance, security, technical-debt (Opus); api-contracts, architecture, compliance, error-handling, test-coverage (Sonnet)
+   - Models: architecture, bug-detection, performance, security, technical-debt (Opus); api-contracts, compliance, error-handling, test-coverage (Sonnet)
    - MODE: `thorough` for all agents
    - WAIT: All 9 agents must complete before proceeding
    - OUTPUT: Phase 1 findings (grouped by category)
@@ -61,7 +61,7 @@ This document defines the authoritative execution sequences for review pipelines
 | Agent | Model (thorough) | Model (gaps) | Model (quick) |
 |-------|------------------|--------------|---------------|
 | api-contracts-agent | sonnet | N/A | N/A |
-| architecture-agent | sonnet | N/A | N/A |
+| architecture-agent | opus | N/A | N/A |
 | bug-detection-agent | opus | sonnet | opus |
 | compliance-agent | sonnet | sonnet | N/A |
 | error-handling-agent | sonnet | N/A | sonnet |

@@ -187,10 +187,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 **Note**: Synthesis agents receive methodology skills only (no primary skill data).
 
-**Cross-file discovery:** If ripple effect analysis discovers affected files, Read them.
-```
-Grep(pattern: "import.*from|exports", path: "src/")
-```
+**Cross-file discovery:** Trace affected files when ripple effect analysis discovers dependencies.
 
 ### Cross-Cutting Pairs
 

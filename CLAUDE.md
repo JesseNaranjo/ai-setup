@@ -28,6 +28,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
+| `architecture-principles-review` | "check SOLID", "find DRY violations", "check YAGNI", "architecture principles" |
 | `bug-review` | "find bugs", "check for errors", "find edge cases" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
 | `performance-review` | "check performance", "find slow code", "optimize" |
@@ -58,6 +59,12 @@ claude-code/plugins/code-review/
 │   ├── technical-debt-agent.md      # Technical debt detection
 │   └── test-coverage-agent.md       # Test coverage gaps
 ├── skills/                          # Targeted review skills (progressive disclosure)
+│   ├── architecture-principles-review/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   │   └── solid-dry-yagni-patterns.md
+│   │   └── examples/
+│   │       └── example-output.md
 │   ├── bug-review/
 │   │   ├── SKILL.md
 │   │   ├── references/
@@ -134,16 +141,16 @@ Each agent has a unique color for visual identification during parallel executio
 
 | Agent | Color |
 |-------|-------|
-| api-contracts-agent | green |
-| architecture-agent | cyan |
+| api-contracts-agent | cyan |
+| architecture-agent | yellow |
 | bug-detection-agent | red |
 | compliance-agent | blue |
 | error-handling-agent | orange |
-| performance-agent | yellow |
-| security-agent | magenta |
+| performance-agent | green |
+| security-agent | purple |
 | synthesis-agent | white |
 | technical-debt-agent | brown |
-| test-coverage-agent | purple |
+| test-coverage-agent | white |
 
 **Color Usage Notes:**
 - All 9 review agents have unique colors within Phase 1
@@ -153,7 +160,7 @@ Each agent has a unique color for visual identification during parallel executio
 
 ### Deep Review Pipeline
 
-1. **Phase 1** (9 agents parallel): Thorough mode review (4 Opus, 5 Sonnet)
+1. **Phase 1** (9 agents parallel): Thorough mode review (5 Opus, 4 Sonnet)
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
 3. **Phase 3** (5 synthesis agents parallel): Cross-cutting concern detection
 4. **Validation**: All issues validated before output
@@ -351,14 +358,14 @@ When preparing a new release:
 
    **Recommended:**
    - All agent files: `agents/*.md` (10 files)
-   - All skill files: `skills/*/SKILL.md` (5 files)
+   - All skill files: `skills/*/SKILL.md` (6 files)
 
 5. **Verify versions are consistent:**
    ```bash
    # Verify no old version remains (exclude CHANGELOG history)
    grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-   # Verify new version count (~21: 1 plugin.json + 1 marketplace.json + 2 README refs + 2 CLAUDE.md refs + 10 agents + 5 skills)
+   # Verify new version count (~22: 1 plugin.json + 1 marketplace.json + 2 README refs + 2 CLAUDE.md refs + 10 agents + 6 skills)
    grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 
    # Verify CHANGELOG has new section

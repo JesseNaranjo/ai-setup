@@ -285,10 +285,11 @@ Combines skill methodology with specific instructions.
 
 | Skill | Primary Agent | Focus |
 |-------|---------------|-------|
-| `security-review` | security-agent | Security vulnerabilities and OWASP patterns |
-| `performance-review` | performance-agent | Performance issues and optimization |
+| `architecture-principles-review` | architecture-agent | SOLID, DRY, YAGNI violations |
 | `bug-review` | bug-detection-agent | Logical errors and edge cases |
 | `compliance-review` | compliance-agent | CLAUDE.md and coding standards |
+| `performance-review` | performance-agent | Performance issues and optimization |
+| `security-review` | security-agent | Security vulnerabilities and OWASP patterns |
 | `technical-debt-review` | technical-debt-agent | Deprecated code, outdated patterns, dead code |
 
 ## Skills
@@ -297,10 +298,11 @@ Targeted review skills for specific concerns:
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
-| `security-review` | "security review", "check for vulnerabilities", "audit security" |
-| `performance-review` | "check performance", "find slow code", "optimize" |
+| `architecture-principles-review` | "check SOLID", "find DRY violations", "check YAGNI", "architecture principles" |
 | `bug-review` | "find bugs", "check for errors", "find edge cases" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+| `performance-review` | "check performance", "find slow code", "optimize" |
+| `security-review` | "security review", "check for vulnerabilities", "audit security" |
 | `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
 
 ## Architecture
@@ -328,10 +330,11 @@ code-review/
 │   ├── technical-debt-agent.md  # Technical debt detection
 │   └── synthesis-agent.md       # Cross-agent insights
 ├── skills/                      # Targeted review skills
-│   ├── security-review/
-│   ├── performance-review/
+│   ├── architecture-principles-review/
 │   ├── bug-review/
 │   ├── compliance-review/
+│   ├── performance-review/
+│   ├── security-review/
 │   └── technical-debt-review/
 ├── languages/                   # Language-specific configs
 │   ├── nodejs.md                # Node.js/TypeScript checks
@@ -361,16 +364,16 @@ code-review/
 
 | Agent | Model | Supported Modes | Color |
 |-------|-------|-----------------|-------|
-| compliance-agent | Sonnet | thorough, gaps | blue |
+| api-contracts-agent | Sonnet | thorough | cyan |
+| architecture-agent | Opus | thorough | yellow |
 | bug-detection-agent | Opus | thorough, gaps, quick | red |
-| security-agent | Opus | thorough, gaps, quick | magenta |
-| performance-agent | Opus | thorough, gaps | yellow |
-| architecture-agent | Sonnet | thorough | cyan |
-| api-contracts-agent | Sonnet | thorough | green |
+| compliance-agent | Sonnet | thorough, gaps | blue |
 | error-handling-agent | Sonnet | thorough, quick | orange |
-| test-coverage-agent | Sonnet | thorough, quick | purple |
-| technical-debt-agent | Opus | thorough, gaps | brown |
+| performance-agent | Opus | thorough, gaps | green |
+| security-agent | Opus | thorough, gaps, quick | purple |
 | synthesis-agent | Sonnet | (cross-category) | white |
+| technical-debt-agent | Opus | thorough, gaps | brown |
+| test-coverage-agent | Sonnet | thorough, quick | white |
 
 > **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
 
@@ -438,8 +441,8 @@ See `shared/output-format.md` for complete output templates.
 
 | Category | Critical | Major | Minor | Suggestions |
 |----------|----------|-------|-------|-------------|
-| Compliance | 0 | 1 | 0 | 0 |
 | Bugs | 0 | 2 | 1 | 0 |
+| Compliance | 0 | 1 | 0 | 0 |
 | Security | 1 | 0 | 0 | 0 |
 | ...
 ```

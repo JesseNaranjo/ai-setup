@@ -77,10 +77,11 @@ skill_instructions:
 
 | Agent | Receives From |
 |-------|---------------|
-| security-agent | `security-review` focus_areas, ALL methodology skills |
+| architecture-agent | `architecture-principles-review` focus_areas, ALL methodology skills |
 | bug-detection-agent | `bug-review` focus_areas, ALL methodology skills |
-| performance-agent | `performance-review` focus_areas, ALL methodology skills |
 | compliance-agent | `compliance-review` focus_areas, ALL methodology skills |
+| performance-agent | `performance-review` focus_areas, ALL methodology skills |
+| security-agent | `security-review` focus_areas, ALL methodology skills |
 | technical-debt-agent | `technical-debt-review` focus_areas, ALL methodology skills |
 | Other agents | ALL methodology skills only |
 
