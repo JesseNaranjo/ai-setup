@@ -118,7 +118,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
 
 ```yaml
 issues:
-  - # ... base fields from shared/output-schema-base.md
+  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
     category: "Bugs"
     conditions: "When this bug occurs"
     impact: "What happens when the bug triggers"
@@ -160,16 +160,27 @@ issues:
     fix_prompt: "Add distributed locking to processOrder in src/services/orders.ts:45-78. Use Redis-based lock with orderId as key, 30-second TTL, and retry logic. Wrap the entire order processing in a try-finally to ensure lock release."
 ```
 
-## Gaps Mode with Prior Findings
+## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
+When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
 
-**Bug detection-specific subtle issues:**
+**Duplicate Detection:**
+- Skip issues in same file within ±5 lines of prior findings
+- Skip same issue type on same function/method
+- For range findings (lines A-B): skip zone = [A-5, B+5]
+
+**Focus Areas (subtle issues thorough mode misses):**
 - Boundary conditions (empty arrays, zero values, max values)
 - Race conditions in concurrent code
 - State management issues (stale state, incorrect updates)
 - Resource cleanup failures in error paths
-- Time-of-check to time-of-use issues, integer overflow/underflow
+- Time-of-check to time-of-use issues
+- Integer overflow/underflow
+
+**Constraints:**
+- Only report Major or Critical severity (skip Minor/Suggestion)
+- Maximum 5 new findings
+- Model: Always Sonnet (cost optimization)
 
 ## False Positive Guidelines
 

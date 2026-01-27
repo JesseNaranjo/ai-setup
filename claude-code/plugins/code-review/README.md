@@ -343,16 +343,13 @@ code-review/
 │   ├── content-gathering-files.md   # Content gathering for file reviews
 │   ├── content-gathering-staged.md  # Content gathering for staged reviews
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── gaps-mode-rules.md           # Rules for gaps mode operation
 │   ├── input-validation-files.md    # Input validation for file commands
 │   ├── input-validation-staged.md   # Input validation for staged commands
-│   ├── output-format.md             # Output templates
+│   ├── output-format.md             # Authoritative output schema and templates
 │   ├── output-generation.md         # Output generation and file writing
-│   ├── output-schema-base.md        # Base YAML schema for all agents
 │   ├── review-workflow.md           # Orchestration logic
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── severity-definitions.md      # Severity classification
-│   ├── skill-common-workflow.md     # Lean skill workflow (references details)
 │   ├── validation-rules.md          # Validation process
 │   └── references/                  # Detailed reference content
 │       ├── scope-determination.md   # Scope options and edge cases

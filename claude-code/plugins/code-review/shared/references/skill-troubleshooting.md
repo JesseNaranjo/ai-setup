@@ -1,6 +1,6 @@
 # Skill Troubleshooting
 
-Common issues and solutions when using review skills. Referenced by `skill-common-workflow.md`.
+Common issues and solutions when using review skills.
 
 ## Agent Returns No Issues But Problems Exist
 

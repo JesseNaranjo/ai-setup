@@ -84,15 +84,13 @@ See each agent file for category-specific false positive exclusions.
 
 ## Gaps Mode Behavior
 
-When MODE=gaps, follow all rules in `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`.
+When MODE=gaps, agents that support gaps mode have inline rules in their respective files. Only these 5 agents support gaps mode: bug-detection, compliance, performance, security, technical-debt.
 
-See each agent file for category-specific gaps mode focus areas.
+See each agent file for category-specific gaps mode rules and focus areas.
 
 ## Output Schema
 
-All agents output YAML following `${CLAUDE_PLUGIN_ROOT}/shared/output-schema-base.md`.
-
-Each issue requires these base fields:
+Use the YAML schema shown in your agent's examples. Each issue requires these base fields:
 - `title`: Brief description
 - `file`: File path relative to repo root
 - `line`: Primary line number
@@ -104,3 +102,5 @@ Each issue requires these base fields:
 - `fix_diff` or `fix_prompt`: The suggested fix
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for severity classification rules.
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for the authoritative output schema reference used during output generation.

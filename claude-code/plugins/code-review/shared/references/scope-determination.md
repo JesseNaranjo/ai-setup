@@ -1,6 +1,6 @@
 # Scope Determination Details
 
-Detailed procedures for determining review scope. Referenced by `skill-common-workflow.md` Step 1.
+Detailed procedures for determining review scope. Referenced by skill workflow step 1.
 
 ## Scope Options
 

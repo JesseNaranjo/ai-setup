@@ -105,6 +105,20 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 - Debt that requires deeper cross-file analysis
 - Edge cases in deprecated pattern detection
 
+## Gaps Mode Behavior
+
+When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
+
+**Duplicate Detection:**
+- Skip issues in same file within ±5 lines of prior findings
+- Skip same issue type on same function/method
+- For range findings (lines A-B): skip zone = [A-5, B+5]
+
+**Constraints:**
+- Only report Major or Critical severity (skip Minor/Suggestion)
+- Maximum 5 new findings
+- Model: Always Sonnet (cost optimization)
+
 ### Step 2: Language-Specific Technical Debt Checks
 
 **Node.js/TypeScript:**
@@ -160,7 +174,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
 
 ```yaml
 issues:
-  - # ... base fields from shared/output-schema-base.md
+  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
     category: "Technical Debt"
     debt_type: "deprecated_dependency|outdated_pattern|workaround|dead_code|scalability|documentation"
     urgency: "blocking|soon|low"

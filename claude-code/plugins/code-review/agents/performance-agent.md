@@ -113,7 +113,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
 
 ```yaml
 issues:
-  - # ... base fields from shared/output-schema-base.md
+  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
     category: "Performance"
     complexity: "Time/space complexity (e.g., O(n²))"
     scale: "At what data size this becomes a problem"
@@ -158,16 +158,26 @@ issues:
     fix_prompt: "Refactor report generation in src/api/reports.ts:23-45 to use async file operations. Replace all readFileSync calls with fs.promises.readFile, ensure proper await usage, and consider streaming for large files."
 ```
 
-## Gaps Mode with Prior Findings
+## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
+When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
 
-**Performance-specific subtle issues:**
+**Duplicate Detection:**
+- Skip issues in same file within ±5 lines of prior findings
+- Skip same issue type on same function/method
+- For range findings (lines A-B): skip zone = [A-5, B+5]
+
+**Focus Areas (subtle issues thorough mode misses):**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)
 - Memory retention through closures or event listeners
 - Inefficient serialization/deserialization
 - Cache invalidation issues, unnecessary data copying
 - Batch operation opportunities, hot path inefficiencies
+
+**Constraints:**
+- Only report Major or Critical severity (skip Minor/Suggestion)
+- Maximum 5 new findings
+- Model: Always Sonnet (cost optimization)
 
 ## False Positive Guidelines
 

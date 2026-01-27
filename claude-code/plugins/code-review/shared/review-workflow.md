@@ -90,7 +90,7 @@ Review execution varies by review type. See `${CLAUDE_PLUGIN_ROOT}/shared/orches
 - Quick review phases (4 agents quick)
 - Model selection per agent and mode
 
-For `previous_findings` format used in gaps mode, see `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md`.
+For gaps mode behavior, see the inline gaps rules in each supporting agent file (bug-detection, compliance, performance, security, technical-debt).
 
 ### Agent Invocation Pattern
 

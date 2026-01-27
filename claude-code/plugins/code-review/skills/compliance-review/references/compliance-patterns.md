@@ -4,7 +4,7 @@ Patterns for checking compliance with AI Agent Instructions (CLAUDE.md, etc.).
 
 ## Instruction File Locations
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` Step 2 for the canonical search order.
+Search for instruction files in: current directory, parent directories, and `.github/` folders.
 
 ## Rule Classification
 

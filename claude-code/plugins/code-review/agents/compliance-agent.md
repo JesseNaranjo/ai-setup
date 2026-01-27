@@ -103,7 +103,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
 
 ```yaml
 issues:
-  - # ... base fields from shared/output-schema-base.md
+  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
     category: "Compliance"
     rule_violated: "Exact quote from instruction file"
     rule_source: "CLAUDE.md or AI-AGENT-INSTRUCTIONS.md path"
@@ -149,15 +149,25 @@ issues:
     fix_prompt: "Add JSDoc header to PaymentService class in src/services/PaymentService.ts describing its purpose, main responsibilities, and key methods. Include @module and @description tags per CLAUDE.md requirements."
 ```
 
-## Gaps Mode with Prior Findings
+## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
+When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
 
-**Compliance-specific subtle issues:**
+**Duplicate Detection:**
+- Skip issues in same file within ±5 lines of prior findings
+- Skip same issue type on same function/method
+- For range findings (lines A-B): skip zone = [A-5, B+5]
+
+**Focus Areas (subtle issues thorough mode misses):**
 - Rules with exceptions that weren't properly applied
 - Inconsistent application of guidelines across files
 - Context-dependent violations (correct in one place, wrong in another)
 - Subtle spirit-of-the-rule violations that technically pass
+
+**Constraints:**
+- Only report Major or Critical severity (skip Minor/Suggestion)
+- Maximum 5 new findings
+- Model: Always Sonnet (cost optimization)
 
 ## False Positive Guidelines
 

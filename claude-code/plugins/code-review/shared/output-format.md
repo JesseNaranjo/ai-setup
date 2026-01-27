@@ -1,6 +1,6 @@
 # Output Format
 
-This document defines the output format for code review results.
+This document defines the output format for code review results and serves as the **authoritative output schema reference** for all agents. This file is loaded once during output generation phase.
 
 ## Related Files
 

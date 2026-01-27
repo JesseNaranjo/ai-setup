@@ -120,7 +120,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
 
 ```yaml
 issues:
-  - # ... base fields from shared/output-schema-base.md
+  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
     category: "Security"
     attack_vector: "How an attacker could exploit this"
     impact: "What damage could result"
@@ -159,16 +159,26 @@ issues:
     fix_prompt: "Add CSRF protection to all state-changing endpoints in src/api/account.ts. Install csurf middleware, generate tokens on GET requests, validate tokens on POST/PUT/DELETE. Update frontend forms to include the CSRF token."
 ```
 
-## Gaps Mode with Prior Findings
+## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common gaps behavior.
+When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
 
-**Security-specific subtle issues:**
+**Duplicate Detection:**
+- Skip issues in same file within ±5 lines of prior findings
+- Skip same issue type on same function/method
+- For range findings (lines A-B): skip zone = [A-5, B+5]
+
+**Focus Areas (subtle issues thorough mode misses):**
 - Second-order injection (stored XSS, delayed command execution)
 - Authorization edge cases (role escalation, missing checks)
 - Timing attacks, side channels, race conditions
 - Error messages leaking sensitive information
 - Weak randomness in security-critical code
+
+**Constraints:**
+- Only report Major or Critical severity (skip Minor/Suggestion)
+- Maximum 5 new findings
+- Model: Always Sonnet (cost optimization)
 
 ## False Positive Guidelines
 

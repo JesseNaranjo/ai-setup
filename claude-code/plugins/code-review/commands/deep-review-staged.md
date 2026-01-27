@@ -61,7 +61,7 @@ After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 fin
 
 **Agents**: Bug Detection, Compliance, Performance, Security, Technical Debt
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/gaps-mode-rules.md` for gaps mode operation.
+See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
 ---
 

@@ -12,7 +12,11 @@ Identify vulnerabilities, insecure coding patterns, and security misconfiguratio
 
 **Agent:** `code-review:security-agent` (see `orchestration-sequence.md` for model selection)
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures.
+1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
+2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)
+3. **Launch**: Invoke security-agent with MODE=thorough, pass skill focus areas below
+4. **Validate**: Issues auto-validated if matching patterns in validation-rules.md; others validated by Sonnet
+5. **Report**: Output findings using YAML schema with fix_type (diff for ≤10 line single-location fixes, prompt for complex/multi-location)
 
 ## Security Categories Checked
 
