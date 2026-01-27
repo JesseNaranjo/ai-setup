@@ -167,8 +167,8 @@ phases:
     agents: [bug-detection, compliance, performance, security, technical-debt]
 
   - name: "Synthesis"
-    expected_agents: 4
-    agents: [synthesis (x4 with different category pairs)]
+    expected_agents: 5
+    agents: [synthesis (x5 with different category pairs)]
 ```
 
 ### Quick Review (7 invocations)

@@ -67,50 +67,12 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for:
 
 **Goal:** Present findings in actionable, severity-prioritized format.
 
-### Standard Output Structure
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for:
+- Complete output structure and templates
+- Fix type classification (diff vs prompt)
+- Issue entry format with severity badges
 
-```markdown
-## [Review Type] Review
-
-**Scope:** [files or staged changes reviewed]
-**Project Type:** [Node.js/TypeScript or .NET/C#]
-
-### Findings
-
-| Severity | Count |
-|----------|-------|
-| Critical | X |
-| Major | X |
-
-### Critical Issues (Must Fix)
-
-**1. [Issue Title]** `Critical` `[Category]`
-`file/path.ts:line-range`
-
-[Description]
-
-**Fix**:
-```diff
-- old line
-+ new line
-```
-```
-
-### Fix Types
-
-| Type | When to Use |
-|------|-------------|
-| **diff** | Single-location fixes ≤10 lines |
-| **prompt** | Multi-location or structural fixes |
-
-### Severity Classification
-
-| Severity | Criteria |
-|----------|----------|
-| **Critical** | Immediate fix required, high impact |
-| **Major** | Should fix before merge |
-| **Minor** | Can merge, fix soon |
-| **Suggestion** | Optional improvement |
+See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for severity classification criteria.
 
 ---
 

@@ -114,7 +114,6 @@ claude-code/plugins/code-review/
 │   ├── gaps-mode-rules.md           # Rules for gaps mode operation
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── scope-determination.md   # Detailed scope options and edge cases
-│       ├── validation-details.md    # Batch validation and false positive handling
 │       └── skill-troubleshooting.md # Common issues and solutions
 ├── templates/
 │   └── code-review.local.md.example # Settings template for users

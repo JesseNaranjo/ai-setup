@@ -119,7 +119,7 @@ Read the SKILL.md file and parse it into structured data. The orchestrator uses 
 
 #### Structured Data Extraction
 
-**For review-focused skills (security-review, performance-review, bug-review, compliance-review):**
+**For review-focused skills (bug-review, compliance-review, performance-review, security-review, technical-debt-review):**
 
 | Field | Source | Description |
 |-------|--------|-------------|
@@ -194,17 +194,18 @@ Search for a section header containing "False Positive":
 
 **Step 4.5: Determine Skill Type**
 Based on skill name:
-- If name matches `security-review|performance-review|bug-review|compliance-review` → `type: "review"`
+- If name matches `bug-review|compliance-review|performance-review|security-review|technical-debt-review` → `type: "review"`
 - Otherwise → `type: "methodology"`
 
 **Step 4.6: Assign Primary Agent**
 
 | Skill Name | Primary Agent |
 |------------|---------------|
-| security-review | security-agent |
-| performance-review | performance-agent |
 | bug-review | bug-detection-agent |
 | compliance-review | compliance-agent |
+| performance-review | performance-agent |
+| security-review | security-agent |
+| technical-debt-review | technical-debt-agent |
 | (methodology) | null |
 
 ### 5. Build Resolved Skills Structure

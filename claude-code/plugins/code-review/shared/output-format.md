@@ -165,6 +165,7 @@ No issues found. All checks passed:
 - Error Handling
 - Performance
 - Security
+- Technical Debt
 - Test Coverage
 
 Files reviewed:
@@ -215,6 +216,7 @@ When issues are found:
 | Error Handling | 0 | 0 | 0 | 0 |
 | Performance | 0 | 0 | 0 | 0 |
 | Security | 0 | 0 | 0 | 0 |
+| Technical Debt | 0 | 0 | 0 | 0 |
 | Test Coverage | 0 | 0 | 0 | 0 |
 | **Total** | **0** | **0** | **0** | **0** |
 
@@ -461,6 +463,7 @@ Review saved to: [filepath]
 | Error Handling | 0 | 1 | 0 | 0 |
 | Performance | 0 | 0 | 1 | 1 |
 | Security | 1 | 0 | 0 | 0 |
+| Technical Debt | 0 | 0 | 0 | 0 |
 | Test Coverage | 0 | 0 | 0 | 2 |
 | **Total** | **1** | **3** | **2** | **3** |
 

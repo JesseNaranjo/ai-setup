@@ -8,15 +8,13 @@ version: 3.2.0
 
 Identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs through targeted bug-focused code review.
 
-## Agent Configuration
+## Workflow
 
-Uses **bug-detection-agent** (Opus in thorough/quick modes, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
+**Agent:** `code-review:bug-detection-agent` (see `orchestration-sequence.md` for model selection)
 
-### Common Workflow Steps
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for scope determination, context gathering, validation, and reporting procedures.
-
-### Bug Categories Checked
+## Bug Categories Checked
 
 **Null/Undefined References (Major to Critical):**
 - Accessing properties on potentially null objects
@@ -106,8 +104,3 @@ See `examples/example-output.md` for a sample showing:
 - Null reference with optional chaining fix
 - Unhandled promise with try/catch fix
 
----
-
-## Related Components
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/bug-detection-agent.md` for the agent definition.

@@ -8,15 +8,13 @@ version: 3.2.0
 
 Identify vulnerabilities, insecure coding patterns, and security misconfigurations through targeted security-focused code review.
 
-## Agent Configuration
+## Workflow
 
-Uses **security-agent** (Opus in thorough mode, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
+**Agent:** `code-review:security-agent` (see `orchestration-sequence.md` for model selection)
 
-### Common Workflow Steps
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for scope determination, context gathering, validation, and reporting procedures.
-
-### Security Categories Checked
+## Security Categories Checked
 
 **Injection Vulnerabilities (Critical):**
 - SQL injection via string concatenation
@@ -90,8 +88,3 @@ See `examples/example-output.md` for a sample showing:
 - Hardcoded API key with prompt fix
 - Missing rate limiting with prompt fix
 
----
-
-## Related Components
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` for the agent definition.

@@ -8,15 +8,13 @@ version: 3.2.0
 
 Identify algorithmic inefficiencies, memory leaks, database query problems, and other performance bottlenecks through targeted performance-focused code review.
 
-## Agent Configuration
+## Workflow
 
-Uses **performance-agent** (Opus in thorough mode, Sonnet in gaps mode). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
+**Agent:** `code-review:performance-agent` (see `orchestration-sequence.md` for model selection)
 
-### Common Workflow Steps
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for scope determination, context gathering, validation, and reporting procedures.
-
-### Performance Categories Checked
+## Performance Categories Checked
 
 **Algorithmic Complexity (Major to Critical):**
 - O(n^2) nested loops that could be O(n)
@@ -114,8 +112,3 @@ See `examples/example-output.md` for a sample showing:
 - Sequential awaits with Promise.all fix
 - Unbounded query with pagination prompt
 
----
-
-## Related Components
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/performance-agent.md` for the agent definition.

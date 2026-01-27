@@ -8,13 +8,11 @@ version: 3.2.0
 
 Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) and project-specific rules through targeted compliance-focused code review.
 
-## Agent Configuration
+## Workflow
 
-Uses **compliance-agent** (Sonnet in all modes). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
+**Agent:** `code-review:compliance-agent` (see `orchestration-sequence.md` for model selection)
 
-### Instruction File Locations (Part of Step 2)
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` Step 2 for the canonical search order.
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures.
 
 ---
 
@@ -104,8 +102,3 @@ See `examples/example-output.md` for a sample showing:
 - Business logic in controller with prompt fix
 - Missing JSDoc violation with diff fix
 
----
-
-## Related Components
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/compliance-agent.md` for the agent definition.

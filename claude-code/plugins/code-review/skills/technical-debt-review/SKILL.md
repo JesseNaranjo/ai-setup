@@ -8,15 +8,13 @@ version: 3.2.0
 
 Identify accumulated technical debt including deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt.
 
-## Agent Configuration
+## Workflow
 
-Uses **technical-debt-agent** (Sonnet in both thorough and gaps modes). See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for authoritative model configuration.
+**Agent:** `code-review:technical-debt-agent` (see `orchestration-sequence.md` for model selection)
 
-### Common Workflow Steps
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for scope determination, context gathering, validation, and reporting procedures.
-
-### Technical Debt Categories Checked
+## Technical Debt Categories Checked
 
 **Deprecated Dependencies (Critical/Major):**
 - Packages with deprecation warnings
@@ -94,8 +92,3 @@ See `examples/example-output.md` for samples showing:
 - Outdated pattern with prompt fix
 - Dead code with diff fix
 
----
-
-## Related Components
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/technical-debt-agent.md` for the agent definition.
