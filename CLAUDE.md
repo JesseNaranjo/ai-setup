@@ -112,14 +112,14 @@ claude-code/plugins/code-review/
 │   ├── review-workflow.md           # Workflow steps and settings application
 │   ├── skill-orchestration.md       # Skill-informed orchestration (loaded when --skills used)
 │   ├── skill-resolver.md            # Skill resolution and structured parsing
-│   ├── skill-common-workflow.md     # Common skill workflow steps (lean, references details)
+│   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
+│   ├── usage-tracking.md            # Usage tracking schema and protocol
 │   ├── validation-rules.md          # Validation process
 │   ├── output-format.md             # Output templates (with fix_type)
 │   ├── output-generation.md         # Output generation and file writing
-│   ├── output-schema-base.md        # Base YAML schema for all agents
 │   ├── severity-definitions.md      # Severity classification
-│   ├── gaps-mode-rules.md           # Rules for gaps mode operation
 │   └── references/                  # Detailed reference content (progressive disclosure)
+│       ├── complete-output-example.md # Complete output format example
 │       ├── scope-determination.md   # Detailed scope options and edge cases
 │       └── skill-troubleshooting.md # Common issues and solutions
 ├── templates/
@@ -162,7 +162,7 @@ Each agent has a unique color for visual identification during parallel executio
 
 1. **Phase 1** (9 agents parallel): Thorough mode review (5 Opus, 4 Sonnet)
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
-3. **Phase 3** (5 synthesis agents parallel): Cross-cutting concern detection
+3. **Synthesis** (5 agents parallel): Cross-cutting concern detection
 4. **Validation**: All issues validated before output
 
 ### MODE Parameter
@@ -192,15 +192,13 @@ Each agent has a unique color for visual identification during parallel executio
 - `shared/review-workflow.md` - Workflow steps and settings application
 - `shared/skill-orchestration.md` - Skill-informed orchestration (lazy-loaded when --skills used)
 - `shared/skill-resolver.md` - Skill resolution and structured parsing for orchestrator interpretation
-- `shared/skill-common-workflow.md` - Lean workflow steps for skills (references `shared/references/` for details)
+- `shared/synthesis-invocation-pattern.md` - Synthesis agent invocation template
 - `shared/validation-rules.md` - Issue validation process
-- `shared/output-schema-base.md` - Base YAML schema all agents must use
 - `shared/output-format.md` - Output formatting templates with fix_type
 - `shared/output-generation.md` - Output generation and file writing process
 - `shared/severity-definitions.md` - Severity classification (Critical, Major, Minor, Suggestion)
-- `shared/gaps-mode-rules.md` - Rules for gaps mode (deduplication, focus areas)
 - `shared/usage-tracking.md` - Usage tracking schema and protocol
-- `skills/*/SKILL.md` - Skill definitions (reference skill-common-workflow.md)
+- `skills/*/SKILL.md` - Skill definitions
 - `templates/code-review.local.md.example` - User settings template
 
 ### Project Settings
@@ -240,7 +238,7 @@ When modifying the plugin:
 7. **Agent invocation pattern**: Edit `shared/agent-invocation-pattern.md`
 8. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, gaps)
 9. **Common command steps**: Edit `shared/command-common-steps.md` (settings, context, validation, output)
-10. **Common skill steps**: Edit `shared/skill-common-workflow.md`
+10. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
 11. **Command arguments**: Edit command YAML frontmatter in `commands/`
 12. **Skills**: Edit skill files in `skills/*/SKILL.md`
 13. **Skill references**: Add detailed patterns to `skills/*/references/`
@@ -287,10 +285,9 @@ Category pairs (alphabetize by first category):
 
 Each skill follows progressive disclosure pattern:
 
-1. **SKILL.md** (~130-170 lines): Core workflow loaded when skill triggers
-2. **shared/skill-common-workflow.md**: Common workflow steps (scope, context, validation, reporting)
-3. **references/** (optional): Detailed patterns loaded on-demand
-4. **examples/** (optional): Sample output formats for reference
+1. **SKILL.md** (~95-125 lines): Self-contained workflow loaded when skill triggers
+2. **references/** (optional): Detailed patterns loaded on-demand
+3. **examples/** (optional): Sample output formats for reference
 
 ```
 skills/skill-name/
@@ -301,7 +298,7 @@ skills/skill-name/
     └── example-output.md
 ```
 
-Skills reference `${CLAUDE_PLUGIN_ROOT}/shared/skill-common-workflow.md` for common procedures (determining scope, gathering context, validating findings, and reporting results) to avoid duplication across skills.
+Each skill is self-contained with its own workflow procedures (determining scope, gathering context, validating findings, and reporting results) to minimize file lookups during execution.
 
 ## Skill-Informed Orchestration
 
