@@ -10,7 +10,7 @@ Identify vulnerabilities, insecure coding patterns, and security misconfiguratio
 
 ## Workflow
 
-**Agent:** `code-review:security-agent` (see `orchestration-sequence.md` for model selection)
+**Agent:** `code-review:security-agent` (Opus - comprehensive security analysis)
 
 1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
 2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)

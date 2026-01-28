@@ -88,6 +88,18 @@ When MODE=gaps, agents that support gaps mode have inline rules in their respect
 
 See each agent file for category-specific gaps mode rules and focus areas.
 
+## Skill Instructions Apply to All Modes
+
+When `--skills` is provided to a review command, **ALL agents receive `skill_instructions` regardless of MODE**:
+
+- **thorough**: Receives full skill focus areas, checklists, and methodology guidance
+- **gaps**: Receives the **same** skill_instructions as thorough mode - skills inform gap detection priorities
+- **quick**: Receives the same skill_instructions - skills inform the quick pass focus
+
+This means gaps-mode agents should apply skill-specific focus areas and validation rules just as thoroughly as thorough-mode agents, but with their standard gaps-mode behavior (focusing on subtle issues, avoiding duplicates of previous_findings).
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-orchestration.md` for how skill_instructions are generated and passed to agents.
+
 ## Output Schema
 
 Use the YAML schema shown in your agent's examples. Each issue requires these base fields:

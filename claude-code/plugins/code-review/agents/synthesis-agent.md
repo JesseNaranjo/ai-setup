@@ -43,10 +43,10 @@ Individual review agents are specialists - they excel at finding issues in their
 
 ## MODE Parameter
 
-This agent does not use the MODE parameter. Unlike the 8 review agents that support `thorough`, `gaps`, and `quick` modes, the synthesis agent operates on category pairs via the `synthesis_input` structure.
+This agent does not use the MODE parameter. Unlike the 9 review agents that support `thorough`, `gaps`, and `quick` modes, the synthesis agent operates on category pairs via the `synthesis_input` structure.
 
 **Phase Context:**
-- **Deep review**: Invoked in Step 7 (Synthesis phase), after Phase 1 (8 thorough agents) and Phase 2 (4 gaps agents) complete
+- **Deep review**: Invoked in Step 7 (Synthesis phase), after Phase 1 (9 thorough agents) and Phase 2 (5 gaps agents) complete
 - **Quick review**: Invoked in Step 7 (Synthesis phase), after the Review phase (4 quick agents) completes
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for the complete orchestration sequence.
@@ -76,23 +76,27 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 ### Cross-Cutting Pairs
 
-**Deep Review Pairs** (used with 8 category agents):
+**Authoritative source:** See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the definitive list of category pairs and cross-cutting questions.
 
-| Input Categories | Cross-Cutting Question | What to Look For |
-|-----------------|------------------------|------------------|
-| Architecture + Test Coverage | "Are architectural changes covered by tests?" | New abstractions without tests, refactored code with broken test coverage, missing integration tests |
-| Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" | Bug fixes that need error handling, error paths that could trigger identified bugs |
-| Compliance + Bugs | "Do compliance violations introduce or mask bugs?" | Compliance violations that cause incorrect behavior, compliance rules that prevent bug detection |
-| Compliance + Technical Debt | "Do compliance violations indicate or worsen technical debt?" | Compliance rules masking debt, debt causing compliance issues |
-| Performance + Security | "Do any security fixes introduce performance issues?" | Parameterized queries without limits, encryption adding latency, auth checks in hot paths |
+The tables below describe what to look for when analyzing each pair. The exact pairs and questions are defined in orchestration-sequence.md to ensure consistency across all invocation points.
 
-**Quick Review Pairs** (used with 4 category agents):
+**Deep Review Analysis (5 pairs with 9 category agents):**
 
-| Input Categories | Cross-Cutting Question | What to Look For |
-|-----------------|------------------------|------------------|
-| Bugs + Error Handling | "Do identified bugs have proper error handling in fix paths?" | Bug fixes that need error handling, error paths that could trigger identified bugs |
-| Security + Bugs | "Do security issues introduce or relate to bugs?" | Security vulnerabilities that could cause crashes, bugs that create security holes |
-| Bugs + Test Coverage | "Are identified bugs covered by tests?" | Bug fixes without corresponding test coverage, untested error paths |
+| Input Categories | What to Look For |
+|-----------------|------------------|
+| Architecture + Test Coverage | New abstractions without tests, refactored code with broken test coverage, missing integration tests |
+| Bugs + Error Handling | Bug fixes that need error handling, error paths that could trigger identified bugs |
+| Compliance + Bugs | Compliance violations that cause incorrect behavior, compliance rules that prevent bug detection |
+| Compliance + Technical Debt | Compliance rules masking debt, debt causing compliance issues |
+| Performance + Security | Parameterized queries without limits, encryption adding latency, auth checks in hot paths |
+
+**Quick Review Analysis (3 pairs with 4 category agents):**
+
+| Input Categories | What to Look For |
+|-----------------|------------------|
+| Bugs + Error Handling | Bug fixes that need error handling, error paths that could trigger identified bugs |
+| Bugs + Security | Security vulnerabilities that could cause crashes, bugs that create security holes |
+| Bugs + Test Coverage | Bug fixes without corresponding test coverage, untested error paths |
 
 ## Review Process
 

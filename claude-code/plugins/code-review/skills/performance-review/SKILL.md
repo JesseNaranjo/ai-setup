@@ -10,7 +10,7 @@ Identify algorithmic inefficiencies, memory leaks, database query problems, and 
 
 ## Workflow
 
-**Agent:** `code-review:performance-agent` (see `orchestration-sequence.md` for model selection)
+**Agent:** `code-review:performance-agent` (Opus - comprehensive performance analysis)
 
 1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
 2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)

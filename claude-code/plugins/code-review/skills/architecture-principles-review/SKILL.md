@@ -10,7 +10,7 @@ Identify SOLID, DRY, and YAGNI violations through targeted design-principles-foc
 
 ## Workflow
 
-**Agent:** `code-review:architecture-agent` (see `orchestration-sequence.md` for model selection)
+**Agent:** `code-review:architecture-agent` (Opus - comprehensive architectural analysis)
 
 1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
 2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)

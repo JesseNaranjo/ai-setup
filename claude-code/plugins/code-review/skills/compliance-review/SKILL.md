@@ -10,7 +10,7 @@ Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions,
 
 ## Workflow
 
-**Agent:** `code-review:compliance-agent` (see `orchestration-sequence.md` for model selection)
+**Agent:** `code-review:compliance-agent` (Sonnet - efficient compliance checking)
 
 1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
 2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`); find AI Agent Instructions files (CLAUDE.md, copilot-instructions.md)

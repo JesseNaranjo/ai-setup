@@ -23,19 +23,9 @@ synthesis_input:
 
 ## Parallel Invocation Pattern
 
-Commands launch 5 instances of this agent simultaneously, each with different parameters:
+Commands launch 5 instances of this agent simultaneously, each with different category pairs.
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                    5 Parallel Synthesis Invocations                     │
-├─────────────────────────────────────────────────────────────────────────┤
-│ Instance 1: category_a=Architecture, category_b=Test Coverage           │
-│ Instance 2: category_a=Bugs, category_b=Error Handling                  │
-│ Instance 3: category_a=Compliance, category_b=Bugs                      │
-│ Instance 4: category_a=Compliance, category_b=Technical Debt            │
-│ Instance 5: category_a=Performance, category_b=Security                 │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+**Authoritative source for category pairs:** See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` "Synthesis" sections for the definitive list of pairs and cross-cutting questions for both deep review (5 pairs) and quick review (3 pairs).
 
 Each instance operates independently and returns its own `cross_cutting_insights` list. The orchestrating command merges all results.
 

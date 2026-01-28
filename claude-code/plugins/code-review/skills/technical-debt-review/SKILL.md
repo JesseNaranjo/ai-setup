@@ -10,7 +10,7 @@ Identify accumulated technical debt including deprecated dependencies, outdated 
 
 ## Workflow
 
-**Agent:** `code-review:technical-debt-agent` (see `orchestration-sequence.md` for model selection)
+**Agent:** `code-review:technical-debt-agent` (Opus - comprehensive technical debt analysis)
 
 1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
 2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)

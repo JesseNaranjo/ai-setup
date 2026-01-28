@@ -10,7 +10,7 @@ Identify logical errors, null reference issues, race conditions, off-by-one erro
 
 ## Workflow
 
-**Agent:** `code-review:bug-detection-agent` (see `orchestration-sequence.md` for model selection)
+**Agent:** `code-review:bug-detection-agent` (Opus - comprehensive bug analysis)
 
 1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
 2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)
