@@ -318,17 +318,17 @@ code-review/
 │   ├── deep-review-staged.md    # Deep staged review (19 invocations)
 │   ├── quick-review.md          # Quick file review (7 invocations)
 │   └── quick-review-staged.md   # Quick staged review (7 invocations)
-├── agents/                      # Modular agent definitions
-│   ├── compliance-agent.md      # AI instructions compliance
-│   ├── bug-detection-agent.md   # Logical errors & edge cases
-│   ├── security-agent.md        # Security vulnerabilities
-│   ├── performance-agent.md     # Performance issues
-│   ├── architecture-agent.md    # Architecture patterns
+├── agents/                      # Modular agent definitions (alphabetical)
 │   ├── api-contracts-agent.md   # API compatibility
+│   ├── architecture-agent.md    # Architecture patterns
+│   ├── bug-detection-agent.md   # Logical errors & edge cases
+│   ├── compliance-agent.md      # AI instructions compliance
 │   ├── error-handling-agent.md  # Error handling gaps
-│   ├── test-coverage-agent.md   # Test coverage gaps
+│   ├── performance-agent.md     # Performance issues
+│   ├── security-agent.md        # Security vulnerabilities
+│   ├── synthesis-agent.md       # Cross-agent insights
 │   ├── technical-debt-agent.md  # Technical debt detection
-│   └── synthesis-agent.md       # Cross-agent insights
+│   └── test-coverage-agent.md   # Test coverage gaps
 ├── skills/                      # Targeted review skills
 │   ├── architecture-principles-review/
 │   ├── bug-review/
@@ -340,18 +340,25 @@ code-review/
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── dotnet.md                # .NET/C# checks
 ├── shared/
+│   ├── agent-common-instructions.md # Common agent instructions (MODE, gaps, pre-existing issue detection)
+│   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
+│   ├── command-common-steps.md      # Common workflow steps for all commands
 │   ├── content-gathering-files.md   # Content gathering for file reviews
 │   ├── content-gathering-staged.md  # Content gathering for staged reviews
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── input-validation-files.md    # Input validation for file commands
 │   ├── input-validation-staged.md   # Input validation for staged commands
-│   ├── output-format.md             # Authoritative output schema and templates
-│   ├── output-generation.md         # Output generation and file writing
-│   ├── review-workflow.md           # Orchestration logic
+│   ├── orchestration-sequence.md    # Phase definitions and model selection
+│   ├── output-format.md             # Output schema, templates, and generation process
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── severity-definitions.md      # Severity classification
+│   ├── skill-orchestration.md       # Skill-informed orchestration (--skills)
+│   ├── skill-resolver.md            # Skill resolution and parsing
+│   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
+│   ├── usage-tracking.md            # Usage tracking schema and protocol
 │   ├── validation-rules.md          # Validation process
 │   └── references/                  # Detailed reference content
+│       ├── complete-output-example.md # Complete output format example
 │       ├── scope-determination.md   # Scope options and edge cases
 │       └── skill-troubleshooting.md # Common issues and solutions
 └── README.md
@@ -388,8 +395,8 @@ Each agent accepts a MODE parameter:
 
 | Command | Agents | Mode Invocations | Total Invocations |
 |---------|--------|------------------|-------------------|
-| `/deep-review` | All 10 | thorough (9) + gaps (5) + synthesis (4) | 18 |
-| `/deep-review-staged` | All 10 | thorough (9) + gaps (5) + synthesis (4) | 18 |
+| `/deep-review` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/deep-review-staged` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
 | `/quick-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 | `/quick-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 

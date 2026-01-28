@@ -103,7 +103,7 @@ Skills affect validation through:
 Skills can inform synthesis questions:
 
 **Default Cross-Cutting Questions:**
-- Use the standard questions defined in review-workflow.md
+- Use the standard questions defined in `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`
 
 **With Skills:**
 - If `security-review` skill is active, add: "Do findings align with OWASP categories?"

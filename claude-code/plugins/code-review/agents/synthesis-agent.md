@@ -49,7 +49,7 @@ This agent does not use the MODE parameter. Unlike the 9 review agents that supp
 - **Deep review**: Invoked in Step 7 (Synthesis phase), after Phase 1 (9 thorough agents) and Phase 2 (5 gaps agents) complete
 - **Quick review**: Invoked in Step 7 (Synthesis phase), after the Review phase (4 quick agents) completes
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for the complete orchestration sequence.
+See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the complete orchestration sequence.
 
 ## Invocation
 

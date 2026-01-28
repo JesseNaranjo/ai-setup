@@ -70,3 +70,16 @@ This document defines the authoritative execution sequences for review pipelines
 | synthesis-agent | sonnet | N/A | sonnet |
 | technical-debt-agent | opus | sonnet | N/A |
 | test-coverage-agent | sonnet | N/A | sonnet |
+
+## Language-Specific Focus
+
+Load language configs ONLY for detected languages to minimize context usage:
+
+- If `detected_languages.nodejs` has files: Load `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`
+- If `detected_languages.dotnet` has files: Load `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
+- Skip loading configs for languages not present in the review
+
+For mixed codebases (monorepos):
+- Each file receives only its relevant language config
+- Agents receive language-specific checks per file, not all configs
+- Cross-language issues (e.g., API contract mismatches) are handled by architecture and API agents

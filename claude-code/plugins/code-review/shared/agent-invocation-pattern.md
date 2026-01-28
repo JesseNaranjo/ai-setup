@@ -5,8 +5,7 @@ This document defines how to invoke review agents via the Task tool.
 ## Related Files
 
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` - Phase definitions and model selection table
-- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps)
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` - Workflow orchestration and settings application
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps, pre-existing issue detection)
 - `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` - Authoritative output schema reference
 - `${CLAUDE_PLUGIN_ROOT}/agents/*.md` - Individual agent definitions
 

@@ -9,7 +9,7 @@ Commands use a consistent 11-step workflow:
 - **Steps 2, 4, 6-7**: Defined inline in each command (command-specific)
 - **Steps 8-11**: Defined here (shared across all commands)
 
-**Related File**: `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` provides detailed orchestration logic for review execution (Step 6).
+**Related File**: `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` provides phase definitions and model selection for review execution.
 
 ## Step 1: Load Settings
 
@@ -62,14 +62,14 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 ## Step 10: Output Generation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting.
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting and generation process.
 
 **REQUIRED: Generate Usage Summary FIRST (before any other output):**
 
 The Usage Summary MUST appear at the very beginning of the output file, before the Code Review header. This section is MANDATORY - outputs missing this section are INCOMPLETE.
 
 Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` "Usage Summary Section":
-- Use model assignments from `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md`
+- Use model assignments from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`
 - Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`
 
 **IMPORTANT:** If the Usage Summary section is missing from the output, the review is INCOMPLETE and must be regenerated.
@@ -78,7 +78,7 @@ Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared
 
 ## Step 11: Write Output
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-generation.md` for write process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for write process.
 
 ---
 
@@ -96,7 +96,7 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for:
 - Cross-cutting pairs and questions
 - Output schema and guidelines
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for:
+See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for:
 - Category pairs and cross-cutting questions (Deep Review vs Quick Review)
 - Model selection (Sonnet)
 

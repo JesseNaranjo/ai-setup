@@ -40,7 +40,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-files.md` for the content ga
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
 - `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-workflow.md` for workflow steps and settings application
 
 ### Usage Tracking
 
@@ -50,7 +49,7 @@ Initialize per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
 
 ### Phase 1: Thorough Review (9 agents in parallel)
 
-Launch all 9 agents with **thorough** mode. See review-workflow.md for model assignments.
+Launch all 9 agents with **thorough** mode. See `orchestration-sequence.md` for model assignments.
 
 **Agents**: API Contracts, Architecture, Bug Detection, Compliance, Error Handling, Performance, Security, Technical Debt, Test Coverage
 
