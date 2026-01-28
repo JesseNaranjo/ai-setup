@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.2.1) - a modular 10-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.2.2) - a modular 10-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -41,7 +41,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ```
 claude-code/plugins/code-review/
-├── .claude-plugin/plugin.json       # Plugin metadata (v3.2.1)
+├── .claude-plugin/plugin.json       # Plugin metadata (v3.2.2)
 ├── commands/                        # Thin orchestration documents (reference shared/)
 │   ├── deep-review.md               # Deep file review (19 agent invocations)
 │   ├── deep-review-staged.md        # Deep staged review (19 agent invocations)

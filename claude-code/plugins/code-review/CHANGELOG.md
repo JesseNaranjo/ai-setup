@@ -5,6 +5,40 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.2] - 2026-01-28
+
+### Added
+- **Architecture Principles Review Skill**: New skill for detecting SOLID, DRY, and YAGNI violations with severity mappings
+  - `skills/architecture-principles-review/SKILL.md` - Core skill workflow (122 lines)
+  - `skills/architecture-principles-review/references/solid-dry-yagni-patterns.md` - Detection patterns (291 lines)
+  - `skills/architecture-principles-review/examples/example-output.md` - Example findings (102 lines)
+- **Synthesis Invocation Pattern**: New `shared/synthesis-invocation-pattern.md` documenting 5-way parallel synthesis invocation
+- **Complete Output Example**: New `shared/references/complete-output-example.md` with comprehensive output format reference
+- **Pre-Existing Issue Detection**: Added section to `agent-common-instructions.md` with rules for flagging issues from staged/diff reviews
+- **Automatic Cross-File Analysis**: Added section to `agent-common-instructions.md` for cross-cutting concern detection
+
+### Changed
+- **Agent description format**: All 10 agents now have 3-example format with Context, User, Assistant, and Commentary sections
+- **Synthesis agent refactored**: Reduced from 224 lines to lean template using shared synthesis-invocation-pattern.md
+- **Output format consolidated**: Merged output generation process into `output-format.md` (step-by-step workflow)
+- **Skill descriptions standardized**: All 6 skills use consistent third-person trigger phrase format
+- **Command documentation**: All 4 commands updated to reference new shared patterns
+- **Orchestration sequence**: Added language-specific focus guidance for selective config loading in monorepos
+- **Validation rules**: Enhanced cross-references and consensus detection
+
+### Removed
+- `shared/gaps-mode-rules.md` - content consolidated into `agent-common-instructions.md`
+- `shared/output-schema-base.md` - content consolidated into `output-format.md`
+- `shared/skill-common-workflow.md` - content distributed to individual skills
+- `shared/output-generation.md` - content consolidated into `output-format.md`
+- `shared/review-workflow.md` - content distributed to specialized documents
+
+### Fixed
+- Alphabetical ordering violation in synthesis pairs (Compliance+Bugs → Bugs+Compliance)
+- Agent invocation pattern references updated to use `${CLAUDE_PLUGIN_ROOT}` consistently
+- Skill resolver clarified Skill() tool as primary loading method
+- README updated with accurate 10-agent architecture and 19-invocation deep review pipeline
+
 ## [3.2.1] - 2026-01-26
 
 ### Fixed
@@ -166,8 +200,8 @@ When releasing a new version, update:
 - Repository root `.claude-plugin/marketplace.json` (if applicable)
 
 **Recommended:**
-- `agents/*.md` - Agent frontmatter version field (9 files)
-- `skills/*/SKILL.md` - Skill frontmatter version field (5 files)
+- `agents/*.md` - Agent frontmatter version field (10 files)
+- `skills/*/SKILL.md` - Skill frontmatter version field (6 files)
 
 **Verification:**
 ```bash

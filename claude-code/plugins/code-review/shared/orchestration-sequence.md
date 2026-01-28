@@ -28,8 +28,8 @@ This document defines the authoritative execution sequences for review pipelines
    - INPUT: ALL findings from Phase 1 AND Phase 2
    - Pairs and questions:
      - Architecture+Test Coverage: "Are architectural changes covered by tests?"
+     - Bugs+Compliance: "Do compliance violations introduce or mask bugs?"
      - Bugs+Error Handling: "Do identified bugs have proper error handling in fix paths?"
-     - Compliance+Bugs: "Do compliance violations introduce or mask bugs?"
      - Compliance+Technical Debt: "Do compliance violations indicate or worsen technical debt?"
      - Performance+Security: "Do any security fixes introduce performance issues?"
    - WAIT: All 5 must complete
