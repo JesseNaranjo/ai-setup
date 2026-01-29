@@ -133,9 +133,6 @@ min_severity: "suggestion"
 
 # Language override (options: nodejs, dotnet, or empty for auto-detect)
 language: ""
-
-# Custom rules (checked by compliance agent)
-custom_rules: []
 ---
 
 # Project-Specific Instructions
@@ -153,7 +150,6 @@ Add context for review agents here. This content is passed to all agents.
 | `min_severity` | `"suggestion"` | Filter output to this severity or higher |
 | `language` | `""` | Force language (overridden by `--language` flag) |
 | `additional_test_patterns` | `[]` | Extra glob patterns for test files |
-| `custom_rules` | `[]` | Additional rules for compliance checks |
 
 ### Example Configurations
 
@@ -169,16 +165,6 @@ min_severity: "major"
 ```yaml
 ---
 output_dir: "./docs/reviews"
----
-```
-
-**Add custom rules:**
-```yaml
----
-custom_rules:
-  - pattern: "console\\.log"
-    message: "Remove console.log before committing"
-    severity: "minor"
 ---
 ```
 

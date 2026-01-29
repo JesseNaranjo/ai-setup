@@ -17,7 +17,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md` for the settings loading p
 
 Check for `.claude/code-review.local.md` in the project root:
 - If found and `enabled: false`, stop with message
-- Apply settings: `output_dir`, `skip_agents`, `min_severity`, `language`, `custom_rules`
+- Apply settings: `output_dir`, `skip_agents`, `min_severity`, `language`
 - Read project-specific instructions from markdown body
 
 ---

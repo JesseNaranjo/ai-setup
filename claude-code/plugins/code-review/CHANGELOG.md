@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Agent description format**: All 10 agents now have 3-example format with Context, User, Assistant, and Commentary sections
 - **Synthesis agent refactored**: Reduced from 224 lines to lean template using shared synthesis-invocation-pattern.md
 - **Output format consolidated**: Merged output generation process into `output-format.md` (step-by-step workflow)
-- **Skill descriptions standardized**: All 6 skills use consistent third-person trigger phrase format
+- **Skill descriptions standardized**: All 7 skills use consistent third-person trigger phrase format
 - **Command documentation**: All 4 commands updated to reference new shared patterns
 - **Orchestration sequence**: Added language-specific focus guidance for selective config loading in monorepos
 - **Validation rules**: Enhanced cross-references and consensus detection

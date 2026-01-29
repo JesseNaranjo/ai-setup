@@ -36,7 +36,6 @@ skip_agents: []
 min_severity: "suggestion"
 language: ""
 additional_test_patterns: []
-custom_rules: []
 ---
 ```
 
@@ -55,7 +54,6 @@ Apply settings to the review process:
 | `min_severity` | Filter output to only show issues at or above this severity |
 | `language` | Use as language override (unless --language flag overrides) |
 | `additional_test_patterns` | Merge with default test patterns when finding related tests |
-| `custom_rules` | Pass to compliance-agent as additional rules to check |
 
 ### 5. Read Project Instructions
 
@@ -72,7 +70,6 @@ skip_agents: []
 min_severity: "suggestion"
 language: ""  # auto-detect
 additional_test_patterns: []
-custom_rules: []
 ```
 
 ## Settings Priority
@@ -114,20 +111,6 @@ output_dir: "./docs/reviews"
 ```
 
 Save review files to `docs/reviews/` instead of project root.
-
-### Add Custom Rules
-
-```yaml
----
-custom_rules:
-  - pattern: "console\\.log"
-    message: "Remove console.log statements before committing"
-    severity: "minor"
-  - pattern: "\\bany\\b"
-    message: "Avoid using 'any' type - use specific types"
-    severity: "suggestion"
----
-```
 
 ### Provide Project Context
 

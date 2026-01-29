@@ -233,7 +233,6 @@ output_dir: "."
 skip_agents: []
 min_severity: "suggestion"
 language: ""
-custom_rules: []
 ---
 
 # Project-specific instructions for review agents
@@ -382,7 +381,7 @@ When preparing a new release:
    # Verify no old version remains (exclude CHANGELOG history)
    grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-   # Verify new version count (~22: 1 plugin.json + 1 marketplace.json + 2 README refs + 2 CLAUDE.md refs + 10 agents + 6 skills)
+   # Verify new version count (~22: 1 plugin.json + 1 marketplace.json + 2 README refs + 2 CLAUDE.md refs + 10 agents + 7 skills)
    grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 
    # Verify CHANGELOG has new section

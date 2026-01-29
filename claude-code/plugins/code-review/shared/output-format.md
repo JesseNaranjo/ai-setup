@@ -226,9 +226,9 @@ All reviews start with this header:
 
 When no issues are found after validation, list only the categories that were actually checked.
 
-### Deep Review (8 categories)
+### Deep Review (9 categories)
 
-For deep reviews (`/deep-code-review`, `/deep-code-review-staged`), list all 8 categories:
+For deep reviews (`/deep-code-review`, `/deep-code-review-staged`), list all 9 categories:
 
 ```markdown
 ## Code Review
