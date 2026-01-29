@@ -164,6 +164,15 @@ Some high-confidence patterns skip validation entirely and are marked `auto_vali
 | `hack_comment` | `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?` | Explicit HACK/WORKAROUND/XXX marker |
 | `outdated_callback` | `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)` | Callback pattern in async context |
 
+**Architecture patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `circular_dependency` | N/A (detected via import graph analysis) | Circular import/dependency between modules |
+| `god_class_500_lines` | N/A (detected via line count) | Class/module exceeds 500 lines |
+| `function_10_params` | `function\s+\w+\s*\([^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*\)` | Function has 10+ parameters |
+| `direct_new_instantiation` | `(?:=\s*new\s+\w+Service\|=\s*new\s+\w+Repository)\s*\(` | Direct instantiation of service/repository dependency |
+
 **Notes on pattern matching:**
 - Patterns are case-insensitive for SQL keywords
 - Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`

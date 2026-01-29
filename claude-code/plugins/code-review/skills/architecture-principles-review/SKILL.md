@@ -96,6 +96,14 @@ When reviewing directories, automatically prioritize:
 
 ---
 
+## Auto-Validated Patterns
+
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
+
+**Architecture patterns:** `circular_dependency`, `god_class_500_lines`, `function_10_params`, `direct_new_instantiation`
+
+---
+
 ## False Positives
 
 Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section.
