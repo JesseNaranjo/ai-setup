@@ -41,12 +41,12 @@ Individual review agents are specialists - they excel at finding issues in their
 2. Identifying ripple effects of proposed fixes
 3. Finding gaps where one category's finding should trigger another category's concern
 
-## MODE Parameter
+## Invocation Model
 
-This agent does not use the MODE parameter. Unlike the 9 review agents that support `thorough`, `gaps`, and `quick` modes, the synthesis agent operates on category pairs via the `synthesis_input` structure.
+Unlike the 9 review agents that support MODE parameters (`thorough`, `gaps`, `quick`), the synthesis agent operates on category pairs via the `synthesis_input` structure.
 
 **Phase Context:**
-- **Deep review**: Invoked in Step 7 (Synthesis phase), after Phase 1 (9 thorough agents) and Phase 2 (5 gaps agents) complete
+- **Deep review**: Invoked in Step 7 (Synthesis phase), after Phase 1 (9 thorough agents) AND Phase 2 (5 gaps agents) complete
 - **Quick review**: Invoked in Step 7 (Synthesis phase), after the Review phase (4 quick agents) completes
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the complete orchestration sequence.

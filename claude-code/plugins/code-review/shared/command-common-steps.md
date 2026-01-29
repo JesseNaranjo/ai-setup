@@ -84,7 +84,9 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for write process.
 
 ## Cross-Agent Synthesis
 
-After the review phase completes, launch synthesis agents in parallel.
+**For Deep Review:** Launch synthesis agents ONLY after BOTH Phase 1 (Thorough) AND Phase 2 (Gaps) complete. Synthesis receives findings from ALL prior phases.
+
+**For Quick Review:** Launch synthesis agents after the Review phase completes.
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for:
 - Invocation format (required YAML structure)

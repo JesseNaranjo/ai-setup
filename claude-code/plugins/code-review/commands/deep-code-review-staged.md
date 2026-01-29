@@ -62,6 +62,8 @@ After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 fin
 
 See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
+**WAIT:** All Phase 2 agents must complete before proceeding to Synthesis.
+
 ---
 
 ## Step 7: Cross-Agent Synthesis (5 agents in parallel)

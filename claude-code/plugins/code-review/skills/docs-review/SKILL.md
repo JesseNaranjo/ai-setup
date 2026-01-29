@@ -103,6 +103,14 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
 ---
 
+## References
+
+For detailed patterns and templates:
+- **`references/ai-instruction-templates.md`** - Templates for AI Agent Instructions files
+- **`references/documentation-best-practices.md`** - Documentation quality patterns
+
+---
+
 ## Example Output
 
 See `examples/example-output.md` for samples showing:
