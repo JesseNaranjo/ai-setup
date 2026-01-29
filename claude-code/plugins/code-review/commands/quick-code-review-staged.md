@@ -1,12 +1,12 @@
 ---
 name: quick-code-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Quick 7-agent code review of staged changes
+description: Quick code review of staged changes with 7 agent invocations
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a fast 4-agent code review for staged git changes, focusing on bugs, security, error handling, and test coverage.
+Perform a fast code review using 4 agents (7 invocations total) for staged git changes, focusing on bugs, security, error handling, and test coverage.
 
 Parse arguments from `$ARGUMENTS`:
 - Optional: `--output-file <path>` to specify output location (default: `.quick-code-review-staged.md`)

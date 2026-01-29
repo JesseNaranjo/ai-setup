@@ -22,7 +22,7 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ### `/deep-code-review`
 
-Comprehensive code review using all 10 agents (19 invocations) with thorough + gaps modes for maximum coverage.
+Comprehensive code review using all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
 /deep-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -30,7 +30,7 @@ Comprehensive code review using all 10 agents (19 invocations) with thorough + g
 
 ### `/deep-code-review-staged`
 
-Comprehensive code review of staged git changes using all 10 agents (19 invocations) with thorough + gaps modes.
+Comprehensive code review of staged git changes using all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes.
 
 ```bash
 /deep-code-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -38,7 +38,7 @@ Comprehensive code review of staged git changes using all 10 agents (19 invocati
 
 ### `/quick-code-review`
 
-Fast 4-agent review of specific files focusing on critical issues (bugs, security, errors, tests).
+Fast review using 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
 /quick-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -46,7 +46,7 @@ Fast 4-agent review of specific files focusing on critical issues (bugs, securit
 
 ### `/quick-code-review-staged`
 
-Fast 4-agent review of staged git changes focusing on critical issues (bugs, security, errors, tests).
+Fast review of staged git changes using 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
 /quick-code-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -66,7 +66,7 @@ If no files are specified, discovers and reviews all documentation files (README
 
 ### `/quick-docs-review`
 
-Fast 4-agent documentation review focusing on critical issues (accuracy, clarity, examples, structure).
+Fast documentation review using 4 agents (7 invocations) focusing on critical issues (accuracy, clarity, examples, structure).
 
 ```bash
 /quick-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"]
@@ -454,8 +454,8 @@ Each agent accepts a MODE parameter:
 
 | Command | Agents | Mode Invocations | Total Invocations |
 |---------|--------|------------------|-------------------|
-| `/deep-code-review` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/deep-code-review-staged` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/deep-code-review` | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/deep-code-review-staged` | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
 | `/quick-code-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 | `/quick-code-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 

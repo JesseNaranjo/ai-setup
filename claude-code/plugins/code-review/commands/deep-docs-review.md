@@ -1,7 +1,7 @@
 ---
 name: deep-docs-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Bash(find:*), Read, Write, Glob
-description: Deep 13-agent documentation review with synthesis
+description: Deep documentation review with 13 agent invocations and synthesis
 argument-hint: "[file1...] [--output-file <path>] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---

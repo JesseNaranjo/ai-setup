@@ -11,8 +11,8 @@ Identify documentation issues including accuracy, clarity, completeness, consist
 ## Workflow
 
 **Commands:**
-- `/deep-docs-review` - Full 13-agent pipeline for comprehensive review
-- `/quick-docs-review` - Quick 7-agent pipeline for critical issues
+- `/deep-docs-review` - Full 13-invocation pipeline for comprehensive review
+- `/quick-docs-review` - Quick 7-invocation pipeline for critical issues
 
 1. **Scope**: Review files specified by user or discover all documentation
 2. **Context**: Detect project type, gather version info and code references

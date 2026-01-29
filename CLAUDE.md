@@ -373,15 +373,15 @@ When preparing a new release:
    - `CLAUDE.md` version references (this file)
 
    **Recommended:**
-   - All agent files: `agents/*.md` (10 files)
-   - All skill files: `skills/*/SKILL.md` (6 files)
+   - All agent files: `agents/*.md` and `agents/docs/*.md` (16 files)
+   - All skill files: `skills/*/SKILL.md` (7 files)
 
 5. **Verify versions are consistent:**
    ```bash
    # Verify no old version remains (exclude CHANGELOG history)
    grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-   # Verify new version count (~22: 1 plugin.json + 1 marketplace.json + 2 README refs + 2 CLAUDE.md refs + 10 agents + 7 skills)
+   # Verify new version count (~29: 1 plugin.json + 1 marketplace.json + 2 README refs + 2 CLAUDE.md refs + 16 agents + 7 skills)
    grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 
    # Verify CHANGELOG has new section

@@ -200,14 +200,14 @@ When releasing a new version, update:
 - Repository root `.claude-plugin/marketplace.json` (if applicable)
 
 **Recommended:**
-- `agents/*.md` - Agent frontmatter version field (10 files)
-- `skills/*/SKILL.md` - Skill frontmatter version field (6 files)
+- `agents/*.md` and `agents/docs/*.md` - Agent frontmatter version field (16 files)
+- `skills/*/SKILL.md` - Skill frontmatter version field (7 files)
 
 **Verification:**
 ```bash
 # Verify no old version remains (exclude CHANGELOG history)
 grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-# Verify new version count (~17 expected)
+# Verify new version count (~26 expected)
 grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 ```

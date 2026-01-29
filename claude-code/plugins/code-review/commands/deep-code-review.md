@@ -1,7 +1,7 @@
 ---
 name: deep-code-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Deep 19-agent code review with synthesis
+description: Deep code review with 19 agent invocations and synthesis
 argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
