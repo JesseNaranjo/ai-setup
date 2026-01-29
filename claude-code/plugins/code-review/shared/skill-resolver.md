@@ -194,7 +194,7 @@ Search for a section header containing "False Positive":
 
 **Step 4.5: Determine Skill Type**
 Based on skill name:
-- If name matches `architecture-principles-review|bug-review|compliance-review|performance-review|security-review|technical-debt-review` → `type: "review"`
+- If name matches `architecture-principles-review|bug-review|compliance-review|docs-review|performance-review|security-review|technical-debt-review` → `type: "review"`
 - Otherwise → `type: "methodology"`
 
 **Step 4.6: Assign Primary Agent**
@@ -204,6 +204,7 @@ Based on skill name:
 | architecture-principles-review | architecture-agent |
 | bug-review | bug-detection-agent |
 | compliance-review | compliance-agent |
+| docs-review | structure-agent |
 | performance-review | performance-agent |
 | security-review | security-agent |
 | technical-debt-review | technical-debt-agent |

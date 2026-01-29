@@ -101,6 +101,12 @@ Example: "When two users simultaneously withdraw from the same account (concurre
 
 ---
 
+## Detailed Bug Patterns
+
+For comprehensive code examples and detection patterns by category, see `references/common-bugs.md`.
+
+---
+
 ## Example Output
 
 See `examples/example-output.md` for a sample showing:

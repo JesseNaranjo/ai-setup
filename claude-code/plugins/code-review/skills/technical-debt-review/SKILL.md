@@ -88,6 +88,12 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False P
 
 ---
 
+## Detailed Debt Patterns
+
+For comprehensive detection patterns and code examples, see `references/technical-debt-patterns.md`.
+
+---
+
 ## Example Output
 
 See `examples/example-output.md` for samples showing:

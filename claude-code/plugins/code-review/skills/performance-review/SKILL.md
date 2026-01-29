@@ -109,6 +109,12 @@ Example: "Current O(n*m) where n=orders, m=items. With 100 orders and 1000 items
 
 ---
 
+## Detailed Performance Patterns
+
+For comprehensive code examples and detection patterns by category, see `references/performance-patterns.md`.
+
+---
+
 ## Example Output
 
 See `examples/example-output.md` for a sample showing:

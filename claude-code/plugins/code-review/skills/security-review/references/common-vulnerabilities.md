@@ -276,18 +276,3 @@ Check for these security headers:
 - `X-XSS-Protection: 1; mode=block`
 
 **Severity**: Minor to Major depending on context
-
-## OWASP Top 10 Quick Reference
-
-| Rank | Vulnerability | Severity |
-|------|--------------|----------|
-| A01 | Broken Access Control | Critical |
-| A02 | Cryptographic Failures | Critical |
-| A03 | Injection | Critical |
-| A04 | Insecure Design | Major |
-| A05 | Security Misconfiguration | Major |
-| A06 | Vulnerable Components | Major |
-| A07 | Auth Failures | Critical |
-| A08 | Software/Data Integrity | Major |
-| A09 | Logging Failures | Minor |
-| A10 | SSRF | Critical |

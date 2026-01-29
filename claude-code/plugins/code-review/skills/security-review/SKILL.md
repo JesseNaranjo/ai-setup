@@ -79,9 +79,11 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False P
 
 ---
 
-## OWASP Top 10 Quick Reference
+## Security References
 
-For OWASP Top 10 reference, see `references/owasp-reference.md`.
+For detailed vulnerability patterns with code examples, see `references/common-vulnerabilities.md`.
+
+For OWASP Top 10 category reference, see `references/owasp-reference.md`.
 
 ---
 
