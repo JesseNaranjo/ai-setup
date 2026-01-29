@@ -12,12 +12,21 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ## Plugin Commands
 
+### Code Review Commands
+
 | Command | Description |
 |---------|-------------|
 | `/deep-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (9 agents) → Phase 2 (5 gaps agents) → Synthesis (5 agents) |
 | `/deep-review-staged [--output-file <path>]` | Deep review of staged git changes with full pipeline |
 | `/quick-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
 | `/quick-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
+
+### Documentation Review Commands
+
+| Command | Description |
+|---------|-------------|
+| `/deep-docs-review [file1...] [--output-file <path>]` | Deep docs review: Phase 1 (6 agents) → Phase 2 (3 gaps agents) → Synthesis (4 agents) |
+| `/quick-docs-review [file1...] [--output-file <path>]` | Quick docs review (4 agents + 3 synthesis agents) |
 
 **Note:** All review commands also accept:
 - `--language nodejs|dotnet` to force language detection
@@ -31,6 +40,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 | `architecture-principles-review` | "check SOLID", "find DRY violations", "check YAGNI", "architecture principles" |
 | `bug-review` | "find bugs", "check for errors", "find edge cases" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+| `docs-review` | "review documentation", "check docs", "audit README", "verify AI instructions", "standardize docs" |
 | `performance-review` | "check performance", "find slow code", "optimize" |
 | `security-review` | "security review", "check for vulnerabilities", "audit security" |
 | `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
@@ -43,15 +53,24 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata (v3.2.2)
 ├── commands/                        # Thin orchestration documents (reference shared/)
+│   ├── deep-docs-review.md          # Deep documentation review (13 invocations)
 │   ├── deep-review.md               # Deep file review (19 agent invocations)
 │   ├── deep-review-staged.md        # Deep staged review (19 agent invocations)
+│   ├── quick-docs-review.md         # Quick documentation review (7 invocations)
 │   ├── quick-review.md              # Quick file review (7 invocations)
 │   └── quick-review-staged.md       # Quick staged review (7 invocations)
-├── agents/                          # Modular agent definitions (10 agents)
+├── agents/                          # Modular agent definitions (10 code + 6 docs agents)
 │   ├── api-contracts-agent.md       # API compatibility
 │   ├── architecture-agent.md        # Architecture patterns
 │   ├── bug-detection-agent.md       # Logical errors & edge cases
 │   ├── compliance-agent.md          # AI instructions compliance
+│   ├── docs/                        # Documentation review agents (6 agents)
+│   │   ├── accuracy-agent.md        # Code-doc sync, factual correctness
+│   │   ├── clarity-agent.md         # Readability, jargon, audience
+│   │   ├── completeness-agent.md    # Missing sections, coverage gaps
+│   │   ├── consistency-agent.md     # Terminology, formatting, style
+│   │   ├── examples-agent.md        # Code example validity
+│   │   └── structure-agent.md       # Organization, links, AI instructions
 │   ├── error-handling-agent.md      # Error handling gaps
 │   ├── performance-agent.md         # Performance issues
 │   ├── security-agent.md            # Security vulnerabilities
@@ -75,6 +94,13 @@ claude-code/plugins/code-review/
 │   │   ├── SKILL.md
 │   │   ├── references/
 │   │   │   └── compliance-patterns.md
+│   │   └── examples/
+│   │       └── example-output.md
+│   ├── docs-review/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   │   ├── ai-instruction-templates.md
+│   │   │   └── documentation-best-practices.md
 │   │   └── examples/
 │   │       └── example-output.md
 │   ├── performance-review/

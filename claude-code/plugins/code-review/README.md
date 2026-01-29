@@ -1,10 +1,12 @@
 # Code Review Plugin
 
-Modular 10-agent code review with parameterized modes for Node.js and .NET projects.
+Modular 10-agent code review with parameterized modes for Node.js and .NET projects. Also includes documentation review commands with 6 specialized documentation agents.
 
 ## Overview
 
 The Code Review Plugin provides automated, in-depth code review using 10 specialized agents that analyze code from different perspectives. Each agent supports multiple review modes (thorough, gaps, quick) for flexible review depth.
+
+Additionally, the plugin provides documentation review commands that analyze project documentation for accuracy, clarity, completeness, consistency, examples quality, and structure.
 
 ### Key Features
 
@@ -49,6 +51,45 @@ Fast 4-agent review of staged git changes focusing on critical issues (bugs, sec
 ```bash
 /quick-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
+
+## Documentation Review Commands
+
+### `/deep-docs-review`
+
+Comprehensive documentation review using all 6 documentation agents (13 invocations) with thorough + gaps modes.
+
+```bash
+/deep-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"]
+```
+
+If no files are specified, discovers and reviews all documentation files (README.md, CLAUDE.md, docs/*, etc.).
+
+### `/quick-docs-review`
+
+Fast 4-agent documentation review focusing on critical issues (accuracy, clarity, examples, structure).
+
+```bash
+/quick-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"]
+```
+
+### Documentation Categories
+
+| Category | Focus Areas |
+|----------|-------------|
+| **Accuracy** | Code-doc sync, API signatures, version accuracy |
+| **Clarity** | Readability, jargon, audience appropriateness |
+| **Completeness** | Missing sections, undocumented features |
+| **Consistency** | Terminology, formatting, voice uniformity |
+| **Examples** | Code example validity, completeness |
+| **Structure** | Organization, links, AI instruction standardization |
+
+### AI Instruction File Standardization
+
+Documentation reviews include standardization checks for AI agent instruction files:
+
+- `/.ai/AI-AGENT-INSTRUCTIONS.md` - Comprehensive coding standards (required location)
+- `/CLAUDE.md` - Claude Code quick reference (must reference .ai/)
+- `/.github/copilot-instructions.md` - GitHub Copilot quick reference
 
 ## Configuration
 
@@ -301,6 +342,7 @@ Targeted review skills for specific concerns:
 | `architecture-principles-review` | "check SOLID", "find DRY violations", "check YAGNI", "architecture principles" |
 | `bug-review` | "find bugs", "check for errors", "find edge cases" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
+| `docs-review` | "review documentation", "check docs", "audit README", "verify AI instructions" |
 | `performance-review` | "check performance", "find slow code", "optimize" |
 | `security-review` | "security review", "check for vulnerabilities", "audit security" |
 | `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
@@ -314,8 +356,10 @@ code-review/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata (v3.2.2)
 ├── commands/
+│   ├── deep-docs-review.md      # Deep documentation review (13 invocations)
 │   ├── deep-review.md           # Deep file review (19 invocations)
 │   ├── deep-review-staged.md    # Deep staged review (19 invocations)
+│   ├── quick-docs-review.md     # Quick documentation review (7 invocations)
 │   ├── quick-review.md          # Quick file review (7 invocations)
 │   └── quick-review-staged.md   # Quick staged review (7 invocations)
 ├── agents/                      # Modular agent definitions (alphabetical)
@@ -323,6 +367,13 @@ code-review/
 │   ├── architecture-agent.md    # Architecture patterns
 │   ├── bug-detection-agent.md   # Logical errors & edge cases
 │   ├── compliance-agent.md      # AI instructions compliance
+│   ├── docs/                    # Documentation review agents
+│   │   ├── accuracy-agent.md    # Code-doc sync, factual correctness
+│   │   ├── clarity-agent.md     # Readability, jargon, audience
+│   │   ├── completeness-agent.md # Missing sections, coverage
+│   │   ├── consistency-agent.md # Terminology, formatting, style
+│   │   ├── examples-agent.md    # Code example validity
+│   │   └── structure-agent.md   # Organization, links, AI instructions
 │   ├── error-handling-agent.md  # Error handling gaps
 │   ├── performance-agent.md     # Performance issues
 │   ├── security-agent.md        # Security vulnerabilities
@@ -333,6 +384,7 @@ code-review/
 │   ├── architecture-principles-review/
 │   ├── bug-review/
 │   ├── compliance-review/
+│   ├── docs-review/             # Documentation review skill
 │   ├── performance-review/
 │   ├── security-review/
 │   └── technical-debt-review/
@@ -343,9 +395,13 @@ code-review/
 │   ├── agent-common-instructions.md # Common agent instructions (MODE, gaps, pre-existing issue detection)
 │   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
 │   ├── command-common-steps.md      # Common workflow steps for all commands
+│   ├── content-gathering-docs.md    # Content gathering for documentation reviews
 │   ├── content-gathering-files.md   # Content gathering for file reviews
 │   ├── content-gathering-staged.md  # Content gathering for staged reviews
 │   ├── context-discovery.md         # Context discovery instructions
+│   ├── docs-agent-common-instructions.md # Common instructions for documentation agents
+│   ├── docs-orchestration-sequence.md # Documentation review phase definitions
+│   ├── input-validation-docs.md     # Input validation for documentation commands
 │   ├── input-validation-files.md    # Input validation for file commands
 │   ├── input-validation-staged.md   # Input validation for staged commands
 │   ├── orchestration-sequence.md    # Phase definitions and model selection
@@ -366,6 +422,8 @@ code-review/
 
 ### Agent Configuration
 
+**Code Review Agents:**
+
 | Agent | Model | Supported Modes | Color |
 |-------|-------|-----------------|-------|
 | api-contracts-agent | Sonnet | thorough | cyan |
@@ -378,6 +436,19 @@ code-review/
 | synthesis-agent | Sonnet | (cross-category) | white |
 | technical-debt-agent | Opus | thorough, gaps | brown |
 | test-coverage-agent | Sonnet | thorough, quick | white |
+
+**Documentation Review Agents:**
+
+| Agent | Model | Supported Modes | Color |
+|-------|-------|-----------------|-------|
+| accuracy-agent | Opus | thorough, gaps, quick | red |
+| clarity-agent | Sonnet | thorough, quick | cyan |
+| completeness-agent | Opus | thorough, gaps | green |
+| consistency-agent | Sonnet | thorough, gaps | blue |
+| examples-agent | Opus | thorough, quick | yellow |
+| structure-agent | Sonnet | thorough, quick | purple |
+
+> **Note:** Documentation reviews reuse `synthesis-agent` from the code review agents for cross-category analysis.
 
 > **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
 
@@ -393,12 +464,21 @@ Each agent accepts a MODE parameter:
 
 ### Review Configurations
 
+**Code Reviews:**
+
 | Command | Agents | Mode Invocations | Total Invocations |
 |---------|--------|------------------|-------------------|
 | `/deep-review` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
 | `/deep-review-staged` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
 | `/quick-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 | `/quick-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+
+**Documentation Reviews:**
+
+| Command | Agents | Mode Invocations | Total Invocations |
+|---------|--------|------------------|-------------------|
+| `/deep-docs-review` | All 6 docs | thorough (6) + gaps (3) + synthesis (4) | 13 |
+| `/quick-docs-review` | 4 (accuracy, clarity, examples, structure) | quick (4) + synthesis (3) | 7 |
 
 ## Severity Levels
 
