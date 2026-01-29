@@ -55,10 +55,10 @@ Write the same content to a file:
 
 | Command | Default Output File |
 |---------|---------------------|
-| `/deep-review` | `.deep-review.md` |
-| `/deep-review-staged` | `.deep-review-staged.md` |
-| `/quick-review` | `.quick-review.md` |
-| `/quick-review-staged` | `.quick-review-staged.md` |
+| `/deep-code-review` | `.deep-code-review.md` |
+| `/deep-code-review-staged` | `.deep-code-review-staged.md` |
+| `/quick-code-review` | `.quick-code-review.md` |
+| `/quick-code-review-staged` | `.quick-code-review-staged.md` |
 
 If `--output-file <path>` argument was provided, use that path instead.
 
@@ -146,10 +146,10 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 
 | Command | Review Type Value |
 |---------|-------------------|
-| `/deep-review` | Deep (19 invocations) |
-| `/deep-review-staged` | Deep (19 invocations) |
-| `/quick-review` | Quick (7 invocations) |
-| `/quick-review-staged` | Quick (7 invocations) |
+| `/deep-code-review` | Deep (19 invocations) |
+| `/deep-code-review-staged` | Deep (19 invocations) |
+| `/quick-code-review` | Quick (7 invocations) |
+| `/quick-code-review-staged` | Quick (7 invocations) |
 
 ### Status Indicators
 
@@ -217,10 +217,10 @@ All reviews start with this header:
 
 | Command | Review Depth Description |
 |---------|-------------------------|
-| `/deep-review` | Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis) |
-| `/deep-review-staged` | Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis) |
-| `/quick-review` | Quick (7 invocations: 4 review + 3 synthesis) |
-| `/quick-review-staged` | Quick (7 invocations: 4 review + 3 synthesis) |
+| `/deep-code-review` | Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis) |
+| `/deep-code-review-staged` | Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis) |
+| `/quick-code-review` | Quick (7 invocations: 4 review + 3 synthesis) |
+| `/quick-code-review-staged` | Quick (7 invocations: 4 review + 3 synthesis) |
 
 ## No Issues Found
 
@@ -228,7 +228,7 @@ When no issues are found after validation, list only the categories that were ac
 
 ### Deep Review (8 categories)
 
-For deep reviews (`/deep-review`, `/deep-review-staged`), list all 8 categories:
+For deep reviews (`/deep-code-review`, `/deep-code-review-staged`), list all 8 categories:
 
 ```markdown
 ## Code Review
@@ -254,7 +254,7 @@ Files reviewed:
 
 ### Quick Review (4 categories + synthesis)
 
-For quick reviews (`/quick-review`, `/quick-review-staged`), list only the 4 categories that were checked:
+For quick reviews (`/quick-code-review`, `/quick-code-review-staged`), list only the 4 categories that were checked:
 
 ```markdown
 ## Code Review
@@ -511,10 +511,10 @@ This is treated as `fix_type: diff` internally.
 ## File Output
 
 Write the review to a file:
-- Default for `/deep-review`: `.deep-review.md`
-- Default for `/deep-review-staged`: `.deep-review-staged.md`
-- Default for `/quick-review`: `.quick-review.md`
-- Default for `/quick-review-staged`: `.quick-review-staged.md`
+- Default for `/deep-code-review`: `.deep-code-review.md`
+- Default for `/deep-code-review-staged`: `.deep-code-review-staged.md`
+- Default for `/quick-code-review`: `.quick-code-review.md`
+- Default for `/quick-code-review-staged`: `.quick-code-review-staged.md`
 - Custom path if `--output-file` argument provided
 
 End with:

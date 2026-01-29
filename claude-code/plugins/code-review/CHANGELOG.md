@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - CHANGELOG Version Locations skill count (4 → 5 files)
-- Command description inconsistency in quick-review-staged (added "code")
+- Command description inconsistency in quick-code-review-staged (added "code")
 - CLAUDE.md version count documentation (accurate file breakdown: ~21 files)
 
 ### Changed

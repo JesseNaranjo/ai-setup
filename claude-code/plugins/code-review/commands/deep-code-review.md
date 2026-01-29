@@ -1,16 +1,16 @@
 ---
-name: quick-review
+name: deep-code-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Quick 7-agent code review with synthesis
+description: Deep 19-agent code review with synthesis
 argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a fast 4-agent code review for the specified files, focusing on bugs, security, error handling, and test coverage. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a comprehensive code review using all 9 agents (19 invocations total) for the specified files. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
 Parse arguments from `$ARGUMENTS`:
 - Required: One or more file paths (space-separated)
-- Optional: `--output-file <path>` to specify output location (default: `.quick-review.md`)
+- Optional: `--output-file <path>` to specify output location (default: `.deep-code-review.md`)
 - Optional: `--language nodejs|dotnet` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
@@ -35,7 +35,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-files.md` for the content ga
 
 ---
 
-## Step 6: 4-Agent Quick Review
+## Step 6: Two-Phase Deep Review
 
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
@@ -45,26 +45,29 @@ See:
 
 Initialize per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
 - Record `review_started_at` timestamp
-- Initialize 2 phases: "Review", "Synthesis"
+- Initialize 3 phases: "Phase 1: Thorough Review", "Phase 2: Gaps Review", "Synthesis"
 
-### Review Phase (4 agents in parallel)
+### Phase 1: Thorough Review (9 agents in parallel)
 
-Launch 4 agents with **quick** mode. See `orchestration-sequence.md` for model assignments.
+Launch all 9 agents with **thorough** mode. See `orchestration-sequence.md` for model assignments.
 
-**Agents**: Bug Detection (Opus), Security (Opus), Error Handling (Sonnet), Test Coverage (Sonnet)
+**Agents**: API Contracts, Architecture, Bug Detection, Compliance, Error Handling, Performance, Security, Technical Debt, Test Coverage
 
-**Quick mode agents focus on**:
-- Critical and Major severity issues only
-- Most obvious and impactful problems
-- Issues that would block a merge
+### Phase 2: Gaps Review (5 Sonnet agents in parallel)
+
+After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
+
+**Agents**: Bug Detection, Compliance, Performance, Security, Technical Debt
+
+See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
 ---
 
-## Step 7: Cross-Agent Synthesis (3 agents in parallel)
+## Step 7: Cross-Agent Synthesis (5 agents in parallel)
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 
-Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
+Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
 
 ---
 
@@ -72,7 +75,4 @@ Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
-**Output config:** Review Type: "Quick (7 invocations)", Categories: 4 only
-**Note:** Quick review should be extra conservative - skip theoretical edge cases.
-
-*For comprehensive review, run `/deep-review <files>` or `/deep-review-staged` for staged changes.*
+**Output config:** Review Type: "Deep (19 invocations)", Categories: All 9

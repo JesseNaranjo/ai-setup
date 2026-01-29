@@ -76,6 +76,6 @@ Common issues and solutions when using review skills.
 **Symptoms:** Individual category reviews pass but integration issues exist.
 
 **Solutions:**
-1. Use `/deep-review` which includes synthesis phase
+1. Use `/deep-code-review` which includes synthesis phase
 2. Explicitly ask: "Check if security fixes affect performance"
 3. Review related files together, not in isolation

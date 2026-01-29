@@ -1,6 +1,6 @@
 # Content Gathering: File-Based Commands
 
-Shared content gathering logic for file-based review commands (`/deep-review`, `/quick-review`).
+Shared content gathering logic for file-based review commands (`/deep-code-review`, `/quick-code-review`).
 
 ## Process
 

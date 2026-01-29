@@ -16,10 +16,10 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Command | Description |
 |---------|-------------|
-| `/deep-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (9 agents) → Phase 2 (5 gaps agents) → Synthesis (5 agents) |
-| `/deep-review-staged [--output-file <path>]` | Deep review of staged git changes with full pipeline |
-| `/quick-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
-| `/quick-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
+| `/deep-code-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (9 agents) → Phase 2 (5 gaps agents) → Synthesis (5 agents) |
+| `/deep-code-review-staged [--output-file <path>]` | Deep review of staged git changes with full pipeline |
+| `/quick-code-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
+| `/quick-code-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
 
 ### Documentation Review Commands
 
@@ -54,11 +54,11 @@ claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata (v3.2.2)
 ├── commands/                        # Thin orchestration documents (reference shared/)
 │   ├── deep-docs-review.md          # Deep documentation review (13 invocations)
-│   ├── deep-review.md               # Deep file review (19 agent invocations)
-│   ├── deep-review-staged.md        # Deep staged review (19 agent invocations)
+│   ├── deep-code-review.md          # Deep file review (19 agent invocations)
+│   ├── deep-code-review-staged.md        # Deep staged review (19 agent invocations)
 │   ├── quick-docs-review.md         # Quick documentation review (7 invocations)
-│   ├── quick-review.md              # Quick file review (7 invocations)
-│   └── quick-review-staged.md       # Quick staged review (7 invocations)
+│   ├── quick-code-review.md              # Quick file review (7 invocations)
+│   └── quick-code-review-staged.md       # Quick staged review (7 invocations)
 ├── agents/                          # Modular agent definitions (10 code + 6 docs agents)
 │   ├── api-contracts-agent.md       # API compatibility
 │   ├── architecture-agent.md        # Architecture patterns

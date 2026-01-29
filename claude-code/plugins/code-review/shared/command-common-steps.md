@@ -1,6 +1,6 @@
 # Common Command Steps
 
-This document contains shared workflow steps referenced by all review commands (deep-review, deep-review-staged, quick-review, quick-review-staged).
+This document contains shared workflow steps referenced by all review commands (deep-code-review, deep-code-review-staged, quick-code-review, quick-code-review-staged).
 
 ## Step Numbering Scheme
 

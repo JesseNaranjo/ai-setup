@@ -1,5 +1,5 @@
 ---
-name: quick-review-staged
+name: quick-code-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Quick 7-agent code review of staged changes
 argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
@@ -9,7 +9,7 @@ model: opus
 Perform a fast 4-agent code review for staged git changes, focusing on bugs, security, error handling, and test coverage.
 
 Parse arguments from `$ARGUMENTS`:
-- Optional: `--output-file <path>` to specify output location (default: `.quick-review-staged.md`)
+- Optional: `--output-file <path>` to specify output location (default: `.quick-code-review-staged.md`)
 - Optional: `--language nodejs|dotnet` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
@@ -76,4 +76,4 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 **Output config:** Review Type: "Quick (7 invocations)", Categories: 4 only
 **Note:** Quick review should be extra conservative - skip theoretical edge cases.
 
-*For comprehensive review (compliance, performance, architecture, API), run `/deep-review-staged`*
+*For comprehensive review (compliance, performance, architecture, API), run `/deep-code-review-staged`*

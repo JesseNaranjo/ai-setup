@@ -1,6 +1,6 @@
 # Input Validation: File-Based Commands
 
-Shared input validation logic for file-based review commands (`/deep-review`, `/quick-review`).
+Shared input validation logic for file-based review commands (`/deep-code-review`, `/quick-code-review`).
 
 ## Process
 

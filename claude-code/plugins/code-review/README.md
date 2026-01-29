@@ -20,36 +20,36 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ## Commands
 
-### `/deep-review`
+### `/deep-code-review`
 
 Comprehensive code review using all 10 agents (19 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
-/deep-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/deep-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
-### `/deep-review-staged`
+### `/deep-code-review-staged`
 
 Comprehensive code review of staged git changes using all 10 agents (19 invocations) with thorough + gaps modes.
 
 ```bash
-/deep-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/deep-code-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
-### `/quick-review`
+### `/quick-code-review`
 
 Fast 4-agent review of specific files focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/quick-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
-### `/quick-review-staged`
+### `/quick-code-review-staged`
 
 Fast 4-agent review of staged git changes focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/quick-code-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ## Documentation Review Commands
@@ -213,25 +213,25 @@ Use `--prompt` to pass ad-hoc instructions to all review agents without editing 
 #### Example: Brainstorming-Style Deep Exploration
 
 ```bash
-/deep-review src/auth/*.ts --prompt "Before flagging issues, brainstorm multiple attack vectors and failure modes for each function. Consider: What assumptions does this code make? What happens if those assumptions are violated? What edge cases might the original developer have missed? Explore creatively before concluding."
+/deep-code-review src/auth/*.ts --prompt "Before flagging issues, brainstorm multiple attack vectors and failure modes for each function. Consider: What assumptions does this code make? What happens if those assumptions are violated? What edge cases might the original developer have missed? Explore creatively before concluding."
 ```
 
 #### Example: Systematic Checklist Approach
 
 ```bash
-/quick-review-staged --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
+/quick-code-review-staged --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
 ```
 
 #### Example: Domain-Specific Focus
 
 ```bash
-/deep-review src/api/payments.ts --prompt "This is a payment processing module. Focus on: financial calculation precision, transaction atomicity, audit trail completeness, PCI compliance patterns. Flag anything that could lead to money loss or compliance violations."
+/deep-code-review src/api/payments.ts --prompt "This is a payment processing module. Focus on: financial calculation precision, transaction atomicity, audit trail completeness, PCI compliance patterns. Flag anything that could lead to money loss or compliance violations."
 ```
 
 #### Example: Threat Model Guidance
 
 ```bash
-/deep-review src/api/*.ts --prompt "Assume an attacker has valid credentials but is trying to access other users' data. Focus on authorization checks, IDOR vulnerabilities, and data leakage in error messages."
+/deep-code-review src/api/*.ts --prompt "Assume an attacker has valid credentials but is trying to access other users' data. Focus on authorization checks, IDOR vulnerabilities, and data leakage in error messages."
 ```
 
 #### Combining with Project Settings
@@ -253,7 +253,7 @@ Use systematic analysis: check each security category even when code appears saf
 Then use `--prompt` for one-off additions:
 
 ```bash
-/deep-review src/auth/*.ts --prompt "Additionally, this PR introduces OAuth. Verify token handling follows OWASP guidelines."
+/deep-code-review src/auth/*.ts --prompt "Additionally, this PR introduces OAuth. Verify token handling follows OWASP guidelines."
 ```
 
 #### Effective Prompt Strategies
@@ -287,19 +287,19 @@ Use `--skills` to enhance reviews with skill-specific knowledge and methodologie
 
 **Embed brainstorming methodology:**
 ```bash
-/deep-review src/auth/*.ts --skills superpowers:brainstorming
+/deep-code-review src/auth/*.ts --skills superpowers:brainstorming
 ```
 All agents will explore multiple interpretations and failure modes before flagging issues.
 
 **Combine multiple skills:**
 ```bash
-/deep-review src/api/*.ts --skills security-review,superpowers:systematic-debugging
+/deep-code-review src/api/*.ts --skills security-review,superpowers:systematic-debugging
 ```
 Security agent receives targeted security checklists; all agents receive debugging methodology.
 
 **Use with --prompt:**
 ```bash
-/deep-review src/payments.ts --skills superpowers:brainstorming --prompt "Focus on financial calculation precision"
+/deep-code-review src/payments.ts --skills superpowers:brainstorming --prompt "Focus on financial calculation precision"
 ```
 Combines skill methodology with specific instructions.
 
@@ -357,11 +357,11 @@ code-review/
 │   └── plugin.json              # Plugin metadata (v3.2.2)
 ├── commands/
 │   ├── deep-docs-review.md      # Deep documentation review (13 invocations)
-│   ├── deep-review.md           # Deep file review (19 invocations)
-│   ├── deep-review-staged.md    # Deep staged review (19 invocations)
+│   ├── deep-code-review.md      # Deep file review (19 invocations)
+│   ├── deep-code-review-staged.md    # Deep staged review (19 invocations)
 │   ├── quick-docs-review.md     # Quick documentation review (7 invocations)
-│   ├── quick-review.md          # Quick file review (7 invocations)
-│   └── quick-review-staged.md   # Quick staged review (7 invocations)
+│   ├── quick-code-review.md          # Quick file review (7 invocations)
+│   └── quick-code-review-staged.md   # Quick staged review (7 invocations)
 ├── agents/                      # Modular agent definitions (alphabetical)
 │   ├── api-contracts-agent.md   # API compatibility
 │   ├── architecture-agent.md    # Architecture patterns
@@ -468,10 +468,10 @@ Each agent accepts a MODE parameter:
 
 | Command | Agents | Mode Invocations | Total Invocations |
 |---------|--------|------------------|-------------------|
-| `/deep-review` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/deep-review-staged` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/quick-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
-| `/quick-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+| `/deep-code-review` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/deep-code-review-staged` | All 10 | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/quick-code-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+| `/quick-code-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 
 **Documentation Reviews:**
 
@@ -551,7 +551,7 @@ cmd.Parameters.AddWithValue("@id", userId);
 
 ```bash
 git add src/feature.ts
-/quick-review-staged
+/quick-code-review-staged
 git commit -m "Add feature"
 ```
 
@@ -559,7 +559,7 @@ git commit -m "Add feature"
 
 ```bash
 git add .
-/deep-review-staged
+/deep-code-review-staged
 ```
 
 ### Targeted Security Audit
@@ -569,7 +569,7 @@ Use the security-review skill for focused security analysis.
 ### Legacy Code Audit
 
 ```bash
-/deep-review src/legacy/critical-module.ts
+/deep-code-review src/legacy/critical-module.ts
 ```
 
 ## Customization

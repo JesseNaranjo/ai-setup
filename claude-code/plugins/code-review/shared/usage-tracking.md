@@ -15,7 +15,7 @@ Maintain this structure internally during workflow execution:
 
 ```yaml
 usage_tracking:
-  review_type: "deep-review"  # deep-review, deep-review-staged, quick-review, quick-review-staged
+  review_type: "deep-code-review"  # deep-code-review, deep-code-review-staged, quick-code-review, quick-code-review-staged
   review_started_at: "2024-01-15T10:30:00Z"  # ISO 8601 timestamp
   review_ended_at: "2024-01-15T10:33:05Z"
   total_duration_seconds: 185

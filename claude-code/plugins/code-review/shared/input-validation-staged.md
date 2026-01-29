@@ -1,6 +1,6 @@
 # Input Validation: Staged Commands
 
-Shared input validation logic for staged review commands (`/deep-review-staged`, `/quick-review-staged`).
+Shared input validation logic for staged review commands (`/deep-code-review-staged`, `/quick-code-review-staged`).
 
 ## Process
 

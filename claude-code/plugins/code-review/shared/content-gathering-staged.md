@@ -1,6 +1,6 @@
 # Content Gathering: Staged Commands
 
-Shared content gathering logic for staged review commands (`/deep-review-staged`, `/quick-review-staged`).
+Shared content gathering logic for staged review commands (`/deep-code-review-staged`, `/quick-code-review-staged`).
 
 ## Process
 

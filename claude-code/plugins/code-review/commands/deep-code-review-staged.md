@@ -1,16 +1,15 @@
 ---
-name: deep-review
+name: deep-code-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Deep 19-agent code review with synthesis
-argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
+description: Deep 19-agent code review of staged changes
+argument-hint: "[--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a comprehensive code review using all 9 agents (19 invocations total) for the specified files. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a comprehensive code review using all 9 agents (19 invocations total) for staged git changes. Execute agents with both thorough and gaps modes for maximum coverage.
 
 Parse arguments from `$ARGUMENTS`:
-- Required: One or more file paths (space-separated)
-- Optional: `--output-file <path>` to specify output location (default: `.deep-review.md`)
+- Optional: `--output-file <path>` to specify output location (default: `.deep-code-review-staged.md`)
 - Optional: `--language nodejs|dotnet` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
@@ -23,15 +22,15 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
 ---
 
-## Step 2: Input Validation
+## Step 2: Staged Changes Validation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-files.md` for the validation process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-staged.md` for the validation process.
 
 ---
 
 ## Step 4: Content Gathering
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-files.md` for the content gathering process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content gathering process and tiered context behavior.
 
 ---
 
@@ -52,6 +51,8 @@ Initialize per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
 Launch all 9 agents with **thorough** mode. See `orchestration-sequence.md` for model assignments.
 
 **Agents**: API Contracts, Architecture, Bug Detection, Compliance, Error Handling, Performance, Security, Technical Debt, Test Coverage
+
+Each agent receives staged diff, full file content, and AI Agent Instructions.
 
 ### Phase 2: Gaps Review (5 Sonnet agents in parallel)
 
