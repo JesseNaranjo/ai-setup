@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: blue
 tools: ["Read", "Grep", "Glob"]
-version: 3.3.0
+version: 3.3.1
 ---
 
 # AI Agent Instructions Compliance Review Agent

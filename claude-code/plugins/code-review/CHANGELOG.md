@@ -5,6 +5,20 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.3.1] - 2026-01-30
+
+### Changed
+- **CLAUDE.md Architecture**: Updated to accurately reflect 16-agent architecture (10 code + 6 docs)
+- **Agent Colors Table**: Added 6 documentation agent colors with clarified usage notes for separate pipelines
+- **LSP Integration**: Added comprehensive Language Server Protocol documentation for .NET and Node.js diagnostics
+- **Skill Documentation**: Removed inline pattern ID examples from 6 skills (DRY refactor - authoritative patterns in validation-rules.md)
+
+### Files Changed
+- `CLAUDE.md` - Architecture count fix, expanded Agent Colors table
+- `languages/dotnet.md` - Added 68 lines of LSP integration docs
+- `languages/nodejs.md` - Added 61 lines of LSP integration docs
+- `skills/*/SKILL.md` - Removed redundant pattern ID lists (6 files)
+
 ## [3.3.0] - 2026-01-29
 
 ### Added
