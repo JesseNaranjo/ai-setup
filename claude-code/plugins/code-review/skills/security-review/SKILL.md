@@ -55,8 +55,6 @@ Identify vulnerabilities, insecure coding patterns, and security misconfiguratio
 
 High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-**Security patterns:** `hardcoded_password`, `hardcoded_api_key`, `hardcoded_token`, `hardcoded_secret`, `hardcoded_credentials`, `sql_injection_concat`, `sql_injection_template`, `eval_untrusted`, `new_function_untrusted`
-
 ---
 
 ## Scope Prioritization

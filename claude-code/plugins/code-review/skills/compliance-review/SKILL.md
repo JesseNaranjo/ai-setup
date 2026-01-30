@@ -56,8 +56,6 @@ For rule classification (MUST/SHOULD/MAY keywords and severity mapping), see `re
 
 High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-**Compliance patterns:** `missing_authorize_attribute`, `wrong_case_filename`, `explicit_must_violation`, `missing_required_jsdoc`
-
 ---
 
 ## False Positives

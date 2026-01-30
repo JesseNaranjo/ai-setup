@@ -62,8 +62,6 @@ Identify accumulated technical debt including deprecated dependencies, outdated 
 
 High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-**Technical Debt patterns:** `deprecated_npm_package`, `todo_without_issue`, `commented_out_code`, `hack_comment`, `outdated_callback`
-
 ---
 
 ## Scope Prioritization

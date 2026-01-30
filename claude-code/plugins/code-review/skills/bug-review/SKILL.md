@@ -62,8 +62,6 @@ Identify logical errors, null reference issues, race conditions, off-by-one erro
 
 High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-**Bug patterns:** `empty_catch_block`, `missing_await`, `null_dereference`
-
 ---
 
 ## Bug Investigation Mode

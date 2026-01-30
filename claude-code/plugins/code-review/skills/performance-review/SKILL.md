@@ -63,8 +63,6 @@ Identify algorithmic inefficiencies, memory leaks, database query problems, and 
 
 High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
 
-**Performance patterns:** `n_plus_one_query`, `nested_loop_includes`, `select_star_in_loop`
-
 ---
 
 ## Scope Prioritization
