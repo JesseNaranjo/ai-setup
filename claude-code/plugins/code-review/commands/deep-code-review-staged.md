@@ -56,17 +56,21 @@ Each agent receives staged diff, full file content, and AI Agent Instructions.
 
 ### Phase 2: Gaps Review (5 Sonnet agents in parallel)
 
+**CRITICAL: DO NOT START Phase 2 until Phase 1 is FULLY COMPLETE.**
+
 After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
 
 **Agents**: Bug Detection, Compliance, Performance, Security, Technical Debt
 
 See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
-**WAIT:** All Phase 2 agents must complete before proceeding to Synthesis.
+**CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
 
 ---
 
 ## Step 7: Cross-Agent Synthesis (5 agents in parallel)
+
+**CRITICAL: DO NOT START Synthesis until Phase 1 AND Phase 2 (Step 6) are FULLY COMPLETE.**
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 

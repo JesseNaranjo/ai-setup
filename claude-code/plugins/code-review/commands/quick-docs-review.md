@@ -85,9 +85,13 @@ Pass to all agents:
 - AI instruction file status
 - Additional prompt instructions (if provided)
 
+**CRITICAL: WAIT** - All 4 Review phase agents must complete before proceeding to Synthesis.
+
 ---
 
 ## Step 6: Cross-Agent Synthesis (3 agents in parallel)
+
+**CRITICAL: DO NOT start Synthesis until the Review phase (Step 5) is FULLY COMPLETE.**
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for synthesis pairs.
 

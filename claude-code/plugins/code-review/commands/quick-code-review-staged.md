@@ -59,11 +59,13 @@ Each agent receives staged diff, full file content, and AI Agent Instructions.
 - Most obvious and impactful problems
 - Issues that would block a merge
 
-**WAIT:** All Review phase agents must complete before proceeding to Synthesis.
+**CRITICAL: WAIT** - All Review phase agents must complete before proceeding to Synthesis.
 
 ---
 
 ## Step 7: Cross-Agent Synthesis (3 agents in parallel)
+
+**CRITICAL: DO NOT start Synthesis until the Review phase (Step 6) is FULLY COMPLETE.**
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 

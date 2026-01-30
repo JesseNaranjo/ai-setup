@@ -13,7 +13,7 @@ This document defines the authoritative execution sequences for documentation re
    - Launch: accuracy, clarity, completeness, consistency, examples, structure
    - Models: accuracy, completeness, examples (Opus); clarity, consistency, structure (Sonnet)
    - MODE: `thorough` for all agents
-   - WAIT: All 6 agents must complete before proceeding
+   - **CRITICAL: WAIT** - DO NOT proceed to Phase 2 until ALL 6 agents complete
    - OUTPUT: Phase 1 findings (grouped by category)
 
 3. **Phase 2: Gaps Review** (3 Sonnet agents in parallel)
@@ -21,10 +21,11 @@ This document defines the authoritative execution sequences for documentation re
    - MODE: `gaps`
    - Model: Sonnet (cost-optimized for constrained task)
    - INPUT: Phase 1 findings passed as `previous_findings`
-   - WAIT: All 3 agents must complete before proceeding
+   - **CRITICAL: WAIT** - DO NOT proceed to Synthesis until ALL 3 agents complete
    - OUTPUT: Phase 2 findings (subtle issues, edge cases)
 
 4. **Synthesis** (4 agents in parallel)
+   - **CRITICAL: DO NOT START until Phase 1 AND Phase 2 are FULLY COMPLETE**
    - Launch: 4 instances of synthesis-agent with category pairs
    - INPUT: ALL findings from Phase 1 AND Phase 2
    - Pairs and questions:

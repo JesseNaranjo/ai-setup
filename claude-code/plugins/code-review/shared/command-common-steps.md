@@ -84,9 +84,20 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for write process.
 
 ## Cross-Agent Synthesis
 
-**For Deep Review:** Launch synthesis agents ONLY after BOTH Phase 1 (Thorough) AND Phase 2 (Gaps) complete. Synthesis receives findings from ALL prior phases.
+**CRITICAL: For Deep Review, Synthesis is Phase 3 and requires strict sequential execution:**
 
-**For Quick Review:** Launch synthesis agents after the Review phase completes.
+1. Phase 1 (Thorough Review) - agents run in parallel
+2. **WAIT** - All Phase 1 agents must complete
+3. Phase 2 (Gaps Review) - agents run in parallel
+4. **WAIT** - All Phase 2 agents must complete
+5. Phase 3 (Synthesis) - agents run in parallel
+6. Continue to validation
+
+**Do NOT launch Synthesis until Phase 2 is FULLY COMPLETE.**
+
+Synthesis receives findings from ALL prior phases (Phase 1 + Phase 2) to detect cross-cutting concerns.
+
+**For Quick Review:** Launch synthesis agents after the Review phase completes. Do NOT launch Synthesis until Review phase is FULLY COMPLETE.
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for:
 - Invocation format (required YAML structure)

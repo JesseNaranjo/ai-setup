@@ -85,15 +85,21 @@ Pass to all agents:
 
 ### Phase 2: Gaps Review (3 Sonnet agents in parallel)
 
+**CRITICAL: DO NOT START Phase 2 until Phase 1 is FULLY COMPLETE.**
+
 After Phase 1 completes, launch 3 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
 
 **Agents**: Accuracy, Completeness, Consistency
 
 See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
+**CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
+
 ---
 
 ## Step 6: Cross-Agent Synthesis (4 agents in parallel)
+
+**CRITICAL: DO NOT START Synthesis until Phase 1 AND Phase 2 (Step 5) are FULLY COMPLETE.**
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for synthesis pairs.
 
