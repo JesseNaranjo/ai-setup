@@ -17,6 +17,74 @@ Detect .NET projects by checking for any of these files:
 - `*.IntegrationTests/` projects
 - `tests/` directories
 
+## Language Server Integration (Optional)
+
+When a C# LSP (OmniSharp or `csharp-lsp` plugin) is available, agents can leverage Roslyn analyzer diagnostics for enhanced accuracy. This supplements (does not replace) pattern-based detection.
+
+### LSP Plugin Detection
+
+Check for C# LSP availability:
+- Plugin installed: `csharp-lsp` or OmniSharp in enabled plugins
+- Server running: OmniSharp or Roslyn LSP server process active
+
+### LSP-Enhanced Capabilities
+
+| Capability | LSP Method | Review Enhancement |
+|------------|------------|-------------------|
+| Nullable analysis | `textDocument/diagnostic` | Precise null reference detection |
+| Async issues | `textDocument/diagnostic` | Detect missing awaits, async deadlocks |
+| IDisposable tracking | `textDocument/diagnostic` | Accurate disposal pattern violations |
+| Go to definition | `textDocument/definition` | Track inheritance chains, interface implementations |
+| Find references | `textDocument/references` | Identify all usages, missing attributes |
+
+### Diagnostic Code Mapping
+
+Map Roslyn/analyzer diagnostics to review categories:
+
+| Code | Category | Description |
+|------|----------|-------------|
+| CS8600 | Bugs | Converting null literal to non-nullable type |
+| CS8601 | Bugs | Possible null reference assignment |
+| CS8602 | Bugs | Dereference of possibly null reference |
+| CS8603 | Bugs | Possible null reference return |
+| CS8604 | Bugs | Possible null reference argument |
+| CS8618 | Bugs | Non-nullable property not initialized |
+| CS4014 | Bugs | Async method not awaited |
+| CA2000 | Bugs | Dispose objects before losing scope |
+| CA2007 | Performance | Missing ConfigureAwait |
+| CA1822 | Performance | Member can be static |
+| CS0219 | Technical Debt | Variable assigned but never used |
+| CS0168 | Technical Debt | Variable declared but never used |
+| CA1062 | Security | Validate parameter is not null |
+| CA2100 | Security | SQL queries for security vulnerabilities |
+
+### Agent Usage Guidelines
+
+When C# LSP is available:
+
+1. **Prioritize LSP diagnostics** for nullable reference issues (CS8600-CS8618)
+2. **Use LSP for async analysis** - CS4014 is more accurate than pattern matching for missing awaits
+3. **Combine LSP + patterns** for security - LSP validates types, patterns find SQL concatenation
+4. **Use LSP for IDisposable** - CA2000 tracks object lifetimes better than patterns
+5. **Fall back to patterns** when LSP unavailable or for framework-specific issues (EF queries, DI patterns)
+
+### Example: Enhanced Async Detection
+
+**Pattern-only approach:**
+```csharp
+// Pattern: async method call without await
+GetUserAsync(id);  // May miss context - could be intentional fire-and-forget
+```
+
+**LSP-enhanced approach:**
+```
+Diagnostic: CS4014 at line 25, column 9
+Message: Because this call is not awaited, execution continues before the call completes
+Context: Method returns Task<User>, not void
+```
+
+LSP distinguishes intentional fire-and-forget (Task-returning in void context) from bugs.
+
 ## Category-Specific Checks
 
 ### Bugs {#bugs}

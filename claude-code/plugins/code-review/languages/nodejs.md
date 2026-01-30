@@ -17,6 +17,67 @@ Detect Node.js projects by checking for `package.json` in the repository root or
 - `__tests__/` directories
 - `tests/` directories
 
+## Language Server Integration (Optional)
+
+When the `typescript-lsp` plugin is available, agents can leverage real TypeScript compiler diagnostics for enhanced accuracy. This supplements (does not replace) pattern-based detection.
+
+### LSP Plugin Detection
+
+Check for TypeScript LSP availability:
+- Plugin installed: `typescript-lsp` in enabled plugins
+- Server running: TypeScript Language Server process active
+
+### LSP-Enhanced Capabilities
+
+| Capability | LSP Method | Review Enhancement |
+|------------|------------|-------------------|
+| Type errors | `textDocument/diagnostic` | Precise null/undefined detection, missing properties |
+| Unused symbols | `textDocument/diagnostic` | Accurate dead code detection |
+| Go to definition | `textDocument/definition` | Track cross-file references, circular imports |
+| Find references | `textDocument/references` | Identify all usages, unused exports |
+| Type information | `textDocument/hover` | Get exact types for API contract validation |
+
+### Diagnostic Code Mapping
+
+Map TypeScript diagnostics to review categories:
+
+| TS Code | Category | Description |
+|---------|----------|-------------|
+| TS2322 | Bugs | Type mismatch in assignment |
+| TS2345 | Bugs | Argument type mismatch |
+| TS2531 | Bugs | Object is possibly null |
+| TS2532 | Bugs | Object is possibly undefined |
+| TS6133 | Technical Debt | Unused variable/parameter |
+| TS6196 | Technical Debt | Unused declaration |
+| TS7006 | Architecture | Implicit any type |
+| TS7031 | Architecture | Implicit any in binding element |
+
+### Agent Usage Guidelines
+
+When TypeScript LSP is available:
+
+1. **Prioritize LSP diagnostics** for type-related bugs (TS2322, TS2345, TS2531, TS2532)
+2. **Combine LSP + patterns** for security issues (LSP finds types, patterns find dangerous sinks)
+3. **Use LSP for cross-file analysis** when tracking imports, exports, and circular dependencies
+4. **Fall back to patterns** when LSP unavailable or for runtime-specific issues (Promise handling, event loop)
+
+### Example: Enhanced Null Detection
+
+**Pattern-only approach:**
+```typescript
+// Pattern: (?<![\?!])\.(\w+) after nullable
+user.profile.name  // May miss context
+```
+
+**LSP-enhanced approach:**
+```
+Diagnostic: TS2532 at line 15, column 5
+Message: Object is possibly 'undefined'
+Context: user.profile is Optional<Profile>
+```
+
+LSP provides precise location and type context unavailable to pattern matching.
+
 ## Category-Specific Checks
 
 ### Bugs {#bugs}
