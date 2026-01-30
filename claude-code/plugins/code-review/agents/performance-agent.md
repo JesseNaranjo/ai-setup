@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for thorough. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
 color: green
 tools: ["Read", "Grep", "Glob"]
-version: 3.2.2
+version: 3.3.0
 ---
 
 # Performance Review Agent

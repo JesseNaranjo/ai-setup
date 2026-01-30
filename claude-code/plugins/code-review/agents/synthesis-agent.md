@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: white
 tools: ["Read", "Grep", "Glob"]
-version: 3.2.2
+version: 3.3.0
 ---
 
 # Cross-Agent Synthesis Agent
@@ -85,8 +85,8 @@ The tables below describe what to look for when analyzing each pair. The exact p
 | Input Categories | What to Look For |
 |-----------------|------------------|
 | Architecture + Test Coverage | New abstractions without tests, refactored code with broken test coverage, missing integration tests |
+| Bugs + Compliance | Compliance violations that cause incorrect behavior, compliance rules that prevent bug detection |
 | Bugs + Error Handling | Bug fixes that need error handling, error paths that could trigger identified bugs |
-| Compliance + Bugs | Compliance violations that cause incorrect behavior, compliance rules that prevent bug detection |
 | Compliance + Technical Debt | Compliance rules masking debt, debt causing compliance issues |
 | Performance + Security | Parameterized queries without limits, encryption adding latency, auth checks in hot paths |
 
@@ -186,13 +186,13 @@ Use lowercase keys in `related_findings` and Title Case values in `category`:
 
 | Display Name | related_findings Key | category Value |
 |--------------|---------------------|----------------|
-| Compliance | `compliance` | `Compliance` |
-| Bugs | `bugs` | `Bugs` |
-| Security | `security` | `Security` |
-| Performance | `performance` | `Performance` |
-| Architecture | `architecture` | `Architecture` |
 | API Contracts | `api_contracts` | `API Contracts` |
+| Architecture | `architecture` | `Architecture` |
+| Bugs | `bugs` | `Bugs` |
+| Compliance | `compliance` | `Compliance` |
 | Error Handling | `error_handling` | `Error Handling` |
+| Performance | `performance` | `Performance` |
+| Security | `security` | `Security` |
 | Test Coverage | `test_coverage` | `Test Coverage` |
 
 **Example - Security + Performance**:

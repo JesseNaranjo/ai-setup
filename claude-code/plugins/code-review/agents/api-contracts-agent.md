@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.2.2
+version: 3.3.0
 ---
 
 # API & Contracts Review Agent

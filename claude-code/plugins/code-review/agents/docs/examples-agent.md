@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection
 color: yellow
 tools: ["Read", "Grep", "Glob"]
-version: 3.2.2
+version: 3.3.0
 ---
 
 # Examples Review Agent
