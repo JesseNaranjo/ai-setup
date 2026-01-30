@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.3.0) - a modular 10-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.3.0) - a modular 16-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -162,6 +162,8 @@ See the following files for authoritative agent configuration:
 
 Each agent has a unique color for visual identification during parallel execution:
 
+#### Code Review Agents (10)
+
 | Agent | Color |
 |-------|-------|
 | api-contracts-agent | cyan |
@@ -175,11 +177,23 @@ Each agent has a unique color for visual identification during parallel executio
 | technical-debt-agent | brown |
 | test-coverage-agent | white |
 
+#### Documentation Review Agents (6)
+
+| Agent | Color |
+|-------|-------|
+| accuracy-agent | red |
+| clarity-agent | cyan |
+| completeness-agent | green |
+| consistency-agent | blue |
+| examples-agent | yellow |
+| structure-agent | purple |
+
 **Color Usage Notes:**
-- All 9 review agents have unique colors within Phase 1
+- All 9 code review agents have unique colors within Phase 1 (synthesis and test-coverage share white)
 - Phase 2 reuses colors from Phase 1 (compliance, bug, security, performance, technical-debt) but runs sequentially after Phase 1 completes
 - Synthesis phase runs 5 parallel instances of synthesis-agent, all using white (same agent type)
-- Color conflicts within a phase are avoided; color reuse across sequential phases is acceptable
+- Documentation agents intentionally reuse code agent colors since they run in separate pipelines (docs-review commands vs code-review commands)
+- Color conflicts within a phase are avoided; color reuse across sequential phases or separate pipelines is acceptable
 
 ### Deep Review Pipeline
 
