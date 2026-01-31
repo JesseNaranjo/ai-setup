@@ -1,7 +1,7 @@
 ---
 name: architecture-principles-review
 description: Identifies SOLID, DRY, and YAGNI violations in code architecture. Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", or "architecture principles review".
-version: 3.3.2
+version: 3.4.0
 ---
 
 # Architecture Principles Review Skill

@@ -5,6 +5,39 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2026-01-31
+
+### Added
+- **React Language Support**: New `languages/react.md` with 158 lines of React-specific checks
+  - Stale closure detection in hooks
+  - Dependency array validation
+  - XSS prevention (dangerouslySetInnerHTML)
+  - State management patterns (Redux/RTK, React Query)
+  - Next.js specific checks (App Router, Server Components)
+- **.NET Version Detection**: Runtime version detection with TFM parsing
+- **Node.js Runtime Detection**: Bun, Browser, Deno, Node.js environment detection
+- **Modern JS/TS Patterns**: ESM, TypeScript 5.x, async patterns
+
+### Changed
+- **Language Parameter**: Commands now accept `dotnet|nodejs|react` (alphabetical)
+- **Synthesis Agent**: Restructured cross-cutting analysis with domain-specific patterns
+- **Agent Invocation Pattern**: Simplified model selection, references orchestration-sequence.md
+- **.NET Language Config**: Expanded from ~150 to ~250 lines with 30+ new patterns
+- **Node.js Language Config**: Expanded from ~200 to ~290 lines with runtime detection
+
+### Files Changed
+- `languages/react.md` (NEW - 158 lines)
+- `languages/dotnet.md` (+101 lines)
+- `languages/nodejs.md` (+92 lines)
+- `commands/deep-code-review.md`, `deep-code-review-staged.md`
+- `commands/quick-code-review.md`, `quick-code-review-staged.md`
+- `shared/orchestration-sequence.md` (+22 lines)
+- `shared/context-discovery.md` (+22 lines)
+- `shared/output-format.md` (+6 lines)
+- `agents/synthesis-agent.md` (restructured)
+- `shared/agent-invocation-pattern.md` (simplified)
+- `README.md` (React support documentation)
+
 ## [3.3.2] - 2026-01-30
 
 ### Changed

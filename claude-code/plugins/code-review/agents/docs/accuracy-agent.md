@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection (sonnet for gaps)
 color: red
 tools: ["Read", "Grep", "Glob"]
-version: 3.3.2
+version: 3.4.0
 ---
 
 # Accuracy Review Agent

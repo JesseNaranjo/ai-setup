@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: orange
 tools: ["Read", "Grep", "Glob"]
-version: 3.3.2
+version: 3.4.0
 ---
 
 # Error Handling Review Agent

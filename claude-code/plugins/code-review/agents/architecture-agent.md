@@ -26,7 +26,7 @@ description: |
 model: opus  # Thorough mode. See orchestration-sequence.md for authoritative model selection per mode
 color: yellow
 tools: ["Read", "Grep", "Glob"]
-version: 3.3.2
+version: 3.4.0
 ---
 
 # Architecture Review Agent

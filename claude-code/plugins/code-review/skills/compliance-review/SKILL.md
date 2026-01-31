@@ -1,7 +1,7 @@
 ---
 name: compliance-review
 description: Verifies adherence to CLAUDE.md, coding standards, and project conventions. Use when user mentions "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", or "check naming conventions".
-version: 3.3.2
+version: 3.4.0
 ---
 
 # Compliance Code Review Skill

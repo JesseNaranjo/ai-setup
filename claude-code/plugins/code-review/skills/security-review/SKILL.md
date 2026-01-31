@@ -1,7 +1,7 @@
 ---
 name: security-review
 description: Identifies vulnerabilities, insecure patterns, and security misconfigurations. Use when user mentions "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", or "OWASP check".
-version: 3.3.2
+version: 3.4.0
 ---
 
 # Security Code Review Skill
