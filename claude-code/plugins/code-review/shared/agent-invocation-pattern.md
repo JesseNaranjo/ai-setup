@@ -122,13 +122,9 @@ Return findings as YAML per agent examples in your agent file.
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the authoritative model selection table.
 
-**Important**: Always pass the `model` parameter explicitly when invoking Task:
-- Use `model: "opus"` for bug-detection, performance, security, and technical-debt agents in thorough mode (require nuanced judgment)
-- Use `model: "sonnet"` for compliance and all other agents in thorough mode (pattern-based detection)
-- Use `model: "sonnet"` for gaps mode (constrained task with prior findings context)
-- Use `model: "sonnet"` for synthesis agents (cross-category correlation)
+**Important**: Always pass the `model` parameter explicitly when invoking Task. Refer to the table in orchestration-sequence.md for the correct model per agent and mode.
 
-**Note**: Gaps mode uses Sonnet because it receives prior findings context and follows explicit checklists, reducing the complexity of the task.
+**Rationale**: Gaps mode uses Sonnet (not Opus) because it receives prior findings context and follows explicit checklists, reducing the complexity of the task. This is a cost optimization, not a quality tradeoff.
 
 ## Common Agent Input
 

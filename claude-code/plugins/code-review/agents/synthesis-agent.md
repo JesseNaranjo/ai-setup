@@ -76,27 +76,40 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 
 ### Cross-Cutting Pairs
 
-**Authoritative source:** See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the definitive list of category pairs and cross-cutting questions.
+**Authoritative source:** See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for:
+- Deep review pairs (5 pairs with cross-cutting questions)
+- Quick review pairs (3 pairs with cross-cutting questions)
 
-The tables below describe what to look for when analyzing each pair. The exact pairs and questions are defined in orchestration-sequence.md to ensure consistency across all invocation points.
+The pairs and questions are defined in orchestration-sequence.md to ensure consistency. This section provides analysis guidance for each category combination.
 
-**Deep Review Analysis (5 pairs with 9 category agents):**
+### Analysis Patterns by Category Domain
 
-| Input Categories | What to Look For |
-|-----------------|------------------|
-| Architecture + Test Coverage | New abstractions without tests, refactored code with broken test coverage, missing integration tests |
-| Bugs + Compliance | Compliance violations that cause incorrect behavior, compliance rules that prevent bug detection |
-| Bugs + Error Handling | Bug fixes that need error handling, error paths that could trigger identified bugs |
-| Compliance + Technical Debt | Compliance rules masking debt, debt causing compliance issues |
-| Performance + Security | Parameterized queries without limits, encryption adding latency, auth checks in hot paths |
+Apply these domain-specific patterns when analyzing cross-cutting concerns:
 
-**Quick Review Analysis (3 pairs with 4 category agents):**
+**Architecture patterns:**
+- New abstractions without corresponding tests
+- Refactored code with broken test coverage
+- Missing integration tests at architectural boundaries
 
-| Input Categories | What to Look For |
-|-----------------|------------------|
-| Bugs + Error Handling | Bug fixes that need error handling, error paths that could trigger identified bugs |
-| Bugs + Security | Security vulnerabilities that could cause crashes, bugs that create security holes |
-| Bugs + Test Coverage | Bug fixes without corresponding test coverage, untested error paths |
+**Bug patterns:**
+- Bug fixes that need error handling in their fix paths
+- Error paths that could trigger identified bugs
+- Compliance violations that cause incorrect behavior
+- Security vulnerabilities that could cause crashes or create security holes
+
+**Performance patterns:**
+- Parameterized queries without result limits
+- Encryption adding latency in hot paths
+- Auth checks in performance-critical code paths
+
+**Compliance patterns:**
+- Compliance rules masking technical debt
+- Technical debt causing compliance violations
+- Compliance rules that prevent bug detection
+
+**Test coverage patterns:**
+- Bug fixes without corresponding test coverage
+- Untested error recovery paths
 
 ## Review Process
 
