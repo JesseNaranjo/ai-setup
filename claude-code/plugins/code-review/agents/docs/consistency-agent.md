@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default for thorough. See docs-orchestration-sequence.md for authoritative model selection (sonnet for gaps)
 color: blue
 tools: ["Read", "Grep", "Glob"]
-version: 3.3.1
+version: 3.3.2
 ---
 
 # Consistency Review Agent

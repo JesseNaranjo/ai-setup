@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection
 color: purple
 tools: ["Read", "Grep", "Glob"]
-version: 3.3.1
+version: 3.3.2
 ---
 
 # Structure Review Agent
