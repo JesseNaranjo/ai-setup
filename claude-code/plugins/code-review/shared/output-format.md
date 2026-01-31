@@ -57,8 +57,10 @@ Write the same content to a file:
 |---------|---------------------|
 | `/deep-code-review` | `.deep-code-review.md` |
 | `/deep-code-review-staged` | `.deep-code-review-staged.md` |
+| `/deep-docs-review` | `.deep-docs-review.md` |
 | `/quick-code-review` | `.quick-code-review.md` |
 | `/quick-code-review-staged` | `.quick-code-review-staged.md` |
+| `/quick-docs-review` | `.quick-docs-review.md` |
 
 If `--output-file <path>` argument was provided, use that path instead.
 
@@ -148,8 +150,10 @@ The Usage Summary appears BEFORE the Code Review header to provide visibility in
 |---------|-------------------|
 | `/deep-code-review` | Deep (19 invocations) |
 | `/deep-code-review-staged` | Deep (19 invocations) |
+| `/deep-docs-review` | Deep Documentation (13 invocations) |
 | `/quick-code-review` | Quick (7 invocations) |
 | `/quick-code-review-staged` | Quick (7 invocations) |
+| `/quick-docs-review` | Quick Documentation (7 invocations) |
 
 ### Status Indicators
 
@@ -513,8 +517,10 @@ This is treated as `fix_type: diff` internally.
 Write the review to a file:
 - Default for `/deep-code-review`: `.deep-code-review.md`
 - Default for `/deep-code-review-staged`: `.deep-code-review-staged.md`
+- Default for `/deep-docs-review`: `.deep-docs-review.md`
 - Default for `/quick-code-review`: `.quick-code-review.md`
 - Default for `/quick-code-review-staged`: `.quick-code-review-staged.md`
+- Default for `/quick-docs-review`: `.quick-docs-review.md`
 - Custom path if `--output-file` argument provided
 
 End with:

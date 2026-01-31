@@ -189,12 +189,20 @@ Each agent has a unique color for visual identification during parallel executio
 | examples-agent | yellow |
 | structure-agent | purple |
 
-**Color Usage Notes:**
-- All 9 code review agents have unique colors within Phase 1 (synthesis and test-coverage share white)
-- Phase 2 reuses colors from Phase 1 (compliance, bug, security, performance, technical-debt) but runs sequentially after Phase 1 completes
+**Color Assignment Rules:**
+
+There are more agents than available colors. When assigning colors:
+
+1. **Do not change existing colors** - Existing agent colors should not be changed unless absolutely necessary
+2. **Minimize conflicts within each Phase** - Agents running in parallel within the same phase should have distinct colors when possible
+3. **Repeating across Phases is acceptable** - Colors can be reused in different phases since they run sequentially
+4. **Use white for overflow** - When colors must repeat within a phase, use white
+
+**Current Color Usage:**
+- Phase 1 code review agents have unique colors except synthesis and test-coverage (both white)
+- Phase 2 reuses colors from Phase 1 (runs sequentially after Phase 1 completes)
 - Synthesis phase runs 5 parallel instances of synthesis-agent, all using white (same agent type)
-- Documentation agents intentionally reuse code agent colors since they run in separate pipelines (docs-review commands vs code-review commands)
-- Color conflicts within a phase are avoided; color reuse across sequential phases or separate pipelines is acceptable
+- Documentation agents reuse code agent colors since they run in separate pipelines (docs-review commands vs code-review commands)
 
 ### Deep Review Pipeline
 
@@ -315,6 +323,38 @@ Category pairs (alphabetize by first category):
 ```
 
 **Rationale:** Alphabetical ordering ensures consistent, neutral presentation without implying priority or importance. It also makes it easier to find specific items in long lists.
+
+### File Path References
+
+Plugin files use two distinct path reference patterns based on the official Anthropic skill best practices:
+
+**1. Cross-Plugin References (to `shared/`, `languages/`, `agents/`)**
+
+Use `${CLAUDE_PLUGIN_ROOT}` for references that cross skill/component boundaries:
+
+```markdown
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for validation rules.
+See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#security` for Node.js checks.
+See `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` for agent definition.
+```
+
+**2. Intra-Skill References (local `references/` and `examples/`)**
+
+Use relative paths for references within a skill's own directory structure:
+
+```markdown
+# In skills/security-review/SKILL.md
+See `references/common-vulnerabilities.md` for vulnerability patterns.
+See `examples/example-output.md` for sample output format.
+```
+
+**Rationale:** This follows the official Anthropic skill authoring best practices which shows relative paths for intra-skill references:
+
+> "**Pattern 1: High-level guide with references**
+> `**Form filling**: See [FORMS.md](FORMS.md) for complete guide`
+> Claude loads FORMS.md, REFERENCE.md, or EXAMPLES.md only when needed."
+
+**Do NOT convert intra-skill relative paths to `${CLAUDE_PLUGIN_ROOT}` paths** - this would break the documented progressive disclosure pattern.
 
 ## Skill Structure (Progressive Disclosure)
 
