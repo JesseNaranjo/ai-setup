@@ -137,6 +137,10 @@ LSP provides precise location and type context unavailable to pattern matching.
 | Async/await pitfalls | Missing `await`, returning instead of awaiting, parallel vs sequential execution |
 | Type coercion bugs | Loose equality (`==`), implicit type conversions causing unexpected behavior |
 | Event loop blocking | Synchronous operations that block the event loop |
+| Promise.all partial failure | Using Promise.all where one failure should not abort others (use Promise.allSettled) |
+| JSON.parse without try-catch | Parsing untrusted JSON without error handling |
+| Array method on possibly empty | Calling .reduce() on potentially empty arrays without initial value |
+| Timezone-naive Date operations | Using new Date() without timezone consideration in server code |
 
 ### Security {#security}
 
@@ -150,6 +154,11 @@ LSP provides precise location and type context unavailable to pattern matching.
 | XSS via template literals | Unescaped user input in template strings used in HTML |
 | Command injection | User input passed to shell execution functions |
 | Path traversal | User input in file paths without sanitization |
+| Server-side request forgery (SSRF) | User input in fetch/axios URLs without allowlist validation |
+| Mass assignment | Object.assign/spread with user input to model objects |
+| Sensitive data in error messages | Stack traces or internal details exposed to clients |
+| Express helmet missing | Express apps without helmet middleware |
+| Rate limiting absent | Public APIs without rate limiting middleware |
 
 ### Performance {#performance}
 
@@ -208,3 +217,25 @@ LSP provides precise location and type context unavailable to pattern matching.
 | Commented code | Large blocks of commented-out code (10+ lines) |
 | Event emitter abuse | Excessive event-driven patterns where direct calls suffice |
 | Monolithic modules | Single files with 1000+ lines or 50+ exports |
+
+## Framework-Specific Checks
+
+Apply these checks when the corresponding framework is detected by context-discovery.
+
+### Express Checks
+
+| Issue Type | Description |
+|------------|-------------|
+| Missing error middleware | No app.use((err, req, res, next)) handler |
+| Route parameter injection | req.params used in SQL/shell without validation |
+| Trust proxy misconfiguration | Missing or incorrect trust proxy behind reverse proxy |
+| Body parser limits | express.json() without size limits |
+
+### NestJS Checks
+
+| Issue Type | Description |
+|------------|-------------|
+| Missing validation pipe | Controllers without ValidationPipe |
+| Injectable scope issues | Singleton services holding request-scoped data |
+| Circular module imports | ModuleRef required due to circular DI |
+| Missing guards on controllers | Endpoints without AuthGuard |

@@ -129,6 +129,9 @@ LSP distinguishes intentional fire-and-forget (Task-returning in void context) f
 | LINQ deferred execution issues | LINQ queries executed multiple times unintentionally |
 | String comparison issues | Case-sensitive comparisons where case-insensitive is needed |
 | Collection modification during iteration | Modifying collections while iterating with foreach |
+| CancellationToken ignored | Async methods not passing/checking CancellationToken |
+| DbContext disposed early | Accessing DbContext after scope disposal |
+| Lazy loading disconnected | Navigation property accessed after context disposed |
 
 ### Security {#security}
 
@@ -142,6 +145,9 @@ LSP distinguishes intentional fire-and-forget (Task-returning in void context) f
 | Weak cryptography | MD5/SHA1 for security purposes, weak encryption modes |
 | CSRF vulnerabilities | Missing anti-forgery tokens on state-changing operations |
 | XXE vulnerabilities | XML parsing without disabling external entities |
+| Open redirect in Redirect() | User input in Redirect/RedirectToAction URLs |
+| Model over-binding | [Bind] or [FromBody] allowing sensitive property binding |
+| JWT without validation | JwtSecurityTokenHandler without validation parameters |
 
 ### Performance {#performance}
 
@@ -154,6 +160,11 @@ LSP distinguishes intentional fire-and-forget (Task-returning in void context) f
 | N+1 EF queries | Entity Framework lazy loading causing multiple database calls |
 | Missing async I/O | Synchronous I/O blocking thread pool threads |
 | Large object heap allocations | Repeatedly allocating objects > 85KB |
+| Sync over async in middleware | Blocking calls in ASP.NET middleware |
+| Missing response compression | Large responses without compression middleware |
+| Missing AsNoTracking | Read-only queries without AsNoTracking() |
+| Include without filter | Loading entire related collections when filtering needed |
+| ToList() before filter | Materializing query before applying Where() |
 
 ### Architecture {#architecture}
 
@@ -202,3 +213,45 @@ LSP distinguishes intentional fire-and-forget (Task-returning in void context) f
 | Commented code | Large blocks of commented-out code (10+ lines) |
 | Static class abuse | Static classes preventing testability and DI |
 | Missing async suffix | Async methods without `Async` suffix convention |
+
+## Entity Framework Core Patterns
+
+Apply when EF Core is detected (Microsoft.EntityFrameworkCore in csproj).
+
+### Query Issues
+
+| Issue Type | Description |
+|------------|-------------|
+| N+1 via lazy loading | Navigation properties accessed in loops |
+| Client-side evaluation | LINQ expressions evaluated in memory instead of SQL |
+| Raw SQL injection | FromSqlRaw with string interpolation |
+| Missing AsSplitQuery | Large Include graphs causing Cartesian explosion |
+
+### Context Issues
+
+| Issue Type | Description |
+|------------|-------------|
+| Long-lived DbContext | DbContext kept alive across multiple requests |
+| DbContext in Singleton | Scoped DbContext injected into Singleton service |
+| Missing transactions | Multiple SaveChanges without TransactionScope |
+| Concurrent DbContext access | Same DbContext used from multiple threads |
+
+## ASP.NET Core Middleware Checks
+
+Apply when ASP.NET Core is detected (Microsoft.AspNetCore in csproj).
+
+### Middleware Order Issues
+
+| Issue Type | Description |
+|------------|-------------|
+| Auth after endpoints | UseAuthentication/Authorization after MapControllers |
+| Exception handler position | UseExceptionHandler not at start of pipeline |
+| CORS misconfigured | UseCors after UseRouting or before policy applied |
+
+### Minimal API Security
+
+| Issue Type | Description |
+|------------|-------------|
+| Missing RequireAuthorization | Endpoints without .RequireAuthorization() |
+| Missing validation | Endpoints without parameter validation |
+| Improper Results usage | Returning raw data instead of Results.Ok/BadRequest |

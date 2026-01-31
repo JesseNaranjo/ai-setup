@@ -38,6 +38,9 @@ These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/langu
 | Controlled/uncontrolled input mixing | Switching between controlled and uncontrolled inputs |
 | Key prop issues | Missing keys in lists, using index as key for dynamic lists |
 | Ref updates during render | Mutating refs during render instead of in useEffect |
+| useEffect async function | Defining async function inside useEffect (should be separate) |
+| Derived state anti-pattern | useState for values computable from props |
+| Context value object recreation | Passing new object to Context.Provider value on each render |
 
 ### Security {#security}
 
@@ -61,6 +64,9 @@ These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/langu
 | Missing useCallback for handler props | Handler functions recreated on every render |
 | Missing useMemo for expensive computations | Heavy calculations running on every render |
 | Unnecessary re-renders | Missing memoization, inline functions/objects in props causing child re-renders |
+| Heavy computation in render | Complex calculations not memoized with useMemo |
+| Object creation in dependency array | Objects in useEffect deps without useMemo |
+| Large bundle imports | Full library imports instead of tree-shakeable |
 
 ### Architecture {#architecture}
 
@@ -108,3 +114,45 @@ These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/langu
 | Legacy lifecycle methods | componentWillMount, componentWillReceiveProps, componentWillUpdate |
 | PropTypes in TypeScript | Redundant PropTypes validation in TypeScript projects |
 | String refs | Using string refs instead of createRef/useRef |
+
+## State Management Checks
+
+Apply when state management libraries detected by context-discovery.
+
+### Redux/RTK Patterns
+
+| Issue Type | Description |
+|------------|-------------|
+| Direct state mutation | Modifying state outside of reducers |
+| Selector recomputation | Selectors without createSelector memoization |
+| Non-serializable state | Functions or class instances in Redux state |
+| Missing loading/error states | Async thunks without pending/rejected handling |
+
+### React Query Patterns
+
+| Issue Type | Description |
+|------------|-------------|
+| Missing error boundaries for queries | Queries without onError or error boundary |
+| Stale time too short | Refetching on every mount unnecessarily |
+| Missing query invalidation | Mutations not invalidating related queries |
+
+## Next.js Specific Checks
+
+Apply when Next.js is detected by context-discovery (presence of `next` in deps).
+
+### App Router (Server Components)
+
+| Issue Type | Description |
+|------------|-------------|
+| Client component unnecessary | 'use client' on component with no hooks/events |
+| useState in server component | Client hooks used in server components |
+| Missing Suspense for async | Async server components without loading.tsx |
+| Large data in server components | Passing large objects from server to client |
+
+### API Routes
+
+| Issue Type | Description |
+|------------|-------------|
+| Missing authentication | API routes without auth middleware |
+| Missing rate limiting | Public APIs without rate limits |
+| Improper error responses | Exposing internal errors to clients |

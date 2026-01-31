@@ -59,7 +59,7 @@ Fast review of staged git changes using 4 agents (7 invocations) focusing on cri
 Comprehensive documentation review using all 6 documentation agents (13 invocations) with thorough + gaps modes.
 
 ```bash
-/deep-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"]
+/deep-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 If no files are specified, discovers and reviews all documentation files (README.md, CLAUDE.md, docs/*, etc.).
@@ -69,8 +69,10 @@ If no files are specified, discovers and reviews all documentation files (README
 Fast documentation review using 4 agents (7 invocations) focusing on critical issues (accuracy, clarity, examples, structure).
 
 ```bash
-/quick-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"]
+/quick-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
 ```
+
+> **Note:** Documentation commands support the `docs-review` skill which provides focused documentation quality checks across all 6 documentation agents (accuracy, clarity, completeness, consistency, examples, structure).
 
 ### Documentation Categories
 

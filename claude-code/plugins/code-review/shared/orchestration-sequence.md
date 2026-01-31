@@ -23,6 +23,20 @@ This document defines the authoritative execution sequences for review pipelines
    - **CRITICAL: WAIT** - DO NOT proceed to Synthesis until ALL 5 agents complete
    - OUTPUT: Phase 2 findings (subtle issues, edge cases)
 
+### Gaps Mode Agent Selection Rationale
+
+**Selected agents:** bug-detection, compliance, performance, security, technical-debt
+
+**Rationale:**
+1. **High complexity domains**: Security, performance, and bugs have many subtle edge cases that benefit from a second pass with fresh perspective
+2. **Domain overlap potential**: Compliance and technical-debt often surface issues that other agents might frame differently
+3. **Cost-benefit analysis**: These 5 agents provide the best coverage-to-cost ratio for gaps analysis
+
+**Excluded agents:** api-contracts, architecture, error-handling, test-coverage
+- These domains have fewer subtle edge cases that benefit from gaps pass
+- Their issues are typically more binary (present/absent) rather than nuanced
+- Architecture and API contracts are better caught in thorough mode or synthesis
+
 4. **Synthesis** (5 agents in parallel)
    - **CRITICAL: DO NOT START until Phase 1 AND Phase 2 are FULLY COMPLETE**
    - Launch: 5 instances of synthesis-agent with category pairs
