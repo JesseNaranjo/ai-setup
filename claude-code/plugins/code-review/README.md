@@ -1,6 +1,6 @@
 # Code Review Plugin
 
-Modular 10-agent code review with parameterized modes for Node.js and .NET projects. Also includes documentation review commands with 6 specialized documentation agents.
+Modular 10-agent code review with parameterized modes for Node.js, React, and .NET projects. Also includes documentation review commands with 6 specialized documentation agents.
 
 ## Overview
 
@@ -12,7 +12,7 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 - **Modular 10-Agent Architecture**: Each agent is a separate file in `agents/` for easy customization
 - **Parameterized Modes**: thorough, gaps, and quick modes for different review depths
-- **Language-Aware**: Specialized checks for Node.js/TypeScript and .NET/C# (configs in `languages/`)
+- **Language-Aware**: Specialized checks for Node.js/TypeScript, React, and .NET/C# (configs in `languages/`)
 - **Targeted Skills**: Security, performance, bug, compliance, and technical debt review skills
 - **Validation Layer**: Every issue is independently validated to reduce false positives
 - **Severity Classification**: Issues categorized as Critical, Major, Minor, or Suggestion
@@ -25,7 +25,7 @@ Additionally, the plugin provides documentation review commands that analyze pro
 Comprehensive code review using all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes for maximum coverage.
 
 ```bash
-/deep-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/deep-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ### `/deep-code-review-staged`
@@ -33,7 +33,7 @@ Comprehensive code review using all 9 review agents plus synthesis (19 invocatio
 Comprehensive code review of staged git changes using all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes.
 
 ```bash
-/deep-code-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/deep-code-review-staged [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ### `/quick-code-review`
@@ -41,7 +41,7 @@ Comprehensive code review of staged git changes using all 9 review agents plus s
 Fast review using 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/quick-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ### `/quick-code-review-staged`
@@ -49,7 +49,7 @@ Fast review using 4 agents (7 invocations) focusing on critical issues (bugs, se
 Fast review of staged git changes using 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/quick-code-review-staged [--output-file <path>] [--language <nodejs|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/quick-code-review-staged [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ## Documentation Review Commands
@@ -325,13 +325,13 @@ Targeted review skills for specific concerns:
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
-| `architecture-principles-review` | "check SOLID", "find DRY violations", "check YAGNI", "architecture principles" |
-| `bug-review` | "find bugs", "check for errors", "find edge cases" |
-| `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
-| `docs-review` | "review documentation", "check docs", "audit README", "verify AI instructions" |
-| `performance-review` | "check performance", "find slow code", "optimize" |
-| `security-review` | "security review", "check for vulnerabilities", "audit security" |
-| `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
+| `architecture-principles-review` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "check YAGNI", "find over-engineering" |
+| `bug-review` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions" |
+| `compliance-review` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions" |
+| `docs-review` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown" |
+| `performance-review` | "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity" |
+| `security-review` | "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets" |
+| `technical-debt-review` | "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health" |
 
 ## Architecture
 
@@ -486,6 +486,15 @@ Detected by presence of `package.json`. See `languages/nodejs.md` for:
 - Architecture concerns (circular imports, hooks violations)
 - Test file patterns
 
+### React
+
+Detected by `react` or `react-dom` in package.json dependencies. Extends Node.js checks. See `languages/react.md` for:
+- Bug patterns (stale closures, dependency arrays, unmounted state updates)
+- Security checks (XSS via dangerouslySetInnerHTML, javascript: URLs)
+- Performance issues (missing memo/useCallback, inline objects, virtualization)
+- Architecture concerns (prop drilling, component boundaries, hooks extraction)
+- Test file patterns (testing-library patterns)
+
 ### .NET / C#
 
 Detected by presence of `*.csproj` or `*.sln`. See `languages/dotnet.md` for:
@@ -595,7 +604,7 @@ Create a new `.md` file in `commands/` with the appropriate frontmatter.
 - Verify changes are staged with `git status`
 
 **Wrong language detected:**
-- Use `--language nodejs` or `--language dotnet` flag
+- Use `--language nodejs`, `--language react`, or `--language dotnet` flag
 - Or set `language` in settings file
 
 **Too many findings:**

@@ -6,6 +6,17 @@ Language-specific checks and patterns for Node.js and TypeScript projects.
 
 Detect Node.js projects by checking for `package.json` in the repository root or parent directories.
 
+## Runtime Detection
+
+Detect runtime environment for runtime-specific checks:
+
+| Runtime | Detection | Special Checks |
+|---------|-----------|----------------|
+| Bun | `bun.lockb` or `bunfig.toml` | Bun namespace, SQLite |
+| Browser | No runtime markers + DOM usage | Window, document patterns |
+| Deno | `deno.json` or `deno.jsonc` | Deno namespace, permissions |
+| Node.js | `package.json` engines.node | Buffer, fs, process patterns |
+
 ## Test File Patterns
 
 - `*.test.ts`
@@ -16,6 +27,30 @@ Detect Node.js projects by checking for `package.json` in the repository root or
 - `*-spec.js`
 - `__tests__/` directories
 - `tests/` directories
+
+## Modern JavaScript/TypeScript Patterns
+
+### ES2022+ Features to Prefer
+
+| Modern Pattern | Legacy Pattern | Category |
+|----------------|----------------|----------|
+| `?.` optional chaining | `x && x.y && x.y.z` | Architecture |
+| `??` nullish coalescing | `x \|\| defaultValue` (falsy trap) | Bugs |
+| `Array.at(-1)` | `arr[arr.length - 1]` | Architecture |
+| `Object.hasOwn()` | `hasOwnProperty.call()` | Security |
+| Private class fields `#` | WeakMap or naming convention | Architecture |
+| Static class blocks | Constructor initialization | Architecture |
+| Top-level await | Wrapper async IIFE | Architecture |
+
+### ESM vs CommonJS
+
+| Check | Description |
+|-------|-------------|
+| __dirname/__filename in ESM | Using CommonJS globals in ESM context |
+| Default export interop | CJS default imports from ESM |
+| Dynamic import() for CommonJS | Using require() where import() needed |
+| .mjs/.cjs extension issues | Wrong extension for module type |
+| Package.json "type" mismatch | Files using wrong module syntax for package type |
 
 ## Language Server Integration (Optional)
 
@@ -43,14 +78,26 @@ Map TypeScript diagnostics to review categories:
 
 | TS Code | Category | Description |
 |---------|----------|-------------|
+| TS2304 | Architecture | Cannot find name (missing import) |
+| TS2307 | Architecture | Cannot find module |
 | TS2322 | Bugs | Type mismatch in assignment |
+| TS2339 | Bugs | Property does not exist on type |
 | TS2345 | Bugs | Argument type mismatch |
 | TS2531 | Bugs | Object is possibly null |
 | TS2532 | Bugs | Object is possibly undefined |
+| TS2551 | Bugs | Property does not exist (did you mean?) |
+| TS2571 | Bugs | Object is of type 'unknown' |
+| TS2614 | Architecture | Module has no exported member |
+| TS2741 | Bugs | Property missing in type assignment |
+| TS2769 | Bugs | No overload matches this call |
 | TS6133 | Technical Debt | Unused variable/parameter |
 | TS6196 | Technical Debt | Unused declaration |
+| TS6198 | Technical Debt | All imports unused |
 | TS7006 | Architecture | Implicit any type |
 | TS7031 | Architecture | Implicit any in binding element |
+| TS7053 | Bugs | Element implicitly has 'any' type (index signature) |
+| TS18046 | Bugs | Value is 'unknown' |
+| TS18048 | Bugs | Value is possibly 'undefined' |
 
 ### Agent Usage Guidelines
 
@@ -112,19 +159,21 @@ LSP provides precise location and type context unavailable to pattern matching.
 | Memory leaks | Unclosed event listeners, closures capturing large objects, unbounded caches |
 | Inefficient array methods | `forEach` in hot paths where `for` loop is faster, repeated `find()`/`filter()` |
 | Missing stream usage | Reading large files entirely into memory instead of streaming |
-| Unnecessary re-renders | React: missing memoization, inline functions/objects in props |
 | N+1 queries | Sequential database calls in loops instead of batch queries |
 
 ### Architecture {#architecture}
 
 | Issue Type | Description |
 |------------|-------------|
-| CommonJS vs ESM issues | Mixing `require()` and `import`, incorrect file extensions |
-| Circular imports | Modules that import each other causing initialization issues |
-| React hooks rules violations | Hooks called conditionally, hooks in loops, missing dependencies in useEffect |
-| Improper TypeScript typing | `any` abuse, incorrect type assertions, missing generics |
-| God modules | Single files with too many responsibilities |
 | Barrel file abuse | Re-exports causing bundle size issues |
+| Circular imports | Modules that import each other causing initialization issues |
+| CommonJS vs ESM issues | Mixing `require()` and `import`, incorrect file extensions |
+| God modules | Single files with too many responsibilities |
+| Improper TypeScript typing | `any` abuse, incorrect type assertions, missing generics |
+| Missing noImplicitAny | Implicit any hiding type errors |
+| Missing noUncheckedIndexedAccess | Array/object access possibly undefined |
+| Missing strictNullChecks | Nullable errors not caught at compile time |
+| Strict mode not enabled | tsconfig.json without `"strict": true` |
 
 ### Error Handling {#errors}
 
@@ -132,7 +181,6 @@ LSP provides precise location and type context unavailable to pattern matching.
 |------------|-------------|
 | Unhandled promise rejections | Promises without error handling in async code |
 | Missing `.catch()` | Promise chains without terminal error handler |
-| Missing error boundaries | React apps without error boundary components |
 | Swallowed errors | Empty catch blocks, catch blocks that only log |
 | Improper error propagation | Catching and not re-throwing when appropriate |
 | Missing finally cleanup | Resources not cleaned up on error |
@@ -153,7 +201,6 @@ LSP provides precise location and type context unavailable to pattern matching.
 |------------|-------------|
 | Deprecated dependencies | Packages with npm deprecation warnings, major version 2+ behind |
 | Callback patterns | Callbacks instead of async/await in modern codebases |
-| Class components | React class components in React 18+ projects |
 | CommonJS in ESM | `require()` usage in ESM-configured projects (`"type": "module"`) |
 | Legacy bundler config | Webpack 4 config, Gulp/Grunt in modern projects |
 | Outdated TypeScript | TS <4.0 patterns, pre-strict mode code, excessive `any` usage |

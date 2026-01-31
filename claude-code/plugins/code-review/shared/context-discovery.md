@@ -62,6 +62,21 @@ If `--language` argument is provided:
 
 The override takes precedence over auto-detection.
 
+### Step 2b: Detect Frameworks
+
+For files detected as Node.js/TypeScript, additionally check for React framework:
+
+**React detection:**
+- Read nearest `package.json` to the file
+- If `dependencies` or `devDependencies` contains `react` or `react-dom`: mark file as React
+- Store in `detected_frameworks.react` for language config loading
+
+**Framework override:**
+
+If `--language react` is provided:
+- Force React checks for all Node.js/TypeScript files
+- This implies Node.js base checks + React-specific checks
+
 ### Step 3: Find Related Test Files
 
 For each file being reviewed, find corresponding test files based on detected language.
@@ -120,16 +135,19 @@ discovery_results:
     nodejs: ["src/api/handler.ts", "src/utils/helpers.ts"]
     dotnet: ["Services/UserService.cs"]
 
+  detected_frameworks:
+    react: ["src/components/Button.tsx", "src/hooks/useAuth.ts"]
+
   test_files:
     - source: "src/api/handler.ts"
       tests: ["src/api/__tests__/handler.test.ts"]
     - source: "Services/UserService.cs"
       tests: ["Services.Tests/UserServiceTests.cs"]
 
-  language_override: null  # or "nodejs" / "dotnet" if --language was used
+  language_override: null  # or "nodejs" / "react" / "dotnet" if --language was used
 ```
 
-**Note:** The `detected_languages` field maps each detected language to its file list. This enables lazy loading of language configs - only load `languages/nodejs.md` if `detected_languages.nodejs` has files, and only load `languages/dotnet.md` if `detected_languages.dotnet` has files.
+**Note:** The `detected_languages` field maps each detected language to its file list. This enables lazy loading of language configs - only load `languages/nodejs.md` if `detected_languages.nodejs` has files, and only load `languages/dotnet.md` if `detected_languages.dotnet` has files. The `detected_frameworks` field tracks framework-level detection (React) that extends base language configs.
 
 ## Error Handling
 

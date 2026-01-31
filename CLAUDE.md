@@ -8,7 +8,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
-- Support for Node.js/TypeScript and .NET/C# projects
+- Support for Node.js/TypeScript, React, and .NET/C# projects
 
 ## Plugin Commands
 
@@ -29,7 +29,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 | `/quick-docs-review [file1...] [--output-file <path>]` | Quick docs review (4 agents + 3 synthesis agents) |
 
 **Note:** All review commands also accept:
-- `--language nodejs|dotnet` to force language detection
+- `--language nodejs|react|dotnet` to force language detection
 - `--prompt "<instructions>"` to pass additional instructions to agents
 - `--skills <skill1,skill2,...>` to enable skill-informed orchestration (orchestrator interprets skills and generates tailored `skill_instructions` per agent)
 
@@ -37,13 +37,13 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
-| `architecture-principles-review` | "check SOLID", "find DRY violations", "check YAGNI", "architecture principles" |
-| `bug-review` | "find bugs", "check for errors", "find edge cases" |
-| `compliance-review` | "check CLAUDE.md compliance", "review against standards" |
-| `docs-review` | "review documentation", "check docs", "audit README", "verify AI instructions", "standardize docs" |
-| `performance-review` | "check performance", "find slow code", "optimize" |
-| `security-review` | "security review", "check for vulnerabilities", "audit security" |
-| `technical-debt-review` | "find technical debt", "check for deprecated code", "identify dead code" |
+| `architecture-principles-review` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "check YAGNI", "find over-engineering" |
+| `bug-review` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions" |
+| `compliance-review` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions" |
+| `docs-review` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown" |
+| `performance-review` | "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity" |
+| `security-review` | "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets" |
+| `technical-debt-review` | "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health" |
 
 ## Architecture
 
@@ -53,12 +53,12 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata (v3.3.2)
 ├── commands/                        # Thin orchestration documents (reference shared/)
-│   ├── deep-docs-review.md          # Deep documentation review (13 invocations)
 │   ├── deep-code-review.md          # Deep file review (19 agent invocations)
-│   ├── deep-code-review-staged.md        # Deep staged review (19 agent invocations)
-│   ├── quick-docs-review.md         # Quick documentation review (7 invocations)
-│   ├── quick-code-review.md              # Quick file review (7 invocations)
-│   └── quick-code-review-staged.md       # Quick staged review (7 invocations)
+│   ├── deep-code-review-staged.md   # Deep staged review (19 agent invocations)
+│   ├── deep-docs-review.md          # Deep documentation review (13 invocations)
+│   ├── quick-code-review.md         # Quick file review (7 invocations)
+│   ├── quick-code-review-staged.md  # Quick staged review (7 invocations)
+│   └── quick-docs-review.md         # Quick documentation review (7 invocations)
 ├── agents/                          # Modular agent definitions (10 code + 6 docs agents)
 │   ├── api-contracts-agent.md       # API compatibility
 │   ├── architecture-agent.md        # Architecture patterns
@@ -122,8 +122,9 @@ claude-code/plugins/code-review/
 │       └── examples/
 │           └── example-output.md
 ├── languages/                       # Language-specific configs
+│   ├── dotnet.md                    # .NET/C# checks
 │   ├── nodejs.md                    # Node.js/TypeScript checks
-│   └── dotnet.md                    # .NET/C# checks
+│   └── react.md                     # React checks (extends Node.js)
 ├── shared/
 │   ├── orchestration-sequence.md    # Phase definitions and model selection (authoritative)
 │   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
@@ -257,6 +258,7 @@ See `shared/settings-loader.md` for loading logic and `README.md` for full docum
 ## Language Detection
 
 - **Node.js/TypeScript**: Detected by `package.json`
+- **React**: Detected by `react` or `react-dom` in package.json dependencies (extends Node.js checks)
 - **.NET/C#**: Detected by `*.csproj`, `*.sln`, or `*.slnx`
 
 ## Making Changes

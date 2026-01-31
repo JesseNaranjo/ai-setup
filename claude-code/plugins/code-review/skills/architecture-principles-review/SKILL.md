@@ -1,6 +1,6 @@
 ---
 name: architecture-principles-review
-description: This skill should be used when the user asks to "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "architecture principles review", or wants to verify code follows software design principles.
+description: Identifies SOLID, DRY, and YAGNI violations in code architecture. Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", or "architecture principles review".
 version: 3.3.2
 ---
 

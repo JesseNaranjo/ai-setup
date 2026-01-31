@@ -1,6 +1,6 @@
 ---
 name: compliance-review
-description: This skill should be used when the user asks to "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", "check naming conventions", or wants to ensure code follows project-specific rules and standards.
+description: Verifies adherence to CLAUDE.md, coding standards, and project conventions. Use when user mentions "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", or "check naming conventions".
 version: 3.3.2
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: technical-debt-review
-description: This skill should be used when the user asks to "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", "legacy code review", or wants to identify accumulated technical debt.
+description: Identifies deprecated dependencies, outdated patterns, dead code, and TODO accumulation. Use when user mentions "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", or "legacy code review".
 version: 3.3.2
 ---
 

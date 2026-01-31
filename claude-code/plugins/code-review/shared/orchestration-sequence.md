@@ -74,13 +74,15 @@ This document defines the authoritative execution sequences for review pipelines
 
 ## Language-Specific Focus
 
-Load language configs ONLY for detected languages to minimize context usage:
+Load language configs ONLY for detected languages/frameworks to minimize context usage:
 
-- If `detected_languages.nodejs` has files: Load `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`
 - If `detected_languages.dotnet` has files: Load `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
-- Skip loading configs for languages not present in the review
+- If `detected_languages.nodejs` has files: Load `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`
+- If `detected_frameworks.react` has files: Also load `${CLAUDE_PLUGIN_ROOT}/languages/react.md`
+- Skip loading configs for languages/frameworks not present in the review
 
 For mixed codebases (monorepos):
 - Each file receives only its relevant language config
+- React files receive both nodejs.md AND react.md checks
 - Agents receive language-specific checks per file, not all configs
 - Cross-language issues (e.g., API contract mismatches) are handled by architecture and API agents

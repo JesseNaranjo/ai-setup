@@ -9,6 +9,17 @@ Detect .NET projects by checking for any of these files:
 - `*.sln` (solution file)
 - `*.slnx` (solution file, newer format)
 
+## .NET Version Detection
+
+Detect target framework for version-specific checks:
+
+| Target | Detection | Special Checks |
+|--------|-----------|----------------|
+| .NET 8+ | `<TargetFramework>net8.0</TargetFramework>` | Primary constructors, collection expressions |
+| .NET 6-7 | `<TargetFramework>net6.0</TargetFramework>` | Minimal APIs, file-scoped namespaces |
+| .NET Framework | `<TargetFramework>net48</TargetFramework>` | Legacy patterns flagged |
+| .NET Standard | `<TargetFramework>netstandard2.0</TargetFramework>` | Compatibility concerns |
+
 ## Test File Patterns
 
 - `*.Tests.cs`
@@ -43,20 +54,41 @@ Map Roslyn/analyzer diagnostics to review categories:
 
 | Code | Category | Description |
 |------|----------|-------------|
+| CA1031 | Error Handling | Do not catch general exception types |
+| CA1032 | Architecture | Implement standard exception constructors |
+| CA1054 | Architecture | URI parameters should not be strings |
+| CA1062 | Security | Validate parameter is not null |
+| CA1063 | Architecture | Implement IDisposable correctly |
+| CA1303 | Architecture | Do not pass literals as localized parameters |
+| CA1304 | Bugs | Specify CultureInfo |
+| CA1305 | Bugs | Specify IFormatProvider |
+| CA1307 | Bugs | Specify StringComparison |
+| CA1310 | Bugs | Specify StringComparison for correctness |
+| CA1822 | Performance | Member can be static |
+| CA1825 | Performance | Avoid zero-length array allocations |
+| CA1829 | Performance | Use Length/Count property instead of Count() |
+| CA1836 | Performance | Prefer IsEmpty over Count when available |
+| CA1848 | Performance | Use LoggerMessage delegates |
+| CA1852 | Performance | Type can be sealed |
+| CA1860 | Performance | Avoid using 'Enumerable.Any()' extension method |
+| CA2000 | Bugs | Dispose objects before losing scope |
+| CA2007 | Performance | Missing ConfigureAwait |
+| CA2100 | Security | SQL queries for security vulnerabilities |
+| CA2211 | Architecture | Non-constant fields should not be visible |
+| CA2227 | Architecture | Collection properties should be read only |
+| CA2234 | Architecture | Pass System.Uri instead of strings |
+| CS0168 | Technical Debt | Variable declared but never used |
+| CS0219 | Technical Debt | Variable assigned but never used |
+| CS1998 | Performance | Async method lacks await operators |
+| CS4014 | Bugs | Async method not awaited |
 | CS8600 | Bugs | Converting null literal to non-nullable type |
 | CS8601 | Bugs | Possible null reference assignment |
 | CS8602 | Bugs | Dereference of possibly null reference |
 | CS8603 | Bugs | Possible null reference return |
 | CS8604 | Bugs | Possible null reference argument |
 | CS8618 | Bugs | Non-nullable property not initialized |
-| CS4014 | Bugs | Async method not awaited |
-| CA2000 | Bugs | Dispose objects before losing scope |
-| CA2007 | Performance | Missing ConfigureAwait |
-| CA1822 | Performance | Member can be static |
-| CS0219 | Technical Debt | Variable assigned but never used |
-| CS0168 | Technical Debt | Variable declared but never used |
-| CA1062 | Security | Validate parameter is not null |
-| CA2100 | Security | SQL queries for security vulnerabilities |
+| CS8625 | Bugs | Cannot convert null literal to non-nullable |
+| CS8629 | Bugs | Nullable value type may be null |
 
 ### Agent Usage Guidelines
 

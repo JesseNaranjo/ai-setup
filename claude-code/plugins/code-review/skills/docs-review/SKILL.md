@@ -1,6 +1,6 @@
 ---
 name: docs-review
-description: This skill should be used when the user asks to "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown", "check docs accuracy", or mentions reviewing project documentation for quality issues.
+description: Reviews documentation for accuracy, clarity, completeness, and structure. Use when user mentions "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown", or "check docs accuracy".
 version: 3.3.2
 ---
 

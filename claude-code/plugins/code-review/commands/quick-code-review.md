@@ -2,7 +2,7 @@
 name: quick-code-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
 description: Quick code review with 7 agent invocations and synthesis
-argument-hint: "<file1> [file2...] [--output-file <path>] [--language nodejs|dotnet] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
+argument-hint: "<file1> [file2...] [--output-file <path>] [--language dotnet|nodejs|react] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
@@ -11,7 +11,7 @@ Perform a fast code review using 4 agents (7 invocations total) for the specifie
 Parse arguments from `$ARGUMENTS`:
 - Required: One or more file paths (space-separated)
 - Optional: `--output-file <path>` to specify output location (default: `.quick-code-review.md`)
-- Optional: `--language nodejs|dotnet` to force language detection
+- Optional: `--language dotnet|nodejs|react` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
 

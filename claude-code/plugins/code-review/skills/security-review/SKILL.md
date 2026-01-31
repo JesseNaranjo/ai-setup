@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: This skill should be used when the user asks to "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", "OWASP check", or mentions reviewing code specifically for security concerns.
+description: Identifies vulnerabilities, insecure patterns, and security misconfigurations. Use when user mentions "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", or "OWASP check".
 version: 3.3.2
 ---
 
