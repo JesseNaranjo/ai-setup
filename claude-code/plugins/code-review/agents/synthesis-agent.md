@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
 color: white
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.0
+version: 3.4.1
 ---
 
 # Cross-Agent Synthesis Agent

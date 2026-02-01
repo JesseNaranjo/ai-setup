@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.4.0) - a modular 16-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.4.1) - a modular 16-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -437,7 +437,7 @@ When preparing a new release:
    # Verify no old version remains (exclude CHANGELOG history)
    grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-   # Verify new version count (~29: 1 plugin.json + 1 marketplace.json + 2 README refs + 2 CLAUDE.md refs + 16 agents + 7 skills)
+   # Verify new version count (~27: 1 plugin.json + 1 marketplace.json + 1 README + 1 CLAUDE.md + 16 agents + 7 skills)
    grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 
    # Verify CHANGELOG has new section

@@ -26,7 +26,7 @@ description: |
 model: opus  # Default for thorough/quick. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
 color: purple
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.0
+version: 3.4.1
 ---
 
 # Security Review Agent

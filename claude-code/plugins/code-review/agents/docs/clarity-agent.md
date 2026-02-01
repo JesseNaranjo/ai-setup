@@ -26,7 +26,7 @@ description: |
 model: sonnet  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.0
+version: 3.4.1
 ---
 
 # Clarity Review Agent

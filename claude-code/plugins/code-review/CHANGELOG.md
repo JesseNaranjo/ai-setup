@@ -5,6 +5,25 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.1] - 2026-01-31
+
+### Changed
+- **Validation Rules**: Added auto-validated patterns for documentation agent categories (Accuracy, Clarity, Completeness, Consistency, Examples, Structure) with alphabetical organization
+- **Architecture Principles Skill**: Added Separation of Concerns (SoC) and File Organization violation detection with new trigger phrases ("check SoC", "separation of concerns", "file organization")
+- **Architecture Agent**: Added SoC and file organization checks with examples
+- **Skill Resolver**: Clarified `docs-review` as command-invoking meta-skill (type: "command") rather than review skill
+- **Agent Common Instructions**: Expanded Gaps Mode Behavior section with structured template (duplicate detection, constraints, supporting agents list)
+- **Agent Descriptions**: Simplified agent-specific descriptions across documentation for clarity
+
+### Files Changed
+- `shared/validation-rules.md` (+109 lines) - Documentation agent validation patterns
+- `skills/architecture-principles-review/SKILL.md` (+34 lines) - SoC and file organization checks
+- `agents/architecture-agent.md` (+43 lines) - SoC detection and file organization examples
+- `shared/agent-common-instructions.md` (+24 lines) - Gaps Mode Behavior template
+- `shared/skill-resolver.md` - Meta-skill type clarification
+- `shared/command-common-steps.md` - Updated orchestration
+- Multiple agents: api-contracts, bug-detection, compliance, error-handling, performance, security, synthesis, technical-debt, test-coverage (description simplification)
+
 ## [3.4.0] - 2026-01-31
 
 ### Added

@@ -620,7 +620,7 @@ For more troubleshooting, see `shared/references/skill-troubleshooting.md`.
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history and release notes.
 
-**Current Version:** 3.4.0
+**Current Version:** 3.4.1
 
 ## Author
 
