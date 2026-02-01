@@ -37,13 +37,13 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
-| `architecture-principles-review` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "file organization" |
-| `bug-review` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions" |
-| `compliance-review` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions" |
-| `docs-review` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown" |
-| `performance-review` | "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity" |
-| `security-review` | "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets" |
-| `technical-debt-review` | "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health" |
+| `architecture-principles-review` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", "architecture principles review" |
+| `bug-review` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", "debug this code" |
+| `compliance-review` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", "check naming conventions" |
+| `docs-review` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown", "check docs accuracy" |
+| `performance-review` | "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", "latency issues" |
+| `security-review` | "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", "OWASP check" |
+| `technical-debt-review` | "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", "legacy code review" |
 
 ## Architecture
 

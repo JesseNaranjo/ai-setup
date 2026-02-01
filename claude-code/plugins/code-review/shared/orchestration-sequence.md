@@ -86,6 +86,32 @@ This document defines the authoritative execution sequences for review pipelines
 | technical-debt-agent | opus | sonnet | N/A |
 | test-coverage-agent | sonnet | N/A | sonnet |
 
+## Content Strategy by Phase
+
+Different phases have different content requirements. This strategy reduces token usage while maintaining review quality.
+
+**Phase 1 (Thorough):**
+- Full file content provided
+- Full diff content provided
+- AI instructions per distribution rules (see agent-invocation-pattern.md)
+- Test files per distribution rules (see agent-invocation-pattern.md)
+- Agents perform comprehensive analysis
+
+**Phase 2 (Gaps):**
+- Diff content always provided
+- Full file content: Not provided by default - agents use Read tool if deeper analysis needed
+- Previous findings provided (defines skip zones)
+- Focus: Subtle issues, edge cases not caught in Phase 1
+- Model: Sonnet (cost-optimized for constrained task with prior context)
+
+**Synthesis:**
+- Findings from Phase 1 + Phase 2 provided
+- File paths provided (agents can Read if cross-reference needed)
+- Focus: Cross-cutting concerns only
+- No file content passed by default
+
+**Rationale:** Agents have access to Read, Grep, and Glob tools. Providing file paths instead of full content for later phases allows agents to fetch content on-demand, reducing baseline token usage while preserving capability.
+
 ## Language-Specific Focus
 
 Load language configs ONLY for detected languages/frameworks to minimize context usage:

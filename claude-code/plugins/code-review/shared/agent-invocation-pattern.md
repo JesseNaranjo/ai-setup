@@ -126,6 +126,39 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the authoritati
 
 **Rationale**: Gaps mode uses Sonnet (not Opus) because it receives prior findings context and follows explicit checklists, reducing the complexity of the task. This is a cost optimization, not a quality tradeoff.
 
+## Content Distribution Optimization
+
+To reduce Execution Context usage, not all agents receive all content. The orchestrator should distribute content selectively based on agent requirements.
+
+### Test File Distribution
+
+Pass `related_tests` content ONLY to agents that analyze test relationships:
+
+| Agent | Receives `related_tests` | Rationale |
+|-------|--------------------------|-----------|
+| bug-detection-agent | ✅ Yes | Uses test files to understand expected behavior |
+| technical-debt-agent | ✅ Yes | Identifies untested deprecated code |
+| test-coverage-agent | ✅ Yes | Primary consumer - analyzes test coverage |
+| All other agents | ❌ No | Can use Grep/Glob if cross-file analysis warrants |
+
+**Implementation:** When building agent prompts, only include `related_tests` section for bug-detection-agent, technical-debt-agent, and test-coverage-agent. Other agents can discover test files via tooling if needed.
+
+**Estimated savings:** 6 agents × ~300 lines average test content = ~1,800 lines per review
+
+### AI Instructions Distribution
+
+Pass full `ai_instructions` content ONLY to agents that need project-specific rules:
+
+| Agent | Receives full `ai_instructions` | Rationale |
+|-------|--------------------------------|-----------|
+| architecture-agent | ✅ Yes | Checks documented architectural patterns and conventions |
+| compliance-agent | ✅ Yes | Primary consumer - verifies adherence to documented standards |
+| All other agents | 📝 Summary only | Receive: "AI instructions exist at [paths]. Use Grep to check specific rules if needed." |
+
+**Implementation:** When building agent prompts, include full `ai_instructions` only for architecture-agent and compliance-agent. Other agents receive a brief summary with file paths.
+
+**Estimated savings:** 7 agents × ~500 lines average AI instructions = ~3,500 lines per review
+
 ## Common Agent Input
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs (files, project type, MODE, skill_instructions, previous_findings).
