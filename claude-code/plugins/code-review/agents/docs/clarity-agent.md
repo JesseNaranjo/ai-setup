@@ -157,9 +157,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Clarity-specific exclusions:**
-- Jargon appropriate for stated expert audience
-- Acronyms defined earlier in the same document
-- Industry-standard terms in domain-specific docs (e.g., "REST" in API docs)
-- Intentionally terse reference documentation (vs tutorials)
-- Code comments within code blocks (different standards apply)
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Clarity (Documentation)" for exclusions.

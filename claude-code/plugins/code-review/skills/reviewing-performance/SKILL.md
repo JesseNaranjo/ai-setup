@@ -1,5 +1,5 @@
 ---
-name: performance-review
+name: reviewing-performance
 description: Use when user mentions "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", or "latency issues".
 version: 3.4.1
 ---

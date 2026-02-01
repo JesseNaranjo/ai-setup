@@ -189,8 +189,4 @@ When MODE=gaps, this agent receives `previous_findings` from thorough mode to av
 
 ## False Positive Guidelines
 
-**Accuracy-specific exclusions:**
-- Intentionally simplified examples (marked as "simplified" or "basic example")
-- Pseudocode clearly marked as illustrative
-- Version-specific documentation with version clearly noted
-- Documentation for planned/upcoming features marked as such
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Accuracy (Documentation)" for exclusions.

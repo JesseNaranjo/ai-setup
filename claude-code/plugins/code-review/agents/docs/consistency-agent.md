@@ -201,9 +201,4 @@ When MODE=gaps, this agent receives `previous_findings` from thorough mode to av
 
 ## False Positive Guidelines
 
-**Consistency-specific exclusions:**
-- Intentional variations for emphasis or clarity
-- Code/API names that must match implementation (even if inconsistent with prose style)
-- Quoted text that preserves original formatting
-- Version-specific sections that intentionally differ
-- External content (quotes, references) with different style
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Consistency (Documentation)" for exclusions.

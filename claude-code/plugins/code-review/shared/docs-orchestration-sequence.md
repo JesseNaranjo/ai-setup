@@ -123,4 +123,4 @@ The structure-agent includes standardization checks for AI agent instruction fil
 3. copilot-instructions.md must exist with header referencing `.ai/AI-AGENT-INSTRUCTIONS.md`
 4. Cross-references between all three files must be valid
 
-See `${CLAUDE_PLUGIN_ROOT}/skills/docs-review/references/ai-instruction-templates.md` for required header templates.
+See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruction-templates.md` for required header templates.

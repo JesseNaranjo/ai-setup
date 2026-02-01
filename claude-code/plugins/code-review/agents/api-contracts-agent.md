@@ -151,9 +151,4 @@ issues:
 
 ## False Positive Guidelines
 
-**API contracts-specific exclusions:**
-- Internal/private API changes
-- Changes to APIs with no external consumers
-- Additive changes that don't break existing consumers
-- Changes that follow established deprecation process
-- Beta/experimental APIs clearly marked as unstable
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > API Contracts" for exclusions.

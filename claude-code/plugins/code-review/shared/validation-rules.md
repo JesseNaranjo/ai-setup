@@ -11,6 +11,7 @@ This document defines the validation process for issues found by review agents.
   - [Cross-Cutting Insight Validation](#cross-cutting-insight-validation)
   - [Batch Validator Prompt](#batch-validator-prompt)
   - [Auto-Validation (Skip Validation)](#auto-validation-skip-validation)
+  - [Auto-Validation Output](#auto-validation-output)
   - [Common False Positives to Check](#common-false-positives-to-check)
   - [Validation Output](#validation-output)
 - [Aggregation Rules](#aggregation-rules)
@@ -23,6 +24,7 @@ This document defines the validation process for issues found by review agents.
 - [False Positive Rules](#false-positive-rules)
   - [Do NOT Flag](#do-not-flag)
   - [Deep vs Quick Review Differences](#deep-vs-quick-review-differences)
+- [Category-Specific False Positive Rules](#category-specific-false-positive-rules)
 
 ## Batch Validation Process
 
@@ -141,7 +143,126 @@ validations:
 
 ### Auto-Validation (Skip Validation)
 
-Some high-confidence patterns skip validation entirely and are marked `auto_validated: true`. Pattern definitions are loaded separately by command-common-steps.md.
+Some high-confidence patterns skip validation entirely and are marked `auto_validated: true`:
+
+**Accuracy patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `api_signature_mismatch` | N/A (detected via code comparison) | Documented function signature differs from implementation |
+| `missing_parameter_doc` | N/A (detected via param comparison) | Parameter exists in code but not documented |
+| `outdated_version_reference` | N/A (detected via version comparison) | Documentation references older version than package.json/csproj |
+
+**Architecture patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `circular_dependency` | N/A (detected via import graph analysis) | Circular import/dependency between modules |
+| `god_class_500_lines` | N/A (detected via line count) | Class/module exceeds 500 lines |
+| `function_10_params` | `function\s+\w+\s*\([^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*\)` | Function has 10+ parameters |
+| `direct_new_instantiation` | `(?:=\s*new\s+\w+Service\|=\s*new\s+\w+Repository)\s*\(` | Direct instantiation of service/repository dependency |
+
+**Bug patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `empty_catch_block` | `catch\s*\([^)]*\)\s*\{\s*(?:\/\/[^\n]*)?\s*\}` | Empty catch block (allows single comment) |
+| `missing_await` | `(?:const\|let\|var)\s+\w+\s*=\s*(?!await)[^;]*\basync\s+\w+\(` | Async function call without await |
+| `null_dereference` | `(?:\?\.\s*\w+\s*\(\)\s*\.)\|(?:\w+\s*&&\s*\w+\.\w+\s*\?\s*\w+\.\w+\.\w+)` | Null access after optional chain or guard |
+
+**Clarity patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `undefined_acronym` | `\b[A-Z]{2,}\b(?!.*\([^)]+\))` | Acronym used without expansion (first occurrence) |
+| `passive_voice_instruction` | N/A (detected via NLP analysis) | Instructions written in passive voice |
+
+**Completeness patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `missing_api_doc` | N/A (detected via export comparison) | Exported function/class has no documentation |
+| `empty_section` | `^#+\s+.+\n\s*\n(?=^#+)` | Section header with no content before next header |
+| `missing_error_handling_doc` | N/A (detected via throw analysis) | Function throws but no error documentation |
+
+**Compliance patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `missing_authorize_attribute` | `\[(?:Http(?:Get\|Post\|Put\|Delete\|Patch)\|Route)\][^[]*(?<!\[Authorize\])\s*public\s+(?:async\s+)?(?:Task<)?(?:IActionResult\|ActionResult)` | ASP.NET endpoint without [Authorize] attribute |
+| `wrong_case_filename` | N/A (detected via filesystem comparison) | Filename violates project naming convention |
+| `explicit_must_violation` | N/A (detected via rule matching) | Code violates a MUST rule from AI instructions |
+| `missing_required_jsdoc` | `export\s+(?:async\s+)?function\s+\w+\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{(?!\s*/\*\*)` | Exported function without JSDoc comment |
+
+**Consistency patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `inconsistent_terminology` | N/A (detected via term frequency analysis) | Same concept named differently across docs |
+| `inconsistent_heading_style` | N/A (detected via heading pattern analysis) | Mixed title case and sentence case headings |
+
+**Examples patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `example_syntax_error` | N/A (detected via parser) | Code example has syntax error |
+| `example_undefined_import` | N/A (detected via import analysis) | Example uses undefined import |
+
+**Performance patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `nested_loop_includes` | `for\s*\([^)]*\)[\s\S]*?for\s*\([^)]*\)[\s\S]*?\.(?:includes\|indexOf)\s*\(` | O(n²) nested loop with includes/indexOf |
+| `select_star_in_loop` | `(?:for\|while\|forEach)[\s\S]*?SELECT\s+\*` | SELECT * inside a loop |
+| `n_plus_one_query` | `(?:for\|while\|forEach\|\.map\|\.forEach)[\s\S]{0,200}(?:findOne\|findById\|query\|execute\|fetch)` | Database query inside iteration (N+1) |
+
+**Security patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `hardcoded_password` | `(?:password\|passwd\|pwd)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded password in assignment |
+| `hardcoded_api_key` | `(?:api[_-]?key\|apikey)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded API key |
+| `hardcoded_token` | `(?:token\|bearer\|auth[_-]?token\|access[_-]?token)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded auth token |
+| `hardcoded_secret` | `(?:secret\|client[_-]?secret\|private[_-]?key)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded secret/private key |
+| `hardcoded_credentials` | `(?:credentials\|connection[_-]?string)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded credentials object |
+| `sql_injection_concat` | `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*[+]\s*(?:req\|request\|params\|query\|body\|input\|user)` | SQL with string concatenation of user input |
+| `sql_injection_template` | `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*\$\{.*(?:req\|request\|params\|query\|body\|input\|user)` | SQL with template literal interpolation of user input |
+| `eval_untrusted` | `eval\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)` | eval() with untrusted input |
+| `new_function_untrusted` | `new\s+Function\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)` | new Function() with untrusted input |
+
+**Structure patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `broken_internal_link` | `\[([^\]]+)\]\((?!https?://)([^)]+)\)` | Internal markdown link (check target exists) |
+| `missing_ai_instruction_header` | N/A (detected via header check) | CLAUDE.md missing required header comment |
+| `ai_instruction_wrong_location` | N/A (detected via path check) | AI instruction file in wrong directory |
+
+**Technical Debt patterns (always valid):**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `deprecated_npm_package` | N/A (detected via `npm ls` output) | npm package with deprecation warning |
+| `todo_without_issue` | `(?:\/\/\|#)\s*TODO(?:\([^)]*\))?:?\s+(?!.*(?:#\d+\|ISSUE-\|JIRA-\|TICKET-))` | TODO/FIXME without issue reference |
+| `commented_out_code` | `^(?:\s*(?:\/\/\|#).*\n){10,}` | 10+ consecutive lines of commented code |
+| `hack_comment` | `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?` | Explicit HACK/WORKAROUND/XXX marker |
+| `outdated_callback` | `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)` | Callback pattern in async context |
+
+**Notes on pattern matching:**
+- Patterns are case-insensitive for SQL keywords
+- Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`
+- Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`
+- Empty catch pattern allows a single comment line to avoid flagging intentional empty catches with explanation
+
+### Auto-Validation Output
+
+```yaml
+issues:
+  - title: "Hardcoded database password"
+    auto_validated: true
+    confidence_pattern: "hardcoded_credential"
+    ...
+```
 
 ### Common False Positives to Check
 
@@ -287,3 +408,121 @@ Quick review is optimized for speed and should be extra conservative:
 - Focus only on blocking issues that must be fixed before merge
 - Ignore minor style concerns
 - Skip theoretical edge cases
+
+## Category-Specific False Positive Rules
+
+Each category has specific exclusions in addition to the general false positive rules above.
+
+### API Contracts
+
+- Internal/private API changes
+- Changes to APIs with no external consumers
+- Additive changes that don't break existing consumers
+- Changes that follow established deprecation process
+- Beta/experimental APIs clearly marked as unstable
+
+### Architecture
+
+- Pragmatic compromises with clear justification
+- Patterns that are overkill for the scale of the project
+- Architecture decisions already documented and justified
+- Temporary code with clear TODOs
+
+### Bug Detection
+
+- Code that appears buggy but is correct in context
+- Defensive code that handles edge cases (unless it has a bug)
+- Code with explicit comments explaining why it's correct
+
+### Compliance
+
+- Code that appears to violate a rule but has an explicit override comment
+- Ambiguous rules where the code could reasonably be compliant
+- Rules that don't apply to this file type or context
+- Style preferences not explicitly stated as rules
+
+### Error Handling
+
+- Code where errors are intentionally ignored with explicit comments
+- Errors that are handled at a higher level
+- Internal code with documented error handling strategy
+- Logging-only catch blocks where that's the intended behavior
+
+### Performance
+
+- Micro-optimizations that won't have measurable impact
+- Performance issues in code that runs rarely
+- Code that prioritizes readability over minor performance gains
+
+### Security
+
+- Internal-only code with no untrusted input exposure
+- Code with explicit security comments explaining the design
+- Vulnerabilities already mitigated elsewhere in the code
+
+### Technical Debt
+
+- Dependencies intentionally pinned for compatibility (documented reason)
+- Legacy patterns in legacy modules explicitly marked as deprecated
+- Dead code that's actually conditionally compiled (build flags)
+- TODO comments that reference issue tracking (TODO(#123))
+- Workarounds with documented upstream bugs and tracking
+- Class components in projects supporting older React versions intentionally
+
+### Test Coverage
+
+- Private/internal implementation details
+- Code that's impractical to unit test (better suited for integration tests)
+- Code already covered by higher-level tests
+- Test files themselves (don't require tests of tests)
+- Generated code or boilerplate
+- Configuration files or constants
+- Dead code that should be removed rather than tested
+
+### Accuracy (Documentation)
+
+- Intentionally simplified examples (marked as "simplified" or "basic example")
+- Pseudocode clearly marked as illustrative
+- Version-specific documentation with version clearly noted
+- Documentation for planned/upcoming features marked as such
+
+### Clarity (Documentation)
+
+- Jargon appropriate for stated expert audience
+- Acronyms defined earlier in the same document
+- Industry-standard terms in domain-specific docs (e.g., "REST" in API docs)
+- Intentionally terse reference documentation (vs tutorials)
+- Code comments within code blocks (different standards apply)
+
+### Completeness (Documentation)
+
+- Internal/private APIs not intended for external use
+- Features clearly marked as experimental/unstable
+- Configuration options with sensible defaults that rarely need changing
+- Platform-specific docs when project only targets one platform
+- Sections that would duplicate content available elsewhere (with link)
+
+### Consistency (Documentation)
+
+- Intentional variations for emphasis or clarity
+- Code/API names that must match implementation (even if inconsistent with prose style)
+- Quoted text that preserves original formatting
+- Version-specific sections that intentionally differ
+- External content (quotes, references) with different style
+
+### Examples (Documentation)
+
+- Pseudocode clearly marked as illustrative (not runnable)
+- Intentionally simplified examples with explicit notes about what's omitted
+- Partial examples with "..." indicating omitted code
+- Examples for older versions in clearly versioned documentation
+- Examples showing error cases (intentionally incorrect code to demonstrate what not to do)
+- Shell examples with placeholder values like `<your-token>`
+
+### Structure (Documentation)
+
+- Intentionally orphaned archive/historical documents
+- External links to known-stable resources (official docs, RFCs)
+- Heading hierarchy violations in code-generated documentation
+- Alternative navigation paths that are intentional (multiple entry points)
+- AI instruction files in projects that don't use AI assistants (if explicitly stated)

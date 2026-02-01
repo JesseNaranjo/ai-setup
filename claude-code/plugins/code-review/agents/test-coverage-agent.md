@@ -180,11 +180,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Test coverage-specific exclusions:**
-- Private/internal implementation details
-- Code that's impractical to unit test (better suited for integration tests)
-- Code already covered by higher-level tests
-- Test files themselves (don't require tests of tests)
-- Generated code or boilerplate
-- Configuration files or constants
-- Dead code that should be removed rather than tested
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Test Coverage" for exclusions.

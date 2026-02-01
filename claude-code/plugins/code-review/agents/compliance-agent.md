@@ -43,7 +43,7 @@ Review code for compliance with CLAUDE.md and other AI Agent Instructions files 
 
 ## Input
 
-**Agent-specific:** This agent receives `compliance-review` skill data as its primary review-focused skill. Also requires all relevant AI Agent Instructions files (CLAUDE.md, AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md).
+**Agent-specific:** This agent receives `reviewing-compliance` skill data as its primary review-focused skill. Also requires all relevant AI Agent Instructions files (CLAUDE.md, AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md).
 
 **Cross-file discovery:** Verify naming patterns across files when compliance rules require it.
 
@@ -152,8 +152,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Compliance-specific exclusions:**
-- Code that appears to violate a rule but has an explicit override comment
-- Ambiguous rules where the code could reasonably be compliant
-- Rules that don't apply to this file type or context
-- Style preferences not explicitly stated as rules
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Compliance" for exclusions.

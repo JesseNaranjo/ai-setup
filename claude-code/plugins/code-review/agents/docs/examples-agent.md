@@ -199,10 +199,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Examples-specific exclusions:**
-- Pseudocode clearly marked as illustrative (not runnable)
-- Intentionally simplified examples with explicit notes about what's omitted
-- Partial examples with "..." indicating omitted code
-- Examples for older versions in clearly versioned documentation
-- Examples showing error cases (intentionally incorrect code to demonstrate what not to do)
-- Shell examples with placeholder values like `<your-token>`
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Examples (Documentation)" for exclusions.

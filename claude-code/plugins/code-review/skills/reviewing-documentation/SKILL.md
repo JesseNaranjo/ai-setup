@@ -1,5 +1,5 @@
 ---
-name: docs-review
+name: reviewing-documentation
 description: Use when user mentions "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown", or "check docs accuracy".
 version: 3.4.1
 ---

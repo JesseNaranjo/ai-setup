@@ -43,7 +43,7 @@ Analyze code for performance issues that will have measurable impact.
 
 ## Input
 
-**Agent-specific:** This agent receives `performance-review` skill data as its primary review-focused skill.
+**Agent-specific:** This agent receives `reviewing-performance` skill data as its primary review-focused skill.
 
 **Cross-file discovery:** Trace database query patterns across data access layers.
 
@@ -162,7 +162,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Performance-specific exclusions:**
-- Micro-optimizations that won't have measurable impact
-- Performance issues in code that runs rarely
-- Code that prioritizes readability over minor performance gains
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Performance" for exclusions.

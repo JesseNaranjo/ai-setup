@@ -42,7 +42,7 @@ Analyze code for architectural issues affecting maintainability and scalability.
 
 ## Input
 
-**Agent-specific:** This agent receives `architecture-principles-review` skill data as its primary review-focused skill.
+**Agent-specific:** This agent receives `reviewing-architecture-principles` skill data as its primary review-focused skill.
 
 **Cross-file discovery:** Trace module dependencies when analysis discovers imports.
 
@@ -263,8 +263,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Architecture-specific exclusions:**
-- Pragmatic compromises with clear justification
-- Patterns that are overkill for the scale of the project
-- Architecture decisions already documented and justified
-- Temporary code with clear TODOs
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Architecture" for exclusions.

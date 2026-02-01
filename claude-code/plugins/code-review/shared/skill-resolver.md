@@ -43,7 +43,7 @@ Skill(skill: "{skill_name}")
 ```
 
 **Examples:**
-- `security-review` → `Skill(skill: "security-review")`
+- `reviewing-security` → `Skill(skill: "reviewing-security")`
 - `superpowers:brainstorming` → `Skill(skill: "superpowers:brainstorming")`
 
 The Skill() tool will:
@@ -89,7 +89,7 @@ If the Skill() tool returns an error or fails to load the skill:
 
    **If skill has no ":" (plugin-local):**
    ```
-   security-review
+   reviewing-security
      → Look in: ${CLAUDE_PLUGIN_ROOT}/skills/{skill_name}/SKILL.md
    ```
 
@@ -131,7 +131,7 @@ Read the SKILL.md file and parse it into structured data. The orchestrator uses 
 
 #### Structured Data Extraction
 
-**For review-focused skills (bug-review, compliance-review, performance-review, security-review, technical-debt-review):**
+**For review-focused skills (reviewing-bugs, reviewing-compliance, reviewing-performance, reviewing-security, reviewing-technical-debt):**
 
 | Field | Source | Description |
 |-------|--------|-------------|
@@ -206,31 +206,31 @@ Search for a section header containing "False Positive":
 
 **Step 4.5: Determine Skill Type**
 Based on skill name:
-- If name matches `architecture-principles-review|bug-review|compliance-review|performance-review|security-review|technical-debt-review` → `type: "review"`
-- If name matches `docs-review` → `type: "command"` (meta-skill that invokes docs-review commands)
+- If name matches `reviewing-architecture-principles|reviewing-bugs|reviewing-compliance|reviewing-performance|reviewing-security|reviewing-technical-debt` → `type: "review"`
+- If name matches `reviewing-documentation` → `type: "command"` (meta-skill that invokes docs-review commands)
 - Otherwise → `type: "methodology"`
 
 **Step 4.6: Assign Primary Agent**
 
 | Skill Name | Primary Agent |
 |------------|---------------|
-| architecture-principles-review | architecture-agent |
-| bug-review | bug-detection-agent |
-| compliance-review | compliance-agent |
-| docs-review | N/A (command-invoking meta-skill) |
-| performance-review | performance-agent |
-| security-review | security-agent |
-| technical-debt-review | technical-debt-agent |
+| reviewing-architecture-principles | architecture-agent |
+| reviewing-bugs | bug-detection-agent |
+| reviewing-compliance | compliance-agent |
+| reviewing-documentation | N/A (command-invoking meta-skill) |
+| reviewing-performance | performance-agent |
+| reviewing-security | security-agent |
+| reviewing-technical-debt | technical-debt-agent |
 | (methodology) | null |
 
-**Meta-Skills:** `docs-review` is a meta-skill that invokes documentation review COMMANDS (`/deep-docs-review`, `/quick-docs-review`) rather than targeting individual agents. It should be invoked directly, not passed as `--skills` to other commands.
+**Meta-Skills:** `reviewing-documentation` is a meta-skill that invokes documentation review COMMANDS (`/deep-docs-review`, `/quick-docs-review`) rather than targeting individual agents. It should be invoked directly, not passed as `--skills` to other commands.
 
 ### 5. Build Resolved Skills Structure
 
 ```yaml
 resolved_skills:
-  - name: "security-review"
-    source: "security-review"  # Original reference
+  - name: "reviewing-security"
+    source: "reviewing-security"  # Original reference
     type: "review"  # review | methodology
     primary_agent: "security-agent"  # null for methodology skills
     focus_areas:

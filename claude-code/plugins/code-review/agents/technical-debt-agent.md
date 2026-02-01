@@ -43,7 +43,7 @@ Analyze code for accumulated technical debt affecting maintainability, moderniza
 
 ## Input
 
-**Agent-specific:** This agent receives `technical-debt-review` skill data as its primary review-focused skill. Also uses related test files to identify untested deprecated code.
+**Agent-specific:** This agent receives `reviewing-technical-debt` skill data as its primary review-focused skill. Also uses related test files to identify untested deprecated code.
 
 **Cross-file discovery:** Check package files when analysis discovers dependency issues.
 
@@ -221,10 +221,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Technical Debt-specific exclusions:**
-- Dependencies intentionally pinned for compatibility (documented reason)
-- Legacy patterns in legacy modules explicitly marked as deprecated
-- Dead code that's actually conditionally compiled (build flags)
-- TODO comments that reference issue tracking (TODO(#123))
-- Workarounds with documented upstream bugs and tracking
-- Class components in projects supporting older React versions intentionally
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Technical Debt" for exclusions.

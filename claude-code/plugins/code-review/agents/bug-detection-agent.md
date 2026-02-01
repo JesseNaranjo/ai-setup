@@ -42,7 +42,7 @@ Analyze code for bugs that will cause incorrect behavior at runtime.
 
 ## Input
 
-**Agent-specific:** This agent receives `bug-review` skill data as its primary review-focused skill. Also uses related test files for context.
+**Agent-specific:** This agent receives `reviewing-bugs` skill data as its primary review-focused skill. Also uses related test files for context.
 
 **Cross-file discovery:** Trace shared logic when analysis discovers cross-module dependencies.
 
@@ -165,7 +165,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Bug detection-specific exclusions:**
-- Code that appears buggy but is correct in context
-- Defensive code that handles edge cases (unless it has a bug)
-- Code with explicit comments explaining why it's correct
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Bug Detection" for exclusions.

@@ -42,7 +42,7 @@ Analyze code for security vulnerabilities and weaknesses.
 
 ## Input
 
-**Agent-specific:** This agent receives `security-review` skill data as its primary review-focused skill.
+**Agent-specific:** This agent receives `reviewing-security` skill data as its primary review-focused skill.
 
 **Cross-file discovery:** Trace auth and input handling across security boundaries.
 
@@ -163,7 +163,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Security-specific exclusions:**
-- Internal-only code with no untrusted input exposure
-- Code with explicit security comments explaining the design
-- Vulnerabilities already mitigated elsewhere in the code
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Security" for exclusions.

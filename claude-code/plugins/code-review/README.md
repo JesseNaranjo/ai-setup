@@ -72,7 +72,7 @@ Fast documentation review using 4 agents (7 invocations) focusing on critical is
 /quick-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
-> **Note:** Documentation commands support the `docs-review` skill which provides focused documentation quality checks across all 6 documentation agents (accuracy, clarity, completeness, consistency, examples, structure).
+> **Note:** Documentation commands support the `reviewing-documentation` skill which provides focused documentation quality checks across all 6 documentation agents (accuracy, clarity, completeness, consistency, examples, structure).
 
 ### Documentation Categories
 
@@ -268,7 +268,7 @@ Use `--skills` to enhance reviews with skill-specific knowledge and methodologie
 
 | Format | Example | Description |
 |--------|---------|-------------|
-| Plugin-local | `security-review` | Skills within the code-review plugin |
+| Plugin-local | `reviewing-security` | Skills within the code-review plugin |
 | External plugin | `superpowers:brainstorming` | Skills from other plugins (plugin:skill) |
 
 #### Examples
@@ -281,7 +281,7 @@ All agents will explore multiple interpretations and failure modes before flaggi
 
 **Combine multiple skills:**
 ```bash
-/deep-code-review src/api/*.ts --skills security-review,superpowers:systematic-debugging
+/deep-code-review src/api/*.ts --skills reviewing-security,superpowers:systematic-debugging
 ```
 Security agent receives targeted security checklists; all agents receive debugging methodology.
 
@@ -296,7 +296,7 @@ Combines skill methodology with specific instructions.
 1. Skill names are resolved to SKILL.md files
 2. Skills are parsed into structured data (categories, patterns, rules, methodology)
 3. The orchestrator generates tailored `skill_instructions` per agent:
-   - **Review skills** (security-review, etc.) → Targeted to their primary agent with focus areas and checklists
+   - **Review skills** (reviewing-security, etc.) → Targeted to their primary agent with focus areas and checklists
    - **Methodology skills** (brainstorming, etc.) → Applied universally to all agents
 4. Auto-validated patterns skip the validation step for high-confidence findings
 5. False positive rules are applied across all agents
@@ -314,12 +314,12 @@ Combines skill methodology with specific instructions.
 
 | Skill | Primary Agent | Focus |
 |-------|---------------|-------|
-| `architecture-principles-review` | architecture-agent | SOLID, DRY, YAGNI violations |
-| `bug-review` | bug-detection-agent | Logical errors and edge cases |
-| `compliance-review` | compliance-agent | CLAUDE.md and coding standards |
-| `performance-review` | performance-agent | Performance issues and optimization |
-| `security-review` | security-agent | Security vulnerabilities and OWASP patterns |
-| `technical-debt-review` | technical-debt-agent | Deprecated code, outdated patterns, dead code |
+| `reviewing-architecture-principles` | architecture-agent | SOLID, DRY, YAGNI violations |
+| `reviewing-bugs` | bug-detection-agent | Logical errors and edge cases |
+| `reviewing-compliance` | compliance-agent | CLAUDE.md and coding standards |
+| `reviewing-performance` | performance-agent | Performance issues and optimization |
+| `reviewing-security` | security-agent | Security vulnerabilities and OWASP patterns |
+| `reviewing-technical-debt` | technical-debt-agent | Deprecated code, outdated patterns, dead code |
 
 ## Skills
 
@@ -327,13 +327,13 @@ Targeted review skills for specific concerns:
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
-| `architecture-principles-review` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "file organization" |
-| `bug-review` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions" |
-| `compliance-review` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions" |
-| `docs-review` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown" |
-| `performance-review` | "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity" |
-| `security-review` | "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets" |
-| `technical-debt-review` | "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health" |
+| `reviewing-architecture-principles` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "file organization" |
+| `reviewing-bugs` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions" |
+| `reviewing-compliance` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions" |
+| `reviewing-documentation` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown" |
+| `reviewing-performance` | "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity" |
+| `reviewing-security` | "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets" |
+| `reviewing-technical-debt` | "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health" |
 
 ## Architecture
 
@@ -369,13 +369,13 @@ code-review/
 │   ├── technical-debt-agent.md  # Technical debt detection
 │   └── test-coverage-agent.md   # Test coverage gaps
 ├── skills/                      # Targeted review skills
-│   ├── architecture-principles-review/
-│   ├── bug-review/
-│   ├── compliance-review/
-│   ├── docs-review/             # Documentation review skill
-│   ├── performance-review/
-│   ├── security-review/
-│   └── technical-debt-review/
+│   ├── reviewing-architecture-principles/
+│   ├── reviewing-bugs/
+│   ├── reviewing-compliance/
+│   ├── reviewing-documentation/  # Documentation review skill
+│   ├── reviewing-performance/
+│   ├── reviewing-security/
+│   └── reviewing-technical-debt/
 ├── languages/                   # Language-specific configs
 │   ├── dotnet.md                # .NET/C# checks
 │   ├── nodejs.md                # Node.js/TypeScript checks
@@ -561,7 +561,7 @@ git add .
 
 ### Targeted Security Audit
 
-Use the security-review skill for focused security analysis.
+Use the reviewing-security skill for focused security analysis.
 
 ### Legacy Code Audit
 

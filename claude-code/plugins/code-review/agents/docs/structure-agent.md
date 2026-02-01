@@ -132,7 +132,7 @@ Grep(pattern: "\\.ai/AI-AGENT-INSTRUCTIONS\\.md", path: ".github/copilot-instruc
 - All three files should reference each other appropriately
 - Links between files should be valid relative paths
 
-See `${CLAUDE_PLUGIN_ROOT}/skills/docs-review/references/ai-instruction-templates.md` for required header templates.
+See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruction-templates.md` for required header templates.
 
 ### Step 6: Report Structure Issues
 
@@ -208,9 +208,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Structure-specific exclusions:**
-- Intentionally orphaned archive/historical documents
-- External links to known-stable resources (official docs, RFCs)
-- Heading hierarchy violations in code-generated documentation
-- Alternative navigation paths that are intentional (multiple entry points)
-- AI instruction files in projects that don't use AI assistants (if explicitly stated)
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Structure (Documentation)" for exclusions.

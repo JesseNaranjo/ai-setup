@@ -77,17 +77,17 @@ skill_instructions:
 
 | Agent | Receives From |
 |-------|---------------|
-| architecture-agent | `architecture-principles-review` focus_areas, ALL methodology skills |
-| bug-detection-agent | `bug-review` focus_areas, ALL methodology skills |
-| compliance-agent | `compliance-review` focus_areas, ALL methodology skills |
-| performance-agent | `performance-review` focus_areas, ALL methodology skills |
-| security-agent | `security-review` focus_areas, ALL methodology skills |
-| technical-debt-agent | `technical-debt-review` focus_areas, ALL methodology skills |
+| architecture-agent | `reviewing-architecture-principles` focus_areas, ALL methodology skills |
+| bug-detection-agent | `reviewing-bugs` focus_areas, ALL methodology skills |
+| compliance-agent | `reviewing-compliance` focus_areas, ALL methodology skills |
+| performance-agent | `reviewing-performance` focus_areas, ALL methodology skills |
+| security-agent | `reviewing-security` focus_areas, ALL methodology skills |
+| technical-debt-agent | `reviewing-technical-debt` focus_areas, ALL methodology skills |
 | Other agents | ALL methodology skills only |
 
 **Merging Multiple Skills:**
 
-When multiple skills are provided (e.g., `--skills security-review,superpowers:brainstorming`):
+When multiple skills are provided (e.g., `--skills reviewing-security,superpowers:brainstorming`):
 
 1. **focus_areas**: Union of all applicable focus areas
 2. **checklist**: Union of all applicable checklists
@@ -116,8 +116,8 @@ Skills can inform synthesis questions:
 - Use the standard questions defined in `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`
 
 **With Skills:**
-- If `security-review` skill is active, add: "Do findings align with OWASP categories?"
-- If `performance-review` skill is active, add: "Are performance issues in hot paths?"
+- If `reviewing-security` skill is active, add: "Do findings align with OWASP categories?"
+- If `reviewing-performance` skill is active, add: "Are performance issues in hot paths?"
 - Methodology skills don't affect synthesis questions
 
 ## Skill Instructions in Gaps Mode

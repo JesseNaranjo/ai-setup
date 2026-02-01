@@ -209,9 +209,4 @@ When MODE=gaps, this agent receives `previous_findings` from thorough mode to av
 
 ## False Positive Guidelines
 
-**Completeness-specific exclusions:**
-- Internal/private APIs not intended for external use
-- Features clearly marked as experimental/unstable
-- Configuration options with sensible defaults that rarely need changing
-- Platform-specific docs when project only targets one platform
-- Sections that would duplicate content available elsewhere (with link)
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Completeness (Documentation)" for exclusions.

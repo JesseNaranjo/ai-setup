@@ -1,5 +1,5 @@
 ---
-name: technical-debt-review
+name: reviewing-technical-debt
 description: Use when user mentions "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", or "legacy code review".
 version: 3.4.1
 ---

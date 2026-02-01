@@ -156,8 +156,4 @@ issues:
 
 ## False Positive Guidelines
 
-**Error handling-specific exclusions:**
-- Code where errors are intentionally ignored with explicit comments
-- Errors that are handled at a higher level
-- Internal code with documented error handling strategy
-- Logging-only catch blocks where that's the intended behavior
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Error Handling" for exclusions.
