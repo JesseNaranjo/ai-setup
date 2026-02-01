@@ -156,3 +156,11 @@ Apply when Next.js is detected by context-discovery (presence of `next` in deps)
 | Missing authentication | API routes without auth middleware |
 | Missing rate limiting | Public APIs without rate limits |
 | Improper error responses | Exposing internal errors to clients |
+
+## Language Server Integration
+
+React projects inherit TypeScript LSP integration from Node.js. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` "Language Server Integration" section for:
+- LSP plugin detection
+- LSP-enhanced capabilities
+- Diagnostic code mapping
+- Agent usage guidelines

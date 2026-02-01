@@ -327,7 +327,7 @@ Targeted review skills for specific concerns:
 
 | Skill | Trigger Phrases |
 |-------|-----------------|
-| `architecture-principles-review` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "check YAGNI", "find over-engineering" |
+| `architecture-principles-review` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "file organization" |
 | `bug-review` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions" |
 | `compliance-review` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions" |
 | `docs-review` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown" |
@@ -377,8 +377,9 @@ code-review/
 │   ├── security-review/
 │   └── technical-debt-review/
 ├── languages/                   # Language-specific configs
+│   ├── dotnet.md                # .NET/C# checks
 │   ├── nodejs.md                # Node.js/TypeScript checks
-│   └── dotnet.md                # .NET/C# checks
+│   └── react.md                 # React checks (extends Node.js)
 ├── shared/
 │   ├── agent-common-instructions.md # Common agent instructions (MODE, gaps, pre-existing issue detection)
 │   ├── agent-invocation-pattern.md  # Task invocation pattern for agents

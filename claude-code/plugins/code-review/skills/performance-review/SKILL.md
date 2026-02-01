@@ -1,6 +1,6 @@
 ---
 name: performance-review
-description: Identifies performance bottlenecks, memory leaks, and inefficient patterns. Use when user mentions "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", or "latency issues".
+description: Use when user mentions "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", or "latency issues". Identifies performance bottlenecks, memory leaks, and inefficient patterns.
 version: 3.4.0
 ---
 

@@ -4,12 +4,31 @@ This document contains shared workflow steps referenced by all review commands (
 
 ## Step Numbering Scheme
 
-Commands use a consistent 11-step workflow:
+Commands use a consistent workflow:
+- **Step 0**: Defined here (optional methodology skills)
 - **Steps 1, 3, 5**: Defined here (shared across all commands)
 - **Steps 2, 4, 6-7**: Defined inline in each command (command-specific)
 - **Steps 8-11**: Defined here (shared across all commands)
 
 **Related File**: `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` provides phase definitions and model selection for review execution.
+
+---
+
+## Step 0: Invoke Methodology Skills (Optional)
+
+Before beginning the review workflow, the orchestrator MAY invoke external methodology skills if available. These are optional enhancements - the review workflow functions correctly without them.
+
+**Optional External Skills (from `superpowers` plugin):**
+- `superpowers:using-superpowers` - Skill usage methodology
+- `superpowers:brainstorming` - Explore interpretations before concluding
+- `superpowers:systematic-debugging` - Systematic issue detection
+- `superpowers:verification-before-completion` - Verify findings before reporting
+
+**Usage:** If loaded successfully, apply methodologies from these skills throughout the review process. These inform HOW to analyze, not WHAT to look for. If skills are not found, proceed with the standard review workflow.
+
+**Note:** These skills are part of the optional `superpowers` plugin. Additional superpowers skills (writing-plans, executing-plans, requesting-code-review, dispatching-parallel-agents, subagent-driven-development) apply when planning or coordinating work, not during review execution.
+
+---
 
 ## Step 1: Load Settings
 

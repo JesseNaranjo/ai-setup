@@ -82,11 +82,27 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" se
 
 See each agent file for category-specific false positive exclusions.
 
-## Gaps Mode Behavior
+## Gaps Mode Behavior Template
 
-When MODE=gaps, agents that support gaps mode have inline rules in their respective files. Only these 5 agents support gaps mode: bug-detection, compliance, performance, security, technical-debt.
+When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid duplicates.
 
-See each agent file for category-specific gaps mode rules and focus areas.
+### Duplicate Detection (Common to All Gaps Agents)
+
+- Skip issues in same file within ±5 lines of prior findings
+- Skip same issue type on same function/method
+- For range findings (lines A-B): skip zone = [A-5, B+5]
+
+### Constraints (Common to All Gaps Agents)
+
+- Only report Major or Critical severity (skip Minor/Suggestion)
+- Maximum 5 new findings per agent
+- Model: Always Sonnet (cost optimization)
+
+### Gaps-Supporting Agents
+
+Only these agents support gaps mode: bug-detection, compliance, performance, security, technical-debt.
+
+See each agent file for category-specific focus areas (what subtle issues thorough mode misses).
 
 ## Skill Instructions Apply to All Modes
 

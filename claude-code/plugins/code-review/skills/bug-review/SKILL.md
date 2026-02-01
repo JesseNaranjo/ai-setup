@@ -1,6 +1,6 @@
 ---
 name: bug-review
-description: Identifies logical errors, null references, race conditions, and edge cases in code. Use when user mentions "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", or "debug this code".
+description: Use when user mentions "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", or "debug this code". Identifies logical errors, null references, race conditions, and edge cases in code.
 version: 3.4.0
 ---
 

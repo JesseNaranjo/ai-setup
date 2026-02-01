@@ -1,12 +1,12 @@
 ---
 name: architecture-principles-review
-description: Identifies SOLID, DRY, and YAGNI violations in code architecture. Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", or "architecture principles review".
+description: Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", or "architecture principles review". Identifies SOLID, DRY, YAGNI, and SoC violations in code architecture.
 version: 3.4.0
 ---
 
 # Architecture Principles Review Skill
 
-Identify SOLID, DRY, and YAGNI violations through targeted design-principles-focused code review.
+Identify SOLID, DRY, YAGNI, and SoC violations through targeted design-principles-focused code review.
 
 ## Workflow
 
@@ -86,6 +86,35 @@ Identify SOLID, DRY, and YAGNI violations through targeted design-principles-foc
 
 ---
 
+## SoC Violations Checked
+
+**Mixed Concerns (Major):**
+- UI logic + business logic + data access in single file
+- Cross-cutting concerns scattered (logging, auth, caching)
+- Configuration mixed with implementation
+- Test utilities mixed with production code
+
+**Layer Violations (Major):**
+- Presentation layer accessing data layer directly
+- Business logic in controllers/handlers
+- Database queries in UI components
+
+---
+
+## File Organization Checked
+
+**Fragmentation Issues (Minor):**
+- Related code scattered across many small files
+- Single-use helpers in separate files (should be colocated)
+- Related types/interfaces in different directories
+
+**Consolidation Opportunities (Suggestion):**
+- Multiple <20-line utility files that belong together
+- Overly granular module structure
+- Evaluate consolidation conservatively (prefer cohesion over fewer files)
+
+---
+
 ## Scope Prioritization
 
 When reviewing directories, automatically prioritize:
@@ -120,6 +149,7 @@ See `examples/example-output.md` for a sample showing:
 - SOLID violation with prompt fix
 - DRY violation with diff fix
 - YAGNI violation with prompt fix
+- SoC violation with prompt fix
 
 ---
 

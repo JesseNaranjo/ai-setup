@@ -160,12 +160,7 @@ issues:
 
 ## Gaps Mode Behavior
 
-When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
-
-**Duplicate Detection:**
-- Skip issues in same file within ±5 lines of prior findings
-- Skip same issue type on same function/method
-- For range findings (lines A-B): skip zone = [A-5, B+5]
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for common rules (duplicate detection, constraints).
 
 **Focus Areas (subtle issues thorough mode misses):**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)
@@ -173,11 +168,6 @@ When MODE=gaps, this agent receives `previous_findings` from thorough mode to av
 - Inefficient serialization/deserialization
 - Cache invalidation issues, unnecessary data copying
 - Batch operation opportunities, hot path inefficiencies
-
-**Constraints:**
-- Only report Major or Critical severity (skip Minor/Suggestion)
-- Maximum 5 new findings
-- Model: Always Sonnet (cost optimization)
 
 ## False Positive Guidelines
 

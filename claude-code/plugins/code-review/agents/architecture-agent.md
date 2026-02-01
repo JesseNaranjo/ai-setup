@@ -1,7 +1,7 @@
 ---
 name: architecture-agent
 description: |
-  This agent should be used when reviewing code for architectural issues. Detects coupling problems, SOLID/DRY/YAGNI violations, anti-patterns, layer violations, and maintainability concerns.
+  This agent should be used when reviewing code for architectural issues. Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-patterns, layer violations, file organization issues, and maintainability concerns.
 
   <example>
   Context: User has completed a major refactoring and wants architectural review.
@@ -77,6 +77,16 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
   - Over-engineered patterns (factory for single product type)
   - Speculative generality (parameters/options never used)
   - Premature optimization structures
+- SoC (Separation of Concerns) violations
+  - Mixed concerns in single file (UI logic + business logic + data access)
+  - Cross-cutting concerns not properly isolated (logging, auth, caching scattered)
+  - Configuration mixed with implementation
+  - Test utilities mixed with production code
+- File organization issues
+  - Related code scattered across many small files that should be consolidated
+  - Overly fragmented modules (evaluate consolidation conservatively)
+  - Single-use helpers in separate files instead of colocated
+  - Related types/interfaces scattered instead of grouped
 
 ### Step 2: Language-Specific Architecture Checks
 
@@ -225,6 +235,37 @@ issues:
     impact: "Unnecessary indirection increases complexity without benefit"
     fix_type: "prompt"
     fix_prompt: "Simplify notification creation by removing NotificationFactory and INotification interface. Replace factory calls with direct EmailNotification instantiation. If other notification types are needed later, the abstraction can be reintroduced."
+```
+
+**Example SoC violation**:
+```yaml
+issues:
+  - title: "Mixed concerns in API handler"
+    file: "src/api/users.ts"
+    line: 15
+    range: "15-120"
+    category: "Architecture"
+    severity: "Major"
+    description: "Handler mixes HTTP concerns (request parsing, response formatting), business logic (user validation, role checks), and data access (direct SQL queries) in single function"
+    principle: "SoC (Separation of Concerns)"
+    impact: "Difficult to test business logic in isolation, changes to data layer require modifying API handlers"
+    fix_type: "prompt"
+    fix_prompt: "Separate concerns into layers: 1) Keep HTTP handling in src/api/users.ts (parse request, call service, format response), 2) Extract business logic to src/services/UserService.ts, 3) Move data access to src/repositories/UserRepository.ts. Each layer should only know about the layer directly below it."
+```
+
+**Example file consolidation opportunity**:
+```yaml
+issues:
+  - title: "Related validation logic scattered across files"
+    file: "src/validators/emailValidator.ts"
+    line: 1
+    category: "Architecture"
+    severity: "Minor"
+    description: "Five separate single-function validator files (emailValidator.ts, phoneValidator.ts, dateValidator.ts, urlValidator.ts, currencyValidator.ts) each containing <20 lines. Related code should be consolidated."
+    principle: "File Organization"
+    impact: "Unnecessary file fragmentation increases navigation overhead and import complexity"
+    fix_type: "prompt"
+    fix_prompt: "Consolidate related validators into src/validators/commonValidators.ts. Export individual functions for tree-shaking. Keep domain-specific validators (e.g., OrderValidator with complex business rules) in separate files."
 ```
 
 ## False Positive Guidelines

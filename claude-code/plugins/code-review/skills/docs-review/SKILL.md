@@ -1,6 +1,6 @@
 ---
 name: docs-review
-description: Reviews documentation for accuracy, clarity, completeness, and structure. Use when user mentions "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown", or "check docs accuracy".
+description: Use when user mentions "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown", or "check docs accuracy". Reviews documentation for accuracy, clarity, completeness, and structure.
 version: 3.4.0
 ---
 

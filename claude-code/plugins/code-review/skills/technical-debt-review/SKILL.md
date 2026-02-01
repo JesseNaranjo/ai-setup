@@ -1,6 +1,6 @@
 ---
 name: technical-debt-review
-description: Identifies deprecated dependencies, outdated patterns, dead code, and TODO accumulation. Use when user mentions "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", or "legacy code review".
+description: Use when user mentions "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", or "legacy code review". Identifies deprecated dependencies, outdated patterns, dead code, and TODO accumulation.
 version: 3.4.0
 ---
 
