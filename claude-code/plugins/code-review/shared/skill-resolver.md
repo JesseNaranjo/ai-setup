@@ -194,7 +194,8 @@ Search for a section header containing "False Positive":
 
 **Step 4.5: Determine Skill Type**
 Based on skill name:
-- If name matches `architecture-principles-review|bug-review|compliance-review|docs-review|performance-review|security-review|technical-debt-review` → `type: "review"`
+- If name matches `architecture-principles-review|bug-review|compliance-review|performance-review|security-review|technical-debt-review` → `type: "review"`
+- If name matches `docs-review` → `type: "command"` (meta-skill that invokes docs-review commands)
 - Otherwise → `type: "methodology"`
 
 **Step 4.6: Assign Primary Agent**
@@ -204,11 +205,13 @@ Based on skill name:
 | architecture-principles-review | architecture-agent |
 | bug-review | bug-detection-agent |
 | compliance-review | compliance-agent |
-| docs-review | structure-agent |
+| docs-review | N/A (command-invoking meta-skill) |
 | performance-review | performance-agent |
 | security-review | security-agent |
 | technical-debt-review | technical-debt-agent |
 | (methodology) | null |
+
+**Meta-Skills:** `docs-review` is a meta-skill that invokes documentation review COMMANDS (`/deep-docs-review`, `/quick-docs-review`) rather than targeting individual agents. It should be invoked directly, not passed as `--skills` to other commands.
 
 ### 5. Build Resolved Skills Structure
 

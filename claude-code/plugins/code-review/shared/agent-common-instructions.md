@@ -92,6 +92,8 @@ When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid d
 - Skip same issue type on same function/method
 - For range findings (lines A-B): skip zone = [A-5, B+5]
 
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` lines 80-86 for the complete `previous_findings` schema.
+
 ### Constraints (Common to All Gaps Agents)
 
 - Only report Major or Critical severity (skip Minor/Suggestion)
