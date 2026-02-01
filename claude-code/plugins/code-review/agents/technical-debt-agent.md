@@ -35,8 +35,6 @@ Analyze code for accumulated technical debt affecting maintainability, moderniza
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
-
 **Technical Debt-specific modes:**
 - **thorough**: Comprehensive debt discovery across all 6 categories
 - **gaps**: Focus on subtle debt missed in thorough pass, receives prior findings
@@ -44,8 +42,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 *Note: This agent does not use "quick" mode and is not invoked during quick reviews.*
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** This agent receives `technical-debt-review` skill data as its primary review-focused skill. Also uses related test files to identify untested deprecated code.
 
@@ -154,14 +150,11 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
-
 **Technical Debt-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Technical Debt"
+  - category: "Technical Debt"
     debt_type: "deprecated_dependency|outdated_pattern|workaround|dead_code|scalability|documentation"
     urgency: "blocking|soon|low"
     effort_estimate: "trivial|small|medium|large"
@@ -220,8 +213,6 @@ issues:
 
 ## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for common rules (duplicate detection, constraints).
-
 **Focus Areas (subtle issues thorough mode misses):**
 - Subtle debt not caught in thorough pass
 - Context-dependent debt (patterns fine in some contexts but debt in this project)
@@ -229,8 +220,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behav
 - Edge cases in deprecated pattern detection
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
 
 **Technical Debt-specific exclusions:**
 - Dependencies intentionally pinned for compatibility (documented reason)

@@ -35,8 +35,6 @@ Analyze documentation for readability and comprehension issues.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common MODE behavior.
-
 **Clarity-specific modes:**
 - **thorough**: Full readability analysis, jargon detection, audience assessment, explanation quality
 - **quick**: Critical clarity issues (completely unclear sections, undefined acronyms, major ambiguities)
@@ -44,8 +42,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common 
 **Note:** This agent does not support gaps mode.
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** Context about intended audience if available (from project README or contribution guidelines).
 
@@ -117,14 +113,11 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for base schema.
-
 **Clarity-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Clarity"
+  - category: "Clarity"
     affected_audience: "Who would be confused (beginner/intermediate/expert)"
     clarity_type: "jargon|ambiguity|complexity|missing_context|structure"
 ```
@@ -163,8 +156,6 @@ issues:
 ```
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for universal rules.
 
 **Clarity-specific exclusions:**
 - Jargon appropriate for stated expert audience

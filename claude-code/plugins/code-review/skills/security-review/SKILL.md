@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: Use when user mentions "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", or "OWASP check". Identifies vulnerabilities, insecure patterns, and security misconfigurations.
+description: Use when user mentions "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", or "OWASP check".
 version: 3.4.1
 ---
 
@@ -8,15 +8,11 @@ version: 3.4.1
 
 Identify vulnerabilities, insecure coding patterns, and security misconfigurations through targeted security-focused code review.
 
-## Workflow
+## Agent
 
-**Agent:** `code-review:security-agent` (Opus - comprehensive security analysis)
+`code-review:security-agent` (Opus)
 
-1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
-2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)
-3. **Launch**: Invoke security-agent with MODE=thorough, pass skill focus areas below
-4. **Validate**: Issues auto-validated if matching patterns in validation-rules.md; others validated by Sonnet
-5. **Report**: Output findings using YAML schema with fix_type (diff for ≤10 line single-location fixes, prompt for complex/multi-location)
+Uses thorough mode with focus areas below.
 
 ## Security Categories Checked
 

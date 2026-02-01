@@ -35,8 +35,6 @@ Review code for compliance with CLAUDE.md and other AI Agent Instructions files 
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
-
 **Compliance-specific modes:**
 - **thorough**: All compliance issues, every rule against every changed file
 - **gaps**: Subtle violations, edge cases, rules that might be misinterpreted
@@ -44,8 +42,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 *Note: This agent is not invoked during quick reviews.*
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** This agent receives `compliance-review` skill data as its primary review-focused skill. Also requires all relevant AI Agent Instructions files (CLAUDE.md, AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md).
 
@@ -97,14 +93,11 @@ For each violation found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
-
 **Compliance-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Compliance"
+  - category: "Compliance"
     rule_violated: "Exact quote from instruction file"
     rule_source: "CLAUDE.md or AI-AGENT-INSTRUCTIONS.md path"
 ```
@@ -151,8 +144,6 @@ issues:
 
 ## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for common rules (duplicate detection, constraints).
-
 **Focus Areas (subtle issues thorough mode misses):**
 - Rules with exceptions that weren't properly applied
 - Inconsistent application of guidelines across files
@@ -160,8 +151,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behav
 - Subtle spirit-of-the-rule violations that technically pass
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
 
 **Compliance-specific exclusions:**
 - Code that appears to violate a rule but has an explicit override comment

@@ -1,6 +1,6 @@
 ---
 name: architecture-principles-review
-description: Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", or "architecture principles review". Identifies SOLID, DRY, YAGNI, and SoC violations in code architecture.
+description: Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", or "architecture principles review".
 version: 3.4.1
 ---
 
@@ -8,15 +8,11 @@ version: 3.4.1
 
 Identify SOLID, DRY, YAGNI, and SoC violations through targeted design-principles-focused code review.
 
-## Workflow
+## Agent
 
-**Agent:** `code-review:architecture-agent` (Opus - comprehensive architectural analysis)
+`code-review:architecture-agent` (Opus)
 
-1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
-2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)
-3. **Launch**: Invoke architecture-agent with MODE=thorough, pass skill focus areas below
-4. **Validate**: Issues auto-validated if matching patterns in validation-rules.md; others validated by Sonnet
-5. **Report**: Output findings using YAML schema with fix_type (diff for ≤10 line single-location fixes, prompt for complex/multi-location)
+Uses thorough mode with focus areas below.
 
 ## SOLID Principles Checked
 

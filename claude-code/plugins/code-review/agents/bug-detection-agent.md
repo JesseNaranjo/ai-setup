@@ -35,16 +35,12 @@ Analyze code for bugs that will cause incorrect behavior at runtime.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
-
 **Bug detection-specific modes:**
 - **thorough**: Comprehensive bug hunting - logical errors, null references, off-by-one errors, type mismatches
 - **gaps**: Edge cases, boundary conditions, race conditions, state management issues
 - **quick**: Most obvious and critical bugs only
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** This agent receives `bug-review` skill data as its primary review-focused skill. Also uses related test files for context.
 
@@ -112,14 +108,11 @@ For each bug found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
-
 **Bug detection-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Bugs"
+  - category: "Bugs"
     conditions: "When this bug occurs"
     impact: "What happens when the bug triggers"
 ```
@@ -162,8 +155,6 @@ issues:
 
 ## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for common rules (duplicate detection, constraints).
-
 **Focus Areas (subtle issues thorough mode misses):**
 - Boundary conditions (empty arrays, zero values, max values)
 - Race conditions in concurrent code
@@ -173,8 +164,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behav
 - Integer overflow/underflow
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
 
 **Bug detection-specific exclusions:**
 - Code that appears buggy but is correct in context

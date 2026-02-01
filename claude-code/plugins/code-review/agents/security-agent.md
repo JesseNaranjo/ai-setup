@@ -35,16 +35,12 @@ Analyze code for security vulnerabilities and weaknesses.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
-
 **Security-specific modes:**
 - **thorough**: All OWASP categories, authentication, authorization, cryptography, data handling
 - **gaps**: Second-order injection, timing attacks, race conditions, defense-in-depth gaps
 - **quick**: Direct injection, obvious auth bypass, hardcoded secrets
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** This agent receives `security-review` skill data as its primary review-focused skill.
 
@@ -114,14 +110,11 @@ For each vulnerability found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
-
 **Security-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Security"
+  - category: "Security"
     attack_vector: "How an attacker could exploit this"
     impact: "What damage could result"
 ```
@@ -161,8 +154,6 @@ issues:
 
 ## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for common rules (duplicate detection, constraints).
-
 **Focus Areas (subtle issues thorough mode misses):**
 - Second-order injection (stored XSS, delayed command execution)
 - Authorization edge cases (role escalation, missing checks)
@@ -171,8 +162,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behav
 - Weak randomness in security-critical code
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
 
 **Security-specific exclusions:**
 - Internal-only code with no untrusted input exposure

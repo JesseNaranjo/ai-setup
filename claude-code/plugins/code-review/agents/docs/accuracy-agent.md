@@ -35,16 +35,12 @@ Analyze documentation for factual correctness and code synchronization.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common MODE behavior.
-
 **Accuracy-specific modes:**
 - **thorough**: All code references, API signatures, version numbers, CLI commands, configuration options
 - **gaps**: Subtle drift (parameter order changes, default value changes, edge case behavior differences)
 - **quick**: Critical mismatches (wrong function names, incorrect return types, broken examples)
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** This agent receives related code files for cross-reference verification.
 
@@ -126,14 +122,11 @@ For each inaccuracy found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for base schema.
-
 **Accuracy-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Accuracy"
+  - category: "Accuracy"
     documented_value: "What the documentation claims"
     actual_value: "What the code actually does"
     code_location: "Path to the actual implementation"
@@ -195,8 +188,6 @@ When MODE=gaps, this agent receives `previous_findings` from thorough mode to av
 - Model: Always Sonnet (cost optimization)
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for universal rules.
 
 **Accuracy-specific exclusions:**
 - Intentionally simplified examples (marked as "simplified" or "basic example")

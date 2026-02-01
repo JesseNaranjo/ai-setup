@@ -1,6 +1,6 @@
 ---
 name: compliance-review
-description: Use when user mentions "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", or "check naming conventions". Verifies adherence to CLAUDE.md, coding standards, and project conventions.
+description: Use when user mentions "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", or "check naming conventions".
 version: 3.4.1
 ---
 
@@ -8,15 +8,11 @@ version: 3.4.1
 
 Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) and project-specific rules through targeted compliance-focused code review.
 
-## Workflow
+## Agent
 
-**Agent:** `code-review:compliance-agent` (Sonnet - efficient compliance checking)
+`code-review:compliance-agent` (Sonnet)
 
-1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
-2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`); find AI Agent Instructions files (CLAUDE.md, copilot-instructions.md)
-3. **Launch**: Invoke compliance-agent with MODE=thorough, pass skill focus areas below
-4. **Validate**: Issues auto-validated if matching patterns in validation-rules.md; others validated by Sonnet
-5. **Report**: Output findings using YAML schema with fix_type (diff for ≤10 line single-location fixes, prompt for complex/multi-location)
+Uses thorough mode with focus areas below.
 
 ---
 

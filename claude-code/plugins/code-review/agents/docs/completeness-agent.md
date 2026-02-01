@@ -35,8 +35,6 @@ Analyze documentation for coverage gaps and missing content.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common MODE behavior.
-
 **Completeness-specific modes:**
 - **thorough**: All standard sections, feature coverage, setup completeness, error documentation
 - **gaps**: Edge cases, implicit assumptions, undocumented defaults, missing caveats
@@ -44,8 +42,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common 
 **Note:** This agent does not support quick mode.
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** Project type detection for expected documentation sections.
 
@@ -147,14 +143,11 @@ For each gap found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for base schema.
-
 **Completeness-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Completeness"
+  - category: "Completeness"
     missing_type: "section|api|config|example|error_handling|prerequisite"
     related_code: "Path to code that should be documented (if applicable)"
 ```
@@ -215,8 +208,6 @@ When MODE=gaps, this agent receives `previous_findings` from thorough mode to av
 - Model: Always Sonnet (cost optimization)
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for universal rules.
 
 **Completeness-specific exclusions:**
 - Internal/private APIs not intended for external use

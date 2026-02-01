@@ -35,8 +35,6 @@ Analyze code examples in documentation for correctness and completeness.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common MODE behavior.
-
 **Examples-specific modes:**
 - **thorough**: All code examples, imports, syntax, API correctness, completeness, output accuracy
 - **quick**: Critical example errors (syntax errors, missing critical imports, completely wrong API usage)
@@ -44,8 +42,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common 
 **Note:** This agent does not support gaps mode.
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** Actual implementation code for cross-referencing example correctness.
 
@@ -154,14 +150,11 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for base schema.
-
 **Examples-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Examples"
+  - category: "Examples"
     example_type: "syntax|imports|api_usage|completeness|output|deprecation"
     language: "javascript|typescript|python|bash|etc"
     error_message: "What error users would see (if applicable)"
@@ -205,8 +198,6 @@ issues:
 ```
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for universal rules.
 
 **Examples-specific exclusions:**
 - Pseudocode clearly marked as illustrative (not runnable)

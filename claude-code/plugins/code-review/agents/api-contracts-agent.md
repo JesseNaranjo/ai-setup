@@ -35,16 +35,12 @@ Analyze code for API compatibility and contract compliance issues.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
-
 **API contracts-specific modes:**
 - **thorough**: Breaking changes, compatibility, versioning, contract consistency
 
 *Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** Uses related API definitions if available.
 
@@ -109,14 +105,11 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
-
 **API contracts-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "API Contracts"
+  - category: "API Contracts"
     breaking: true  # or false
     consumers_affected: "Who/what is affected"
     migration: "Required migration steps, if applicable"
@@ -157,8 +150,6 @@ issues:
 ```
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
 
 **API contracts-specific exclusions:**
 - Internal/private API changes

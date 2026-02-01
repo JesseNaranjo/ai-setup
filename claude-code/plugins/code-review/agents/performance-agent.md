@@ -35,8 +35,6 @@ Analyze code for performance issues that will have measurable impact.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
-
 **Performance-specific modes:**
 - **thorough**: Algorithmic complexity, memory usage, I/O patterns, database access
 - **gaps**: Hidden N+1 queries, memory retention, cache invalidation, batch opportunities
@@ -44,8 +42,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 *Note: This agent is not invoked during quick reviews.*
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** This agent receives `performance-review` skill data as its primary review-focused skill.
 
@@ -107,14 +103,11 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
-
 **Performance-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Performance"
+  - category: "Performance"
     complexity: "Time/space complexity (e.g., O(n²))"
     scale: "At what data size this becomes a problem"
     impact: "Expected performance degradation"
@@ -160,8 +153,6 @@ issues:
 
 ## Gaps Mode Behavior
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for common rules (duplicate detection, constraints).
-
 **Focus Areas (subtle issues thorough mode misses):**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)
 - Memory retention through closures or event listeners
@@ -170,8 +161,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behav
 - Batch operation opportunities, hot path inefficiencies
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
 
 **Performance-specific exclusions:**
 - Micro-optimizations that won't have measurable impact

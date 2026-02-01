@@ -1,6 +1,6 @@
 ---
 name: bug-review
-description: Use when user mentions "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", or "debug this code". Identifies logical errors, null references, race conditions, and edge cases in code.
+description: Use when user mentions "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", or "debug this code".
 version: 3.4.1
 ---
 
@@ -8,15 +8,11 @@ version: 3.4.1
 
 Identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs through targeted bug-focused code review.
 
-## Workflow
+## Agent
 
-**Agent:** `code-review:bug-detection-agent` (Opus - comprehensive bug analysis)
+`code-review:bug-detection-agent` (Opus)
 
-1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
-2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)
-3. **Launch**: Invoke bug-detection-agent with MODE=thorough, pass skill focus areas below
-4. **Validate**: Issues auto-validated if matching patterns in validation-rules.md; others validated by Sonnet
-5. **Report**: Output findings using YAML schema with fix_type (diff for ≤10 line single-location fixes, prompt for complex/multi-location)
+Uses thorough mode with focus areas below.
 
 ## Bug Categories Checked
 

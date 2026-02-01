@@ -35,16 +35,12 @@ Analyze code for architectural issues affecting maintainability and scalability.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE behavior.
-
 **Architecture-specific modes:**
 - **thorough**: Coupling, cohesion, SOLID principles, design patterns
 
 *Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** This agent receives `architecture-principles-review` skill data as its primary review-focused skill.
 
@@ -159,14 +155,11 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema.
-
 **Architecture-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Architecture"
+  - category: "Architecture"
     principle: "Which architectural principle is violated"
     impact: "How this affects maintainability/testability"
 ```
@@ -269,8 +262,6 @@ issues:
 ```
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for universal rules.
 
 **Architecture-specific exclusions:**
 - Pragmatic compromises with clear justification

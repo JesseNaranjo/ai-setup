@@ -1,6 +1,6 @@
 ---
 name: performance-review
-description: Use when user mentions "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", or "latency issues". Identifies performance bottlenecks, memory leaks, and inefficient patterns.
+description: Use when user mentions "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", or "latency issues".
 version: 3.4.1
 ---
 
@@ -8,15 +8,11 @@ version: 3.4.1
 
 Identify algorithmic inefficiencies, memory leaks, database query problems, and other performance bottlenecks through targeted performance-focused code review.
 
-## Workflow
+## Agent
 
-**Agent:** `code-review:performance-agent` (Opus - comprehensive performance analysis)
+`code-review:performance-agent` (Opus)
 
-1. **Scope**: Review files specified by user or staged changes (`git diff --cached`)
-2. **Context**: Detect project type (Node.js via `package.json`, .NET via `*.csproj`/`*.sln`)
-3. **Launch**: Invoke performance-agent with MODE=thorough, pass skill focus areas below
-4. **Validate**: Issues auto-validated if matching patterns in validation-rules.md; others validated by Sonnet
-5. **Report**: Output findings using YAML schema with fix_type (diff for ≤10 line single-location fixes, prompt for complex/multi-location)
+Uses thorough mode with focus areas below.
 
 ## Performance Categories Checked
 

@@ -63,8 +63,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for:
 
 ## Input
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
-
 **Agent-specific:** This agent operates on findings from other agents, receiving:
 - `synthesis_input.category_a.findings` - Findings from first category
 - `synthesis_input.category_b.findings` - Findings from second category
@@ -169,7 +167,7 @@ Report insights that weren't caught by individual agents.
 
 ## Output Schema
 
-Return cross-cutting insights as a YAML list. See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for base schema and fix_type selection rules.
+Return cross-cutting insights as a YAML list.
 
 ```yaml
 cross_cutting_insights:

@@ -35,8 +35,6 @@ Analyze documentation for organization, navigation, and structural integrity.
 
 ## MODE Parameter
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common MODE behavior.
-
 **Structure-specific modes:**
 - **thorough**: Full structure analysis, all links, heading hierarchy, AI instruction standardization
 - **quick**: Broken links, major navigation issues, critical structural problems
@@ -44,8 +42,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for common 
 **Note:** This agent does not support gaps mode.
 
 ## Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for standard agent inputs.
 
 **Agent-specific:** AI instruction file standardization status from input validation.
 
@@ -156,14 +152,11 @@ For each issue found, report:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for base schema.
-
 **Structure-specific fields:**
 
 ```yaml
 issues:
-  - # ... base fields (title, file, line, range, category, severity, description, fix_type, fix_diff/fix_prompt)
-    category: "Structure"
+  - category: "Structure"
     structure_type: "links|headings|navigation|organization|ai_instructions"
     broken_target: "The target that doesn't exist (for broken links)"
 ```
@@ -214,8 +207,6 @@ issues:
 ```
 
 ## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-agent-common-instructions.md` for universal rules.
 
 **Structure-specific exclusions:**
 - Intentionally orphaned archive/historical documents
