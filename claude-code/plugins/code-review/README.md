@@ -388,7 +388,6 @@ code-review/
 │   ├── content-gathering-files.md   # Content gathering for file reviews
 │   ├── content-gathering-staged.md  # Content gathering for staged reviews
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── docs-agent-common-instructions.md # Common instructions for documentation agents
 │   ├── docs-orchestration-sequence.md # Documentation review phase definitions
 │   ├── input-validation-docs.md     # Input validation for documentation commands
 │   ├── input-validation-files.md    # Input validation for file commands
