@@ -8,18 +8,6 @@ version: 3.4.1
 
 Identify documentation issues including accuracy, clarity, completeness, consistency, examples, and structure through targeted documentation-focused review.
 
-## Workflow
-
-**Commands:**
-- `/deep-docs-review` - Full 13-invocation pipeline for comprehensive review
-- `/quick-docs-review` - Quick 7-invocation pipeline for critical issues
-
-1. **Scope**: Review files specified by user or discover all documentation
-2. **Context**: Detect project type, gather version info and code references
-3. **Launch**: Invoke documentation agents with appropriate MODE
-4. **Validate**: Issues validated per validation-rules.md
-5. **Report**: Output findings using YAML schema with fix_type
-
 ## Documentation Categories Checked
 
 **Accuracy (Critical):**
