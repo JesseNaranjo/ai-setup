@@ -1,7 +1,6 @@
 ---
 name: reviewing-compliance
 description: Use when user mentions "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", or "check naming conventions".
-version: 3.4.1
 ---
 
 # Compliance Code Review Skill

@@ -1,7 +1,6 @@
 ---
 name: reviewing-bugs
 description: Use when user mentions "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", or "debug this code".
-version: 3.4.1
 ---
 
 # Bug Detection Code Review Skill

@@ -7,8 +7,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.4.2] - 2026-02-01
 
+### Changed
+- **Skill Naming Convention**: Renamed all 7 skills to `reviewing-*` pattern for consistency
+  - `architecture-principles-review` → `reviewing-architecture-principles`
+  - `bug-review` → `reviewing-bugs`
+  - `compliance-review` → `reviewing-compliance`
+  - `docs-review` → `reviewing-documentation`
+  - `performance-review` → `reviewing-performance`
+  - `security-review` → `reviewing-security`
+  - `technical-debt-review` → `reviewing-technical-debt`
+- **Shared File Consolidation**: Merged related documents for cleaner architecture
+  - `skill-orchestration.md` + `skill-resolver.md` → `skill-handling.md`
+  - `input-validation-files.md` + `content-gathering-files.md` → `file-processing.md`
+  - `input-validation-staged.md` + `content-gathering-staged.md` → `staged-processing.md`
+- **Agent Documentation**: Streamlined all 16 agents with comprehensive contents sections
+- **Command Workflows**: Enhanced clarity with timing/task ID instructions
+- **README**: Updated skill names, directory structure, and examples throughout
+- **Versioning**: Removed version fields from skill frontmatter per Anthropic's plugin guidance (version only in `plugin.json`)
+
 ### Removed
-- Removed unused `docs-agent-common-instructions.md` - documentation agents are self-contained with inline instructions
+- `docs-agent-common-instructions.md` - documentation agents are self-contained
+- `skill-orchestration.md` - consolidated into `skill-handling.md`
+- `skill-resolver.md` - consolidated into `skill-handling.md`
+- `input-validation-files.md` - consolidated into `file-processing.md`
+- `input-validation-staged.md` - consolidated into `staged-processing.md`
+- `content-gathering-files.md` - consolidated into `file-processing.md`
+- `content-gathering-staged.md` - consolidated into `staged-processing.md`
+- Version fields from all 7 skill SKILL.md files (per Anthropic guidance)
+
+### Files Changed
+- 7 skill directories renamed and updated (version fields removed)
+- 16 agent files refined
+- 6 command files updated
+- 8 shared files consolidated into 3
+- README.md updated throughout
+- CLAUDE.md and CHANGELOG.md version location docs updated per Anthropic guidance
 
 ## [3.4.1] - 2026-01-31
 
@@ -303,19 +336,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 When releasing a new version, update:
 
-**Required:**
-- `.claude-plugin/plugin.json` - Plugin manifest
+- `.claude-plugin/plugin.json` - Plugin manifest (authoritative version)
 - Repository root `.claude-plugin/marketplace.json` (if applicable)
+- `README.md` - Current Version line
 
-**Recommended:**
-- `agents/*.md` and `agents/docs/*.md` - Agent frontmatter version field (16 files)
-- `skills/*/SKILL.md` - Skill frontmatter version field (7 files)
+> **Note:** Per Anthropic's plugin guidance, only `plugin.json` should contain the version. Individual agent, skill, and command files should NOT have version fields.
 
 **Verification:**
 ```bash
 # Verify no old version remains (exclude CHANGELOG history)
 grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-# Verify new version count (~26 expected)
+# Verify new version count (3 expected: plugin.json, marketplace.json, README.md)
 grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 ```

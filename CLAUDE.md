@@ -438,22 +438,18 @@ When preparing a new release:
 
 4. **Update version in all locations:**
 
-   **Required:**
    - `claude-code/plugins/code-review/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json` (repository root)
    - `claude-code/plugins/code-review/README.md` (Current Version line)
-   - `CLAUDE.md` version references (this file)
 
-   **Recommended:**
-   - All agent files: `agents/*.md` and `agents/docs/*.md` (16 files)
-   - All skill files: `skills/*/SKILL.md` (7 files)
+   > **Note:** Per Anthropic's plugin guidance, only `plugin.json` should contain the authoritative version. Individual agent, skill, and command files should NOT have version fields.
 
 5. **Verify versions are consistent:**
    ```bash
    # Verify no old version remains (exclude CHANGELOG history)
    grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-   # Verify new version count (~27: 1 plugin.json + 1 marketplace.json + 1 README + 1 CLAUDE.md + 16 agents + 7 skills)
+   # Verify new version count (3: 1 plugin.json + 1 marketplace.json + 1 README)
    grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 
    # Verify CHANGELOG has new section

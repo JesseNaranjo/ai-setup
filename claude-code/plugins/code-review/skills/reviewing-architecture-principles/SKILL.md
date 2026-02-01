@@ -1,7 +1,6 @@
 ---
 name: reviewing-architecture-principles
 description: Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", or "architecture principles review".
-version: 3.4.1
 ---
 
 # Architecture Principles Review Skill
