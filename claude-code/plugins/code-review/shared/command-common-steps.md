@@ -81,8 +81,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 **Skip this step entirely if `--skills` argument was not provided.**
 
 If `--skills` is provided:
-1. See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for skill resolution
-2. See `${CLAUDE_PLUGIN_ROOT}/shared/skill-orchestration.md` for orchestration adjustments
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for complete skill resolution and orchestration.
 
 ---
 

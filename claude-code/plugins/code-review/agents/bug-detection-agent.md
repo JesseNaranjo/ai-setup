@@ -1,32 +1,9 @@
 ---
 name: bug-detection-agent
-description: |
-  This agent should be used when reviewing code for bugs, logical errors, edge cases, race conditions, and state management issues. Detects runtime errors, null references, off-by-one errors, boundary conditions, and resource cleanup failures.
-
-  <example>
-  Context: User has implemented new functionality and wants to check for bugs before merging.
-  user: "Can you check this code for bugs?"
-  assistant: "I'll use the bug detection agent to analyze your code for logical errors, null references, edge cases, and other potential bugs."
-  <commentary>User explicitly asked to find bugs, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Code review where user is concerned about edge cases.
-  user: "Are there any edge cases I might have missed in this function?"
-  assistant: "Let me run the bug detection agent to identify any edge cases, boundary conditions, or logical errors that might cause issues."
-  <commentary>User asked about edge cases, which is a key focus area of the bug detection agent.</commentary>
-  </example>
-
-  <example>
-  Context: Debugging session where user suspects a race condition.
-  user: "This code sometimes produces wrong results - could there be a race condition?"
-  assistant: "I'll use the bug detection agent to analyze for race conditions, state management issues, and other concurrency-related bugs."
-  <commentary>User mentioned race conditions and intermittent bugs, which are specific issues this agent is designed to detect.</commentary>
-  </example>
-model: opus  # Default for thorough/quick. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
+description: Detects runtime errors, null references, off-by-one errors, boundary conditions, race conditions, and state management issues. Use for bug hunting, edge cases, or logical errors.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: red
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Bug Detection Review Agent

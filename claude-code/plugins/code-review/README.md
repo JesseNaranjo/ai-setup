@@ -385,19 +385,16 @@ code-review/
 │   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
 │   ├── command-common-steps.md      # Common workflow steps for all commands
 │   ├── content-gathering-docs.md    # Content gathering for documentation reviews
-│   ├── content-gathering-files.md   # Content gathering for file reviews
-│   ├── content-gathering-staged.md  # Content gathering for staged reviews
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── docs-orchestration-sequence.md # Documentation review phase definitions
+│   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── input-validation-docs.md     # Input validation for documentation commands
-│   ├── input-validation-files.md    # Input validation for file commands
-│   ├── input-validation-staged.md   # Input validation for staged commands
 │   ├── orchestration-sequence.md    # Phase definitions and model selection
 │   ├── output-format.md             # Output schema, templates, and generation process
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── severity-definitions.md      # Severity classification
-│   ├── skill-orchestration.md       # Skill-informed orchestration (--skills)
-│   ├── skill-resolver.md            # Skill resolution and parsing
+│   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
+│   ├── staged-processing.md         # Input validation and content gathering for staged commands
 │   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
 │   ├── usage-tracking.md            # Usage tracking schema and protocol
 │   ├── validation-rules.md          # Validation process

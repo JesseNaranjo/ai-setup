@@ -1,32 +1,9 @@
 ---
 name: api-contracts-agent
-description: |
-  This agent should be used when reviewing code for API and contract issues. Detects breaking changes, backward compatibility problems, interface contract violations, inconsistent API patterns, and schema changes affecting consumers.
-
-  <example>
-  Context: User has modified an API endpoint and wants to check for breaking changes.
-  user: "Will these API changes break existing clients?"
-  assistant: "I'll use the API contracts agent to analyze for breaking changes, backward compatibility issues, and impacts on existing consumers."
-  <commentary>User asked about breaking changes to API, which is the core focus of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Code review for interface modifications.
-  user: "Did I change any method signatures that could affect callers?"
-  assistant: "Let me run the API contracts agent to check for changed method signatures, interface contract violations, and backward compatibility problems."
-  <commentary>User is concerned about method signature changes affecting callers, which is a specific contract issue this agent detects.</commentary>
-  </example>
-
-  <example>
-  Context: Schema change review.
-  user: "I updated the response schema - is this a breaking change for clients?"
-  assistant: "I'll use the API contracts agent to analyze the schema changes and identify any backward compatibility issues that could affect existing consumers."
-  <commentary>User mentioned schema changes and client impact, which is precisely what this agent is designed to evaluate.</commentary>
-  </example>
-model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
+description: Detects breaking changes, backward compatibility problems, interface contract violations, inconsistent API patterns, and schema changes affecting consumers. Use for API review, breaking changes, or contract issues.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # API & Contracts Review Agent

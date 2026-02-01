@@ -22,15 +22,9 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
 ---
 
-## Step 3: Staged Changes Validation
+## Steps 3 & 5: Input Validation and Content Gathering
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-staged.md` for the validation process.
-
----
-
-## Step 5: Content Gathering
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-staged.md` for the content gathering process and tiered context behavior.
+See `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md` for the validation, content gathering, and tiered context behavior.
 
 ---
 

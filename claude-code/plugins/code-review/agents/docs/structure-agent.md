@@ -1,32 +1,9 @@
 ---
 name: structure-agent
-description: |
-  This agent should be used when reviewing documentation for structural issues. Detects organization problems, broken links, navigation issues, heading hierarchy problems, and AI instruction file standardization violations.
-
-  <example>
-  Context: User wants to verify documentation is well-organized.
-  user: "Is our documentation well-structured and easy to navigate?"
-  assistant: "I'll use the structure agent to analyze document organization, heading hierarchy, cross-references, and navigation patterns."
-  <commentary>User asked about documentation structure, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Documentation link audit.
-  user: "Check for any broken links in our docs"
-  assistant: "Let me run the structure agent to verify all internal and external links, check cross-references, and identify any broken or outdated URLs."
-  <commentary>User asked about broken links, which is a key structural concern.</commentary>
-  </example>
-
-  <example>
-  Context: AI instruction file review.
-  user: "Are our AI agent instruction files properly set up?"
-  assistant: "I'll use the structure agent to check AI instruction file standardization: verify AI-AGENT-INSTRUCTIONS.md is in .ai/, CLAUDE.md has correct header, and copilot-instructions.md exists."
-  <commentary>User asked about AI instruction files, which this agent includes standardization checks for.</commentary>
-  </example>
-model: sonnet  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection
+description: Detects organization problems, broken links, navigation issues, heading hierarchy problems, and AI instruction file standardization violations. Use for doc structure review.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: purple
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Structure Review Agent

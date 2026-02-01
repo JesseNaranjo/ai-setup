@@ -1,32 +1,9 @@
 ---
 name: clarity-agent
-description: |
-  This agent should be used when reviewing documentation for clarity issues. Detects readability problems, unexplained jargon, audience mismatches, confusing explanations, and poor sentence structure.
-
-  <example>
-  Context: User wants to ensure documentation is accessible to newcomers.
-  user: "Is this documentation clear for someone new to the project?"
-  assistant: "I'll use the clarity agent to check readability, identify unexplained jargon, and ensure explanations are appropriate for newcomers."
-  <commentary>User asked about clarity for new users, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Technical documentation review.
-  user: "Are there any confusing sections in our API docs?"
-  assistant: "Let me run the clarity agent to identify confusing explanations, ambiguous descriptions, and sections that need clearer wording."
-  <commentary>User mentioned confusing sections, which is a key clarity concern.</commentary>
-  </example>
-
-  <example>
-  Context: Documentation audit for public release.
-  user: "Check if our docs use too much internal jargon"
-  assistant: "I'll use the clarity agent to find unexplained technical terms, internal jargon, and abbreviations that external users might not understand."
-  <commentary>User asked about jargon, which this agent specializes in detecting.</commentary>
-  </example>
-model: sonnet  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection
+description: Detects readability problems, unexplained jargon, audience mismatches, confusing explanations, and poor sentence structure. Use for doc clarity or readability review.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: cyan
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Clarity Review Agent

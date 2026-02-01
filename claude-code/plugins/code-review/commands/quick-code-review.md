@@ -23,15 +23,9 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
 ---
 
-## Step 3: Input Validation
+## Steps 3 & 5: Input Validation and Content Gathering
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-files.md` for the validation process.
-
----
-
-## Step 5: Content Gathering
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-files.md` for the content gathering process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/file-processing.md` for the validation and content gathering process.
 
 ---
 

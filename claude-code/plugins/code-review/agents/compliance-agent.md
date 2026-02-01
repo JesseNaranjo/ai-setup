@@ -1,32 +1,9 @@
 ---
 name: compliance-agent
-description: |
-  This agent should be used when reviewing code for compliance with CLAUDE.md and other AI Agent Instructions files. Reviews adherence to project-specific coding standards, guidelines, and rules defined in instruction files.
-
-  <example>
-  Context: User has finished implementing a feature and wants to verify it follows project standards.
-  user: "Check if this code follows our CLAUDE.md guidelines"
-  assistant: "I'll use the compliance agent to review your code against the CLAUDE.md standards and identify any guideline violations."
-  <commentary>User explicitly asked about CLAUDE.md compliance, which is the primary focus of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: PR review where the project has documented coding standards.
-  user: "Does this implementation follow our coding conventions?"
-  assistant: "Let me run the compliance agent to check your implementation against the project's AI Agent Instructions files."
-  <commentary>User asked about coding conventions, which are defined in instruction files that this agent specializes in checking.</commentary>
-  </example>
-
-  <example>
-  Context: Code review with specific project rules documented.
-  user: "Review this against our team's documented standards in AI-AGENT-INSTRUCTIONS.md"
-  assistant: "I'll use the compliance agent to verify adherence to your AI-AGENT-INSTRUCTIONS.md rules."
-  <commentary>User specifically mentioned AI-AGENT-INSTRUCTIONS.md, a file type this agent is designed to check against.</commentary>
-  </example>
-model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
+description: Reviews adherence to project-specific coding standards, CLAUDE.md guidelines, and AI agent instruction files. Use for standards compliance or convention checks.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: blue
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # AI Agent Instructions Compliance Review Agent

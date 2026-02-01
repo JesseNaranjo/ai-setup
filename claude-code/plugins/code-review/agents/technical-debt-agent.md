@@ -1,32 +1,9 @@
 ---
 name: technical-debt-agent
-description: |
-  This agent should be used when reviewing code for technical debt. Detects deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt.
-
-  <example>
-  Context: User wants to assess code health and modernization needs.
-  user: "Can you find technical debt in this codebase?"
-  assistant: "I'll use the technical debt agent to identify deprecated dependencies, outdated patterns, workarounds, dead code, and accumulated technical debt."
-  <commentary>User explicitly asked about technical debt, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: User notices TODO comments everywhere.
-  user: "There are lots of TODOs and FIXMEs - can you catalog the technical debt?"
-  assistant: "Let me run the technical debt agent to catalog TODO/FIXME comments, identify workarounds, and assess the overall debt burden."
-  <commentary>User mentioned TODOs and debt, which are specific concerns this agent addresses.</commentary>
-  </example>
-
-  <example>
-  Context: Dependency update review.
-  user: "Are any of our dependencies outdated or deprecated?"
-  assistant: "I'll use the technical debt agent to check for deprecated dependencies, outdated packages, and identify modernization opportunities."
-  <commentary>User asked about dependencies, which is a key technical debt category.</commentary>
-  </example>
-model: opus  # Thorough mode. See orchestration-sequence.md for authoritative model selection per mode
+description: Detects deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt. Use for tech debt assessment or code modernization.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: brown
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Technical Debt Review Agent

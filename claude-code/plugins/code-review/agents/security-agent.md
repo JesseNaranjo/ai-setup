@@ -1,32 +1,9 @@
 ---
 name: security-agent
-description: |
-  This agent should be used when reviewing code for security vulnerabilities. Detects injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, OWASP top 10 issues, and other security concerns.
-
-  <example>
-  Context: User has completed a feature that handles user input and wants a security review.
-  user: "Can you check this code for security vulnerabilities?"
-  assistant: "I'll use the security agent to analyze your code for injection attacks, authentication issues, hardcoded secrets, and other security vulnerabilities."
-  <commentary>User explicitly asked for security vulnerability check, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Code review for an API endpoint that handles sensitive data.
-  user: "Is this authentication code secure? Are there any injection risks?"
-  assistant: "Let me run the security agent to check for authentication bypasses, injection vulnerabilities, and other OWASP top 10 issues."
-  <commentary>User mentioned authentication and injection, which are specific security concerns this agent specializes in.</commentary>
-  </example>
-
-  <example>
-  Context: Pre-deployment security audit.
-  user: "Audit this code for hardcoded secrets and credentials"
-  assistant: "I'll use the security agent to scan for hardcoded secrets, API keys, passwords, and other exposed credentials in your code."
-  <commentary>User asked specifically about hardcoded secrets, which is one of the key vulnerability types this agent detects.</commentary>
-  </example>
-model: opus  # Default for thorough/quick. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
+description: Detects injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, OWASP top 10 issues, and other security concerns. Use for security review, vulnerability audit, or secret scanning.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: purple
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Security Review Agent

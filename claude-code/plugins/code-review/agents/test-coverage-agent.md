@@ -1,32 +1,9 @@
 ---
 name: test-coverage-agent
-description: |
-  This agent should be used when reviewing code for test coverage gaps. Identifies missing tests, test quality issues, edge cases not covered, and provides specific test recommendations.
-
-  <example>
-  Context: User has implemented a feature and wants to know what tests are needed.
-  user: "What tests should I write for this code?"
-  assistant: "I'll use the test coverage agent to identify missing tests, uncovered edge cases, and provide specific test recommendations for your code."
-  <commentary>User asked about what tests to write, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Code review where user wants to verify test completeness.
-  user: "Does this code have adequate test coverage?"
-  assistant: "Let me run the test coverage agent to analyze test coverage gaps, identify untested code paths, and check for missing edge case tests."
-  <commentary>User asked about test coverage adequacy, which this agent is designed to evaluate.</commentary>
-  </example>
-
-  <example>
-  Context: Review of critical business logic.
-  user: "Are there any edge cases in this payment logic that aren't tested?"
-  assistant: "I'll use the test coverage agent to identify untested edge cases, boundary conditions, and error scenarios in your payment logic."
-  <commentary>User mentioned untested edge cases in critical code, which is a key focus area of the test coverage agent.</commentary>
-  </example>
-model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
+description: Identifies missing tests, test quality issues, edge cases not covered, and provides specific test recommendations. Use for test coverage gaps or test recommendations.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: white
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Test Coverage Review Agent

@@ -1,32 +1,9 @@
 ---
 name: accuracy-agent
-description: |
-  This agent should be used when reviewing documentation for accuracy issues. Detects code-documentation sync problems, factual errors, outdated version references, incorrect API signatures, and misleading technical claims.
-
-  <example>
-  Context: User has updated code and wants to verify documentation still matches.
-  user: "Does my documentation match the actual code behavior?"
-  assistant: "I'll use the accuracy agent to verify code-documentation synchronization, check API signatures, and identify any factual discrepancies."
-  <commentary>User asked about code-doc sync, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Documentation review after a major refactoring.
-  user: "Are there any outdated references in the docs after our refactor?"
-  assistant: "Let me run the accuracy agent to find outdated code references, incorrect function signatures, and version mismatches in your documentation."
-  <commentary>User mentioned outdated references after code changes, which is a key accuracy concern.</commentary>
-  </example>
-
-  <example>
-  Context: API documentation audit.
-  user: "Verify that our API docs show the correct parameters and return types"
-  assistant: "I'll use the accuracy agent to cross-reference API documentation against the actual implementation and identify any parameter or type mismatches."
-  <commentary>User asked specifically about API parameter accuracy, which this agent specializes in.</commentary>
-  </example>
-model: opus  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection (sonnet for gaps)
+description: Detects code-documentation sync problems, factual errors, outdated version references, incorrect API signatures, and misleading technical claims. Use for doc accuracy review.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: red
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Accuracy Review Agent

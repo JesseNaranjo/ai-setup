@@ -1,32 +1,9 @@
 ---
 name: error-handling-agent
-description: |
-  This agent should be used when reviewing code for error handling issues. Detects missing try/catch blocks, swallowed exceptions, missing cleanup, improper error propagation, and resilience gaps.
-
-  <example>
-  Context: User has implemented async operations and wants to verify error handling.
-  user: "Is the error handling in this code correct?"
-  assistant: "I'll use the error handling agent to check for missing try/catch blocks, swallowed exceptions, proper cleanup, and error propagation issues."
-  <commentary>User explicitly asked about error handling correctness, which is the core focus of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Code review for code that interacts with external services.
-  user: "Are there any swallowed exceptions or missing error handlers?"
-  assistant: "Let me run the error handling agent to identify swallowed exceptions, empty catch blocks, and missing error handlers in your code."
-  <commentary>User mentioned swallowed exceptions and missing handlers, which are specific issues this agent detects.</commentary>
-  </example>
-
-  <example>
-  Context: Review of resource management code.
-  user: "Does this code properly clean up resources when errors occur?"
-  assistant: "I'll use the error handling agent to verify proper cleanup in error paths, check for finally blocks, and ensure resources are released on failure."
-  <commentary>User asked about resource cleanup during errors, which is a key error handling concern this agent addresses.</commentary>
-  </example>
-model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
+description: Detects missing try/catch blocks, swallowed exceptions, missing cleanup, improper error propagation, and resilience gaps. Use for error handling review or exception issues.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: orange
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Error Handling Review Agent

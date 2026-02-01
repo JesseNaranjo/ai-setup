@@ -1,32 +1,9 @@
 ---
 name: architecture-agent
-description: |
-  This agent should be used when reviewing code for architectural issues. Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-patterns, layer violations, file organization issues, and maintainability concerns.
-
-  <example>
-  Context: User has completed a major refactoring and wants architectural review.
-  user: "Can you review the architecture of this code?"
-  assistant: "I'll use the architecture agent to analyze for coupling problems, SOLID violations, anti-patterns, and other architectural concerns."
-  <commentary>User explicitly asked for architecture review, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Code review where user suspects design issues.
-  user: "Does this class have too many responsibilities? Is it violating SOLID principles?"
-  assistant: "Let me run the architecture agent to check for Single Responsibility violations, coupling issues, and other SOLID principle violations."
-  <commentary>User asked about SOLID principles specifically, which is a key focus area of the architecture agent.</commentary>
-  </example>
-
-  <example>
-  Context: Review of new module structure.
-  user: "Is there any tight coupling or circular dependencies in this module?"
-  assistant: "I'll use the architecture agent to identify circular dependencies, tight coupling, layer violations, and other structural issues."
-  <commentary>User mentioned coupling and dependencies, which are specific architectural concerns this agent detects.</commentary>
-  </example>
-model: opus  # Thorough mode. See orchestration-sequence.md for authoritative model selection per mode
+description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-patterns, layer violations, file organization issues, and maintainability concerns. Use for architecture review, SOLID principles, or design issues.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: yellow
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Architecture Review Agent

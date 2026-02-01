@@ -1,32 +1,9 @@
 ---
 name: synthesis-agent
-description: |
-  This agent should be used to analyze findings from multiple review categories and identify cross-cutting concerns. Finds issues that span categories like security fixes affecting performance, or architectural changes missing test coverage.
-
-  <example>
-  Context: After running multiple specialized review agents, need to find cross-category issues.
-  user: "Are there any issues that span multiple categories - like security fixes that hurt performance?"
-  assistant: "I'll use the synthesis agent to analyze findings across categories and identify cross-cutting concerns, ripple effects, and issues that span multiple domains."
-  <commentary>User asked about cross-category issues, which is precisely what the synthesis agent is designed to find.</commentary>
-  </example>
-
-  <example>
-  Context: Comprehensive code review looking for hidden interactions.
-  user: "Do any of the identified issues affect each other? Are there ripple effects?"
-  assistant: "Let me run the synthesis agent to correlate findings from different review categories and identify ripple effects or hidden interactions between issues."
-  <commentary>User mentioned ripple effects and issue interactions, which is the core analysis this agent performs.</commentary>
-  </example>
-
-  <example>
-  Context: Review aggregation phase after specialized agents completed.
-  user: "Check if the security fixes might introduce performance problems"
-  assistant: "I'll use the synthesis agent to analyze the security findings against performance concerns and identify any fixes that could create new problems."
-  <commentary>User asked specifically about security-performance interactions, which is one of the cross-cutting analysis pairs this agent handles.</commentary>
-  </example>
-model: sonnet  # Default. See orchestration-sequence.md for authoritative model selection per mode
+description: Analyzes findings from multiple review categories to identify cross-cutting concerns, ripple effects, and issues spanning multiple domains. Use after other agents complete.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: white
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Cross-Agent Synthesis Agent

@@ -131,13 +131,10 @@ claude-code/plugins/code-review/
 │   ├── agent-common-instructions.md # Common MODE, false positives, gaps, pre-existing issue detection, output schema
 │   ├── command-common-steps.md      # Common workflow steps for all commands
 │   ├── settings-loader.md           # Settings loading and application
-│   ├── input-validation-files.md    # File-based input validation
-│   ├── input-validation-staged.md   # Staged input validation
-│   ├── content-gathering-files.md   # File-based content gathering
-│   ├── content-gathering-staged.md  # Staged content gathering
+│   ├── file-processing.md           # File-based input validation and content gathering
+│   ├── staged-processing.md         # Staged input validation and content gathering
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── skill-orchestration.md       # Skill-informed orchestration (loaded when --skills used)
-│   ├── skill-resolver.md            # Skill resolution and structured parsing
+│   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
 │   ├── usage-tracking.md            # Usage tracking schema and protocol
 │   ├── validation-rules.md          # Validation process
@@ -232,11 +229,10 @@ There are more agents than available colors. When assigning colors:
 - `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps, pre-existing issue detection, output schema)
 - `shared/command-common-steps.md` - Common workflow steps shared by all commands
 - `shared/settings-loader.md` - Settings loading and application
-- `shared/input-validation-*.md` - Input validation for file/staged commands
-- `shared/content-gathering-*.md` - Content gathering for file/staged commands
+- `shared/file-processing.md` - Input validation and content gathering for file-based commands
+- `shared/staged-processing.md` - Input validation and content gathering for staged commands
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
-- `shared/skill-orchestration.md` - Skill-informed orchestration (lazy-loaded when --skills used)
-- `shared/skill-resolver.md` - Skill resolution and structured parsing for orchestrator interpretation
+- `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
 - `shared/synthesis-invocation-pattern.md` - Synthesis agent invocation template
 - `shared/validation-rules.md` - Issue validation process
 - `shared/output-format.md` - Output formatting, templates, and generation process (with fix_type)
@@ -363,7 +359,7 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` for agent definition.
 Use relative paths for references within a skill's own directory structure:
 
 ```markdown
-# In skills/security-review/SKILL.md
+# In skills/reviewing-security/SKILL.md
 See `references/common-vulnerabilities.md` for vulnerability patterns.
 See `examples/example-output.md` for sample output format.
 ```
@@ -399,15 +395,15 @@ Each skill is self-contained with its own workflow procedures (determining scope
 
 When `--skills` is provided to review commands, the orchestrator (running as Opus) interprets skill content and makes orchestration decisions:
 
-1. **Skill Resolution**: Skills are resolved to SKILL.md files via `shared/skill-resolver.md`
+1. **Skill Resolution**: Skills are resolved to SKILL.md files
 2. **Structured Parsing**: Skills are parsed into structured data (focus_categories, auto_validated_patterns, false_positive_rules, methodology)
 3. **Agent-Specific Instructions**: The orchestrator generates tailored `skill_instructions` per agent:
-   - Review skills (security-review, etc.) target their primary agent with checklists and focus areas
+   - Review skills (reviewing-security, etc.) target their primary agent with checklists and focus areas
    - Methodology skills (superpowers:brainstorming, etc.) apply universally to all agents
 4. **Validation Adjustments**: Auto-validated patterns skip validation; false positive rules filter findings
 5. **Synthesis Adjustments**: Skill-specific cross-cutting questions may be added
 
-See `shared/skill-orchestration.md` for implementation details.
+See `shared/skill-handling.md` for implementation details.
 
 **Skill Loading:** The orchestrator MUST use the Skill() tool to load skills. Direct file read is only used as fallback if Skill() tool fails.
 

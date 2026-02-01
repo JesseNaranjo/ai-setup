@@ -1,32 +1,9 @@
 ---
 name: performance-agent
-description: |
-  This agent should be used when reviewing code for performance issues. Detects algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, excessive allocations, and hot path inefficiencies.
-
-  <example>
-  Context: User has implemented a feature and wants to ensure it performs well.
-  user: "Can you check this code for performance issues?"
-  assistant: "I'll use the performance agent to analyze your code for algorithmic complexity problems, memory leaks, N+1 queries, and other performance issues."
-  <commentary>User explicitly asked about performance issues, which is the core focus of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Code review for a database-heavy feature.
-  user: "Is this database code efficient? I'm worried about N+1 queries."
-  assistant: "Let me run the performance agent to check for N+1 queries, inefficient data access patterns, and other database performance issues."
-  <commentary>User mentioned N+1 queries specifically, which is one of the key performance issues this agent detects.</commentary>
-  </example>
-
-  <example>
-  Context: Optimization review for a high-traffic endpoint.
-  user: "This endpoint is slow - can you find what's causing the bottleneck?"
-  assistant: "I'll use the performance agent to identify algorithmic complexity issues, blocking operations, memory allocation problems, and hot path inefficiencies."
-  <commentary>User is experiencing slowness and wants to find the cause, which requires performance analysis.</commentary>
-  </example>
-model: opus  # Default for thorough. See orchestration-sequence.md for authoritative model selection (sonnet for gaps)
+description: Detects algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, excessive allocations, and hot path inefficiencies. Use for performance review, optimization, or latency issues.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: green
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Performance Review Agent

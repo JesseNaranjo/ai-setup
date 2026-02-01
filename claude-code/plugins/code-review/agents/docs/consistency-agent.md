@@ -1,32 +1,9 @@
 ---
 name: consistency-agent
-description: |
-  This agent should be used when reviewing documentation for consistency issues. Detects terminology variations, formatting inconsistencies, voice/tone mismatches, naming convention violations, and style guide adherence problems.
-
-  <example>
-  Context: User wants unified terminology across documentation.
-  user: "Do we use consistent terminology throughout our docs?"
-  assistant: "I'll use the consistency agent to check for terminology variations, naming inconsistencies, and ensure uniform language across all documentation."
-  <commentary>User asked about terminology consistency, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Documentation style review.
-  user: "Is the formatting consistent across our markdown files?"
-  assistant: "Let me run the consistency agent to verify heading styles, code block formatting, list styles, and other formatting conventions are uniform."
-  <commentary>User asked about formatting consistency, which is a key concern for this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Multi-author documentation audit.
-  user: "Our docs were written by different people. Check for inconsistent voice and style."
-  assistant: "I'll use the consistency agent to identify voice/tone variations, inconsistent writing styles, and help unify the documentation voice."
-  <commentary>User mentioned multi-author inconsistency, which this agent specializes in detecting.</commentary>
-  </example>
-model: sonnet  # Default for thorough. See docs-orchestration-sequence.md for authoritative model selection (sonnet for gaps)
+description: Detects terminology variations, formatting inconsistencies, voice/tone mismatches, naming convention violations, and style guide adherence problems. Use for doc consistency review.
+model: sonnet  # See orchestration-sequence.md Model Selection table
 color: blue
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Consistency Review Agent

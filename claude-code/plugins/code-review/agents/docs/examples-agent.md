@@ -1,32 +1,9 @@
 ---
 name: examples-agent
-description: |
-  This agent should be used when reviewing documentation for code example issues. Detects broken examples, missing imports, incorrect syntax, outdated API usage, incomplete examples, and example-documentation mismatches.
-
-  <example>
-  Context: User wants to verify code examples work correctly.
-  user: "Do all the code examples in our docs actually work?"
-  assistant: "I'll use the examples agent to verify code syntax, check for missing imports, validate API usage, and ensure examples are complete and runnable."
-  <commentary>User asked about code example validity, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: API documentation review.
-  user: "Are our API examples showing the correct request/response formats?"
-  assistant: "Let me run the examples agent to cross-reference API examples against the actual implementation and verify request/response formats are accurate."
-  <commentary>User asked about API example accuracy, which is a key concern for this agent.</commentary>
-  </example>
-
-  <example>
-  Context: Tutorial documentation audit.
-  user: "Check if users could actually follow our tutorial examples step by step"
-  assistant: "I'll use the examples agent to verify tutorial examples are complete, include necessary imports and setup, and would work if copied directly."
-  <commentary>User mentioned tutorial completeness, which this agent specializes in evaluating.</commentary>
-  </example>
-model: opus  # Default for thorough/quick. See docs-orchestration-sequence.md for authoritative model selection
+description: Detects broken examples, missing imports, incorrect syntax, outdated API usage, incomplete examples, and example-documentation mismatches. Use for code example review.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: yellow
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Examples Review Agent

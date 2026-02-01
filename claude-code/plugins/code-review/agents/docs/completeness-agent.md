@@ -1,32 +1,9 @@
 ---
 name: completeness-agent
-description: |
-  This agent should be used when reviewing documentation for completeness issues. Detects missing sections, undocumented features, incomplete setup instructions, missing error handling docs, and coverage gaps.
-
-  <example>
-  Context: User wants to ensure all features are documented.
-  user: "Are any of our APIs missing from the documentation?"
-  assistant: "I'll use the completeness agent to cross-reference your codebase against documentation and identify undocumented APIs, features, and configuration options."
-  <commentary>User asked about missing API documentation, which is the core purpose of this agent.</commentary>
-  </example>
-
-  <example>
-  Context: New project setup documentation review.
-  user: "Does our getting started guide cover everything needed?"
-  assistant: "Let me run the completeness agent to verify setup instructions include all prerequisites, configuration steps, and common first-time issues."
-  <commentary>User asked about setup guide completeness, which is a key coverage concern.</commentary>
-  </example>
-
-  <example>
-  Context: Documentation audit before release.
-  user: "What sections are we missing in our docs?"
-  assistant: "I'll use the completeness agent to check for missing standard sections like installation, troubleshooting, API reference, and changelog."
-  <commentary>User asked about missing sections, which this agent specializes in detecting.</commentary>
-  </example>
-model: opus  # Default for thorough. See docs-orchestration-sequence.md for authoritative model selection (sonnet for gaps)
+description: Detects missing sections, undocumented features, incomplete setup instructions, missing error handling docs, and coverage gaps. Use for doc completeness review.
+model: opus  # See orchestration-sequence.md Model Selection table
 color: green
 tools: ["Read", "Grep", "Glob"]
-version: 3.4.1
 ---
 
 # Completeness Review Agent

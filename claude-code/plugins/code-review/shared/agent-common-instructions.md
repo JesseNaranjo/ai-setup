@@ -133,7 +133,7 @@ When `--skills` is provided to a review command, **ALL agents receive `skill_ins
 
 This means gaps-mode agents should apply skill-specific focus areas and validation rules just as thoroughly as thorough-mode agents, but with their standard gaps-mode behavior (focusing on subtle issues, avoiding duplicates of previous_findings).
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-orchestration.md` for how skill_instructions are generated and passed to agents.
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for how skill_instructions are generated and passed to agents.
 
 ## Pre-Existing Issue Detection (For Staged/Diff Reviews)
 
