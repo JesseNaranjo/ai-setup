@@ -15,9 +15,9 @@ Commands use a consistent workflow:
 
 ---
 
-## Step 1: Invoke Methodology Skills (MANDATORY)
+## Step 1: Invoke Methodology Skills (Recommended)
 
-Before beginning the review workflow, the orchestrator MUST invoke the following skills and pass their methodology to subagents via `skill_instructions.methodology`:
+Before beginning the review workflow, the orchestrator SHOULD invoke the following skills and pass their methodology to subagents via `skill_instructions.methodology`:
 
 **Required Skills (from `superpowers` plugin):**
 1. `superpowers:using-superpowers` - Skill usage methodology (ALWAYS FIRST)

@@ -336,11 +336,13 @@ This applies to:
 
 **Rationale:** Human documentation standards and consistency with agent workflows. All 16 agents already use Step 1 as their first step.
 
-**Current command workflow numbering:**
-- Steps 1, 2, 4, 6: Shared steps defined in `command-common-steps.md`
-- Steps 3, 5, 7-8: Command-specific steps defined inline
-- Step 8.5: Usage tracking verification checkpoint (shared)
-- Steps 9-12: Validation, aggregation, output, write (shared)
+**Shared steps (in command-common-steps.md):**
+- Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills)
+- Step 8.5: Usage tracking verification
+- Steps 9-12: Post-review (validation, aggregation, output, write)
+
+**Command-specific steps (inline in each command):**
+- Steps 3, 5, 7-8: Input validation, content gathering, review execution
 
 ### File Path References
 
