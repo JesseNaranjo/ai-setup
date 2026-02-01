@@ -47,7 +47,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for common MODE 
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs.
 
-**Agent-specific:** This agent receives methodology skills only (no primary review-focused skill). Also uses related test files for context.
+**Agent-specific:** Uses related test files for context.
 
 **Cross-file discovery:** Locate related test files when analyzing untested code paths.
 

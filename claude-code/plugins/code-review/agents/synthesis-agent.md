@@ -70,8 +70,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard age
 - `synthesis_input.category_b.findings` - Findings from second category
 - `cross_cutting_question` - The question to answer
 
-**Note**: Synthesis agents receive methodology skills only (no primary skill data).
-
 **Cross-file discovery:** Trace affected files when ripple effect analysis discovers dependencies.
 
 ### Cross-Cutting Pairs
