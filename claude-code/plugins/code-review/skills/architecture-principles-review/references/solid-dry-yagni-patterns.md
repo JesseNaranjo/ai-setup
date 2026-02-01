@@ -2,6 +2,22 @@
 
 Detailed patterns and heuristics for detecting design principle violations.
 
+## Contents
+
+- [SOLID Principle Patterns](#solid-principle-patterns)
+  - [Single Responsibility Principle (SRP)](#single-responsibility-principle-srp)
+  - [Open/Closed Principle (OCP)](#openclosed-principle-ocp)
+  - [Liskov Substitution Principle (LSP)](#liskov-substitution-principle-lsp)
+  - [Interface Segregation Principle (ISP)](#interface-segregation-principle-isp)
+  - [Dependency Inversion Principle (DIP)](#dependency-inversion-principle-dip)
+- [DRY Violation Patterns](#dry-violation-patterns)
+  - [Code Duplication](#code-duplication)
+  - [Repeated Configuration](#repeated-configuration)
+- [YAGNI Violation Patterns](#yagni-violation-patterns)
+  - [Unused Abstractions](#unused-abstractions)
+  - [Over-Engineering](#over-engineering)
+  - [Speculative Generality](#speculative-generality)
+
 ## SOLID Principle Patterns
 
 ### Single Responsibility Principle (SRP)

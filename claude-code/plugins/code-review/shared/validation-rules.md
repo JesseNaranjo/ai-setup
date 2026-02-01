@@ -2,6 +2,29 @@
 
 This document defines the validation process for issues found by review agents.
 
+## Contents
+
+- [Batch Validation Process](#batch-validation-process)
+  - [Grouping Strategy](#grouping-strategy)
+  - [Validator Model Assignment](#validator-model-assignment)
+  - [Quick Review Validation Scope](#quick-review-validation-scope)
+  - [Cross-Cutting Insight Validation](#cross-cutting-insight-validation)
+  - [Batch Validator Prompt](#batch-validator-prompt)
+  - [Auto-Validation (Skip Validation)](#auto-validation-skip-validation)
+  - [Auto-Validation Output](#auto-validation-output)
+  - [Common False Positives to Check](#common-false-positives-to-check)
+  - [Validation Output](#validation-output)
+- [Aggregation Rules](#aggregation-rules)
+  - [Remove Invalid Issues](#1-remove-invalid-issues)
+  - [Apply Severity Downgrades](#2-apply-severity-downgrades)
+  - [Deduplicate Issues](#3-deduplicate-issues)
+  - [Consensus Detection Algorithm](#4-consensus-detection-algorithm)
+- [Severity Classification](#severity-classification)
+- [Do NOT Validate These (Skip Validation)](#do-not-validate-these-skip-validation)
+- [False Positive Rules](#false-positive-rules)
+  - [Do NOT Flag](#do-not-flag)
+  - [Deep vs Quick Review Differences](#deep-vs-quick-review-differences)
+
 ## Batch Validation Process
 
 To optimize cost and latency, issues are validated in batches grouped by file rather than individually.

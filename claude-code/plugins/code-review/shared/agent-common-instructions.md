@@ -2,6 +2,23 @@
 
 This document contains shared instructions for all review agents. Agents reference this file instead of duplicating content.
 
+## Contents
+
+- [Standard Agent Input](#standard-agent-input)
+- [Using skill_instructions (Full Version)](#using-skill_instructions-full-version)
+- [Using skill_instructions (Methodology Only)](#using-skill_instructions-methodology-only)
+- [Using Tiered Context](#using-tiered-context)
+- [MODE Parameter (Common)](#mode-parameter-common)
+- [False Positive Rules](#false-positive-rules)
+- [Gaps Mode Behavior Template](#gaps-mode-behavior-template)
+  - [Duplicate Detection](#duplicate-detection-common-to-all-gaps-agents)
+  - [Constraints](#constraints-common-to-all-gaps-agents)
+  - [Gaps-Supporting Agents](#gaps-supporting-agents)
+- [Skill Instructions Apply to All Modes](#skill-instructions-apply-to-all-modes)
+- [Pre-Existing Issue Detection](#pre-existing-issue-detection-for-stageddiff-reviews)
+  - [Automatic Cross-File Analysis](#automatic-cross-file-analysis)
+- [Output Schema](#output-schema)
+
 ## Standard Agent Input
 
 All review agents receive the following inputs. Agents should NOT repeat this in their own documentation.

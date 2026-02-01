@@ -2,6 +2,25 @@
 
 Detailed patterns for identifying technical debt across Node.js/TypeScript and .NET/C# projects.
 
+## Contents
+
+- [Deprecated Dependencies](#deprecated-dependencies)
+  - [Node.js Patterns](#nodejs-patterns)
+  - [.NET Patterns](#net-patterns)
+- [Outdated Patterns](#outdated-patterns)
+  - [Node.js/TypeScript](#nodejstypescript)
+  - [.NET/C#](#netc)
+- [Workarounds and Hacks](#workarounds-and-hacks)
+  - [Detection Patterns](#detection-patterns)
+  - [Common Workaround Patterns](#common-workaround-patterns)
+- [Dead Code](#dead-code)
+  - [Detection Patterns](#detection-patterns-1)
+  - [Cross-File Detection](#cross-file-detection)
+- [Scalability Concerns](#scalability-concerns)
+- [Documentation Debt](#documentation-debt)
+  - [TODO/FIXME Patterns](#todofixme-patterns)
+  - [Stale Comments](#stale-comments)
+
 ## Deprecated Dependencies
 
 ### Node.js Patterns

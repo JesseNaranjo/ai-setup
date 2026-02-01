@@ -2,6 +2,16 @@
 
 When `--skills` is provided, the orchestrator interprets the resolved skills and makes orchestration decisions. This document defines how skill data affects each phase of the review.
 
+## Contents
+
+- [Skill Loading](#skill-loading)
+- [Agent Selection Adjustments](#agent-selection-adjustments)
+- [Agent Prompt Generation](#agent-prompt-generation)
+- [Validation Phase Adjustments](#validation-phase-adjustments)
+- [Synthesis Phase Adjustments](#synthesis-phase-adjustments)
+- [Skill Instructions in Gaps Mode](#skill-instructions-in-gaps-mode)
+- [skill_instructions Generation Algorithm](#skill_instructions-generation-algorithm)
+
 ## Skill Loading
 
 **CRITICAL**: See `${CLAUDE_PLUGIN_ROOT}/shared/skill-resolver.md` for the mandatory skill loading protocol (Skill() tool first, file read fallback only on failure).

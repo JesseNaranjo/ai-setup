@@ -2,6 +2,45 @@
 
 This document defines the output format for code review results and serves as the **authoritative output schema reference** for all agents. This file is loaded once during output generation phase.
 
+## Contents
+
+- [Related Files](#related-files)
+- [Output Generation Process](#output-generation-process)
+  - [Generate Usage Summary](#0-generate-usage-summary)
+  - [Generate Review Output](#1-generate-review-output)
+  - [Display Output](#2-display-output)
+  - [Write to File](#3-write-to-file)
+  - [Confirm Output](#4-confirm-output)
+  - [Fix Formatting Rules](#fix-formatting-rules)
+- [Usage Summary Section](#usage-summary-section)
+  - [Format](#format)
+  - [Review Type Values](#review-type-values)
+  - [Status Indicators](#status-indicators)
+  - [Duration Formatting](#duration-formatting)
+  - [Quick Review Phase Names](#quick-review-phase-names)
+  - [Agents Invoked Calculation](#agents-invoked-calculation)
+  - [Handling Anomalies](#handling-anomalies)
+  - [Partial/Interrupted Reviews](#partialinterrupted-reviews)
+- [Review Header](#review-header)
+  - [Review Depth Descriptions](#review-depth-descriptions)
+- [No Issues Found](#no-issues-found)
+  - [Deep Review (9 categories)](#deep-review-9-categories)
+  - [Quick Review (4 categories + synthesis)](#quick-review-4-categories--synthesis)
+- [Issues Found](#issues-found)
+- [Cross-Cutting Insights Section](#cross-cutting-insights-section)
+- [Issue Entry Format](#issue-entry-format)
+  - [Severity Badge](#severity-badge)
+  - [Category Badge](#category-badge)
+  - [Consensus Badge](#consensus-badge)
+  - [File Location](#file-location)
+- [Actionable Fix Formats](#actionable-fix-formats)
+  - [Fix Type Classification](#fix-type-classification)
+  - [Inline Diffs](#inline-diffs-fix_type-diff)
+  - [Fix Prompts](#fix-prompts-fix_type-prompt)
+  - [Legacy Format Support](#legacy-format-support)
+- [File Output](#file-output)
+- [Complete Output Example](#complete-output-example)
+
 ## Related Files
 
 - `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` - Canonical severity definitions

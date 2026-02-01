@@ -4,6 +4,8 @@ This reference file contains a complete example showing all format elements toge
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for format specifications and rules.
 
+**Note:** This file contains a complete example inside a code block. The example demonstrates all format elements: Summary Table, Critical/Major/Minor Issues, Suggestions, Test Recommendations, and Cross-Cutting Insights.
+
 ```markdown
 ## Code Review
 

@@ -2,6 +2,31 @@
 
 Detailed patterns for performance issues by category.
 
+## Contents
+
+- [Algorithmic Complexity](#algorithmic-complexity)
+  - [O(n²) Nested Loops](#on²-nested-loops)
+  - [Repeated Expensive Operations](#repeated-expensive-operations)
+- [Database Performance](#database-performance)
+  - [N+1 Query Problem](#n1-query-problem)
+  - [Missing Indexes](#missing-indexes)
+  - [Unbounded Queries](#unbounded-queries)
+- [Memory Issues](#memory-issues)
+  - [Memory Leaks](#memory-leaks)
+  - [Large Object Allocation](#large-object-allocation)
+- [Async/Await Performance](#asyncawait-performance)
+  - [Sequential Awaits (Waterfall)](#sequential-awaits-waterfall)
+  - [Blocking Event Loop (Node.js)](#blocking-event-loop-nodejs)
+- [String Operations](#string-operations)
+  - [String Concatenation in Loops](#string-concatenation-in-loops)
+- [.NET Specific](#net-specific)
+  - [Boxing/Unboxing](#boxingunboxing)
+  - [LINQ in Hot Paths](#linq-in-hot-paths)
+  - [Async Void](#async-void)
+- [Caching Opportunities](#caching-opportunities)
+  - [Repeated Computations](#repeated-computations)
+- [Quick Reference](#quick-reference)
+
 ## Algorithmic Complexity
 
 ### O(n²) Nested Loops

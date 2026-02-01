@@ -2,6 +2,17 @@
 
 This document defines how to invoke review agents via the Task tool.
 
+## Contents
+
+- [Related Files](#related-files)
+- [Subagent Types](#subagent-types)
+- [Invocation Template](#invocation-template)
+- [Model Selection](#model-selection)
+- [Content Distribution Optimization](#content-distribution-optimization)
+  - [Test File Distribution](#test-file-distribution)
+  - [AI Instructions Distribution](#ai-instructions-distribution)
+- [Common Agent Input](#common-agent-input)
+
 ## Related Files
 
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` - Phase definitions and model selection table

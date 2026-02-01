@@ -2,6 +2,29 @@
 
 Detailed patterns for security issues by category.
 
+## Contents
+
+- [Injection Vulnerabilities](#injection-vulnerabilities)
+  - [SQL Injection](#sql-injection)
+  - [Command Injection](#command-injection)
+  - [XSS (Cross-Site Scripting)](#xss-cross-site-scripting)
+- [Authentication & Authorization](#authentication--authorization)
+  - [Missing Authentication](#missing-authentication)
+  - [Broken Access Control](#broken-access-control)
+- [Sensitive Data Exposure](#sensitive-data-exposure)
+  - [Hardcoded Secrets](#hardcoded-secrets)
+  - [Sensitive Data in Logs](#sensitive-data-in-logs)
+- [Cryptographic Issues](#cryptographic-issues)
+  - [Weak Hashing](#weak-hashing)
+  - [Insecure Random](#insecure-random)
+- [Input Validation](#input-validation)
+  - [Path Traversal](#path-traversal)
+  - [Regex DoS (ReDoS)](#regex-dos-redos)
+- [Deserialization](#deserialization)
+  - [Unsafe Deserialization](#unsafe-deserialization)
+- [Security Headers](#security-headers)
+  - [Missing Headers](#missing-headers)
+
 ## Injection Vulnerabilities
 
 ### SQL Injection

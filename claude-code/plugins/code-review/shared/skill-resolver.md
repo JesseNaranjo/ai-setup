@@ -2,6 +2,18 @@
 
 Resolve skill names to SKILL.md files and parse them into structured data for orchestrator interpretation.
 
+## Contents
+
+- [Skill Loading Efficiency](#skill-loading-efficiency)
+- [Resolution Algorithm](#resolution-algorithm)
+  - [Parse Skill Name](#1-parse-skill-name)
+  - [Load Skill via Skill() Tool (MANDATORY)](#2-load-skill-via-skill-tool-mandatory)
+  - [Fallback: Direct File Read](#25-fallback-direct-file-read-on-skill-tool-failure)
+  - [Handle Not Found](#3-handle-not-found)
+  - [Parse Skill Content](#4-parse-skill-content)
+  - [Build Resolved Skills Structure](#5-build-resolved-skills-structure)
+- [Usage](#usage)
+
 ## Skill Loading Efficiency
 
 The skill resolution process is designed for context efficiency:

@@ -2,6 +2,32 @@
 
 Detailed patterns and guidelines for high-quality documentation.
 
+## Contents
+
+- [README.md Best Practices](#readmemd-best-practices)
+  - [Required Sections (Priority Order)](#required-sections-priority-order)
+  - [README Anti-Patterns](#readme-anti-patterns)
+- [Code Examples Best Practices](#code-examples-best-practices)
+  - [Complete Examples](#complete-examples)
+  - [Example Conventions](#example-conventions)
+- [API Documentation Best Practices](#api-documentation-best-practices)
+  - [Endpoint Documentation Template](#endpoint-documentation-template)
+  - [API Documentation Requirements](#api-documentation-requirements)
+- [Clarity Guidelines](#clarity-guidelines)
+  - [Jargon Handling](#jargon-handling)
+  - [Audience Awareness](#audience-awareness)
+- [Consistency Patterns](#consistency-patterns)
+  - [Terminology Consistency](#terminology-consistency)
+  - [Formatting Consistency](#formatting-consistency)
+- [Structure Guidelines](#structure-guidelines)
+  - [Heading Hierarchy](#heading-hierarchy)
+  - [Navigation](#navigation)
+  - [Link Best Practices](#link-best-practices)
+- [Versioning Documentation](#versioning-documentation)
+  - [Version-Specific Content](#version-specific-content)
+  - [Deprecation Notices](#deprecation-notices)
+  - [Changelog Best Practices](#changelog-best-practices)
+
 ## README.md Best Practices
 
 ### Required Sections (Priority Order)

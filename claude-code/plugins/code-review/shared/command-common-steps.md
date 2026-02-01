@@ -2,6 +2,22 @@
 
 This document contains shared workflow steps referenced by all review commands (deep-code-review, deep-code-review-staged, quick-code-review, quick-code-review-staged).
 
+## Contents
+
+- [Step Numbering Scheme](#step-numbering-scheme)
+- [Step 1: Invoke Methodology Skills](#step-1-invoke-methodology-skills-recommended)
+- [Step 2: Load Settings](#step-2-load-settings)
+- [Step 4: Context Discovery](#step-4-context-discovery)
+- [Step 6: Skill Loading and Interpretation](#step-6-skill-loading-and-interpretation)
+- [Step 8.5: Verify Usage Tracking](#step-85-verify-usage-tracking-mandatory-checkpoint)
+- [Step 9: Validation](#step-9-validation)
+- [Step 10: Aggregation](#step-10-aggregation)
+- [Step 11: Output Generation](#step-11-output-generation)
+- [Step 12: Write Output](#step-12-write-output)
+- [Cross-Agent Synthesis](#cross-agent-synthesis)
+- [False Positives](#false-positives)
+- [Notes](#notes)
+
 ## Step Numbering Scheme
 
 Commands use a consistent workflow:

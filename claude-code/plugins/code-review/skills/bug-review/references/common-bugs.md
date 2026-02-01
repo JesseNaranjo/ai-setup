@@ -2,6 +2,31 @@
 
 Detailed patterns for bugs by category.
 
+## Contents
+
+- [Null/Undefined Reference](#nullundefined-reference)
+  - [Unchecked Null Access](#unchecked-null-access)
+  - [Null Return Values](#null-return-values)
+- [Off-by-One Errors](#off-by-one-errors)
+  - [Array Index Errors](#array-index-errors)
+- [Async/Promise Issues](#asyncpromise-issues)
+  - [Unhandled Promise Rejection](#unhandled-promise-rejection)
+  - [Race Conditions](#race-conditions)
+  - [Floating Promises](#floating-promises)
+- [Type Coercion Issues](#type-coercion-issues)
+  - [Loose Equality Bugs](#loose-equality-bugs)
+  - [String/Number Confusion](#stringnumber-confusion)
+- [State Management](#state-management)
+  - [Mutating Shared State](#mutating-shared-state)
+  - [Stale Closure](#stale-closure)
+- [Error Handling](#error-handling)
+  - [Swallowed Exceptions](#swallowed-exceptions)
+  - [Wrong Error Type Caught](#wrong-error-type-caught)
+- [.NET Specific](#net-specific)
+  - [IDisposable Not Disposed](#idisposable-not-disposed)
+  - [Async Deadlock](#async-deadlock)
+- [Quick Reference](#quick-reference)
+
 ## Null/Undefined Reference
 
 ### Unchecked Null Access

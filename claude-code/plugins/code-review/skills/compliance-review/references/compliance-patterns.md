@@ -2,6 +2,28 @@
 
 Patterns for checking compliance with AI Agent Instructions (CLAUDE.md, etc.).
 
+## Contents
+
+- [Instruction File Locations](#instruction-file-locations)
+- [Rule Classification](#rule-classification)
+  - [MUST/MUST NOT Rules](#mustmust-not-rules)
+  - [SHOULD/SHOULD NOT Rules](#shouldshould-not-rules)
+  - [MAY/CONSIDER Rules](#mayconsider-rules)
+- [Common Rule Categories](#common-rule-categories)
+  - [Architecture Rules](#architecture-rules)
+  - [Naming Conventions](#naming-conventions)
+  - [Testing Requirements](#testing-requirements)
+  - [Documentation Requirements](#documentation-requirements)
+  - [Security Requirements](#security-requirements)
+  - [Error Handling Requirements](#error-handling-requirements)
+- [Checking Process](#checking-process)
+  - [Step 1: Parse Instructions](#step-1-parse-instructions)
+  - [Step 2: Match Files](#step-2-match-files)
+  - [Step 3: Check Compliance](#step-3-check-compliance)
+  - [Step 4: Report Format](#step-4-report-format)
+- [Ignoring Rules](#ignoring-rules)
+- [Quick Reference](#quick-reference)
+
 ## Instruction File Locations
 
 Search for instruction files in: current directory, parent directories, and `.github/` folders.

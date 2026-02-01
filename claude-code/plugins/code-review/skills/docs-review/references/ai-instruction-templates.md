@@ -2,6 +2,23 @@
 
 Required header templates and structure for AI agent instruction files.
 
+## Contents
+
+- [File Structure Overview](#file-structure-overview)
+- [Required Headers](#required-headers)
+  - [.ai/AI-AGENT-INSTRUCTIONS.md](#aiai-agent-instructionsmd)
+  - [CLAUDE.md](#claudemd)
+  - [.github/copilot-instructions.md](#githubcopilot-instructionsmd)
+- [Cross-Reference Requirements](#cross-reference-requirements)
+  - [Valid Link Patterns](#valid-link-patterns)
+  - [Sync Requirements](#sync-requirements)
+- [Common Issues](#common-issues)
+  - [Issue: AI-AGENT-INSTRUCTIONS.md in Root](#issue-ai-agent-instructionsmd-in-root)
+  - [Issue: Missing Cross-References](#issue-missing-cross-references)
+  - [Issue: Broken Relative Links](#issue-broken-relative-links)
+  - [Issue: Missing copilot-instructions.md](#issue-missing-copilot-instructionsmd)
+- [Validation Checklist](#validation-checklist)
+
 ## File Structure Overview
 
 ```
