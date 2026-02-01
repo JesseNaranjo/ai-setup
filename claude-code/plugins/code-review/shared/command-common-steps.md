@@ -100,10 +100,9 @@ If any tracking data is missing, reconstruct from Task tool return values NOW. D
 
 ## Step 9: Validation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation process including:
-- Auto-validation patterns
-- Batch grouping by file
-- Validator model assignment
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for core validation process (batch grouping, validator model assignment).
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/auto-validated-patterns.md` for high-confidence patterns that skip validation.
 
 ---
 
@@ -119,13 +118,15 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 ## Step 11: Output Generation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting and generation process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for core generation process (workflow, structure).
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format-details.md` for detailed format templates (Usage Summary format, badges, fix formats).
 
 **REQUIRED: Generate Usage Summary FIRST (before any other output):**
 
 The Usage Summary MUST appear at the very beginning of the output file, before the Code Review header. This section is MANDATORY - outputs missing this section are INCOMPLETE.
 
-Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` "Usage Summary Section":
+Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared/output-format-details.md` "Usage Summary Section":
 - Use model assignments from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`
 - Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`
 
