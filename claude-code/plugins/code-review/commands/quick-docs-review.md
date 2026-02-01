@@ -85,7 +85,7 @@ Pass to all agents:
 - AI instruction file status
 - Additional prompt instructions (if provided)
 
-**CRITICAL: WAIT** - All 4 Review phase agents must complete before proceeding to Synthesis.
+**CRITICAL: WAIT and RECORD** - All 4 Review phase agents must complete. Record timing/task_id per `usage-tracking.md` before proceeding to Synthesis.
 
 ---
 

@@ -324,6 +324,24 @@ Category pairs (alphabetize by first category):
 
 **Rationale:** Alphabetical ordering ensures consistent, neutral presentation without implying priority or importance. It also makes it easier to find specific items in long lists.
 
+### Step Numbering
+
+**REQUIRED:** All workflow steps start at 1, not 0.
+
+This applies to:
+- Command workflows in `commands/*.md`
+- Agent workflows in `agents/*.md`
+- Skill workflows in `skills/*/SKILL.md`
+- Shared step definitions in `shared/command-common-steps.md`
+
+**Rationale:** Human documentation standards and consistency with agent workflows. All 16 agents already use Step 1 as their first step.
+
+**Current command workflow numbering:**
+- Steps 1, 2, 4, 6: Shared steps defined in `command-common-steps.md`
+- Steps 3, 5, 7-8: Command-specific steps defined inline
+- Step 8.5: Usage tracking verification checkpoint (shared)
+- Steps 9-12: Validation, aggregation, output, write (shared)
+
 ### File Path References
 
 Plugin files use two distinct path reference patterns based on the official Anthropic skill best practices:

@@ -25,11 +25,12 @@ Before generating the Code Review output, generate the Usage Summary section:
    - Agents completed = count per phase
    - Total findings = sum of findings_count per agent
 4. **Record findings_count**: For each agent, count the number of issues in their output and record as `findings_count`
-5. **Detect timing anomalies**:
+5. **Handle missing data**: If any agent tracking data is missing (no task_id or timing), mark that agent's status as "unknown" with duration "??s" rather than omitting it. This ensures all expected agents appear in the output.
+6. **Detect timing anomalies**:
    - Opus agents: < 15s = too fast `[!]`, > 180s = too slow `[*]`
    - Sonnet agents: < 10s = too fast `[!]`, > 120s = too slow `[*]`
    - Synthesis agents: < 5s = too fast `[!]`, > 90s = too slow `[*]`
-6. **Format output**: Follow the Usage Summary Section format below
+7. **Format output**: Follow the Usage Summary Section format below
 
 **Output order:**
 1. Usage Summary (this step)

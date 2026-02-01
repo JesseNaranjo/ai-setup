@@ -17,25 +17,25 @@ Parse arguments from `$ARGUMENTS`:
 
 ---
 
-## Common Steps (Steps 1, 3, 5)
+## Common Steps (Steps 2, 4, 6)
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 
 ---
 
-## Step 2: Input Validation
+## Step 3: Input Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-files.md` for the validation process.
 
 ---
 
-## Step 4: Content Gathering
+## Step 5: Content Gathering
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-files.md` for the content gathering process.
 
 ---
 
-## Step 6: Two-Phase Deep Review
+## Step 7: Two-Phase Deep Review
 
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
@@ -55,7 +55,7 @@ Launch all 9 agents with **thorough** mode. See `orchestration-sequence.md` for 
 
 ### Phase 2: Gaps Review (5 Sonnet agents in parallel)
 
-**CRITICAL: DO NOT START Phase 2 until Phase 1 is FULLY COMPLETE.**
+**CRITICAL: WAIT and RECORD** - All Phase 1 agents must complete. Record timing/task_id per `usage-tracking.md` before starting Phase 2.
 
 After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
 
@@ -63,13 +63,13 @@ After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 fin
 
 See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
-**CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
+**CRITICAL: WAIT and RECORD** - All Phase 2 agents must complete. Record timing/task_id per `usage-tracking.md` before proceeding to Synthesis.
 
 ---
 
-## Step 7: Cross-Agent Synthesis (5 agents in parallel)
+## Step 8: Cross-Agent Synthesis (5 agents in parallel)
 
-**CRITICAL: DO NOT START Synthesis until Phase 1 AND Phase 2 (Step 6) are FULLY COMPLETE.**
+**CRITICAL: DO NOT START Synthesis until Phase 1 AND Phase 2 (Step 7) are FULLY COMPLETE.**
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
 
@@ -77,7 +77,7 @@ Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 
 ---
 
-## Steps 8-11: Validation, Aggregation, Output
+## Steps 9-12: Validation, Aggregation, Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
 

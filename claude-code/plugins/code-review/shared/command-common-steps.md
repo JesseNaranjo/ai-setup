@@ -5,32 +5,42 @@ This document contains shared workflow steps referenced by all review commands (
 ## Step Numbering Scheme
 
 Commands use a consistent workflow:
-- **Step 0**: Defined here (optional methodology skills)
-- **Steps 1, 3, 5**: Defined here (shared across all commands)
-- **Steps 2, 4, 6-7**: Defined inline in each command (command-specific)
-- **Steps 8-11**: Defined here (shared across all commands)
+- **Steps 1, 2, 4, 6**: Defined here (shared across all commands)
+- **Steps 3, 5, 7-8**: Defined inline in each command (command-specific)
+- **Steps 8.5, 9-12**: Defined here (shared across all commands)
+
+**Convention:** Steps start at 1, not 0, for consistency with agent workflows and human documentation standards.
 
 **Related File**: `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` provides phase definitions and model selection for review execution.
 
 ---
 
-## Step 0: Invoke Methodology Skills (Optional)
+## Step 1: Invoke Methodology Skills (MANDATORY)
 
-Before beginning the review workflow, the orchestrator MAY invoke external methodology skills if available. These are optional enhancements - the review workflow functions correctly without them.
+Before beginning the review workflow, the orchestrator MUST invoke the following skills and pass their methodology to subagents via `skill_instructions.methodology`:
 
-**Optional External Skills (from `superpowers` plugin):**
-- `superpowers:using-superpowers` - Skill usage methodology
-- `superpowers:brainstorming` - Explore interpretations before concluding
-- `superpowers:systematic-debugging` - Systematic issue detection
-- `superpowers:verification-before-completion` - Verify findings before reporting
+**Required Skills (from `superpowers` plugin):**
+1. `superpowers:using-superpowers` - Skill usage methodology (ALWAYS FIRST)
+2. `superpowers:brainstorming` - Explore interpretations before concluding
+3. `superpowers:systematic-debugging` - Systematic issue detection
+4. `superpowers:verification-before-completion` - Verify findings before reporting
+5. `superpowers:writing-plans` - For planning phases
+6. `superpowers:executing-plans` - For implementation phases
+7. `superpowers:requesting-code-review` - After completing major tasks
+8. `superpowers:dispatching-parallel-agents` - When coordinating parallel work
+9. `superpowers:subagent-driven-development` - For task execution
 
-**Usage:** If loaded successfully, apply methodologies from these skills throughout the review process. These inform HOW to analyze, not WHAT to look for. If skills are not found, proceed with the standard review workflow.
+**Usage:**
+1. The orchestrator invokes each skill using the Skill() tool
+2. Extract methodology sections from skill content
+3. Pass methodology to ALL subagents via `skill_instructions.methodology` in agent prompts
+4. Since subagents cannot invoke skills, the orchestrator is responsible for distributing methodology
 
-**Note:** These skills are part of the optional `superpowers` plugin. Additional superpowers skills (writing-plans, executing-plans, requesting-code-review, dispatching-parallel-agents, subagent-driven-development) apply when planning or coordinating work, not during review execution.
+**Fallback:** If the superpowers plugin is not installed or any skill cannot be loaded, log a warning and proceed with the standard review workflow. The review functions correctly without these methodologies.
 
 ---
 
-## Step 1: Load Settings
+## Step 2: Load Settings
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md` for the settings loading process.
 
@@ -41,7 +51,7 @@ Check for `.claude/code-review.local.md` in the project root:
 
 ---
 
-## Step 3: Context Discovery
+## Step 4: Context Discovery
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 - AI Agent Instructions file patterns
@@ -50,7 +60,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md` for:
 
 ---
 
-## Step 5: Skill Loading and Interpretation
+## Step 6: Skill Loading and Interpretation
 
 **Skip this step entirely if `--skills` argument was not provided.**
 
@@ -60,7 +70,19 @@ If `--skills` is provided:
 
 ---
 
-## Step 8: Validation
+## Step 8.5: Verify Usage Tracking (Mandatory Checkpoint)
+
+**Before proceeding to validation, verify usage tracking is complete:**
+
+1. All agents from all phases have `agent_ended_at` and `task_id` recorded
+2. All `findings_count` values are populated
+3. All phase timing (`phase_started_at`, `phase_ended_at`) is calculated
+
+If any tracking data is missing, reconstruct from Task tool return values NOW. Do not proceed to validation with incomplete tracking.
+
+---
+
+## Step 9: Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation process including:
 - Auto-validation patterns
@@ -69,7 +91,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation p
 
 ---
 
-## Step 9: Aggregation
+## Step 10: Aggregation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 - Filter invalid issues
@@ -79,7 +101,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 ---
 
-## Step 10: Output Generation
+## Step 11: Output Generation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting and generation process.
 
@@ -95,7 +117,7 @@ Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared
 
 ---
 
-## Step 11: Write Output
+## Step 12: Write Output
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for write process.
 
@@ -106,9 +128,9 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for write process.
 **CRITICAL: For Deep Review, Synthesis is Phase 3 and requires strict sequential execution:**
 
 1. Phase 1 (Thorough Review) - agents run in parallel
-2. **WAIT** - All Phase 1 agents must complete
+2. **WAIT and RECORD** - All Phase 1 agents must complete. Record timing/task_id per `usage-tracking.md`
 3. Phase 2 (Gaps Review) - agents run in parallel
-4. **WAIT** - All Phase 2 agents must complete
+4. **WAIT and RECORD** - All Phase 2 agents must complete. Record timing/task_id per `usage-tracking.md`
 5. Phase 3 (Synthesis) - agents run in parallel
 6. Continue to validation
 

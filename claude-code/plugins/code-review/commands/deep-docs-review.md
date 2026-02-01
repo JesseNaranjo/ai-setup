@@ -85,7 +85,7 @@ Pass to all agents:
 
 ### Phase 2: Gaps Review (3 Sonnet agents in parallel)
 
-**CRITICAL: DO NOT START Phase 2 until Phase 1 is FULLY COMPLETE.**
+**CRITICAL: WAIT and RECORD** - All Phase 1 agents must complete. Record timing/task_id per `usage-tracking.md` before starting Phase 2.
 
 After Phase 1 completes, launch 3 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
 
@@ -93,7 +93,7 @@ After Phase 1 completes, launch 3 agents with **gaps** mode, passing Phase 1 fin
 
 See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
-**CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
+**CRITICAL: WAIT and RECORD** - All Phase 2 agents must complete. Record timing/task_id per `usage-tracking.md` before proceeding to Synthesis.
 
 ---
 
