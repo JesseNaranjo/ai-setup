@@ -384,11 +384,10 @@ code-review/
 │   ├── agent-common-instructions.md # Common agent instructions (MODE, gaps, pre-existing issue detection)
 │   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
 │   ├── command-common-steps.md      # Common workflow steps for all commands
-│   ├── content-gathering-docs.md    # Content gathering for documentation reviews
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── docs-orchestration-sequence.md # Documentation review phase definitions
+│   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
-│   ├── input-validation-docs.md     # Input validation for documentation commands
 │   ├── orchestration-sequence.md    # Phase definitions and model selection
 │   ├── output-format.md             # Output schema, templates, and generation process
 │   ├── settings-loader.md           # Settings loading and application
