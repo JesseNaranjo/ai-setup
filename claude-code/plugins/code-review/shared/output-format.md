@@ -6,21 +6,12 @@ This document defines the output format for code review results and serves as th
 
 - [Related Files](#related-files)
 - [Output Generation Process](#output-generation-process)
-  - [Generate Usage Summary](#0-generate-usage-summary)
-  - [Generate Review Output](#1-generate-review-output)
-  - [Display Output](#2-display-output)
-  - [Write to File](#3-write-to-file)
-  - [Confirm Output](#4-confirm-output)
+  - [Generate Review Output](#0-generate-review-output)
+  - [Display Output](#1-display-output)
+  - [Write to File](#2-write-to-file)
+  - [Confirm Output](#3-confirm-output)
   - [Fix Formatting Rules](#fix-formatting-rules)
-- [Usage Summary Section](#usage-summary-section)
-  - [Format](#format)
-  - [Review Type Values](#review-type-values)
-  - [Status Indicators](#status-indicators)
-  - [Duration Formatting](#duration-formatting)
-  - [Quick Review Phase Names](#quick-review-phase-names)
-  - [Agents Invoked Calculation](#agents-invoked-calculation)
-  - [Handling Anomalies](#handling-anomalies)
-  - [Partial/Interrupted Reviews](#partialinterrupted-reviews)
+- [Filename Generation](#filename-generation)
 - [Review Header](#review-header)
   - [Review Depth Descriptions](#review-depth-descriptions)
 - [No Issues Found](#no-issues-found)
@@ -44,40 +35,12 @@ This document defines the output format for code review results and serves as th
 ## Related Files
 
 - `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` - Canonical severity definitions
-- `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md` - Usage tracking schema and timing anomaly thresholds
 - `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` - Validation and aggregation rules
 - `${CLAUDE_PLUGIN_ROOT}/shared/references/complete-output-example.md` - Complete output example (reference)
 
 ## Output Generation Process
 
-### 0. Generate Usage Summary
-
-Before generating the Code Review output, generate the Usage Summary section:
-
-1. **Read tracking data**: Access the usage_tracking structure maintained during workflow execution
-2. **Calculate totals**:
-   - Total duration = review ended_at - review started_at
-   - Agents invoked = count of agents with status "completed" or "failed"
-   - Planned agents = total expected minus skipped agents
-3. **Calculate phase metrics**:
-   - Phase duration = phase ended_at - phase started_at
-   - Agents completed = count per phase
-   - Total findings = sum of findings_count per agent
-4. **Record findings_count**: For each agent, count the number of issues in their output and record as `findings_count`
-5. **Handle missing data**: If any agent tracking data is missing (no task_id or timing), mark that agent's status as "unknown" with duration "??s" rather than omitting it. This ensures all expected agents appear in the output.
-6. **Detect timing anomalies**:
-   - Opus agents: < 15s = too fast `[!]`, > 180s = too slow `[*]`
-   - Sonnet agents: < 10s = too fast `[!]`, > 120s = too slow `[*]`
-   - Synthesis agents: < 5s = too fast `[!]`, > 90s = too slow `[*]`
-7. **Format output**: Follow the Usage Summary Section format below
-
-**Output order:**
-1. Usage Summary (this step)
-2. Code Review header and content (next step)
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md` for the tracking schema.
-
-### 1. Generate Review Output
+### 0. Generate Review Output
 
 1. **Header**: Use the review depth description provided by the command
 2. **Summary Table**: Include only the categories that were reviewed
@@ -85,26 +48,17 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md` for the tracking schema.
 4. **Cross-Cutting Insights**: Include if synthesis agents produced insights
 5. **Test Recommendations**: Include if applicable
 
-### 2. Display Output
+### 1. Display Output
 
 Display the formatted review in the terminal.
 
-### 3. Write to File
+### 2. Write to File
 
-Write the same content to a file:
-
-| Command | Default Output File |
-|---------|---------------------|
-| `/deep-code-review` | `.deep-code-review.md` |
-| `/deep-code-review-staged` | `.deep-code-review-staged.md` |
-| `/deep-docs-review` | `.deep-docs-review.md` |
-| `/quick-code-review` | `.quick-code-review.md` |
-| `/quick-code-review-staged` | `.quick-code-review-staged.md` |
-| `/quick-docs-review` | `.quick-docs-review.md` |
+Write the same content to a file using the generated filename (see [Filename Generation](#filename-generation)).
 
 If `--output-file <path>` argument was provided, use that path instead.
 
-### 4. Confirm Output
+### 3. Confirm Output
 
 At the end, print: "Review saved to: [filepath]"
 
@@ -122,127 +76,38 @@ At the end, print: "Review saved to: [filepath]"
 
 ---
 
-## Usage Summary Section
+## Filename Generation
 
-The Usage Summary appears BEFORE the Code Review header to provide visibility into which agents were invoked and their timing.
+Generate output filenames following this pattern:
+`yyyy-mm-dd_few-words-summary_review-type.md`
 
-### Format
+### Components
 
-```markdown
-## Usage Summary
+- `yyyy-mm-dd`: Current date (e.g., `2026-02-05`)
+- `few-words-summary`: 2-4 words describing the review scope, derived from:
+  - File names being reviewed (for file-based commands)
+  - "staged-changes" (for staged commands)
+  - Main feature/component name when identifiable
+- `review-type`: The command type (`deep-code-review`, `quick-code-review`, etc.)
 
-| Metric | Value |
-|--------|-------|
-| Review Type | Deep (19 invocations) |
-| Total Duration | 3m 5s |
-| Agents Invoked | 19 of 19 planned |
+### Examples
 
-### Phase Breakdown
+| Command | Example Filename |
+|---------|------------------|
+| `/deep-code-review` | `2026-02-05_auth-service-refactor_deep-code-review.md` |
+| `/deep-code-review-staged` | `2026-02-05_staged-changes_deep-code-review-staged.md` |
+| `/deep-docs-review` | `2026-02-05_api-docs_deep-docs-review.md` |
+| `/quick-code-review` | `2026-02-05_utils-helpers_quick-code-review.md` |
+| `/quick-code-review-staged` | `2026-02-05_staged-changes_quick-code-review-staged.md` |
+| `/quick-docs-review` | `2026-02-05_readme-updates_quick-docs-review.md` |
 
-| Phase | Duration | Agents | Status |
-|-------|----------|--------|--------|
-| Phase 1: Thorough | 1m 44s | 9/9 | ✓ |
-| Phase 2: Gaps | 44s | 5/5 | ✓ |
-| Synthesis | 29s | 5/5 | ✓ |
+### Rules
 
-<details>
-<summary>Agent Timing Details</summary>
-
-**Phase 1: Thorough Review** (1m 44s)
-| Agent | Model | Duration | Findings | Status |
-|-------|-------|----------|----------|--------|
-| api-contracts-agent | sonnet | 31s | 0 | ✓ |
-| architecture-agent | opus | 35s | 0 | ✓ |
-| bug-detection-agent | opus | 1m 44s | 5 | ✓ |
-| compliance-agent | sonnet | 27s | 2 | ✓ |
-| error-handling-agent | sonnet | 28s | 2 | ✓ |
-| performance-agent | opus | 58s | 1 | ✓ |
-| security-agent | opus | 1m 12s | 3 | ✓ |
-| technical-debt-agent | opus | 52s | 2 | ✓ |
-| test-coverage-agent | sonnet | 33s | 4 | ✓ |
-
-**Phase 2: Gaps Review** (44s)
-| Agent | Model | Duration | Findings | Status |
-|-------|-------|----------|----------|--------|
-| bug-detection-agent | sonnet | 44s | 2 | ✓ |
-| compliance-agent | sonnet | 22s | 1 | ✓ |
-| performance-agent | sonnet | 41s | 1 | ✓ |
-| security-agent | sonnet | 38s | 0 | ✓ |
-| technical-debt-agent | sonnet | 36s | 1 | ✓ |
-
-**Synthesis** (29s)
-| Agent | Model | Duration | Findings | Status |
-|-------|-------|----------|----------|--------|
-| synthesis (Architecture+Test Coverage) | sonnet | 29s | 1 | ✓ |
-| synthesis (Bugs+Error Handling) | sonnet | 22s | 0 | ✓ |
-| synthesis (Compliance+Bugs) | sonnet | 27s | 0 | ✓ |
-| synthesis (Compliance+Technical Debt) | sonnet | 24s | 0 | ✓ |
-| synthesis (Performance+Security) | sonnet | 25s | 1 | ✓ |
-
-</details>
-
----
-```
-
-### Review Type Values
-
-| Command | Review Type Value |
-|---------|-------------------|
-| `/deep-code-review` | Deep (19 invocations) |
-| `/deep-code-review-staged` | Deep (19 invocations) |
-| `/deep-docs-review` | Deep Documentation (13 invocations) |
-| `/quick-code-review` | Quick (7 invocations) |
-| `/quick-code-review-staged` | Quick (7 invocations) |
-| `/quick-docs-review` | Quick Documentation (7 invocations) |
-
-### Status Indicators
-
-| Indicator | Meaning |
-|-----------|---------|
-| `✓` | Completed successfully |
-| `✗` | Failed |
-| `-` | Skipped (via skip_agents setting) |
-| `[!]` | Too fast - see `usage-tracking.md` "Timing Anomaly Detection" for thresholds |
-| `[*]` | Too slow - see `usage-tracking.md` "Timing Anomaly Detection" for thresholds |
-
-### Duration Formatting
-
-Format durations for readability:
-- Under 60 seconds: `27s`
-- 60+ seconds: `1m 44s`
-- 60+ minutes: `1h 5m 30s`
-
-### Quick Review Phase Names
-
-For quick reviews, use these phase names:
-- "Review" (instead of "Phase 1: Thorough")
-- "Synthesis"
-
-### Agents Invoked Calculation
-
-`Agents Invoked` = count of agents with status "completed" or "failed"
-`planned` = total expected agents for the review type (excluding skipped)
-
-Example with skip_agents:
-- Deep review with `skip_agents: ["architecture"]`
-- Expected: 15 planned (16 - 1 skipped)
-- Display: "15 of 15 planned"
-
-### Handling Anomalies
-
-When timing anomalies are detected, append the indicator to the status:
-
-```markdown
-| bug-detection-agent | opus | 8s | 0 | ✓ [!] |
-| security-agent | opus | 3m 45s | 7 | ✓ [*] |
-```
-
-### Partial/Interrupted Reviews
-
-If a review is interrupted before completion:
-- Show available data for completed agents
-- Use `(incomplete)` for phases that didn't finish
-- Example: "Agents Invoked: 10 of 16 planned (incomplete)"
+- Use lowercase with hyphens for word separation
+- Keep summary to 2-4 words maximum
+- Replace spaces and special characters with hyphens
+- Truncate long names to keep total filename under 80 characters
+- For staged commands, always use "staged-changes" as the summary
 
 ---
 
@@ -554,14 +419,9 @@ This is treated as `fix_type: diff` internally.
 
 ## File Output
 
-Write the review to a file:
-- Default for `/deep-code-review`: `.deep-code-review.md`
-- Default for `/deep-code-review-staged`: `.deep-code-review-staged.md`
-- Default for `/deep-docs-review`: `.deep-docs-review.md`
-- Default for `/quick-code-review`: `.quick-code-review.md`
-- Default for `/quick-code-review-staged`: `.quick-code-review-staged.md`
-- Default for `/quick-docs-review`: `.quick-docs-review.md`
-- Custom path if `--output-file` argument provided
+Write the review to a file using the generated filename (see [Filename Generation](#filename-generation)).
+
+If `--output-file <path>` argument was provided, use that path instead of the generated filename.
 
 End with:
 ```markdown

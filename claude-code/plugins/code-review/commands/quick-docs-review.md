@@ -10,7 +10,7 @@ Perform a quick documentation review using 4 documentation agents (7 invocations
 
 Parse arguments from `$ARGUMENTS`:
 - Optional: One or more file paths (space-separated) - if omitted, discover all docs
-- Optional: `--output-file <path>` to specify output location (default: `.quick-docs-review.md`)
+- Optional: `--output-file <path>` to specify output location (default: see `output-format.md` Filename Generation)
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
 
@@ -26,7 +26,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md`.
 
 ## Step 2: Input Validation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/input-validation-docs.md` for the validation process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the validation process.
 
 Discover documentation files including:
 - Standard docs: README.md, CLAUDE.md, CHANGELOG.md
@@ -47,7 +47,7 @@ Detect project type and gather context:
 
 ## Step 4: Content Gathering
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/content-gathering-docs.md` for the content gathering process.
+See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the content gathering process.
 
 Gather:
 - Full content of documentation files
@@ -61,12 +61,6 @@ Gather:
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for phase definitions and **Model Selection** table
 - `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
-
-### Usage Tracking
-
-Initialize per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
-- Record `review_started_at` timestamp
-- Initialize 2 phases: "Review", "Synthesis"
 
 ### Review (4 agents in parallel)
 
@@ -85,7 +79,7 @@ Pass to all agents:
 - AI instruction file status
 - Additional prompt instructions (if provided)
 
-**CRITICAL: WAIT and RECORD** - All 4 Review phase agents must complete. Record timing/task_id per `usage-tracking.md` before proceeding to Synthesis.
+**CRITICAL: WAIT** - All 4 Review phase agents must complete before proceeding to Synthesis.
 
 ---
 
@@ -128,7 +122,7 @@ Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`
 - Review Type: "Quick Documentation Review (7 invocations)"
 - Categories: Accuracy, Clarity, Examples, Structure
 
-Write to the output file path (default: `.quick-docs-review.md`).
+Write to the output file path (see `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for filename generation).
 
 Report completion to user with summary:
 - Total issues found by severity

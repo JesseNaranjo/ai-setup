@@ -9,7 +9,6 @@ This document contains shared workflow steps referenced by all review commands (
 - [Step 2: Load Settings](#step-2-load-settings)
 - [Step 4: Context Discovery](#step-4-context-discovery)
 - [Step 6: Skill Loading and Interpretation](#step-6-skill-loading-and-interpretation)
-- [Step 8.5: Verify Usage Tracking](#step-85-verify-usage-tracking-mandatory-checkpoint)
 - [Step 9: Validation](#step-9-validation)
 - [Step 10: Aggregation](#step-10-aggregation)
 - [Step 11: Output Generation](#step-11-output-generation)
@@ -23,7 +22,7 @@ This document contains shared workflow steps referenced by all review commands (
 Commands use a consistent workflow:
 - **Steps 1, 2, 4, 6**: Defined here (shared across all commands)
 - **Steps 3, 5, 7-8**: Defined inline in each command (command-specific)
-- **Steps 8.5, 9-12**: Defined here (shared across all commands)
+- **Steps 9-12**: Defined here (shared across all commands)
 
 **Convention:** Steps start at 1, not 0, for consistency with agent workflows and human documentation standards.
 
@@ -85,18 +84,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for complete skill resoluti
 
 ---
 
-## Step 8.5: Verify Usage Tracking (Mandatory Checkpoint)
-
-**Before proceeding to validation, verify usage tracking is complete:**
-
-1. All agents from all phases have `agent_ended_at` and `task_id` recorded
-2. All `findings_count` values are populated
-3. All phase timing (`phase_started_at`, `phase_ended_at`) is calculated
-
-If any tracking data is missing, reconstruct from Task tool return values NOW. Do not proceed to validation with incomplete tracking.
-
----
-
 ## Step 9: Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation process including:
@@ -120,16 +107,6 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for aggregation rules:
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for formatting and generation process.
 
-**REQUIRED: Generate Usage Summary FIRST (before any other output):**
-
-The Usage Summary MUST appear at the very beginning of the output file, before the Code Review header. This section is MANDATORY - outputs missing this section are INCOMPLETE.
-
-Generate the Usage Summary following the format in `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` "Usage Summary Section":
-- Use model assignments from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`
-- Flag timing anomalies with `[!]` (too fast) or `[*]` (too slow) indicators per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`
-
-**IMPORTANT:** If the Usage Summary section is missing from the output, the review is INCOMPLETE and must be regenerated.
-
 ---
 
 ## Step 12: Write Output
@@ -143,9 +120,9 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for write process.
 **CRITICAL: For Deep Review, Synthesis is Phase 3 and requires strict sequential execution:**
 
 1. Phase 1 (Thorough Review) - agents run in parallel
-2. **WAIT and RECORD** - All Phase 1 agents must complete. Record timing/task_id per `usage-tracking.md`
+2. **WAIT** - All Phase 1 agents must complete before Phase 2 begins
 3. Phase 2 (Gaps Review) - agents run in parallel
-4. **WAIT and RECORD** - All Phase 2 agents must complete. Record timing/task_id per `usage-tracking.md`
+4. **WAIT** - All Phase 2 agents must complete before Synthesis begins
 5. Phase 3 (Synthesis) - agents run in parallel
 6. Continue to validation
 

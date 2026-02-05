@@ -10,7 +10,7 @@ Perform a comprehensive code review using all 9 agents (19 invocations total) fo
 
 Parse arguments from `$ARGUMENTS`:
 - Required: One or more file paths (space-separated)
-- Optional: `--output-file <path>` to specify output location (default: `.deep-code-review.md`)
+- Optional: `--output-file <path>` to specify output location (default: see `output-format.md` Filename Generation)
 - Optional: `--language dotnet|nodejs|react` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
@@ -35,12 +35,6 @@ See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
 - `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
 
-### Usage Tracking
-
-Initialize per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
-- Record `review_started_at` timestamp
-- Initialize 3 phases: "Phase 1: Thorough Review", "Phase 2: Gaps Review", "Synthesis"
-
 ### Phase 1: Thorough Review (9 agents in parallel)
 
 Launch all 9 agents with **thorough** mode. See `orchestration-sequence.md` for model assignments.
@@ -49,7 +43,7 @@ Launch all 9 agents with **thorough** mode. See `orchestration-sequence.md` for 
 
 ### Phase 2: Gaps Review (5 Sonnet agents in parallel)
 
-**CRITICAL: WAIT and RECORD** - All Phase 1 agents must complete. Record timing/task_id per `usage-tracking.md` before starting Phase 2.
+**CRITICAL: WAIT** - All Phase 1 agents must complete before starting Phase 2.
 
 After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
 
@@ -57,7 +51,7 @@ After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 fin
 
 See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
-**CRITICAL: WAIT and RECORD** - All Phase 2 agents must complete. Record timing/task_id per `usage-tracking.md` before proceeding to Synthesis.
+**CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
 
 ---
 

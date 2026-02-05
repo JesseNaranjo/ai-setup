@@ -395,7 +395,6 @@ code-review/
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation and content gathering for staged commands
 │   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
-│   ├── usage-tracking.md            # Usage tracking schema and protocol
 │   ├── validation-rules.md          # Validation process
 │   └── references/                  # Detailed reference content
 │       ├── complete-output-example.md # Complete output format example

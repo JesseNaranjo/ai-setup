@@ -136,7 +136,6 @@ claude-code/plugins/code-review/
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
-│   ├── usage-tracking.md            # Usage tracking schema and protocol
 │   ├── validation-rules.md          # Validation process
 │   ├── output-format.md             # Output templates, generation process (with fix_type)
 │   ├── severity-definitions.md      # Severity classification
@@ -237,7 +236,6 @@ There are more agents than available colors. When assigning colors:
 - `shared/validation-rules.md` - Issue validation process
 - `shared/output-format.md` - Output formatting, templates, and generation process (with fix_type)
 - `shared/severity-definitions.md` - Severity classification (Critical, Major, Minor, Suggestion)
-- `shared/usage-tracking.md` - Usage tracking schema and protocol
 - `skills/*/SKILL.md` - Skill definitions
 - `templates/code-review.local.md.example` - User settings template
 

@@ -136,5 +136,5 @@ The SQL parameterization fix (Issue #1) will add query preparation overhead on e
 > Cache the parameterized query preparation in UserRepository.cs using a static SqlCommand or prepared statement pattern to avoid repeated compilation overhead.
 
 ---
-Review saved to: .code-review-staged.md
+Review saved to: 2026-02-05_user-auth_deep-code-review-staged.md
 ```

@@ -10,7 +10,7 @@ Perform a fast code review using 4 agents (7 invocations total) for the specifie
 
 Parse arguments from `$ARGUMENTS`:
 - Required: One or more file paths (space-separated)
-- Optional: `--output-file <path>` to specify output location (default: `.quick-code-review.md`)
+- Optional: `--output-file <path>` to specify output location (default: see `output-format.md` Filename Generation)
 - Optional: `--language dotnet|nodejs|react` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
@@ -35,12 +35,6 @@ See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
 - `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
 
-### Usage Tracking
-
-Initialize per `${CLAUDE_PLUGIN_ROOT}/shared/usage-tracking.md`:
-- Record `review_started_at` timestamp
-- Initialize 2 phases: "Review", "Synthesis"
-
 ### Review Phase (4 agents in parallel)
 
 Launch 4 agents with **quick** mode. See `orchestration-sequence.md` for model assignments.
@@ -52,7 +46,7 @@ Launch 4 agents with **quick** mode. See `orchestration-sequence.md` for model a
 - Most obvious and impactful problems
 - Issues that would block a merge
 
-**CRITICAL: WAIT and RECORD** - All Review phase agents must complete. Record timing/task_id per `usage-tracking.md` before proceeding to Synthesis.
+**CRITICAL: WAIT** - All Review phase agents must complete before proceeding to Synthesis.
 
 ---
 
