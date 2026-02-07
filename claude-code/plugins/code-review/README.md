@@ -1,6 +1,6 @@
 # Code Review Plugin
 
-Modular 10-agent code review with parameterized modes for Node.js, React, and .NET projects. Also includes documentation review commands with 6 specialized documentation agents.
+Modular 10-agent code review with parameterized modes for Node.js, React, and .NET projects. Also includes documentation review commands with 7 specialized documentation agents.
 
 ## Overview
 
@@ -10,7 +10,7 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ### Key Features
 
-- **Modular 10-Agent Architecture**: Each agent is a separate file in `agents/` for easy customization
+- **Modular 10-Agent Architecture**: Each agent is a separate file in `agents/code/` or `agents/docs/` for easy customization
 - **Parameterized Modes**: thorough, gaps, and quick modes for different review depths
 - **Language-Aware**: Specialized checks for Node.js/TypeScript, React, and .NET/C# (configs in `languages/`)
 - **Targeted Skills**: Security, performance, bug, compliance, and technical debt review skills
@@ -350,24 +350,26 @@ code-review/
 │   ├── quick-docs-review.md     # Quick documentation review (7 invocations)
 │   ├── quick-code-review.md          # Quick file review (7 invocations)
 │   └── quick-code-review-staged.md   # Quick staged review (7 invocations)
-├── agents/                      # Modular agent definitions (alphabetical)
-│   ├── api-contracts-agent.md   # API compatibility
-│   ├── architecture-agent.md    # Architecture patterns
-│   ├── bug-detection-agent.md   # Logical errors & edge cases
-│   ├── compliance-agent.md      # AI instructions compliance
-│   ├── docs/                    # Documentation review agents
-│   │   ├── accuracy-agent.md    # Code-doc sync, factual correctness
-│   │   ├── clarity-agent.md     # Readability, jargon, audience
-│   │   ├── completeness-agent.md # Missing sections, coverage
-│   │   ├── consistency-agent.md # Terminology, formatting, style
-│   │   ├── examples-agent.md    # Code example validity
-│   │   └── structure-agent.md   # Organization, links, AI instructions
-│   ├── error-handling-agent.md  # Error handling gaps
-│   ├── performance-agent.md     # Performance issues
-│   ├── security-agent.md        # Security vulnerabilities
-│   ├── synthesis-agent.md       # Cross-agent insights
-│   ├── technical-debt-agent.md  # Technical debt detection
-│   └── test-coverage-agent.md   # Test coverage gaps
+├── agents/                      # Modular agent definitions (10 code + 7 docs agents)
+│   ├── code/                    # Code review agents (10 agents)
+│   │   ├── api-contracts-agent.md   # API compatibility
+│   │   ├── architecture-agent.md    # Architecture patterns
+│   │   ├── bug-detection-agent.md   # Logical errors & edge cases
+│   │   ├── compliance-agent.md      # AI instructions compliance
+│   │   ├── error-handling-agent.md  # Error handling gaps
+│   │   ├── performance-agent.md     # Performance issues
+│   │   ├── security-agent.md        # Security vulnerabilities
+│   │   ├── synthesis-code-agent.md  # Cross-agent insights (code reviews)
+│   │   ├── technical-debt-agent.md  # Technical debt detection
+│   │   └── test-coverage-agent.md   # Test coverage gaps
+│   └── docs/                    # Documentation review agents (7 agents)
+│       ├── accuracy-agent.md    # Code-doc sync, factual correctness
+│       ├── clarity-agent.md     # Readability, jargon, audience
+│       ├── completeness-agent.md # Missing sections, coverage
+│       ├── consistency-agent.md # Terminology, formatting, style
+│       ├── examples-agent.md    # Code example validity
+│       ├── structure-agent.md   # Organization, links, AI instructions
+│       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
 ├── skills/                      # Targeted review skills
 │   ├── reviewing-architecture-principles/
 │   ├── reviewing-bugs/
@@ -416,7 +418,7 @@ code-review/
 | error-handling-agent | Sonnet | thorough, quick | orange |
 | performance-agent | Opus | thorough, gaps | green |
 | security-agent | Opus | thorough, gaps, quick | purple |
-| synthesis-agent | Sonnet | (cross-category) | white |
+| synthesis-code-agent | Sonnet | (cross-category) | white |
 | technical-debt-agent | Opus | thorough, gaps | brown |
 | test-coverage-agent | Sonnet | thorough, quick | white |
 
@@ -430,8 +432,7 @@ code-review/
 | consistency-agent | Sonnet | thorough, gaps | blue |
 | examples-agent | Opus | thorough, quick | yellow |
 | structure-agent | Sonnet | thorough, quick | purple |
-
-> **Note:** Documentation reviews reuse `synthesis-agent` from the code review agents for cross-category analysis.
+| synthesis-docs-agent | Sonnet | (cross-category) | white |
 
 > **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
 
@@ -572,7 +573,7 @@ Create a new file in `languages/` following the pattern of `nodejs.md` or `dotne
 
 ### Modifying Agent Behavior
 
-Edit the agent file in `agents/` to customize:
+Edit the agent file in `agents/code/` or `agents/docs/` to customize:
 - Detection patterns
 - Severity classification
 - False positive rules

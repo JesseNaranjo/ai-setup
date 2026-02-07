@@ -56,7 +56,7 @@ To optimize cost and latency, issues are validated in batches grouped by file ra
 | Technical Debt | Sonnet |
 | Test Coverage | Sonnet |
 
-**Cross-cutting insights** (from synthesis-agent) always use **Opus** for validation.
+**Cross-cutting insights** (from synthesis-code-agent or synthesis-docs-agent) always use **Opus** for validation.
 
 **Note for Quick Reviews:** Despite the quick review philosophy of using Sonnet where possible, cross-cutting insights still use Opus for validation because they represent novel connections between categories that require more nuanced judgment to validate. The time savings of Sonnet validation does not justify the risk of missing subtle cross-category interactions.
 

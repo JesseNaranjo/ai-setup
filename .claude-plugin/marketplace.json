@@ -10,7 +10,7 @@
         {
             "name": "code-review",
             "source": "./claude-code/plugins/code-review",
-            "description": "Modular 10-agent code review with sequential gaps analysis, cross-agent synthesis, and actionable fixes for Node.js and .NET projects",
+            "description": "Modular 10-agent code review with sequential gaps analysis, cross-agent synthesis, and actionable fixes for Node.js and .NET projects. Also includes 7-agent documentation review with AI instruction file standardization.",
             "version": "3.4.2",
             "keywords": [
                 "agents",

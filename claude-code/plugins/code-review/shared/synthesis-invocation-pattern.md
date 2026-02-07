@@ -1,8 +1,8 @@
 # Synthesis Agent Invocation Pattern
 
-This document defines the invocation pattern for the synthesis-agent. The synthesis agent is designed to be invoked **multiple times in parallel** with different category pairs.
+This document defines the invocation pattern for the synthesis agents. The synthesis agents are designed to be invoked **multiple times in parallel** with different category pairs.
 
-See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for the full agent definition and analysis logic.
+See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` (code reviews) or `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` (docs reviews) for the full agent definition and analysis logic.
 
 ## Invocation Parameters
 
@@ -76,7 +76,7 @@ synthesis_input:
 
 ```
 Task(
-  subagent_type: "code-review:synthesis-agent",
+  subagent_type: "code-review:synthesis-code-agent",  // or "code-review:synthesis-docs-agent" for docs
   model: "sonnet",
   prompt: """
 Analyze cross-cutting concerns between Security and Performance findings.
@@ -110,7 +110,7 @@ synthesis_input:
       diff: "[diff content]"
       full_content: "[full file]"
 
-Follow the synthesis-agent instructions to identify cross-cutting concerns.
+Follow the synthesis agent instructions to identify cross-cutting concerns.
 Return findings as cross_cutting_insights YAML list.
 """
 )

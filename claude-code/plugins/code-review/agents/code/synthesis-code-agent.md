@@ -1,6 +1,6 @@
 ---
-name: synthesis-agent
-description: Analyzes findings from multiple review categories to identify cross-cutting concerns, ripple effects, and issues spanning multiple domains. Use after other agents complete.
+name: synthesis-code-agent
+description: Analyzes findings from multiple code review categories to identify cross-cutting concerns, ripple effects, and issues spanning multiple domains. Use after code review agents complete.
 model: sonnet  # See orchestration-sequence.md Model Selection table
 color: white
 tools: ["Read", "Grep", "Glob"]

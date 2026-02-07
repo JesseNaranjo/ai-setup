@@ -137,7 +137,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for:
 - Parallel invocation pattern diagram
 - Example Task tool invocation
 
-See `${CLAUDE_PLUGIN_ROOT}/agents/synthesis-agent.md` for:
+See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` (code reviews) or `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` (docs reviews) for:
 - Full agent definition and analysis logic
 - Cross-cutting pairs and questions
 - Output schema and guidelines

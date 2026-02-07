@@ -39,7 +39,7 @@ This document defines the authoritative execution sequences for review pipelines
 
 4. **Synthesis** (5 agents in parallel)
    - **CRITICAL: DO NOT START until Phase 1 AND Phase 2 are FULLY COMPLETE**
-   - Launch: 5 instances of synthesis-agent with category pairs
+   - Launch: 5 instances of synthesis-code-agent with category pairs
    - INPUT: ALL findings from Phase 1 AND Phase 2
    - Pairs and questions:
      - Architecture+Test Coverage: "Are architectural changes covered by tests?"
@@ -82,7 +82,7 @@ This document defines the authoritative execution sequences for review pipelines
 | error-handling-agent | sonnet | N/A | sonnet |
 | performance-agent | opus | sonnet | N/A |
 | security-agent | opus | sonnet | opus |
-| synthesis-agent | sonnet | N/A | sonnet |
+| synthesis-code-agent | sonnet | N/A | sonnet |
 | technical-debt-agent | opus | sonnet | N/A |
 | test-coverage-agent | sonnet | N/A | sonnet |
 

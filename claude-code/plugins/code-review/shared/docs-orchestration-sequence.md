@@ -26,7 +26,7 @@ This document defines the authoritative execution sequences for documentation re
 
 4. **Synthesis** (4 agents in parallel)
    - **CRITICAL: DO NOT START until Phase 1 AND Phase 2 are FULLY COMPLETE**
-   - Launch: 4 instances of synthesis-agent with category pairs
+   - Launch: 4 instances of synthesis-docs-agent with category pairs
    - INPUT: ALL findings from Phase 1 AND Phase 2
    - Pairs and questions:
      - Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
@@ -67,7 +67,7 @@ This document defines the authoritative execution sequences for documentation re
 | consistency-agent | sonnet | sonnet | N/A |
 | examples-agent | opus | N/A | opus |
 | structure-agent | sonnet | N/A | sonnet |
-| synthesis-agent | sonnet | N/A | sonnet |
+| synthesis-docs-agent | sonnet | N/A | sonnet |
 
 ## Agent Focus Areas
 

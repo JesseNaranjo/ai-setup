@@ -438,7 +438,7 @@ agent_skill_instructions:
   error-handling-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
   test-coverage-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
   technical-debt-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
-  synthesis-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
+  synthesis-code-agent: { focus_areas: [], checklist: [], auto_validate: [], false_positive_rules: [], methodology: null }
 ```
 
 **Generation Step 2: Process each resolved skill**

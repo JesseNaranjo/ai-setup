@@ -18,7 +18,8 @@ This document defines how to invoke review agents via the Task tool.
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` - Phase definitions and model selection table
 - `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps, pre-existing issue detection)
 - `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` - Authoritative output schema reference
-- `${CLAUDE_PLUGIN_ROOT}/agents/*.md` - Individual agent definitions
+- `${CLAUDE_PLUGIN_ROOT}/agents/code/*.md` - Code review agent definitions (including synthesis-code-agent)
+- `${CLAUDE_PLUGIN_ROOT}/agents/docs/*.md` - Documentation review agent definitions (including synthesis-docs-agent)
 
 ## Subagent Types
 
@@ -33,7 +34,8 @@ Plugin agents are registered as subagent types with the pattern `code-review:[ag
 | Error Handling | `code-review:error-handling-agent` |
 | Performance | `code-review:performance-agent` |
 | Security | `code-review:security-agent` |
-| Synthesis | `code-review:synthesis-agent` |
+| Synthesis (Code) | `code-review:synthesis-code-agent` |
+| Synthesis (Docs) | `code-review:synthesis-docs-agent` |
 | Technical Debt | `code-review:technical-debt-agent` |
 | Test Coverage | `code-review:test-coverage-agent` |
 

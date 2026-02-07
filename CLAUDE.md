@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.4.2) - a modular 16-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.4.2) - a modular 17-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -59,24 +59,26 @@ claude-code/plugins/code-review/
 │   ├── quick-code-review.md         # Quick file review (7 invocations)
 │   ├── quick-code-review-staged.md  # Quick staged review (7 invocations)
 │   └── quick-docs-review.md         # Quick documentation review (7 invocations)
-├── agents/                          # Modular agent definitions (10 code + 6 docs agents)
-│   ├── api-contracts-agent.md       # API compatibility
-│   ├── architecture-agent.md        # Architecture patterns
-│   ├── bug-detection-agent.md       # Logical errors & edge cases
-│   ├── compliance-agent.md          # AI instructions compliance
-│   ├── docs/                        # Documentation review agents (6 agents)
-│   │   ├── accuracy-agent.md        # Code-doc sync, factual correctness
-│   │   ├── clarity-agent.md         # Readability, jargon, audience
-│   │   ├── completeness-agent.md    # Missing sections, coverage gaps
-│   │   ├── consistency-agent.md     # Terminology, formatting, style
-│   │   ├── examples-agent.md        # Code example validity
-│   │   └── structure-agent.md       # Organization, links, AI instructions
-│   ├── error-handling-agent.md      # Error handling gaps
-│   ├── performance-agent.md         # Performance issues
-│   ├── security-agent.md            # Security vulnerabilities
-│   ├── synthesis-agent.md           # Cross-agent insights
-│   ├── technical-debt-agent.md      # Technical debt detection
-│   └── test-coverage-agent.md       # Test coverage gaps
+├── agents/                          # Modular agent definitions (10 code + 7 docs agents)
+│   ├── code/                        # Code review agents (10 agents)
+│   │   ├── api-contracts-agent.md   # API compatibility
+│   │   ├── architecture-agent.md    # Architecture patterns
+│   │   ├── bug-detection-agent.md   # Logical errors & edge cases
+│   │   ├── compliance-agent.md      # AI instructions compliance
+│   │   ├── error-handling-agent.md  # Error handling gaps
+│   │   ├── performance-agent.md     # Performance issues
+│   │   ├── security-agent.md        # Security vulnerabilities
+│   │   ├── synthesis-code-agent.md  # Cross-agent insights (code reviews)
+│   │   ├── technical-debt-agent.md  # Technical debt detection
+│   │   └── test-coverage-agent.md   # Test coverage gaps
+│   └── docs/                        # Documentation review agents (7 agents)
+│       ├── accuracy-agent.md        # Code-doc sync, factual correctness
+│       ├── clarity-agent.md         # Readability, jargon, audience
+│       ├── completeness-agent.md    # Missing sections, coverage gaps
+│       ├── consistency-agent.md     # Terminology, formatting, style
+│       ├── examples-agent.md        # Code example validity
+│       ├── structure-agent.md       # Organization, links, AI instructions
+│       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
 ├── skills/                          # Targeted review skills (progressive disclosure)
 │   ├── reviewing-architecture-principles/
 │   │   ├── SKILL.md
@@ -175,11 +177,11 @@ Each agent has a unique color for visual identification during parallel executio
 | error-handling-agent | orange |
 | performance-agent | green |
 | security-agent | purple |
-| synthesis-agent | white |
+| synthesis-code-agent | white |
 | technical-debt-agent | brown |
 | test-coverage-agent | white |
 
-#### Documentation Review Agents (6)
+#### Documentation Review Agents (7)
 
 | Agent | Color |
 |-------|-------|
@@ -189,6 +191,7 @@ Each agent has a unique color for visual identification during parallel executio
 | consistency-agent | blue |
 | examples-agent | yellow |
 | structure-agent | purple |
+| synthesis-docs-agent | white |
 
 **Color Assignment Rules:**
 
@@ -202,7 +205,7 @@ There are more agents than available colors. When assigning colors:
 **Current Color Usage:**
 - Phase 1 code review agents have unique colors except synthesis and test-coverage (both white)
 - Phase 2 reuses colors from Phase 1 (runs sequentially after Phase 1 completes)
-- Synthesis phase runs 5 parallel instances of synthesis-agent, all using white (same agent type)
+- Synthesis phase runs parallel instances of synthesis-code-agent or synthesis-docs-agent, all using white
 - Documentation agents reuse code agent colors since they run in separate pipelines (docs-review commands vs code-review commands)
 
 ### Deep Review Pipeline
@@ -225,7 +228,8 @@ There are more agents than available colors. When assigning colors:
 
 ### Key Files
 
-- `agents/*.md` - Individual agent definitions with MODE support
+- `agents/code/*.md` - Code review agent definitions with MODE support
+- `agents/docs/*.md` - Documentation review agent definitions
 - `languages/*.md` - Language-specific checks and patterns
 - `commands/*.md` - Thin orchestration documents referencing shared components
 - `shared/orchestration-sequence.md` - Phase definitions, model selection table (authoritative)
@@ -276,7 +280,7 @@ See `shared/settings-loader.md` for loading logic and `README.md` for full docum
 
 When modifying the plugin:
 
-1. **Agent behavior**: Edit agent files in `agents/` directory
+1. **Agent behavior**: Edit agent files in `agents/code/` or `agents/docs/`
 2. **Language-specific checks**: Edit files in `languages/` directory
 3. **Validation rules (shared)**: Edit `shared/validation-rules.md`
 4. **Validation rules (code-specific)**: Edit `shared/validation-rules-code.md`
@@ -335,11 +339,11 @@ Category pairs (alphabetize by first category):
 
 This applies to:
 - Command workflows in `commands/*.md`
-- Agent workflows in `agents/*.md`
+- Agent workflows in `agents/code/*.md` and `agents/docs/*.md`
 - Skill workflows in `skills/*/SKILL.md`
 - Shared step definitions in `shared/command-common-steps.md`
 
-**Rationale:** Human documentation standards and consistency with agent workflows. All 16 agents already use Step 1 as their first step.
+**Rationale:** Human documentation standards and consistency with agent workflows. All 17 agents already use Step 1 as their first step.
 
 **Shared steps (in command-common-steps.md):**
 - Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills)
@@ -359,7 +363,7 @@ Use `${CLAUDE_PLUGIN_ROOT}` for references that cross skill/component boundaries
 ```markdown
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for validation rules.
 See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#security` for Node.js checks.
-See `${CLAUDE_PLUGIN_ROOT}/agents/security-agent.md` for agent definition.
+See `${CLAUDE_PLUGIN_ROOT}/agents/code/security-agent.md` for agent definition.
 ```
 
 **2. Intra-Skill References (local `references/` and `examples/`)**

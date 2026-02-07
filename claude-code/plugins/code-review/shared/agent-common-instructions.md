@@ -54,7 +54,7 @@ When `skill_instructions` is absent, proceed with standard review process.
 
 ## Using skill_instructions (Methodology Only)
 
-For agents that receive only methodology skills (api-contracts-agent, error-handling-agent, test-coverage-agent, synthesis-agent):
+For agents that receive only methodology skills (api-contracts-agent, error-handling-agent, synthesis-code-agent, synthesis-docs-agent, test-coverage-agent):
 
 When `skill_instructions` is present, apply methodology skills as follows:
 
@@ -181,7 +181,7 @@ When triggered, agents use Grep and Glob tools to discover related files, then R
 - Broken call chains (signature changed, callers not updated)
 - Interface/implementation mismatches
 
-See `${CLAUDE_PLUGIN_ROOT}/agents/architecture-agent.md` for detailed cross-file analysis triggers and process.
+See `${CLAUDE_PLUGIN_ROOT}/agents/code/architecture-agent.md` for detailed cross-file analysis triggers and process.
 
 ## Output Schema
 
