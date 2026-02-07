@@ -17,15 +17,29 @@ Parse arguments from `$ARGUMENTS`:
 
 ---
 
-## Common Steps (Steps 2, 4, 6)
+## Step 1: Invoke Methodology Skills
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
+Invoke superpowers skills (using-superpowers, brainstorming, systematic-debugging, verification-before-completion, writing-plans, executing-plans, requesting-code-review, dispatching-parallel-agents, subagent-driven-development) and pass methodology to all subagents via `skill_instructions.methodology`. If superpowers plugin unavailable, proceed without.
+
+## Step 2: Load Settings
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md`. If `.claude/code-review.local.md` has `enabled: false`, stop. Apply: `output_dir`, `skip_agents`, `min_severity`, `language`.
+
+## Step 4: Context Discovery
+
+See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md`.
 
 ---
 
 ## Steps 3 & 5: Input Validation and Content Gathering
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/file-processing.md` for the validation and content gathering process.
+
+---
+
+## Step 6: Skill Loading
+
+Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md`.
 
 ---
 
@@ -57,9 +71,10 @@ See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
 ## Step 8: Cross-Agent Synthesis (5 agents in parallel)
 
-**CRITICAL: DO NOT START Synthesis until Phase 1 AND Phase 2 (Step 7) are FULLY COMPLETE.**
+**CRITICAL: Synthesis receives ALL findings from prior phases. Do NOT launch until prior phases are FULLY COMPLETE.**
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md` "Cross-Agent Synthesis" section.
+See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for invocation format.
+See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for category pairs.
 
 Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
 
@@ -67,6 +82,18 @@ Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 
 ## Steps 9-12: Validation, Aggregation, Output
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/command-common-steps.md`.
+Validate per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` and `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
 
 **Output config:** Review Type: "Deep (19 invocations)", Categories: All 9
+
+---
+
+## Notes
+
+- Use git CLI to interact with the repository. Do not use GitHub CLI.
+- Create a todo list before starting.
+- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
+- When referencing AI Agent Instructions rules, quote the exact rule being violated.
+- File paths should be relative to the repository root.
+- Line numbers should reference the lines in the actual file (not diff line numbers for file reviews, working copy lines for staged reviews).
+- When reviewing full files (no changes), be more lenient - focus on clear bugs, not style issues.

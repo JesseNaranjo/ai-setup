@@ -385,7 +385,6 @@ code-review/
 ├── shared/
 │   ├── agent-common-instructions.md # Common agent instructions (MODE, gaps, pre-existing issue detection)
 │   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
-│   ├── command-common-steps.md      # Common workflow steps for all commands
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── docs-orchestration-sequence.md # Documentation review phase definitions
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
@@ -532,9 +531,11 @@ See `shared/output-format.md` for complete output templates.
 
 The query uses string concatenation with user input.
 
-```suggestion
-var query = "SELECT * FROM Users WHERE Id = @id";
-cmd.Parameters.AddWithValue("@id", userId);
+**Fix**:
+```diff
+- var query = "SELECT * FROM Users WHERE Id = " + userId;
++ var query = "SELECT * FROM Users WHERE Id = @id";
++ cmd.Parameters.AddWithValue("@id", userId);
 ```
 ```
 

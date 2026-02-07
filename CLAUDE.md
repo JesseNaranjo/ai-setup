@@ -52,7 +52,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 ```
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata
-├── commands/                        # Thin orchestration documents (reference shared/)
+├── commands/                        # Self-contained orchestration documents (inline common steps, reference shared/)
 │   ├── deep-code-review.md          # Deep file review (19 agent invocations)
 │   ├── deep-code-review-staged.md   # Deep staged review (19 agent invocations)
 │   ├── deep-docs-review.md          # Deep documentation review (13 invocations)
@@ -132,7 +132,6 @@ claude-code/plugins/code-review/
 │   ├── orchestration-sequence.md    # Phase definitions and model selection (authoritative)
 │   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
 │   ├── agent-common-instructions.md # Common MODE, false positives, gaps, pre-existing issue detection, output schema
-│   ├── command-common-steps.md      # Common workflow steps for all commands
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── staged-processing.md         # Staged input validation and content gathering
@@ -231,11 +230,10 @@ There are more agents than available colors. When assigning colors:
 - `agents/code/*.md` - Code review agent definitions with MODE support
 - `agents/docs/*.md` - Documentation review agent definitions
 - `languages/*.md` - Language-specific checks and patterns
-- `commands/*.md` - Thin orchestration documents referencing shared components
+- `commands/*.md` - Self-contained orchestration documents (inline common steps, reference shared/)
 - `shared/orchestration-sequence.md` - Phase definitions, model selection table (authoritative)
 - `shared/agent-invocation-pattern.md` - Task tool invocation template
 - `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps, pre-existing issue detection, output schema)
-- `shared/command-common-steps.md` - Common workflow steps shared by all commands
 - `shared/settings-loader.md` - Settings loading and application
 - `shared/file-processing.md` - Input validation and content gathering for file-based commands
 - `shared/staged-processing.md` - Input validation and content gathering for staged commands
@@ -289,13 +287,12 @@ When modifying the plugin:
 7. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection, language-specific focus)
 8. **Agent invocation pattern**: Edit `shared/agent-invocation-pattern.md`
 9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, gaps, pre-existing issue detection)
-10. **Common command steps**: Edit `shared/command-common-steps.md` (settings, context, validation, output)
-11. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
-12. **Command arguments**: Edit command YAML frontmatter in `commands/`
-13. **Skills**: Edit skill files in `skills/*/SKILL.md`
-14. **Skill references**: Add detailed patterns to `skills/*/references/`
-15. **Skill examples**: Add sample outputs to `skills/*/examples/`
-16. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
+10. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
+11. **Command arguments**: Edit command YAML frontmatter in `commands/`
+12. **Skills**: Edit skill files in `skills/*/SKILL.md`
+13. **Skill references**: Add detailed patterns to `skills/*/references/`
+14. **Skill examples**: Add sample outputs to `skills/*/examples/`
+15. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
 
 ## Coding Conventions
 
@@ -341,16 +338,29 @@ This applies to:
 - Command workflows in `commands/*.md`
 - Agent workflows in `agents/code/*.md` and `agents/docs/*.md`
 - Skill workflows in `skills/*/SKILL.md`
-- Shared step definitions in `shared/command-common-steps.md`
 
 **Rationale:** Human documentation standards and consistency with agent workflows. All 17 agents already use Step 1 as their first step.
 
-**Shared steps (in command-common-steps.md):**
-- Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills)
-- Steps 9-12: Post-review (validation, aggregation, output, write)
+**Step layout in commands:**
+- Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills) - inlined in each command
+- Steps 3, 5, 7-8: Input validation, content gathering, review execution - command-specific
+- Steps 9-12: Post-review (validation, aggregation, output, write) - inlined in each command
 
-**Command-specific steps (inline in each command):**
-- Steps 3, 5, 7-8: Input validation, content gathering, review execution
+### Command Step Inlining
+
+**CURRENT APPROACH:** Each command file inlines its pre-review setup steps (methodology, settings, context discovery, skills) and post-review steps (validation, aggregation, output) directly, rather than referencing a shared common-steps file. All 4 code review commands follow this pattern with identical inlined content. The 2 docs review commands also inline their steps but use a different layout.
+
+**Rationale:** A shared `command-common-steps.md` file was tried previously but created a second level of indirection — commands referenced common-steps, which referenced the actual shared files. This added an extra file to the orchestrator's Opus context window without adding value, and violated the "keep references one level deep" principle. Inlining keeps each command self-contained with direct references to shared files (one hop, not two).
+
+**Tradeoff:** The 4 code review commands share ~60 lines of identical inlined content (Steps 1, 2, 4, 6, 9-12, and Notes). This duplication is accepted because:
+- Shared files (`shared/*.md`) load into the expensive Opus orchestrator context — adding files there has high cost
+- Command files are the orchestrator's entry point and are always loaded — inlining adds zero extra file reads
+- The docs-review commands already used this pattern successfully
+
+**Revisit this decision if:**
+- The number of code review commands grows beyond 6, making duplication maintenance burdensome
+- The shared steps diverge significantly between commands (suggesting they aren't truly shared)
+- A way is found to share steps without adding an extra file to the orchestrator's context window
 
 ### File Path References
 

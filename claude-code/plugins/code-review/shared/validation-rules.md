@@ -79,28 +79,11 @@ Synthesis agents produce `cross_cutting_insights` that require special validatio
 3. **Validator Model**: Cross-cutting insights always use **Opus** for validation
 4. **Related Findings Check**: Validator must verify that BOTH `related_findings` references exist in the original findings
 
-**Cross-Cutting Validation Prompt Extension**:
-
-```yaml
-# For cross-cutting insights, add to the standard validation prompt:
-cross_cutting_context:
-  related_finding_a:
-    category: "Security"
-    title: "SQL injection in getUser"
-    file: "src/db/users.ts"
-    line: 23
-  related_finding_b:
-    category: "Performance"
-    title: "N+1 query in user list"
-    file: "src/services/users.ts"
-    line: 45
-
-Additional validation checks for cross-cutting insights:
+**Cross-Cutting Validation Checks:**
 1. Verify both related findings are real issues (not false positives)
-2. Verify the cross-cutting insight describes a genuine interaction between the two
+2. Verify the insight describes a genuine interaction between the two
 3. Verify the insight is NOT a duplicate of either original finding
 4. Verify the insight adds value beyond what each category found independently
-```
 
 **Cross-Cutting Deduplication**: If a cross-cutting insight duplicates an issue from the original category findings:
 - Mark as INVALID with reason: "Duplicates existing finding from [category]"
@@ -124,12 +107,6 @@ issues_to_validate:
   - id: 2
     title: "{title}"
     ...
-
-Your task:
-1. Read the file to verify each issue exists
-2. For EACH issue, determine if it's a real problem or false positive
-3. Verify severity classification is appropriate
-4. Return verdict for each issue
 
 Return format (YAML):
 validations:
@@ -208,36 +185,9 @@ When multiple agents flag the same issue:
 
 ### 4. Consensus Detection Algorithm
 
-**Step 1: Group by file**
-Collect all validated issues from all agents, grouped by file path.
-
-**Step 2: Detect overlapping issues**
-Two issues overlap if same file AND line ranges intersect:
-- Issue A at line L1 (or range L1-L2, where L2 defaults to L1 if single line)
-- Issue B at line M1 (or range M1-M2)
-- Overlap: NOT (L2 < M1 OR M2 < L1)
-
-**Step 3: Build clusters**
-Group overlapping issues transitively (if A overlaps B and B overlaps C, cluster = {A, B, C}).
-
-**Step 4: Assign badges and merge**
-For each cluster with issues from N unique agents:
-- **[2 agents]**: N = 2
-- **[3+ agents]**: N >= 3
-- No badge: N = 1
-
-**Step 5: Merge cluster into single issue**
-- Severity: highest in cluster
-- Description: longest (most detailed)
-- Categories: combined (e.g., "Security, Bugs")
-- Badge: prepend to title
-
-**Example:**
-```
-security-agent: "SQL injection" at users.ts:45-48 (Critical)
-bug-detection-agent: "Unsanitized input" at users.ts:46 (Major)
-→ Merged: "[2 agents] SQL injection" at users.ts:45-48 (Critical, Security+Bugs)
-```
+1. **Group by file** and detect overlapping issues (same file, intersecting line ranges: NOT (L2 < M1 OR M2 < L1))
+2. **Build clusters** transitively (if A overlaps B and B overlaps C, cluster = {A, B, C})
+3. **Merge each cluster**: use highest severity, longest description, combined categories, and add badge (`[2 agents]` or `[3+ agents]`) prepended to title
 
 ## Severity Classification
 

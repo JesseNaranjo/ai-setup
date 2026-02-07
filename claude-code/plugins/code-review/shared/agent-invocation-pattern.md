@@ -11,7 +11,6 @@ This document defines how to invoke review agents via the Task tool.
 - [Content Distribution Optimization](#content-distribution-optimization)
   - [Test File Distribution](#test-file-distribution)
   - [AI Instructions Distribution](#ai-instructions-distribution)
-- [Common Agent Input](#common-agent-input)
 
 ## Related Files
 
@@ -133,9 +132,7 @@ Return findings as YAML per agent examples in your agent file.
 
 ## Model Selection
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the authoritative model selection table.
-
-**Important**: Always pass the `model` parameter explicitly when invoking Task. Refer to the table in orchestration-sequence.md for the correct model per agent and mode.
+**Important**: Always pass the `model` parameter explicitly when invoking Task. Refer to `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for the correct model per agent and mode.
 
 **Rationale**: Gaps mode uses Sonnet (not Opus) because it receives prior findings context and follows explicit checklists, reducing the complexity of the task. This is a cost optimization, not a quality tradeoff.
 
@@ -172,8 +169,3 @@ Pass full `ai_instructions` content ONLY to agents that need project-specific ru
 
 **Estimated savings:** 7 agents × ~500 lines average AI instructions = ~3,500 lines per review
 
-## Common Agent Input
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` for standard agent inputs (files, project type, MODE, skill_instructions, previous_findings).
-
-Each agent returns issues following the YAML schema defined in each agent file.

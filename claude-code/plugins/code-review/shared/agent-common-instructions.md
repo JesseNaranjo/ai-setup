@@ -5,18 +5,12 @@ This document contains shared instructions for all review agents. Agents referen
 ## Contents
 
 - [Standard Agent Input](#standard-agent-input)
-- [Using skill_instructions (Full Version)](#using-skill_instructions-full-version)
-- [Using skill_instructions (Methodology Only)](#using-skill_instructions-methodology-only)
+- [Using skill_instructions](#using-skill_instructions)
 - [Using Tiered Context](#using-tiered-context)
 - [MODE Parameter (Common)](#mode-parameter-common)
 - [False Positive Rules](#false-positive-rules)
 - [Gaps Mode Behavior Template](#gaps-mode-behavior-template)
-  - [Duplicate Detection](#duplicate-detection-common-to-all-gaps-agents)
-  - [Constraints](#constraints-common-to-all-gaps-agents)
-  - [Gaps-Supporting Agents](#gaps-supporting-agents)
-- [Skill Instructions Apply to All Modes](#skill-instructions-apply-to-all-modes)
 - [Pre-Existing Issue Detection](#pre-existing-issue-detection-for-stageddiff-reviews)
-  - [Automatic Cross-File Analysis](#automatic-cross-file-analysis)
 - [Output Schema](#output-schema)
 
 ## Standard Agent Input
@@ -34,9 +28,7 @@ All review agents receive the following inputs. Agents should NOT repeat this in
 
 **Available tools:** `["Read", "Grep", "Glob"]`
 
-## Using skill_instructions (Full Version)
-
-For agents that receive review-focused skills (architecture-agent, bug-detection-agent, compliance-agent, performance-agent, security-agent, technical-debt-agent):
+## Using skill_instructions
 
 When `skill_instructions` is present in the prompt, apply it as follows:
 
@@ -50,17 +42,7 @@ For methodology skills (like `superpowers:brainstorming`):
 2. **methodology.steps**: Follow these steps as part of your review process
 3. **methodology.questions**: Consider these questions when evaluating each potential finding
 
-When `skill_instructions` is absent, proceed with standard review process.
-
-## Using skill_instructions (Methodology Only)
-
-For agents that receive only methodology skills (api-contracts-agent, error-handling-agent, synthesis-code-agent, synthesis-docs-agent, test-coverage-agent):
-
-When `skill_instructions` is present, apply methodology skills as follows:
-
-1. **methodology.approach**: Adopt this mindset throughout analysis
-2. **methodology.steps**: Follow these steps as part of your review process
-3. **methodology.questions**: Consider these questions when evaluating each potential finding
+**Note:** Agents without a primary review skill (api-contracts-agent, error-handling-agent, synthesis-code-agent, synthesis-docs-agent, test-coverage-agent) receive only the methodology section.
 
 When `skill_instructions` is absent, proceed with standard review process.
 
@@ -76,12 +58,6 @@ When files include tier information (staged reviews):
 - Only a preview (first 50 lines) is provided
 - Use the preview to understand file purpose
 - If cross-file analysis discovers relevance, use Read tool to get full content
-
-**Cross-File Discovery Pattern:**
-```
-Grep(pattern: "[relevant pattern]", path: "src/")
-Read(file_path: "[discovered file]")  # Read if relevant to analysis
-```
 
 ## MODE Parameter (Common)
 
@@ -123,18 +99,6 @@ Only these agents support gaps mode: bug-detection, compliance, performance, sec
 
 See each agent file for category-specific focus areas (what subtle issues thorough mode misses).
 
-## Skill Instructions Apply to All Modes
-
-When `--skills` is provided to a review command, **ALL agents receive `skill_instructions` regardless of MODE**:
-
-- **thorough**: Receives full skill focus areas, checklists, and methodology guidance
-- **gaps**: Receives the **same** skill_instructions as thorough mode - skills inform gap detection priorities
-- **quick**: Receives the same skill_instructions - skills inform the quick pass focus
-
-This means gaps-mode agents should apply skill-specific focus areas and validation rules just as thoroughly as thorough-mode agents, but with their standard gaps-mode behavior (focusing on subtle issues, avoiding duplicates of previous_findings).
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for how skill_instructions are generated and passed to agents.
-
 ## Pre-Existing Issue Detection (For Staged/Diff Reviews)
 
 **CRITICAL**: When reviewing staged changes or diffs, agents must only flag issues in CHANGED lines.
@@ -168,20 +132,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for how skill_instructions 
 
 ### Automatic Cross-File Analysis
 
-Agents automatically perform cross-file analysis when the reviewed code suggests cross-cutting concerns. This is triggered by:
-
-- **Import/export statements** → Check for consumers, circular dependencies
-- **Class/interface definitions** → Check implementations, inheritance chains
-- **API contracts** → Check for breaking changes affecting consumers
-- **Shared types/utilities** → Check all usages for consistency
-
-When triggered, agents use Grep and Glob tools to discover related files, then Read to analyze relationships. This enables detection of:
-- Unused exports
-- Circular dependencies
-- Broken call chains (signature changed, callers not updated)
-- Interface/implementation mismatches
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/code/architecture-agent.md` for detailed cross-file analysis triggers and process.
+Agents perform cross-file analysis automatically using tools when code suggests cross-cutting concerns (imports/exports, class/interface definitions, API contracts, shared types). See `${CLAUDE_PLUGIN_ROOT}/agents/code/architecture-agent.md` for detailed triggers.
 
 ## Output Schema
 
