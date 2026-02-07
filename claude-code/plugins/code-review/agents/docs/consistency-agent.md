@@ -178,4 +178,4 @@ When MODE=gaps, this agent receives `previous_findings` from thorough mode to av
 
 ## False Positive Guidelines
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Consistency (Documentation)" for exclusions.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Consistency" for exclusions.

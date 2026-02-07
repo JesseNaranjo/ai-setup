@@ -18,13 +18,17 @@
                 "bugs",
                 "code-review",
                 "csharp",
+                "docs-review",
+                "documentation",
                 "dotnet",
                 "git",
                 "nodejs",
                 "performance",
+                "readme",
                 "security",
                 "skills",
                 "synthesis",
+                "testing",
                 "typescript"
             ]
         }

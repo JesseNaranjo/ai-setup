@@ -86,10 +86,10 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for complete skill resoluti
 
 ## Step 9: Validation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for complete validation process including:
-- Auto-validation patterns
-- Batch grouping by file
-- Validator model assignment
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for the shared validation process.
+
+Also load code-specific auto-validation patterns and false positive rules:
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`
 
 ---
 
@@ -153,6 +153,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for:
 ## False Positives
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section for issues that should NOT be flagged.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` for code category-specific false positive rules.
 
 ---
 

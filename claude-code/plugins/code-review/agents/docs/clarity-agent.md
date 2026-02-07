@@ -134,4 +134,4 @@ issues:
 
 ## False Positive Guidelines
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Clarity (Documentation)" for exclusions.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Clarity" for exclusions.

@@ -11,14 +11,22 @@
     "repository": "https://github.com/JesseNaranjo/ai-setup",
     "homepage": "https://github.com/JesseNaranjo/ai-setup#readme",
     "keywords": [
+        "agents",
+        "architecture",
+        "bugs",
         "code-review",
-        "documentation",
+        "csharp",
         "docs-review",
+        "documentation",
         "dotnet",
+        "git",
         "nodejs",
         "performance",
         "readme",
         "security",
-        "testing"
+        "skills",
+        "synthesis",
+        "testing",
+        "typescript"
     ]
 }

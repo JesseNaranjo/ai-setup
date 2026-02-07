@@ -140,4 +140,4 @@ issues:
 
 ## False Positive Guidelines
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "Category-Specific False Positive Rules > Security" for exclusions.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > Security" for exclusions.

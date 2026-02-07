@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.4.1) - a modular 16-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v3.4.2) - a modular 16-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -112,7 +112,8 @@ claude-code/plugins/code-review/
 │   ├── reviewing-security/
 │   │   ├── SKILL.md                 # Core skill instructions
 │   │   ├── references/              # Detailed patterns (loaded on-demand)
-│   │   │   └── common-vulnerabilities.md
+│   │   │   ├── common-vulnerabilities.md
+│   │   │   └── owasp-reference.md
 │   │   └── examples/                # Sample output format
 │   │       └── example-output.md
 │   └── reviewing-technical-debt/
@@ -134,9 +135,13 @@ claude-code/plugins/code-review/
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── staged-processing.md         # Staged input validation and content gathering
 │   ├── context-discovery.md         # Context discovery instructions
+│   ├── docs-orchestration-sequence.md  # Phase definitions for docs review (authoritative)
+│   ├── docs-processing.md             # Docs input validation and content gathering
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
 │   ├── validation-rules.md          # Validation process
+│   ├── validation-rules-code.md       # Code review auto-validation and false positives
+│   ├── validation-rules-docs.md       # Docs review auto-validation and false positives
 │   ├── output-format.md             # Output templates, generation process (with fix_type)
 │   ├── severity-definitions.md      # Severity classification
 │   └── references/                  # Detailed reference content (progressive disclosure)
@@ -231,9 +236,13 @@ There are more agents than available colors. When assigning colors:
 - `shared/file-processing.md` - Input validation and content gathering for file-based commands
 - `shared/staged-processing.md` - Input validation and content gathering for staged commands
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
+- `shared/docs-orchestration-sequence.md` - Phase definitions for documentation review
+- `shared/docs-processing.md` - Input validation and content gathering for docs commands
 - `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
 - `shared/synthesis-invocation-pattern.md` - Synthesis agent invocation template
 - `shared/validation-rules.md` - Issue validation process
+- `shared/validation-rules-code.md` - Code review auto-validation patterns and false positives
+- `shared/validation-rules-docs.md` - Docs review auto-validation patterns and false positives
 - `shared/output-format.md` - Output formatting, templates, and generation process (with fix_type)
 - `shared/severity-definitions.md` - Severity classification (Critical, Major, Minor, Suggestion)
 - `skills/*/SKILL.md` - Skill definitions
@@ -269,18 +278,20 @@ When modifying the plugin:
 
 1. **Agent behavior**: Edit agent files in `agents/` directory
 2. **Language-specific checks**: Edit files in `languages/` directory
-3. **Validation rules**: Edit `shared/validation-rules.md`
-4. **Output format/generation**: Edit `shared/output-format.md`
-5. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection, language-specific focus)
-6. **Agent invocation pattern**: Edit `shared/agent-invocation-pattern.md`
-7. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, gaps, pre-existing issue detection)
-8. **Common command steps**: Edit `shared/command-common-steps.md` (settings, context, validation, output)
-9. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
-10. **Command arguments**: Edit command YAML frontmatter in `commands/`
-11. **Skills**: Edit skill files in `skills/*/SKILL.md`
-12. **Skill references**: Add detailed patterns to `skills/*/references/`
-13. **Skill examples**: Add sample outputs to `skills/*/examples/`
-14. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
+3. **Validation rules (shared)**: Edit `shared/validation-rules.md`
+4. **Validation rules (code-specific)**: Edit `shared/validation-rules-code.md`
+5. **Validation rules (docs-specific)**: Edit `shared/validation-rules-docs.md`
+6. **Output format/generation**: Edit `shared/output-format.md`
+7. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection, language-specific focus)
+8. **Agent invocation pattern**: Edit `shared/agent-invocation-pattern.md`
+9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, gaps, pre-existing issue detection)
+10. **Common command steps**: Edit `shared/command-common-steps.md` (settings, context, validation, output)
+11. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
+12. **Command arguments**: Edit command YAML frontmatter in `commands/`
+13. **Skills**: Edit skill files in `skills/*/SKILL.md`
+14. **Skill references**: Add detailed patterns to `skills/*/references/`
+15. **Skill examples**: Add sample outputs to `skills/*/examples/`
+16. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
 
 ## Coding Conventions
 
@@ -332,7 +343,6 @@ This applies to:
 
 **Shared steps (in command-common-steps.md):**
 - Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills)
-- Step 8.5: Usage tracking verification
 - Steps 9-12: Post-review (validation, aggregation, output, write)
 
 **Command-specific steps (inline in each command):**
@@ -374,13 +384,13 @@ See `examples/example-output.md` for sample output format.
 
 Each skill follows progressive disclosure pattern:
 
-1. **SKILL.md** (~95-125 lines): Self-contained workflow loaded when skill triggers
+1. **SKILL.md** (~90-155 lines): Self-contained workflow loaded when skill triggers
 2. **references/** (optional): Detailed patterns loaded on-demand
 3. **examples/** (optional): Sample output formats for reference
 
 ```
 skills/skill-name/
-├── SKILL.md              # Always loaded when skill triggers (~130-170 lines)
+├── SKILL.md              # Always loaded when skill triggers (~90-155 lines)
 ├── references/           # Loaded when Claude needs detailed patterns
 │   └── patterns.md
 └── examples/             # Loaded when Claude needs output format reference

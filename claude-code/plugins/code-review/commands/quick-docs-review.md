@@ -16,7 +16,19 @@ Parse arguments from `$ARGUMENTS`:
 
 ---
 
-## Step 1: Settings
+## Step 1: Invoke Methodology Skills (Recommended)
+
+Before beginning the review workflow, invoke the following skills and pass their methodology to subagents:
+
+1. `superpowers:using-superpowers` - Skill usage methodology (ALWAYS FIRST)
+2. `superpowers:brainstorming` - Explore interpretations before concluding
+3. `superpowers:verification-before-completion` - Verify findings before reporting
+
+**Fallback:** If the superpowers plugin is not installed, proceed with standard review workflow.
+
+---
+
+## Step 2: Settings
 
 Load project-specific settings if `.claude/code-review.local.md` exists.
 
@@ -24,7 +36,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md`.
 
 ---
 
-## Step 2: Input Validation
+## Step 3: Input Validation
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the validation process.
 
@@ -37,7 +49,16 @@ Track AI instruction file standardization status for reporting.
 
 ---
 
-## Step 3: Context Discovery
+## Step 4: Skill Loading
+
+**Skip this step entirely if `--skills` argument was not provided.**
+
+If `--skills` is provided:
+See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for complete skill resolution and orchestration.
+
+---
+
+## Step 5: Context Discovery
 
 Detect project type and gather context:
 - Read package.json, *.csproj, pyproject.toml for version info
@@ -45,7 +66,7 @@ Detect project type and gather context:
 
 ---
 
-## Step 4: Content Gathering
+## Step 6: Content Gathering
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the content gathering process.
 
@@ -56,7 +77,7 @@ Gather:
 
 ---
 
-## Step 5: Quick Review
+## Step 7: Quick Review
 
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for phase definitions and **Model Selection** table
@@ -83,9 +104,9 @@ Pass to all agents:
 
 ---
 
-## Step 6: Cross-Agent Synthesis (3 agents in parallel)
+## Step 8: Cross-Agent Synthesis (3 agents in parallel)
 
-**CRITICAL: DO NOT START Synthesis until the Review phase (Step 5) is FULLY COMPLETE.**
+**CRITICAL: DO NOT START Synthesis until the Review phase (Step 7) is FULLY COMPLETE.**
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for synthesis pairs.
 
@@ -96,16 +117,16 @@ Launch 3 synthesis agents with category pairs:
 
 ---
 
-## Step 7: Validation
+## Step 9: Validation
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`:
+Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` and `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md`:
 - Filter false positives
 - Verify issue locations exist
 - Remove duplicates
 
 ---
 
-## Step 8: Aggregation
+## Step 10: Aggregation
 
 Aggregate validated findings:
 - Group by category (Accuracy, Clarity, Examples, Structure)
@@ -114,7 +135,7 @@ Aggregate validated findings:
 
 ---
 
-## Step 9: Output
+## Step 11: Output
 
 Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`.
 
