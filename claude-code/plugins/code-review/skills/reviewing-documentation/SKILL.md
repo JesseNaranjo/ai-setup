@@ -80,7 +80,7 @@ When reviewing directories, automatically prioritize:
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "False Positive Rules" section.
 
 **Documentation-specific additions** - do NOT flag:
 - Intentionally simplified examples (marked as such)

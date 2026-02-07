@@ -18,12 +18,6 @@ Analyze code for test coverage gaps and provide specific test recommendations.
 
 *Note: This agent does not use "gaps" mode.*
 
-## Input
-
-**Agent-specific:** Uses related test files for context.
-
-**Cross-file discovery:** Locate related test files when analyzing untested code paths.
-
 ## Review Process
 
 ### Step 1: Detect Test Files
@@ -97,7 +91,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Test coverage-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Test Coverage-specific extra fields:**
 
 ```yaml
 issues:
@@ -107,54 +103,5 @@ issues:
       what: "What to test"
       behavior: "Expected behavior to verify"
       location: "Suggested test file path"
-    fix_type: "diff" or "prompt"  # Use diff for simple test additions, prompt for complex multi-file test suites
+    fix_type: "diff or prompt"  # Use diff for simple test additions, prompt for complex multi-file test suites
 ```
-
-**Example with diff fix** (simple test addition):
-```yaml
-issues:
-  - title: "Missing null check test for getUser"
-    file: "src/services/users.ts"
-    line: 25
-    range: "25-30"
-    category: "Test Coverage"
-    severity: "Minor"
-    description: "getUser lacks test for null/undefined input"
-    risk: "Null input could cause unexpected behavior"
-    test_recommendation:
-      what: "getUser with null/undefined id"
-      behavior: "Should throw or return null gracefully"
-      location: "src/services/__tests__/users.test.ts"
-    fix_type: "diff"
-    fix_diff: |
-      + it('should throw when id is null', () => {
-      +   expect(() => getUser(null)).toThrow('Invalid user id');
-      + });
-      +
-      + it('should throw when id is undefined', () => {
-      +   expect(() => getUser(undefined)).toThrow('Invalid user id');
-      + });
-```
-
-**Example with prompt fix** (complex test suite):
-```yaml
-issues:
-  - title: "No tests for payment refund logic"
-    file: "src/services/payments.ts"
-    line: 145
-    range: "145-180"
-    category: "Test Coverage"
-    severity: "Major"
-    description: "processRefund() handles money but has no unit tests"
-    risk: "Refund calculation errors could cause financial discrepancies"
-    test_recommendation:
-      what: "processRefund with various amounts, partial refunds, edge cases"
-      behavior: "Correct refund amount calculated, idempotency, error handling"
-      location: "src/services/__tests__/payments.test.ts"
-    fix_type: "prompt"
-    fix_prompt: "Create tests for processRefund in src/services/__tests__/payments.test.ts covering: 1) Full refund calculates correct amount, 2) Partial refund with percentage, 3) Refund on already-refunded order throws error, 4) Refund exceeding original amount throws error, 5) Concurrent refund requests are handled idempotently. Mock the payment gateway and database calls."
-```
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > Test Coverage" for exclusions.

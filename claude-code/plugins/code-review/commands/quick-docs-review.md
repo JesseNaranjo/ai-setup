@@ -81,7 +81,7 @@ Gather:
 
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for phase definitions and **Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
 
 ### Review (4 agents in parallel)
 

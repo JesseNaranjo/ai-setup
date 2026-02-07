@@ -130,8 +130,8 @@ claude-code/plugins/code-review/
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
 │   ├── orchestration-sequence.md    # Phase definitions and model selection (authoritative)
-│   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
-│   ├── agent-common-instructions.md # Common MODE, false positives, gaps, pre-existing issue detection, output schema
+│   ├── invocation-patterns.md       # Task invocation patterns (agents + synthesis)
+│   ├── agent-common-instructions.md # Common MODE, false positives, gaps, language checks, pre-existing issue detection, output schema
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── staged-processing.md         # Staged input validation and content gathering
@@ -139,7 +139,6 @@ claude-code/plugins/code-review/
 │   ├── docs-orchestration-sequence.md  # Phase definitions for docs review (authoritative)
 │   ├── docs-processing.md             # Docs input validation and content gathering
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
-│   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
 │   ├── validation-rules.md          # Validation process
 │   ├── validation-rules-code.md       # Code review auto-validation and false positives
 │   ├── validation-rules-docs.md       # Docs review auto-validation and false positives
@@ -147,7 +146,6 @@ claude-code/plugins/code-review/
 │   ├── severity-definitions.md      # Severity classification
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
-│       ├── scope-determination.md   # Detailed scope options and edge cases
 │       └── skill-troubleshooting.md # Common issues and solutions
 ├── templates/
 │   └── code-review.local.md.example # Settings template for users
@@ -158,8 +156,8 @@ claude-code/plugins/code-review/
 
 See the following files for authoritative agent configuration:
 - `shared/orchestration-sequence.md` - Model selection table, phase definitions, language-specific focus
-- `shared/agent-invocation-pattern.md` - Task invocation template
-- `shared/agent-common-instructions.md` - Common MODE, false positives, gaps behavior, pre-existing issue detection
+- `shared/invocation-patterns.md` - Task invocation patterns (agents + synthesis)
+- `shared/agent-common-instructions.md` - Common MODE, false positives, language checks, gaps behavior, pre-existing issue detection, output schema
 
 ### Agent Colors
 
@@ -232,8 +230,8 @@ There are more agents than available colors. When assigning colors:
 - `languages/*.md` - Language-specific checks and patterns
 - `commands/*.md` - Self-contained orchestration documents (inline common steps, reference shared/)
 - `shared/orchestration-sequence.md` - Phase definitions, model selection table (authoritative)
-- `shared/agent-invocation-pattern.md` - Task tool invocation template
-- `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, gaps, pre-existing issue detection, output schema)
+- `shared/invocation-patterns.md` - Task invocation patterns (agents + synthesis)
+- `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema)
 - `shared/settings-loader.md` - Settings loading and application
 - `shared/file-processing.md` - Input validation and content gathering for file-based commands
 - `shared/staged-processing.md` - Input validation and content gathering for staged commands
@@ -241,7 +239,6 @@ There are more agents than available colors. When assigning colors:
 - `shared/docs-orchestration-sequence.md` - Phase definitions for documentation review
 - `shared/docs-processing.md` - Input validation and content gathering for docs commands
 - `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
-- `shared/synthesis-invocation-pattern.md` - Synthesis agent invocation template
 - `shared/validation-rules.md` - Issue validation process
 - `shared/validation-rules-code.md` - Code review auto-validation patterns and false positives
 - `shared/validation-rules-docs.md` - Docs review auto-validation patterns and false positives
@@ -285,8 +282,8 @@ When modifying the plugin:
 5. **Validation rules (docs-specific)**: Edit `shared/validation-rules-docs.md`
 6. **Output format/generation**: Edit `shared/output-format.md`
 7. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection, language-specific focus)
-8. **Agent invocation pattern**: Edit `shared/agent-invocation-pattern.md`
-9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, gaps, pre-existing issue detection)
+8. **Agent invocation patterns**: Edit `shared/invocation-patterns.md`
+9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks, gaps, pre-existing issue detection)
 10. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
 11. **Command arguments**: Edit command YAML frontmatter in `commands/`
 12. **Skills**: Edit skill files in `skills/*/SKILL.md`

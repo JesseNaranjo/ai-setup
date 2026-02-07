@@ -18,12 +18,6 @@ Analyze code examples in documentation for correctness and completeness.
 
 **Note:** This agent does not support gaps mode.
 
-## Input
-
-**Agent-specific:** Actual implementation code for cross-referencing example correctness.
-
-**Cross-file discovery:** Locate implementations of APIs used in examples.
-
 ## Review Process
 
 ### Step 1: Identify Example Categories (Based on MODE)
@@ -127,7 +121,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Examples-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Examples-specific extra fields:**
 
 ```yaml
 issues:
@@ -136,44 +132,3 @@ issues:
     language: "javascript|typescript|python|bash|etc"
     error_message: "What error users would see (if applicable)"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Missing import in example"
-    file: "docs/quickstart.md"
-    line: 34
-    category: "Examples"
-    severity: "Critical"
-    description: "Example uses 'createClient' but doesn't show the import statement. Users copying this code will get 'createClient is not defined'."
-    example_type: "imports"
-    language: "javascript"
-    error_message: "ReferenceError: createClient is not defined"
-    fix_type: "diff"
-    fix_diff: |
-      ```javascript
-      + import { createClient } from '@example/sdk';
-      +
-        const client = createClient({ apiKey: 'your-key' });
-      ```
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "API example shows deprecated method"
-    file: "docs/api/users.md"
-    line: 67
-    range: "67-78"
-    category: "Examples"
-    severity: "Major"
-    description: "Example uses deprecated 'getUser()' method. The current API uses 'fetchUser()' which returns a Promise instead of using callbacks."
-    example_type: "deprecation"
-    language: "typescript"
-    fix_type: "prompt"
-    fix_prompt: "Update the user fetching example in docs/api/users.md (lines 67-78). Replace the deprecated callback-based getUser() with the Promise-based fetchUser(). Change: `getUser(id, (err, user) => {...})` to `const user = await fetchUser(id)`. Update surrounding prose to mention the async nature."
-```
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Examples" for exclusions.

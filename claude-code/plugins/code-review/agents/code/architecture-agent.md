@@ -17,12 +17,6 @@ Analyze code for architectural issues affecting maintainability and scalability.
 
 *Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
 
-## Input
-
-**Agent-specific:** This agent receives `reviewing-architecture-principles` skill data as its primary review-focused skill.
-
-**Cross-file discovery:** Trace module dependencies when analysis discovers imports.
-
 ## Review Process
 
 ### Step 1: Identify Architecture Categories (Based on MODE)
@@ -61,22 +55,14 @@ Analyze code for architectural issues affecting maintainability and scalability.
   - Single-use helpers in separate files instead of colocated
   - Related types/interfaces scattered instead of grouped
 
-### Step 2: Language-Specific Architecture Checks
-
-**Node.js/TypeScript:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#architecture` for detailed checks.
-
-**.NET/C#:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#architecture` for detailed checks.
-
-### Step 3: Analyze Code Structure
+### Step 2: Analyze Code Structure
 
 1. Identify component boundaries
 2. Check coupling between components
 3. Evaluate cohesion within components
 4. Look for design pattern misuse or missing patterns
 
-### Step 4: Cross-File Analysis (When Needed)
+### Step 3: Cross-File Analysis (When Needed)
 
 Perform cross-file analysis automatically when the reviewed code suggests cross-cutting concerns. Trigger cross-file analysis when you observe:
 - Import/export statements that reference other project files
@@ -115,7 +101,7 @@ When cross-file analysis is warranted:
 - File defines an interface → check implementations
 - File modifies a shared type → check all usages
 
-### Step 5: Report Architecture Issues
+### Step 4: Report Architecture Issues
 
 For each issue found, report:
 - **Issue title**: Brief description of the architectural issue
@@ -132,7 +118,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Architecture-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Architecture-specific extra fields:**
 
 ```yaml
 issues:
@@ -140,104 +128,3 @@ issues:
     principle: "Which architectural principle is violated"
     impact: "How this affects maintainability/testability"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Circular dependency between modules"
-    file: "src/services/orders.ts"
-    line: 5
-    category: "Architecture"
-    severity: "Major"
-    description: "OrderService imports UserService which imports OrderService"
-    principle: "Dependency Inversion Principle (DIP)"
-    impact: "Initialization order issues, difficult to test in isolation"
-    fix_type: "diff"
-    fix_diff: |
-      - import { UserService } from './UserService';
-      + import type { IUserService } from '../interfaces/IUserService';
-      + // Inject via constructor instead of direct import
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "God class with 15+ methods spanning multiple concerns"
-    file: "src/services/UserService.ts"
-    line: 1
-    range: "1-450"
-    category: "Architecture"
-    severity: "Major"
-    description: "Single class handles authentication, profile management, notifications, and billing"
-    principle: "Single Responsibility Principle (SRP)"
-    impact: "Difficult to test, modify, or extend any single feature without risk"
-    fix_type: "prompt"
-    fix_prompt: "Refactor UserService.ts into separate services: 1) Create AuthService with login/logout/validateSession methods, 2) Create ProfileService with updateProfile/getProfile methods, 3) Create NotificationService with sendEmail/sendPush methods, 4) Create BillingService with payment-related methods. Update imports in all consumers and add dependency injection."
-```
-
-**Example DRY violation**:
-```yaml
-issues:
-  - title: "Duplicated validation logic across handlers"
-    file: "src/handlers/orders.ts"
-    line: 45
-    range: "45-60"
-    category: "Architecture"
-    severity: "Minor"
-    description: "Order validation logic duplicated in createOrder, updateOrder, and submitOrder handlers with minor variations"
-    principle: "DRY (Don't Repeat Yourself)"
-    impact: "Bug fixes must be applied in 3 places, risk of inconsistent behavior"
-    fix_type: "prompt"
-    fix_prompt: "Extract common validation logic into a shared validateOrder function in src/validators/orderValidator.ts. Replace duplicate code in createOrder (lines 45-60), updateOrder (lines 112-127), and submitOrder (lines 89-104) with calls to the new validator."
-```
-
-**Example YAGNI violation**:
-```yaml
-issues:
-  - title: "Over-engineered factory pattern for single implementation"
-    file: "src/factories/NotificationFactory.ts"
-    line: 1
-    range: "1-45"
-    category: "Architecture"
-    severity: "Suggestion"
-    description: "NotificationFactory creates only EmailNotification, never extended. INotification interface has single implementation."
-    principle: "YAGNI (You Ain't Gonna Need It)"
-    impact: "Unnecessary indirection increases complexity without benefit"
-    fix_type: "prompt"
-    fix_prompt: "Simplify notification creation by removing NotificationFactory and INotification interface. Replace factory calls with direct EmailNotification instantiation. If other notification types are needed later, the abstraction can be reintroduced."
-```
-
-**Example SoC violation**:
-```yaml
-issues:
-  - title: "Mixed concerns in API handler"
-    file: "src/api/users.ts"
-    line: 15
-    range: "15-120"
-    category: "Architecture"
-    severity: "Major"
-    description: "Handler mixes HTTP concerns (request parsing, response formatting), business logic (user validation, role checks), and data access (direct SQL queries) in single function"
-    principle: "SoC (Separation of Concerns)"
-    impact: "Difficult to test business logic in isolation, changes to data layer require modifying API handlers"
-    fix_type: "prompt"
-    fix_prompt: "Separate concerns into layers: 1) Keep HTTP handling in src/api/users.ts (parse request, call service, format response), 2) Extract business logic to src/services/UserService.ts, 3) Move data access to src/repositories/UserRepository.ts. Each layer should only know about the layer directly below it."
-```
-
-**Example file consolidation opportunity**:
-```yaml
-issues:
-  - title: "Related validation logic scattered across files"
-    file: "src/validators/emailValidator.ts"
-    line: 1
-    category: "Architecture"
-    severity: "Minor"
-    description: "Five separate single-function validator files (emailValidator.ts, phoneValidator.ts, dateValidator.ts, urlValidator.ts, currencyValidator.ts) each containing <20 lines. Related code should be consolidated."
-    principle: "File Organization"
-    impact: "Unnecessary file fragmentation increases navigation overhead and import complexity"
-    fix_type: "prompt"
-    fix_prompt: "Consolidate related validators into src/validators/commonValidators.ts. Export individual functions for tree-shaking. Keep domain-specific validators (e.g., OrderValidator with complex business rules) in separate files."
-```
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > Architecture" for exclusions.

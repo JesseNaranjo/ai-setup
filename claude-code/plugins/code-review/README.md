@@ -383,8 +383,8 @@ code-review/
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
-│   ├── agent-common-instructions.md # Common agent instructions (MODE, gaps, pre-existing issue detection)
-│   ├── agent-invocation-pattern.md  # Task invocation pattern for agents
+│   ├── agent-common-instructions.md # Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema)
+│   ├── invocation-patterns.md       # Task invocation patterns (agents + synthesis)
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── docs-orchestration-sequence.md # Documentation review phase definitions
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
@@ -395,11 +395,11 @@ code-review/
 │   ├── severity-definitions.md      # Severity classification
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation and content gathering for staged commands
-│   ├── synthesis-invocation-pattern.md # Synthesis agent task pattern
 │   ├── validation-rules.md          # Validation process
+│   ├── validation-rules-code.md     # Code review auto-validation and false positives
+│   ├── validation-rules-docs.md     # Docs review auto-validation and false positives
 │   └── references/                  # Detailed reference content
 │       ├── complete-output-example.md # Complete output format example
-│       ├── scope-determination.md   # Scope options and edge cases
 │       └── skill-troubleshooting.md # Common issues and solutions
 └── README.md
 ```

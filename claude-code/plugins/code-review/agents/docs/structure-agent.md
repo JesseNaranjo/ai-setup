@@ -18,10 +18,6 @@ Analyze documentation for organization, navigation, and structural integrity.
 
 **Note:** This agent does not support gaps mode.
 
-## Input
-
-**Agent-specific:** AI instruction file standardization status from input validation.
-
 ## Review Process
 
 ### Step 1: Identify Structure Categories (Based on MODE)
@@ -129,7 +125,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Structure-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Structure-specific extra fields:**
 
 ```yaml
 issues:
@@ -137,52 +135,3 @@ issues:
     structure_type: "links|headings|navigation|organization|ai_instructions"
     broken_target: "The target that doesn't exist (for broken links)"
 ```
-
-**Example with diff fix (broken link)**:
-```yaml
-issues:
-  - title: "Broken internal link to API documentation"
-    file: "README.md"
-    line: 45
-    category: "Structure"
-    severity: "Major"
-    description: "Link points to docs/api.md but file is actually at docs/api-reference.md"
-    structure_type: "links"
-    broken_target: "docs/api.md"
-    fix_type: "diff"
-    fix_diff: |
-      - See our [API documentation](docs/api.md) for details.
-      + See our [API documentation](docs/api-reference.md) for details.
-```
-
-**Example with prompt fix (AI instruction standardization)**:
-```yaml
-issues:
-  - title: "AI-AGENT-INSTRUCTIONS.md in wrong location"
-    file: "AI-AGENT-INSTRUCTIONS.md"
-    line: 1
-    category: "Structure"
-    severity: "Major"
-    description: "AI-AGENT-INSTRUCTIONS.md exists in repository root but should be in .ai/ directory for standardization."
-    structure_type: "ai_instructions"
-    fix_type: "prompt"
-    fix_prompt: "Move AI-AGENT-INSTRUCTIONS.md to .ai/AI-AGENT-INSTRUCTIONS.md. Create the .ai/ directory if it doesn't exist. Update any references to this file in CLAUDE.md and other documentation. Add the standard header that identifies it as the comprehensive coding standards document."
-```
-
-**Example with prompt fix (missing AI instruction file)**:
-```yaml
-issues:
-  - title: "Missing .github/copilot-instructions.md"
-    file: ".github/"
-    line: 1
-    category: "Structure"
-    severity: "Major"
-    description: "No GitHub Copilot instructions file exists. This file should provide guidance to Copilot and reference .ai/AI-AGENT-INSTRUCTIONS.md."
-    structure_type: "ai_instructions"
-    fix_type: "prompt"
-    fix_prompt: "Create .github/copilot-instructions.md with the standard header: '# Copilot Instructions\\n\\nThis file provides guidance to GitHub Copilot when working with code in this repository.\\n\\n**For comprehensive coding standards, patterns, and conventions, see [.ai/AI-AGENT-INSTRUCTIONS.md](../.ai/AI-AGENT-INSTRUCTIONS.md).**\\n\\n> **Note:** You MUST keep this file in sync with [CLAUDE.md](../CLAUDE.md).'"
-```
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Structure" for exclusions.

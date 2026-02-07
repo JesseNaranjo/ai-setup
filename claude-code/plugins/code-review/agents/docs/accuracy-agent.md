@@ -14,14 +14,8 @@ Analyze documentation for factual correctness and code synchronization.
 
 **Accuracy-specific modes:**
 - **thorough**: All code references, API signatures, version numbers, CLI commands, configuration options
-- **gaps**: Subtle drift (parameter order changes, default value changes, edge case behavior differences)
+- **gaps**: Default value drift (code changed defaults, docs still show old), behavior edge cases (error conditions, empty inputs, null handling), implicit contract changes (return type narrowing, new exceptions), deprecation without documentation, new optional parameters with important defaults. Duplicate detection: skip issues in same file within ±3 lines of prior findings; skip same issue type on same code reference.
 - **quick**: Critical mismatches (wrong function names, incorrect return types, broken examples)
-
-## Input
-
-**Agent-specific:** This agent receives related code files for cross-reference verification.
-
-**Cross-file discovery:** Trace documented APIs to their implementations.
 
 ## Review Process
 
@@ -99,7 +93,9 @@ For each inaccuracy found, report:
 
 ## Output Schema
 
-**Accuracy-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Accuracy-specific extra fields:**
 
 ```yaml
 issues:
@@ -108,62 +104,3 @@ issues:
     actual_value: "What the code actually does"
     code_location: "Path to the actual implementation"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Incorrect parameter type in API documentation"
-    file: "docs/api.md"
-    line: 45
-    category: "Accuracy"
-    severity: "Major"
-    description: "Documentation shows userId as string, but implementation expects number"
-    documented_value: "userId: string"
-    actual_value: "userId: number"
-    code_location: "src/api/users.ts:23"
-    fix_type: "diff"
-    fix_diff: |
-      - | userId | string | The user's unique identifier |
-      + | userId | number | The user's unique identifier |
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "Function signature changed after refactor"
-    file: "README.md"
-    line: 89
-    range: "89-95"
-    category: "Accuracy"
-    severity: "Critical"
-    description: "createUser function now requires email parameter, but docs show old signature"
-    documented_value: "createUser(name: string)"
-    actual_value: "createUser(name: string, email: string)"
-    code_location: "src/users.ts:15"
-    fix_type: "prompt"
-    fix_prompt: "Update the createUser example in README.md to include the required email parameter. Show: createUser('John', 'john@example.com'). Also update the parameter table to list email as required."
-```
-
-## Gaps Mode Behavior
-
-When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
-
-**Duplicate Detection:**
-- Skip issues in same file within ±3 lines of prior findings
-- Skip same issue type on same code reference
-
-**Focus Areas (subtle issues thorough mode misses):**
-- Default value drift (code changed defaults, docs still show old)
-- Behavior edge cases (error conditions, empty inputs, null handling)
-- Implicit contract changes (return type narrowing, new exceptions)
-- Deprecation without documentation
-- New optional parameters with important defaults
-
-**Constraints:**
-- Only report Major or Critical severity (skip Minor/Suggestion)
-- Maximum 5 new findings
-- Model: Always Sonnet (cost optimization)
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Accuracy" for exclusions.

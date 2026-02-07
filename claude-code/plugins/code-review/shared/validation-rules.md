@@ -19,12 +19,6 @@ This document defines the validation process for issues found by review agents.
   - [Apply Severity Downgrades](#2-apply-severity-downgrades)
   - [Deduplicate Issues](#3-deduplicate-issues)
   - [Consensus Detection Algorithm](#4-consensus-detection-algorithm)
-- [Severity Classification](#severity-classification)
-- [Do NOT Validate These (Skip Validation)](#do-not-validate-these-skip-validation)
-- [False Positive Rules](#false-positive-rules)
-  - [Do NOT Flag](#do-not-flag)
-  - [Deep vs Quick Review Differences](#deep-vs-quick-review-differences)
-- [Category-Specific False Positive Rules](#category-specific-false-positive-rules)
 
 ## Batch Validation Process
 
@@ -91,6 +85,8 @@ Synthesis agents produce `cross_cutting_insights` that require special validatio
 
 ### Batch Validator Prompt
 
+**Skip validation for:** Issues in test files (unless explicitly testing production code paths), style suggestions without functional impact, and documentation suggestions.
+
 For each file with issues, launch ONE validator with all issues for that file:
 
 ```yaml
@@ -144,8 +140,6 @@ issues:
 
 Validators should check for these common false positive patterns:
 
-For the complete list of issues that should NOT be flagged, see the "False Positive Rules" section below.
-
 1. **Pre-existing issues**: The issue existed before the changes being reviewed
 2. **Context makes it correct**: The code appears wrong but has valid context
 3. **Handled elsewhere**: The issue is addressed in another part of the codebase
@@ -189,77 +183,3 @@ When multiple agents flag the same issue:
 2. **Build clusters** transitively (if A overlaps B and B overlaps C, cluster = {A, B, C})
 3. **Merge each cluster**: use highest severity, longest description, combined categories, and add badge (`[2 agents]` or `[3+ agents]`) prepended to title
 
-## Severity Classification
-
-Reference `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for canonical severity definitions and action requirements.
-
-## Do NOT Validate These (Skip Validation)
-
-- Issues in test files (unless explicitly testing production code paths)
-- Style suggestions without functional impact
-- Documentation suggestions
-
-## False Positive Rules
-
-Issues that should NOT be flagged by review agents.
-
-### Do NOT Flag
-
-#### Correct Code
-
-- Code that handles edge cases in non-obvious but valid ways
-- Intentional patterns that look unusual but serve a purpose
-- Something that appears to be a bug but is actually correct behavior
-
-#### Linter Territory
-
-- Formatting issues covered by prettier/eslint/other formatters
-- Import ordering or unused import warnings
-- Issues that a linter will catch (do not run the linter to verify)
-
-#### Pedantic Concerns
-
-- Minor formatting inconsistencies
-- Nitpicks that a senior engineer would not flag
-- Style preferences that don't affect functionality
-
-#### Pre-existing Issues
-
-- Issues in files with changes that existed before these changes
-- Issues in the codebase that are not related to the current changes
-- Pre-existing code patterns that weren't modified
-
-#### Scope Limitations
-
-- General code quality concerns unless explicitly required in AI Agent Instructions
-- Issues in test code or development-only paths unless specifically reviewing tests
-- Suggestions for features or patterns not in scope
-- Theoretical edge cases that are extremely unlikely in practice
-
-#### Silenced Issues
-
-- Code with lint-disable comments for specific rules
-- Intentionally suppressed warnings with documented reasons
-- Issues mentioned in AI Agent Instructions but explicitly silenced in code
-
-### Deep vs Quick Review Differences
-
-#### Deep Review (More Thorough)
-
-Deep review can flag more issues but should still avoid:
-- Issues explicitly silenced in code
-- Pre-existing issues unrelated to changes
-- Pure style preferences
-
-#### Quick Review (Stricter)
-
-Quick review is optimized for speed and should be extra conservative:
-- Focus only on blocking issues that must be fixed before merge
-- Ignore minor style concerns
-- Skip theoretical edge cases
-
-## Category-Specific False Positive Rules
-
-Each category has specific exclusions in addition to the general false positive rules above.
-
-**Domain-specific rules:** See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` (code reviews) or `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` (documentation reviews).

@@ -14,15 +14,9 @@ Analyze code for performance issues that will have measurable impact.
 
 **Performance-specific modes:**
 - **thorough**: Algorithmic complexity, memory usage, I/O patterns, database access
-- **gaps**: Hidden N+1 queries, memory retention, cache invalidation, batch opportunities
+- **gaps**: Hidden N+1 queries (lazy loading, nested loops with DB calls), memory retention through closures or event listeners, inefficient serialization/deserialization, cache invalidation issues, unnecessary data copying, batch operation opportunities, hot path inefficiencies
 
 *Note: This agent is not invoked during quick reviews.*
-
-## Input
-
-**Agent-specific:** This agent receives `reviewing-performance` skill data as its primary review-focused skill.
-
-**Cross-file discovery:** Trace database query patterns across data access layers.
 
 ## Review Process
 
@@ -47,22 +41,14 @@ Analyze code for performance issues that will have measurable impact.
 - Premature optimization opportunities that matter
 - Batch operation opportunities
 
-### Step 2: Language-Specific Performance Checks
-
-**Node.js/TypeScript:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#performance` for detailed checks.
-
-**.NET/C#:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#performance` for detailed checks.
-
-### Step 3: Analyze Hot Paths
+### Step 2: Analyze Hot Paths
 
 1. Identify code that runs frequently (loops, event handlers, API endpoints)
 2. Check for inefficiencies in these hot paths
 3. Consider the scale of data being processed
 4. Evaluate memory allocation patterns
 
-### Step 4: Report Performance Issues
+### Step 3: Report Performance Issues
 
 For each issue found, report:
 - **Issue title**: Brief description of the performance issue
@@ -80,7 +66,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Performance-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Performance-specific extra fields:**
 
 ```yaml
 issues:
@@ -89,54 +77,3 @@ issues:
     scale: "At what data size this becomes a problem"
     impact: "Expected performance degradation"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "N+1 query in user list endpoint"
-    file: "src/api/users.ts"
-    line: 34
-    category: "Performance"
-    severity: "Major"
-    description: "Each user triggers separate query to fetch related orders"
-    complexity: "O(n) database queries where O(1) is possible"
-    scale: "Becomes problematic at 100+ users per request"
-    impact: "Response time grows linearly, potential database connection exhaustion"
-    fix_type: "diff"
-    fix_diff: |
-      - const users = await User.findAll();
-      - for (const user of users) {
-      -   user.orders = await Order.findByUserId(user.id);
-      - }
-      + const users = await User.findAll({ include: Order });
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "Blocking synchronous file reads in request handler"
-    file: "src/api/reports.ts"
-    line: 23
-    range: "23-45"
-    category: "Performance"
-    severity: "Major"
-    description: "readFileSync blocks event loop during report generation"
-    complexity: "O(1) but blocking"
-    scale: "Causes latency spikes with >10 concurrent requests"
-    impact: "Request queue backup, increased p99 latency, potential timeouts"
-    fix_type: "prompt"
-    fix_prompt: "Refactor report generation in src/api/reports.ts:23-45 to use async file operations. Replace all readFileSync calls with fs.promises.readFile, ensure proper await usage, and consider streaming for large files."
-```
-
-## Gaps Mode Behavior
-
-**Focus Areas (subtle issues thorough mode misses):**
-- Hidden N+1 queries (lazy loading, nested loops with DB calls)
-- Memory retention through closures or event listeners
-- Inefficient serialization/deserialization
-- Cache invalidation issues, unnecessary data copying
-- Batch operation opportunities, hot path inefficiencies
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > Performance" for exclusions.

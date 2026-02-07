@@ -14,15 +14,9 @@ Analyze code for accumulated technical debt affecting maintainability, moderniza
 
 **Technical Debt-specific modes:**
 - **thorough**: Comprehensive debt discovery across all 6 categories
-- **gaps**: Focus on subtle debt missed in thorough pass, receives prior findings
+- **gaps**: Subtle debt not caught in thorough pass, context-dependent debt (patterns fine in some contexts but debt in this project), debt requiring deeper cross-file analysis, edge cases in deprecated pattern detection
 
 *Note: This agent does not use "quick" mode and is not invoked during quick reviews.*
-
-## Input
-
-**Agent-specific:** This agent receives `reviewing-technical-debt` skill data as its primary review-focused skill. Also uses related test files to identify untested deprecated code.
-
-**Cross-file discovery:** Check package files when analysis discovers dependency issues.
 
 ## Review Process
 
@@ -78,15 +72,7 @@ Analyze code for accumulated technical debt affecting maintainability, moderniza
 - Debt that requires deeper cross-file analysis
 - Edge cases in deprecated pattern detection
 
-### Step 2: Language-Specific Technical Debt Checks
-
-**Node.js/TypeScript:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#debt` for detailed checks.
-
-**.NET/C#:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#debt` for detailed checks.
-
-### Step 3: Analyze Debt Impact
+### Step 2: Analyze Debt Impact
 
 For each identified debt item:
 1. Assess urgency (blocking, soon, low)
@@ -94,7 +80,7 @@ For each identified debt item:
 3. Identify dependencies and blockers
 4. Consider migration path complexity
 
-### Step 4: Cross-File Analysis (When Needed)
+### Step 3: Cross-File Analysis (When Needed)
 
 Perform cross-file analysis when the reviewed code suggests wider debt issues:
 - Import/export statements referencing deprecated modules
@@ -109,7 +95,7 @@ When cross-file analysis is warranted:
 3. Read package.json, *.csproj to check dependency versions
 4. Check for TODO/FIXME patterns across files
 
-### Step 5: Report Technical Debt Issues
+### Step 4: Report Technical Debt Issues
 
 For each issue found, report:
 - **Issue title**: Brief description of the technical debt
@@ -127,7 +113,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Technical Debt-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Technical Debt-specific extra fields:**
 
 ```yaml
 issues:
@@ -136,66 +124,3 @@ issues:
     urgency: "blocking|soon|low"
     effort_estimate: "trivial|small|medium|large"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "React class component should be converted to functional"
-    file: "src/components/UserProfile.tsx"
-    line: 1
-    range: "1-85"
-    category: "Technical Debt"
-    severity: "Minor"
-    description: "Class component pattern in React 18+ project. Functional components with hooks are the standard."
-    debt_type: "outdated_pattern"
-    urgency: "low"
-    effort_estimate: "small"
-    fix_type: "prompt"
-    fix_prompt: "Convert UserProfile class component to functional component with hooks. Replace lifecycle methods with useEffect, this.state with useState, and remove the class wrapper."
-```
-
-**Example with prompt fix for dependency**:
-```yaml
-issues:
-  - title: "Deprecated dependency: request package"
-    file: "package.json"
-    line: 15
-    category: "Technical Debt"
-    severity: "Major"
-    description: "The 'request' package is deprecated since 2020. It receives no security updates."
-    debt_type: "deprecated_dependency"
-    urgency: "soon"
-    effort_estimate: "medium"
-    fix_type: "prompt"
-    fix_prompt: "Replace 'request' package with 'node-fetch' or 'axios'. Search for all require('request') and import statements, update to the new HTTP client API. Update tests that mock request."
-```
-
-**Example TODO without tracking**:
-```yaml
-issues:
-  - title: "TODO comment without issue tracking"
-    file: "src/services/payment.ts"
-    line: 45
-    category: "Technical Debt"
-    severity: "Minor"
-    description: "TODO comment exists without reference to an issue tracker. Debt accumulates when TODOs aren't tracked."
-    debt_type: "documentation"
-    urgency: "low"
-    effort_estimate: "trivial"
-    fix_type: "diff"
-    fix_diff: |
-      - // TODO: Handle retry logic
-      + // TODO(#123): Handle retry logic - see https://issues.example.com/123
-```
-
-## Gaps Mode Behavior
-
-**Focus Areas (subtle issues thorough mode misses):**
-- Subtle debt not caught in thorough pass
-- Context-dependent debt (patterns fine in some contexts but debt in this project)
-- Debt that requires deeper cross-file analysis
-- Edge cases in deprecated pattern detection
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > Technical Debt" for exclusions.

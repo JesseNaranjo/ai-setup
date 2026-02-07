@@ -18,10 +18,6 @@ Analyze code for error handling issues and resilience gaps.
 
 *Note: This agent does not use "gaps" mode.*
 
-## Input
-
-**Cross-file discovery:** Trace error propagation paths across module boundaries.
-
 ## Review Process
 
 ### Step 1: Identify Error Handling Categories (Based on MODE)
@@ -51,22 +47,14 @@ Analyze code for error handling issues and resilience gaps.
 - Resources not cleaned up (no finally/using/defer)
 - Errors that would crash the application
 
-### Step 2: Language-Specific Error Handling Checks
-
-**Node.js/TypeScript:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#errors` for detailed checks.
-
-**.NET/C#:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#errors` for detailed checks.
-
-### Step 3: Analyze Error Flows
+### Step 2: Analyze Error Flows
 
 1. Identify all operations that can fail
 2. Trace error handling path for each
 3. Check for proper cleanup and recovery
 4. Verify errors are propagated appropriately
 
-### Step 4: Report Error Handling Issues
+### Step 3: Report Error Handling Issues
 
 For each issue found, report:
 - **Issue title**: Brief description of the error handling issue
@@ -84,7 +72,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Error handling-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Error Handling-specific extra fields:**
 
 ```yaml
 issues:
@@ -92,45 +82,3 @@ issues:
     failure_scenario: "What could trigger this error path"
     impact: "What happens when the error occurs"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Empty catch block swallows database errors"
-    file: "src/db/connection.ts"
-    line: 34
-    category: "Error Handling"
-    severity: "Major"
-    description: "Database connection errors caught but not logged or re-thrown"
-    failure_scenario: "Database server unavailable or connection timeout"
-    impact: "Silent failure, application continues with undefined state, data inconsistency"
-    fix_type: "diff"
-    fix_diff: |
-      - } catch (err) {
-      -   // TODO: handle error
-      - }
-      + } catch (err) {
-      +   logger.error('Database connection failed', { error: err, operation: 'connect' });
-      +   throw new DatabaseError('Failed to connect to database', { cause: err });
-      + }
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "Missing error handling across async API handlers"
-    file: "src/api/users.ts"
-    line: 1
-    range: "1-150"
-    category: "Error Handling"
-    severity: "Major"
-    description: "Multiple async handlers lack try-catch blocks, causing unhandled rejections"
-    failure_scenario: "Any database or external service failure"
-    impact: "500 errors without proper error responses, potential memory leaks from unhandled promises"
-    fix_type: "prompt"
-    fix_prompt: "Add consistent error handling to all async handlers in src/api/users.ts. Create an asyncHandler wrapper that catches errors and passes to Express error middleware. Wrap getUser, createUser, updateUser, deleteUser handlers. Log errors with request context before passing to error handler."
-```
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > Error Handling" for exclusions.

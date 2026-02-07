@@ -18,44 +18,15 @@ Individual documentation review agents are specialists - they excel at finding i
 2. Identifying ripple effects where one documentation issue compounds another
 3. Finding gaps where one category's finding should trigger another category's concern
 
-## Invocation Model
-
-Unlike the 6 review agents that support MODE parameters (`thorough`, `gaps`, `quick`), the synthesis agent operates on category pairs via the `synthesis_input` structure.
-
-**Phase Context:**
-- **Deep review**: Invoked in Step 7 (Synthesis phase), after Phase 1 (6 thorough agents) AND Phase 2 (3 gaps agents) complete
-- **Quick review**: Invoked in Step 7 (Synthesis phase), after the Review phase (4 quick agents) completes
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for the complete orchestration sequence.
-
-## Invocation
-
-This agent is invoked multiple times in parallel with different category pairs.
-Each invocation receives a `synthesis_input` structure specifying categories to analyze.
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for:
-- Full invocation parameter specification
-- Parallel invocation pattern diagram
-- Example Task tool invocation
-
 ## Input
 
-**Agent-specific:** This agent operates on findings from other agents, receiving:
-- `synthesis_input.category_a.findings` - Findings from first category
-- `synthesis_input.category_b.findings` - Findings from second category
+Receives `synthesis_input` with:
+- `category_a.findings` - Findings from first category
+- `category_b.findings` - Findings from second category
 - `cross_cutting_question` - The question to answer
+- `files_content` - File diffs and full content for context
 
-**Cross-file discovery:** Trace affected files when ripple effect analysis discovers dependencies.
-
-### Cross-Cutting Pairs
-
-**Authoritative source:** See `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for:
-- Deep review pairs (4 pairs with cross-cutting questions)
-- Quick review pairs (3 pairs with cross-cutting questions)
-
-The pairs and questions are defined in docs-orchestration-sequence.md to ensure consistency. This section provides analysis guidance for each category combination.
-
-### Analysis Patterns by Category Domain
+## Analysis Patterns by Category Domain
 
 Apply these domain-specific patterns when analyzing cross-cutting documentation concerns:
 

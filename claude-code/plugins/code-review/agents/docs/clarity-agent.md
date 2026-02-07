@@ -18,10 +18,6 @@ Analyze documentation for readability and comprehension issues.
 
 **Note:** This agent does not support gaps mode.
 
-## Input
-
-**Agent-specific:** Context about intended audience if available (from project README or contribution guidelines).
-
 ## Review Process
 
 ### Step 1: Identify Clarity Categories (Based on MODE)
@@ -90,7 +86,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**Clarity-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Clarity-specific extra fields:**
 
 ```yaml
 issues:
@@ -98,40 +96,3 @@ issues:
     affected_audience: "Who would be confused (beginner/intermediate/expert)"
     clarity_type: "jargon|ambiguity|complexity|missing_context|structure"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Undefined acronym 'ORM'"
-    file: "docs/database.md"
-    line: 12
-    category: "Clarity"
-    severity: "Major"
-    description: "ORM is used without definition. Beginners may not know this term."
-    affected_audience: "beginner"
-    clarity_type: "jargon"
-    fix_type: "diff"
-    fix_diff: |
-      - The ORM handles all database operations.
-      + The ORM (Object-Relational Mapping) handles all database operations.
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "Authentication flow explanation is confusing"
-    file: "docs/auth.md"
-    line: 45
-    range: "45-78"
-    category: "Clarity"
-    severity: "Major"
-    description: "The authentication flow jumps between concepts without clear transitions. Token refresh, session management, and logout are interleaved confusingly."
-    affected_audience: "intermediate"
-    clarity_type: "structure"
-    fix_type: "prompt"
-    fix_prompt: "Restructure the authentication flow section in docs/auth.md (lines 45-78). Separate into three clear subsections: 1) Initial Authentication, 2) Token Refresh, 3) Session Management and Logout. Add transition sentences between each. Start each subsection with a one-sentence summary."
-```
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Clarity" for exclusions.

@@ -46,7 +46,7 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
 
 ### Phase 1: Thorough Review (9 agents in parallel)
 
@@ -64,7 +64,7 @@ After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 fin
 
 **Agents**: Bug Detection, Compliance, Performance, Security, Technical Debt
 
-See each agent's "Gaps Mode Behavior" section for gaps mode rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for gaps mode rules (duplicate detection, constraints). See each agent's MODE Parameter section for category-specific focus areas.
 
 **CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
 
@@ -74,7 +74,6 @@ See each agent's "Gaps Mode Behavior" section for gaps mode rules.
 
 **CRITICAL: Synthesis receives ALL findings from prior phases. Do NOT launch until prior phases are FULLY COMPLETE.**
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for invocation format.
 See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for category pairs.
 
 Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.

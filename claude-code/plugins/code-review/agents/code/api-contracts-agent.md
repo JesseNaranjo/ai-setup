@@ -17,12 +17,6 @@ Analyze code for API compatibility and contract compliance issues.
 
 *Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
 
-## Input
-
-**Agent-specific:** Uses related API definitions if available.
-
-**Cross-file discovery:** Trace interface consumers when analyzing contract changes.
-
 ## Review Process
 
 ### Step 1: Identify API Categories (Based on MODE)
@@ -82,7 +76,9 @@ For each issue found, report:
 
 ## Output Schema
 
-**API contracts-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**API Contracts-specific extra fields:**
 
 ```yaml
 issues:
@@ -91,41 +87,3 @@ issues:
     consumers_affected: "Who/what is affected"
     migration: "Required migration steps, if applicable"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Changed method signature breaks callers"
-    file: "src/services/orders.ts"
-    line: 45
-    category: "API Contracts"
-    severity: "Major"
-    description: "getOrder now requires options parameter, breaking existing callers"
-    breaking: true
-    consumers_affected: "Internal callers in api/orders.ts, api/reports.ts"
-    migration: "Add default value for options parameter"
-    fix_type: "diff"
-    fix_diff: |
-      - async getOrder(id: string, options: QueryOptions): Promise<Order> {
-      + async getOrder(id: string, options: QueryOptions = {}): Promise<Order> {
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "Removed required field from API response"
-    file: "src/api/orders.ts"
-    line: 56
-    category: "API Contracts"
-    severity: "Critical"
-    description: "Field 'shipping_address' removed from GET /orders/:id response"
-    breaking: true
-    consumers_affected: "Mobile app v2.x, partner integrations using order sync"
-    migration: "Add field back or version API to /v2/orders with deprecation period"
-    fix_type: "prompt"
-    fix_prompt: "Restore backward compatibility for GET /orders/:id: 1) Add shipping_address field back to response with @deprecated JSDoc, 2) Create new /v2/orders/:id endpoint without the field, 3) Add deprecation notice header to v1 response, 4) Update API docs with migration guide."
-```
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > API Contracts" for exclusions.

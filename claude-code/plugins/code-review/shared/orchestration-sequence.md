@@ -93,8 +93,8 @@ Different phases have different content requirements. This strategy reduces toke
 **Phase 1 (Thorough):**
 - Full file content provided
 - Full diff content provided
-- AI instructions per distribution rules (see agent-invocation-pattern.md)
-- Test files per distribution rules (see agent-invocation-pattern.md)
+- AI instructions per distribution rules (see invocation-patterns.md)
+- Test files per distribution rules (see invocation-patterns.md)
 - Agents perform comprehensive analysis
 
 **Phase 2 (Gaps):**

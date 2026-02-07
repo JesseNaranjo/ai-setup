@@ -83,7 +83,7 @@ Gather:
 
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/docs-orchestration-sequence.md` for phase definitions and **Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
 
 ### Phase 1: Thorough Review (6 agents in parallel)
 
@@ -106,7 +106,7 @@ After Phase 1 completes, launch 3 agents with **gaps** mode, passing Phase 1 fin
 
 **Agents**: Accuracy, Completeness, Consistency
 
-See each agent's "Gaps Mode Behavior" section for gaps mode rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for gaps mode rules (duplicate detection, constraints). See each agent's MODE Parameter section for category-specific focus areas.
 
 **CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
 

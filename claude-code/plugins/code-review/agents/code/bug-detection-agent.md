@@ -14,14 +14,8 @@ Analyze code for bugs that will cause incorrect behavior at runtime.
 
 **Bug detection-specific modes:**
 - **thorough**: Comprehensive bug hunting - logical errors, null references, off-by-one errors, type mismatches
-- **gaps**: Edge cases, boundary conditions, race conditions, state management issues
+- **gaps**: Boundary conditions (empty arrays, zero values, max values), race conditions in concurrent code, state management issues (stale state, incorrect updates), resource cleanup failures in error paths, time-of-check to time-of-use issues, integer overflow/underflow
 - **quick**: Most obvious and critical bugs only
-
-## Input
-
-**Agent-specific:** This agent receives `reviewing-bugs` skill data as its primary review-focused skill. Also uses related test files for context.
-
-**Cross-file discovery:** Trace shared logic when analysis discovers cross-module dependencies.
 
 ## Review Process
 
@@ -51,15 +45,7 @@ Analyze code for bugs that will cause incorrect behavior at runtime.
 - Obvious type errors
 - Missing return statements
 
-### Step 2: Language-Specific Bug Checks
-
-**Node.js/TypeScript:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#bugs` for detailed checks.
-
-**.NET/C#:**
-See `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#bugs` for detailed checks.
-
-### Step 3: Analyze Code Paths
+### Step 2: Analyze Code Paths
 
 For each file:
 1. Identify all code paths through changed/reviewed code
@@ -67,7 +53,7 @@ For each file:
 3. Consider how the code interacts with surrounding context
 4. Check for issues at integration points
 
-### Step 4: Report Bugs
+### Step 3: Report Bugs
 
 For each bug found, report:
 - **Issue title**: Brief description of the bug
@@ -85,7 +71,9 @@ For each bug found, report:
 
 ## Output Schema
 
-**Bug detection-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Bugs-specific extra fields:**
 
 ```yaml
 issues:
@@ -93,53 +81,3 @@ issues:
     conditions: "When this bug occurs"
     impact: "What happens when the bug triggers"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Null pointer dereference on optional user"
-    file: "src/services/auth.ts"
-    line: 78
-    category: "Bugs"
-    severity: "Critical"
-    description: "Accessing user.email without null check when user may be undefined"
-    conditions: "When user lookup returns null (invalid session)"
-    impact: "Application crash on invalid session access"
-    fix_type: "diff"
-    fix_diff: |
-      - return user.email;
-      + if (!user) {
-      +   throw new Error('User not found');
-      + }
-      + return user.email;
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "Race condition in concurrent order processing"
-    file: "src/services/orders.ts"
-    line: 45
-    range: "45-78"
-    category: "Bugs"
-    severity: "Critical"
-    description: "Multiple concurrent requests can process the same order twice"
-    conditions: "When two requests hit processOrder simultaneously for same orderId"
-    impact: "Duplicate charges, inventory inconsistency"
-    fix_type: "prompt"
-    fix_prompt: "Add distributed locking to processOrder in src/services/orders.ts:45-78. Use Redis-based lock with orderId as key, 30-second TTL, and retry logic. Wrap the entire order processing in a try-finally to ensure lock release."
-```
-
-## Gaps Mode Behavior
-
-**Focus Areas (subtle issues thorough mode misses):**
-- Boundary conditions (empty arrays, zero values, max values)
-- Race conditions in concurrent code
-- State management issues (stale state, incorrect updates)
-- Resource cleanup failures in error paths
-- Time-of-check to time-of-use issues
-- Integer overflow/underflow
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > Bug Detection" for exclusions.

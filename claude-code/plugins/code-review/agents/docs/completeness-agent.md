@@ -14,15 +14,9 @@ Analyze documentation for coverage gaps and missing content.
 
 **Completeness-specific modes:**
 - **thorough**: All standard sections, feature coverage, setup completeness, error documentation
-- **gaps**: Edge cases, implicit assumptions, undocumented defaults, missing caveats
+- **gaps**: Undocumented edge cases in documented features, missing caveats and limitations, implicit assumptions about user environment, default values differing from common expectations, platform-specific behavior variations, error recovery steps. Duplicate detection: skip issues about same missing section already reported; skip same feature's documentation already flagged.
 
 **Note:** This agent does not support quick mode.
-
-## Input
-
-**Agent-specific:** Project type detection for expected documentation sections.
-
-**Cross-file discovery:** Scan codebase for exported APIs, CLI commands, configuration options.
 
 ## Review Process
 
@@ -120,7 +114,9 @@ For each gap found, report:
 
 ## Output Schema
 
-**Completeness-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Completeness-specific extra fields:**
 
 ```yaml
 issues:
@@ -128,62 +124,3 @@ issues:
     missing_type: "section|api|config|example|error_handling|prerequisite"
     related_code: "Path to code that should be documented (if applicable)"
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Missing environment variable documentation"
-    file: "README.md"
-    line: 45
-    category: "Completeness"
-    severity: "Major"
-    description: "DATABASE_URL environment variable is required but not documented in setup instructions"
-    missing_type: "config"
-    related_code: "src/db/connection.ts:5"
-    fix_type: "diff"
-    fix_diff: |
-      + ## Environment Variables
-      +
-      + | Variable | Required | Description |
-      + |----------|----------|-------------|
-      + | DATABASE_URL | Yes | PostgreSQL connection string |
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "No troubleshooting section"
-    file: "docs/getting-started.md"
-    line: 150
-    category: "Completeness"
-    severity: "Major"
-    description: "Documentation lacks troubleshooting section. Users report common issues with port conflicts and database connections but have no guide."
-    missing_type: "section"
-    fix_type: "prompt"
-    fix_prompt: "Add a Troubleshooting section at the end of docs/getting-started.md. Include: 1) Port already in use (how to change port), 2) Database connection failed (check DATABASE_URL, verify Postgres running), 3) Missing dependencies (run npm install again). Format as FAQ with Problem/Solution pairs."
-```
-
-## Gaps Mode Behavior
-
-When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
-
-**Duplicate Detection:**
-- Skip issues about same missing section already reported
-- Skip same feature's documentation already flagged
-
-**Focus Areas (subtle issues thorough mode misses):**
-- Undocumented edge cases in documented features
-- Missing caveats and limitations
-- Implicit assumptions about user environment
-- Default values that differ from common expectations
-- Platform-specific behavior variations
-- Error recovery steps
-
-**Constraints:**
-- Only report Major or Critical severity (skip Minor/Suggestion)
-- Maximum 5 new findings
-- Model: Always Sonnet (cost optimization)
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Completeness" for exclusions.

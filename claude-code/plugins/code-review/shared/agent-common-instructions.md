@@ -8,7 +8,11 @@ This document contains shared instructions for all review agents. Agents referen
 - [Using skill_instructions](#using-skill_instructions)
 - [Using Tiered Context](#using-tiered-context)
 - [MODE Parameter (Common)](#mode-parameter-common)
+- [Language-Specific Checks](#language-specific-checks)
 - [False Positive Rules](#false-positive-rules)
+  - [Do NOT Flag](#do-not-flag)
+  - [Deep vs Quick Review Differences](#deep-vs-quick-review-differences)
+  - [Category-Specific False Positive Rules](#category-specific-false-positive-rules)
 - [Gaps Mode Behavior Template](#gaps-mode-behavior-template)
 - [Pre-Existing Issue Detection](#pre-existing-issue-detection-for-stageddiff-reviews)
 - [Output Schema](#output-schema)
@@ -69,11 +73,67 @@ All review agents accept a MODE parameter that controls review depth:
 
 See each agent file for mode-specific focus areas.
 
+## Language-Specific Checks
+
+When the detected project type includes a specific language, check the corresponding language file for category-specific patterns:
+
+- **Node.js/TypeScript:** `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#[your-category]`
+- **.NET/C#:** `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md#[your-category]`
+- **React:** `${CLAUDE_PLUGIN_ROOT}/languages/react.md#[your-category]` (extends Node.js)
+
 ## False Positive Rules
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` "False Positive Rules" section for the complete list of issues that should NOT be flagged.
+Issues that should NOT be flagged by review agents.
 
-See each agent file for category-specific false positive exclusions.
+### Do NOT Flag
+
+#### Correct Code
+
+- Code that handles edge cases in non-obvious but valid ways
+- Intentional patterns that look unusual but serve a purpose
+- Something that appears to be a bug but is actually correct behavior
+
+#### Linter Territory
+
+- Formatting issues covered by prettier/eslint/other formatters
+- Import ordering or unused import warnings
+- Issues that a linter will catch (do not run the linter to verify)
+
+#### Pedantic Concerns
+
+- Minor formatting inconsistencies
+- Nitpicks that a senior engineer would not flag
+- Style preferences that don't affect functionality
+
+#### Pre-existing Issues
+
+- Issues in files with changes that existed before these changes
+- Issues in the codebase that are not related to the current changes
+- Pre-existing code patterns that weren't modified
+
+#### Scope Limitations
+
+- General code quality concerns unless explicitly required in AI Agent Instructions
+- Issues in test code or development-only paths unless specifically reviewing tests
+- Suggestions for features or patterns not in scope
+- Theoretical edge cases that are extremely unlikely in practice
+
+#### Silenced Issues
+
+- Code with lint-disable comments for specific rules
+- Intentionally suppressed warnings with documented reasons
+- Issues mentioned in AI Agent Instructions but explicitly silenced in code
+
+### Deep vs Quick Review Differences
+
+**Deep review** can flag more issues but should still avoid pre-existing issues, silenced issues, and pure style preferences.
+
+**Quick review** is optimized for speed: focus only on blocking issues, ignore minor style concerns, skip theoretical edge cases.
+
+### Category-Specific False Positive Rules
+
+- **Code reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` "Category-Specific False Positive Rules > [Your Category]"
+- **Docs reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > [Your Category]"
 
 ## Gaps Mode Behavior Template
 
@@ -85,7 +145,7 @@ When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid d
 - Skip same issue type on same function/method
 - For range findings (lines A-B): skip zone = [A-5, B+5]
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` lines 80-86 for the complete `previous_findings` schema.
+See `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` lines 80-86 for the complete `previous_findings` schema.
 
 ### Constraints (Common to All Gaps Agents)
 
@@ -95,7 +155,8 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` lines 80-86 for t
 
 ### Gaps-Supporting Agents
 
-Only these agents support gaps mode: bug-detection, compliance, performance, security, technical-debt.
+**Code review:** bug-detection, compliance, performance, security, technical-debt.
+**Documentation review:** accuracy, completeness, consistency.
 
 See each agent file for category-specific focus areas (what subtle issues thorough mode misses).
 
@@ -150,3 +211,31 @@ Use the YAML schema shown in your agent's examples. Each issue requires these ba
 See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for severity classification rules.
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for the authoritative output schema reference used during output generation.
+
+**Canonical example (both fix types):**
+
+```yaml
+issues:
+  - title: "Brief descriptive title"
+    file: "src/path/to/file.ts"
+    line: 23
+    range: "23-25"  # null for single-line
+    category: "Category Name"
+    severity: "Critical|Major|Minor|Suggestion"
+    description: "Detailed explanation of the issue"
+    # Add agent-specific extra fields here (see your agent file)
+    fix_type: "diff"
+    fix_diff: |
+      - const old = badCode();
+      + const fixed = goodCode();
+
+  - title: "Multi-location structural issue"
+    file: "src/path/to/file.ts"
+    line: 45
+    range: "45-89"
+    category: "Category Name"
+    severity: "Major"
+    description: "Issue requiring structural changes across multiple locations"
+    fix_type: "prompt"
+    fix_prompt: "Description of what to change and where. Include specific files, line ranges, and the approach."
+```

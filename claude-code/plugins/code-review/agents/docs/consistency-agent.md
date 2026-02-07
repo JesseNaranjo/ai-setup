@@ -14,13 +14,9 @@ Analyze documentation for uniformity in terminology, formatting, and style.
 
 **Consistency-specific modes:**
 - **thorough**: Full terminology scan, formatting rules, voice analysis, naming conventions
-- **gaps**: Subtle inconsistencies, near-synonyms, minor formatting variations
+- **gaps**: Near-synonyms that aren't obvious duplicates, subtle capitalization differences in mid-sentence, inconsistent spacing around punctuation, varying placeholder patterns in examples, inconsistent emphasis (bold vs italics for similar purposes). Duplicate detection: skip terminology pairs already flagged; skip formatting categories already addressed.
 
 **Note:** This agent does not support quick mode.
-
-## Input
-
-**Agent-specific:** Style guide reference if available (from CONTRIBUTING.md or similar).
 
 ## Review Process
 
@@ -106,7 +102,9 @@ For each inconsistency found, report:
 
 ## Output Schema
 
-**Consistency-specific fields:**
+See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+
+**Consistency-specific extra fields:**
 
 ```yaml
 issues:
@@ -117,65 +115,3 @@ issues:
     recommended: "Recommended canonical form"
     other_locations: ["file:line", "file:line"]  # Other occurrences
 ```
-
-**Example with diff fix**:
-```yaml
-issues:
-  - title: "Inconsistent terminology: 'config' vs 'configuration'"
-    file: "docs/setup.md"
-    line: 23
-    category: "Consistency"
-    severity: "Minor"
-    description: "Documentation uses both 'config' and 'configuration' interchangeably. 'configuration' is used 12 times, 'config' 5 times."
-    consistency_type: "terminology"
-    variant_a: "config"
-    variant_b: "configuration"
-    recommended: "configuration"
-    other_locations: ["docs/setup.md:45", "docs/api.md:12", "README.md:34"]
-    fix_type: "diff"
-    fix_diff: |
-      - Create a config file in the root directory.
-      + Create a configuration file in the root directory.
-```
-
-**Example with prompt fix**:
-```yaml
-issues:
-  - title: "Inconsistent heading capitalization"
-    file: "docs/"
-    line: 1
-    category: "Consistency"
-    severity: "Minor"
-    description: "Headings use both Title Case and Sentence case across documentation. 60% use Title Case, 40% use Sentence case."
-    consistency_type: "formatting"
-    variant_a: "Title Case Headings"
-    variant_b: "Sentence case headings"
-    recommended: "Sentence case headings"
-    other_locations: ["docs/setup.md:1,15,30", "docs/api.md:1,20", "README.md:5,10,15"]
-    fix_type: "prompt"
-    fix_prompt: "Standardize all headings to sentence case across the documentation. In docs/setup.md, docs/api.md, and README.md, change Title Case headings to Sentence case (capitalize only first word and proper nouns). Example: 'Getting Started Guide' → 'Getting started guide', but keep proper nouns like 'Docker' capitalized."
-```
-
-## Gaps Mode Behavior
-
-When MODE=gaps, this agent receives `previous_findings` from thorough mode to avoid duplicates.
-
-**Duplicate Detection:**
-- Skip terminology pairs already flagged
-- Skip formatting categories already addressed
-
-**Focus Areas (subtle issues thorough mode misses):**
-- Near-synonyms that aren't obvious duplicates
-- Subtle capitalization differences in mid-sentence
-- Inconsistent spacing around punctuation
-- Varying placeholder patterns in examples
-- Inconsistent emphasis (bold vs italics for similar purposes)
-
-**Constraints:**
-- Only report Major or Critical severity (skip Minor/Suggestion)
-- Maximum 5 new findings
-- Model: Always Sonnet (cost optimization)
-
-## False Positive Guidelines
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md` "Category-Specific False Positive Rules > Consistency" for exclusions.

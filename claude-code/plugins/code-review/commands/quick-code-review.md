@@ -47,7 +47,7 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 
 See:
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/agent-invocation-pattern.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
 
 ### Review Phase (4 agents in parallel)
 
@@ -68,7 +68,6 @@ Launch 4 agents with **quick** mode. See `orchestration-sequence.md` for model a
 
 **CRITICAL: Synthesis receives ALL findings from prior phases. Do NOT launch until prior phases are FULLY COMPLETE.**
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/synthesis-invocation-pattern.md` for invocation format.
 See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for category pairs.
 
 Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
