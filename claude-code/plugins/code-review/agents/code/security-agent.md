@@ -1,7 +1,7 @@
 ---
 name: security-agent
 description: Detects injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, OWASP top 10 issues, and other security concerns. Use for security review, vulnerability audit, or secret scanning.
-model: opus  # See orchestration-sequence.md Code Review Model Selection table
+model: opus  # See review-orchestration-code.md Code Review Model Selection table
 color: purple
 tools: ["Read", "Grep", "Glob"]
 ---

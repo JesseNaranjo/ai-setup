@@ -124,7 +124,7 @@ When `--skills` is provided, the orchestrator interprets the resolved skills and
 - If a skill has `primary_agent: "security-agent"` and security-agent is in `skip_agents`, the orchestrator may warn but does not auto-override
 - Explicit user configuration takes precedence
 
-**Model Selection:** Skills do not change the model selection per agent. The authoritative model table in `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` always applies.
+**Model Selection:** Skills do not change the model selection per agent. The authoritative model table in `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` always applies.
 
 **Generation Rules:**
 | Agent | Receives From |
@@ -153,7 +153,7 @@ When `--skills` is provided, the orchestrator interprets the resolved skills and
 
 ## Synthesis Phase Adjustments
 
-Use the standard questions from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`. With skills active, add skill-specific questions:
+Use the standard questions from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. With skills active, add skill-specific questions:
 - `reviewing-security`: "Do findings align with OWASP categories?"
 - `reviewing-performance`: "Are performance issues in hot paths?"
 - Methodology skills don't affect synthesis questions

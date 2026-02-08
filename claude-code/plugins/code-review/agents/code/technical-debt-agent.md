@@ -1,7 +1,7 @@
 ---
 name: technical-debt-agent
 description: Detects deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt. Use for tech debt assessment or code modernization.
-model: opus  # See orchestration-sequence.md Code Review Model Selection table
+model: opus  # See review-orchestration-code.md Code Review Model Selection table
 color: brown
 tools: ["Read", "Grep", "Glob"]
 ---

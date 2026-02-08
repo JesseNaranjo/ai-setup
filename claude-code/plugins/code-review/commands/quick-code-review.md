@@ -46,12 +46,12 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 ## Step 7: 4-Agent Quick Review
 
 See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Code Review Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for phase definitions and **Code Review Model Selection** table
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for Task invocation template
 
 ### Review Phase (4 agents in parallel)
 
-Launch 4 agents with **quick** mode. See `orchestration-sequence.md` for model assignments.
+Launch 4 agents with **quick** mode. See `review-orchestration-code.md` for model assignments.
 
 **Agents**: Bug Detection (Opus), Security (Opus), Error Handling (Sonnet), Test Coverage (Sonnet)
 
@@ -68,15 +68,15 @@ Launch 4 agents with **quick** mode. See `orchestration-sequence.md` for model a
 
 **CRITICAL: Synthesis receives ALL findings from prior phases. Do NOT launch until prior phases are FULLY COMPLETE.**
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for category pairs.
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for category pairs.
 
-Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`.
+Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 
 ## Steps 9-12: Validation, Aggregation, Output
 
-Validate per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` and `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
+Validate per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
 
 **Output config:** Review Type: "Quick (7 invocations)", Categories: 4 only
 **Note:** Quick review should be extra conservative - skip theoretical edge cases.

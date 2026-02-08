@@ -1,7 +1,7 @@
 ---
 name: test-coverage-agent
 description: Identifies missing tests, test quality issues, edge cases not covered, and provides specific test recommendations. Use for test coverage gaps or test recommendations.
-model: sonnet  # See orchestration-sequence.md Code Review Model Selection table
+model: sonnet  # See review-orchestration-code.md Code Review Model Selection table
 color: white
 tools: ["Read", "Grep", "Glob"]
 ---

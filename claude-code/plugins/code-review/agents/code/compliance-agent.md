@@ -1,7 +1,7 @@
 ---
 name: compliance-agent
 description: Reviews adherence to project-specific coding standards, CLAUDE.md guidelines, and AI agent instruction files. Use for standards compliance or convention checks.
-model: sonnet  # See orchestration-sequence.md Code Review Model Selection table
+model: sonnet  # See review-orchestration-code.md Code Review Model Selection table
 color: blue
 tools: ["Read", "Grep", "Glob"]
 ---

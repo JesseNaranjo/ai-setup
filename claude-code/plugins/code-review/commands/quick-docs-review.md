@@ -80,8 +80,8 @@ Gather:
 ## Step 7: Quick Review
 
 See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` "Documentation Review Orchestration" for phase definitions and **Documentation Review Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for phase definitions and **Documentation Review Model Selection** table
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` for Task invocation template
 
 ### Review (4 agents in parallel)
 
@@ -108,7 +108,7 @@ Pass to all agents:
 
 **CRITICAL: DO NOT START Synthesis until the Review phase (Step 7) is FULLY COMPLETE.**
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` "Documentation Review Orchestration" for synthesis pairs.
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for synthesis pairs.
 
 Launch 3 synthesis agents with category pairs:
 - Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
@@ -119,7 +119,7 @@ Launch 3 synthesis agents with category pairs:
 
 ## Step 9: Validation
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` and `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md`:
+Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md`:
 - Filter false positives
 - Verify issue locations exist
 - Remove duplicates

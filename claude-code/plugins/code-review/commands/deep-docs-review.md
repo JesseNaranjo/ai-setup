@@ -82,12 +82,12 @@ Gather:
 ## Step 7: Two-Phase Deep Review
 
 See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` "Documentation Review Orchestration" for phase definitions and **Documentation Review Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for phase definitions and **Documentation Review Model Selection** table
+- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` for Task invocation template
 
 ### Phase 1: Thorough Review (6 agents in parallel)
 
-Launch all 6 documentation agents with **thorough** mode. See `orchestration-sequence.md` "Documentation Review Model Selection" for model assignments.
+Launch all 6 documentation agents with **thorough** mode. See `review-orchestration-docs.md` "Documentation Review Model Selection" for model assignments.
 
 **Agents**: Accuracy, Clarity, Completeness, Consistency, Examples, Structure
 
@@ -116,7 +116,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behav
 
 **CRITICAL: DO NOT START Synthesis until Phase 1 AND Phase 2 (Step 7) are FULLY COMPLETE.**
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` "Documentation Review Orchestration" for synthesis pairs.
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for synthesis pairs.
 
 Launch 4 synthesis agents with category pairs:
 - Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
@@ -128,7 +128,7 @@ Launch 4 synthesis agents with category pairs:
 
 ## Step 9: Validation
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` and `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md`:
+Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md`:
 - Filter false positives
 - Verify issue locations exist
 - Remove duplicates across agents

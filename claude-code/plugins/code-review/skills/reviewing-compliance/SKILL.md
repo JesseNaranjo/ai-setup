@@ -49,7 +49,7 @@ For rule classification (MUST/SHOULD/MAY keywords and severity mapping), see `re
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`.
 
 ---
 

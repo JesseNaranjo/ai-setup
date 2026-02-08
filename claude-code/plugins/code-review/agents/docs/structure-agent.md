@@ -1,7 +1,7 @@
 ---
 name: structure-agent
 description: Detects organization problems, broken links, navigation issues, heading hierarchy problems, and AI instruction file standardization violations. Use for doc structure review.
-model: sonnet  # See orchestration-sequence.md Documentation Review Model Selection table
+model: sonnet  # See review-orchestration-docs.md Documentation Review Model Selection table
 color: purple
 tools: ["Read", "Grep", "Glob"]
 ---

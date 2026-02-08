@@ -1,7 +1,7 @@
 ---
 name: bug-detection-agent
 description: Detects runtime errors, null references, off-by-one errors, boundary conditions, race conditions, and state management issues. Use for bug hunting, edge cases, or logical errors.
-model: opus  # See orchestration-sequence.md Code Review Model Selection table
+model: opus  # See review-orchestration-code.md Code Review Model Selection table
 color: red
 tools: ["Read", "Grep", "Glob"]
 ---

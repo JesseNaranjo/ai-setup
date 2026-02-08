@@ -384,19 +384,17 @@ code-review/
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
 │   ├── agent-common-instructions.md # Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema)
-│   ├── invocation-patterns.md       # Task invocation patterns (agents + synthesis)
 │   ├── context-discovery.md         # Context discovery instructions
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
-│   ├── orchestration-sequence.md    # Phase definitions and model selection (code + docs)
-│   ├── output-format.md             # Output schema, templates, and generation process
+│   ├── output-format.md             # Output schema, templates, generation process, severity definitions
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns
 │   ├── settings-loader.md           # Settings loading and application
-│   ├── severity-definitions.md      # Severity classification
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation and content gathering for staged commands
-│   ├── validation-rules.md          # Validation process
-│   ├── validation-rules-code.md     # Code review auto-validation and false positives
-│   ├── validation-rules-docs.md     # Docs review auto-validation and false positives
+│   ├── validation-rules-code.md     # Code review validation process, auto-validation, false positives
+│   ├── validation-rules-docs.md     # Docs review validation process, auto-validation, false positives
 │   └── references/                  # Detailed reference content
 │       ├── complete-output-example.md # Complete output format example
 │       └── skill-troubleshooting.md # Common issues and solutions

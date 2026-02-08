@@ -129,20 +129,18 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
-│   ├── orchestration-sequence.md    # Phase definitions and model selection for code + docs (authoritative)
-│   ├── invocation-patterns.md       # Task invocation patterns (agents + synthesis)
 │   ├── agent-common-instructions.md # Common MODE, false positives, gaps, language checks, pre-existing issue detection, output schema
-│   ├── settings-loader.md           # Settings loading and application
-│   ├── file-processing.md           # File-based input validation and content gathering
-│   ├── staged-processing.md         # Staged input validation and content gathering
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── docs-processing.md             # Docs input validation and content gathering
+│   ├── docs-processing.md           # Docs input validation and content gathering
+│   ├── file-processing.md           # File-based input validation and content gathering
+│   ├── output-format.md             # Output templates, generation process, severity definitions
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns
+│   ├── settings-loader.md           # Settings loading and application
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
-│   ├── validation-rules.md          # Validation process
-│   ├── validation-rules-code.md       # Code review auto-validation and false positives
-│   ├── validation-rules-docs.md       # Docs review auto-validation and false positives
-│   ├── output-format.md             # Output templates, generation process (with fix_type)
-│   ├── severity-definitions.md      # Severity classification
+│   ├── staged-processing.md         # Staged input validation and content gathering
+│   ├── validation-rules-code.md     # Code review validation process, auto-validation, false positives
+│   ├── validation-rules-docs.md     # Docs review validation process, auto-validation, false positives
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
 │       └── skill-troubleshooting.md # Common issues and solutions
@@ -154,8 +152,8 @@ claude-code/plugins/code-review/
 ### Agent Configuration
 
 See the following files for authoritative agent configuration:
-- `shared/orchestration-sequence.md` - Model selection table, phase definitions, language-specific focus
-- `shared/invocation-patterns.md` - Task invocation patterns (agents + synthesis)
+- `shared/review-orchestration-code.md` - Code review: model selection, phase definitions, invocation patterns, language-specific focus
+- `shared/review-orchestration-docs.md` - Docs review: model selection, phase definitions, invocation patterns
 - `shared/agent-common-instructions.md` - Common MODE, false positives, language checks, gaps behavior, pre-existing issue detection, output schema
 
 ### Agent Colors
@@ -211,6 +209,20 @@ There are more agents than available colors. When assigning colors:
 3. **Synthesis** (5 agents parallel): Cross-cutting concern detection
 4. **Validation**: All issues validated before output
 
+### Gaps Mode Agent Selection Rationale
+
+**Selected agents:** bug-detection, compliance, performance, security, technical-debt
+
+**Rationale:**
+1. **High complexity domains**: Security, performance, and bugs have many subtle edge cases that benefit from a second pass with fresh perspective
+2. **Domain overlap potential**: Compliance and technical-debt often surface issues that other agents might frame differently
+3. **Cost-benefit analysis**: These 5 agents provide the best coverage-to-cost ratio for gaps analysis
+
+**Excluded agents:** api-contracts, architecture, error-handling, test-coverage
+- These domains have fewer subtle edge cases that benefit from gaps pass
+- Their issues are typically more binary (present/absent) rather than nuanced
+- Architecture and API contracts are better caught in thorough mode or synthesis
+
 ### MODE Parameter
 
 - **thorough**: Comprehensive review, check all issues
@@ -228,8 +240,8 @@ There are more agents than available colors. When assigning colors:
 - `agents/docs/*.md` - Documentation review agent definitions
 - `languages/*.md` - Language-specific checks and patterns
 - `commands/*.md` - Self-contained orchestration documents (inline common steps, reference shared/)
-- `shared/orchestration-sequence.md` - Phase definitions, model selection table (authoritative)
-- `shared/invocation-patterns.md` - Task invocation patterns (agents + synthesis)
+- `shared/review-orchestration-code.md` - Code review: phases, model selection, invocation patterns, language-specific focus
+- `shared/review-orchestration-docs.md` - Docs review: phases, model selection, invocation patterns
 - `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema)
 - `shared/settings-loader.md` - Settings loading and application
 - `shared/file-processing.md` - Input validation and content gathering for file-based commands
@@ -237,11 +249,9 @@ There are more agents than available colors. When assigning colors:
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
 - `shared/docs-processing.md` - Input validation and content gathering for docs commands
 - `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
-- `shared/validation-rules.md` - Issue validation process
-- `shared/validation-rules-code.md` - Code review auto-validation patterns and false positives
-- `shared/validation-rules-docs.md` - Docs review auto-validation patterns and false positives
-- `shared/output-format.md` - Output formatting, templates, and generation process (with fix_type)
-- `shared/severity-definitions.md` - Severity classification (Critical, Major, Minor, Suggestion)
+- `shared/validation-rules-code.md` - Code review validation process, auto-validation, and false positives
+- `shared/validation-rules-docs.md` - Docs review validation process, auto-validation, and false positives
+- `shared/output-format.md` - Output formatting, templates, generation process, severity definitions
 - `skills/*/SKILL.md` - Skill definitions
 - `templates/code-review.local.md.example` - User settings template
 
@@ -275,19 +285,18 @@ When modifying the plugin:
 
 1. **Agent behavior**: Edit agent files in `agents/code/` or `agents/docs/`
 2. **Language-specific checks**: Edit files in `languages/` directory
-3. **Validation rules (shared)**: Edit `shared/validation-rules.md`
-4. **Validation rules (code-specific)**: Edit `shared/validation-rules-code.md`
-5. **Validation rules (docs-specific)**: Edit `shared/validation-rules-docs.md`
-6. **Output format/generation**: Edit `shared/output-format.md`
-7. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection for both code and docs reviews, language-specific focus)
-8. **Agent invocation patterns**: Edit `shared/invocation-patterns.md`
-9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks, gaps, pre-existing issue detection)
-10. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
-11. **Command arguments**: Edit command YAML frontmatter in `commands/`
-12. **Skills**: Edit skill files in `skills/*/SKILL.md`
-13. **Skill references**: Add detailed patterns to `skills/*/references/`
-14. **Skill examples**: Add sample outputs to `skills/*/examples/`
-15. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
+3. **Validation rules (code)**: Edit `shared/validation-rules-code.md`
+4. **Validation rules (docs)**: Edit `shared/validation-rules-docs.md`
+5. **Output format/generation**: Edit `shared/output-format.md` (includes severity definitions)
+6. **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus)
+7. **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns)
+8. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks, gaps, pre-existing issue detection)
+9. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
+10. **Command arguments**: Edit command YAML frontmatter in `commands/`
+11. **Skills**: Edit skill files in `skills/*/SKILL.md`
+12. **Skill references**: Add detailed patterns to `skills/*/references/`
+13. **Skill examples**: Add sample outputs to `skills/*/examples/`
+14. **Settings options**: Edit `shared/settings-loader.md` and `templates/code-review.local.md.example`
 
 ## Coding Conventions
 
@@ -296,7 +305,7 @@ When modifying the plugin:
 **REQUIRED:** Always list agents, categories, and similar items in alphabetical order to avoid preferential treatment or implicit assumptions.
 
 Apply alphabetical ordering to:
-- Agent listings in orchestration documents (e.g., `orchestration-sequence.md`)
+- Agent listings in orchestration documents (e.g., `review-orchestration-code.md`)
 - Category pairs in synthesis configurations (order by first category)
 - Tables with agent/skill names (e.g., Agent Colors table, Model Selection table)
 - Bullet lists of agents or categories
@@ -366,7 +375,7 @@ Plugin files use two distinct path reference patterns based on the official Anth
 Use `${CLAUDE_PLUGIN_ROOT}` for references that cross skill/component boundaries:
 
 ```markdown
-See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md` for validation rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md` for validation rules.
 See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#security` for Node.js checks.
 See `${CLAUDE_PLUGIN_ROOT}/agents/code/security-agent.md` for agent definition.
 ```

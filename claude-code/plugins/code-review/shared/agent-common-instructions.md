@@ -111,7 +111,7 @@ When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid d
 - Skip same issue type on same function/method
 - For range findings (lines A-B): skip zone = [A-5, B+5]
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` Prompt Schema table (`previous_findings` field) for the schema.
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` Prompt Schema table (`previous_findings` field) for the schema.
 
 ### Constraints (Common to All Gaps Agents)
 
@@ -174,33 +174,6 @@ Use the YAML schema shown in your agent's examples. Each issue requires these ba
 - `fix_type`: "diff" or "prompt"
 - `fix_diff` or `fix_prompt`: The suggested fix
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/severity-definitions.md` for severity classification rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md#severity-definitions` for severity classification rules.
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for the authoritative output schema reference used during output generation.
-
-**Canonical example (both fix types):**
-
-```yaml
-issues:
-  - title: "Brief descriptive title"
-    file: "src/path/to/file.ts"
-    line: 23
-    range: "23-25"
-    category: "Category Name"
-    severity: "Critical"
-    description: "Detailed explanation of the issue"
-    fix_type: "diff"
-    fix_diff: |
-      - const old = badCode();
-      + const fixed = goodCode();
-
-  - title: "Multi-location structural issue"
-    file: "src/path/to/file.ts"
-    line: 45
-    range: "45-89"
-    category: "Category Name"
-    severity: "Major"
-    description: "Issue requiring structural changes"
-    fix_type: "prompt"
-    fix_prompt: "Description of what to change and where. Include specific files, line ranges, and the approach."
-```

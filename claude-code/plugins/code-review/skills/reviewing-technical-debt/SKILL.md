@@ -55,7 +55,7 @@ Uses thorough mode with focus areas below.
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules.md`.
+High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`.
 
 ---
 

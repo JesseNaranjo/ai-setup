@@ -1,7 +1,7 @@
 ---
 name: performance-agent
 description: Detects algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, excessive allocations, and hot path inefficiencies. Use for performance review, optimization, or latency issues.
-model: opus  # See orchestration-sequence.md Code Review Model Selection table
+model: opus  # See review-orchestration-code.md Code Review Model Selection table
 color: green
 tools: ["Read", "Grep", "Glob"]
 ---
