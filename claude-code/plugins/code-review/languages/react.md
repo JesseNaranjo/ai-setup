@@ -159,8 +159,4 @@ Apply when Next.js is detected by context-discovery (presence of `next` in deps)
 
 ## Language Server Integration
 
-React projects inherit TypeScript LSP integration from Node.js. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` "Language Server Integration" section for:
-- LSP plugin detection
-- LSP-enhanced capabilities
-- Diagnostic code mapping
-- Agent usage guidelines
+> **LSP Integration:** React projects inherit TypeScript LSP integration from Node.js. See `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for details.

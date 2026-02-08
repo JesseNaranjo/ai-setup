@@ -1,6 +1,6 @@
 ---
 name: reviewing-technical-debt
-description: Use when user mentions "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", or "legacy code review".
+description: Detects deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt. Use when user mentions "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", or "legacy code review".
 ---
 
 # Technical Debt Code Review Skill
@@ -55,7 +55,7 @@ Uses thorough mode with focus areas below.
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`.
+High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 

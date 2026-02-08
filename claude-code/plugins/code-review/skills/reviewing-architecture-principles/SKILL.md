@@ -1,6 +1,6 @@
 ---
 name: reviewing-architecture-principles
-description: Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", or "architecture principles review".
+description: Detects coupling problems, SOLID/DRY/YAGNI violations, anti-patterns, and file organization issues. Use when user mentions "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", or "architecture principles review".
 ---
 
 # Architecture Principles Review Skill
@@ -122,7 +122,7 @@ When reviewing directories, automatically prioritize:
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`.
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 

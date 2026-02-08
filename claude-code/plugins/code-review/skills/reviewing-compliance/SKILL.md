@@ -1,6 +1,6 @@
 ---
 name: reviewing-compliance
-description: Use when user mentions "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", or "check naming conventions".
+description: Reviews adherence to project-specific coding standards, CLAUDE.md guidelines, and AI agent instruction files. Use when user mentions "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", or "check naming conventions".
 ---
 
 # Compliance Code Review Skill
@@ -49,7 +49,7 @@ For rule classification (MUST/SHOULD/MAY keywords and severity mapping), see `re
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`.
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 

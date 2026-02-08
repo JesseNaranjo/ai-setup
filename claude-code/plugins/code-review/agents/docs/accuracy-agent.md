@@ -93,7 +93,7 @@ For each inaccuracy found, report:
 
 ## Output Schema
 
-See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
 
 **Accuracy-specific extra fields:**
 

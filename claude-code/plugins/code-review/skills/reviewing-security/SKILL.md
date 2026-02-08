@@ -1,6 +1,6 @@
 ---
 name: reviewing-security
-description: Use when user mentions "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", or "OWASP check".
+description: Detects injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, and OWASP top 10 issues. Use when user mentions "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", or "OWASP check".
 ---
 
 # Security Code Review Skill
@@ -48,7 +48,7 @@ Uses thorough mode with focus areas below.
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`.
+High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 

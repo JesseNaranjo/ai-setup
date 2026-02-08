@@ -1,6 +1,6 @@
 ---
 name: reviewing-performance
-description: Use when user mentions "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", or "latency issues".
+description: Detects algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, and hot path inefficiencies. Use when user mentions "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", or "latency issues".
 ---
 
 # Performance Code Review Skill
@@ -56,7 +56,7 @@ Uses thorough mode with focus areas below.
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`.
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 

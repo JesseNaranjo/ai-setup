@@ -383,20 +383,17 @@ code-review/
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
-│   ├── agent-common-instructions.md # Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema)
-│   ├── context-discovery.md         # Context discovery instructions
+│   ├── agent-common-instructions.md # Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema, severity definitions)
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
-│   ├── output-format.md             # Output schema, templates, generation process, severity definitions
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns
-│   ├── settings-loader.md           # Settings loading and application
+│   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, validation rules, output format
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, validation rules, output format
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation and content gathering for staged commands
-│   ├── validation-rules-code.md     # Code review validation process, auto-validation, false positives
-│   ├── validation-rules-docs.md     # Docs review validation process, auto-validation, false positives
 │   └── references/                  # Detailed reference content
 │       ├── complete-output-example.md # Complete output format example
+│       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
 │       └── skill-troubleshooting.md # Common issues and solutions
 └── README.md
 ```
@@ -500,7 +497,7 @@ Detected by presence of `*.csproj` or `*.sln`. See `languages/dotnet.md` for:
 
 ## Output Format
 
-See `shared/output-format.md` for complete output templates.
+See the "Output Format" section in `shared/review-orchestration-code.md` for complete output templates.
 
 ### Summary Table
 

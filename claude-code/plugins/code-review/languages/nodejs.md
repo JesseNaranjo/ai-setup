@@ -54,76 +54,7 @@ Detect runtime environment for runtime-specific checks:
 
 ## Language Server Integration (Optional)
 
-When the `typescript-lsp` plugin is available, agents can leverage real TypeScript compiler diagnostics for enhanced accuracy. This supplements (does not replace) pattern-based detection.
-
-### LSP Plugin Detection
-
-Check for TypeScript LSP availability:
-- Plugin installed: `typescript-lsp` in enabled plugins
-- Server running: TypeScript Language Server process active
-
-### LSP-Enhanced Capabilities
-
-| Capability | LSP Method | Review Enhancement |
-|------------|------------|-------------------|
-| Type errors | `textDocument/diagnostic` | Precise null/undefined detection, missing properties |
-| Unused symbols | `textDocument/diagnostic` | Accurate dead code detection |
-| Go to definition | `textDocument/definition` | Track cross-file references, circular imports |
-| Find references | `textDocument/references` | Identify all usages, unused exports |
-| Type information | `textDocument/hover` | Get exact types for API contract validation |
-
-### Diagnostic Code Mapping
-
-Map TypeScript diagnostics to review categories:
-
-| TS Code | Category | Description |
-|---------|----------|-------------|
-| TS2304 | Architecture | Cannot find name (missing import) |
-| TS2307 | Architecture | Cannot find module |
-| TS2322 | Bugs | Type mismatch in assignment |
-| TS2339 | Bugs | Property does not exist on type |
-| TS2345 | Bugs | Argument type mismatch |
-| TS2531 | Bugs | Object is possibly null |
-| TS2532 | Bugs | Object is possibly undefined |
-| TS2551 | Bugs | Property does not exist (did you mean?) |
-| TS2571 | Bugs | Object is of type 'unknown' |
-| TS2614 | Architecture | Module has no exported member |
-| TS2741 | Bugs | Property missing in type assignment |
-| TS2769 | Bugs | No overload matches this call |
-| TS6133 | Technical Debt | Unused variable/parameter |
-| TS6196 | Technical Debt | Unused declaration |
-| TS6198 | Technical Debt | All imports unused |
-| TS7006 | Architecture | Implicit any type |
-| TS7031 | Architecture | Implicit any in binding element |
-| TS7053 | Bugs | Element implicitly has 'any' type (index signature) |
-| TS18046 | Bugs | Value is 'unknown' |
-| TS18048 | Bugs | Value is possibly 'undefined' |
-
-### Agent Usage Guidelines
-
-When TypeScript LSP is available:
-
-1. **Prioritize LSP diagnostics** for type-related bugs (TS2322, TS2345, TS2531, TS2532)
-2. **Combine LSP + patterns** for security issues (LSP finds types, patterns find dangerous sinks)
-3. **Use LSP for cross-file analysis** when tracking imports, exports, and circular dependencies
-4. **Fall back to patterns** when LSP unavailable or for runtime-specific issues (Promise handling, event loop)
-
-### Example: Enhanced Null Detection
-
-**Pattern-only approach:**
-```typescript
-// Pattern: (?<![\?!])\.(\w+) after nullable
-user.profile.name  // May miss context
-```
-
-**LSP-enhanced approach:**
-```
-Diagnostic: TS2532 at line 15, column 5
-Message: Object is possibly 'undefined'
-Context: user.profile is Optional<Profile>
-```
-
-LSP provides precise location and type context unavailable to pattern matching.
+> **LSP Integration:** See `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for TypeScript LSP integration details.
 
 ## Category-Specific Checks
 

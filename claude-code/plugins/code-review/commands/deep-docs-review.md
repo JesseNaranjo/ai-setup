@@ -10,7 +10,7 @@ Perform a comprehensive documentation review using all 6 documentation agents (1
 
 Parse arguments from `$ARGUMENTS`:
 - Optional: One or more file paths (space-separated) - if omitted, discover all docs
-- Optional: `--output-file <path>` to specify output location (default: see `output-format.md` Filename Generation)
+- Optional: `--output-file <path>` to specify output location (default: see Filename Generation in review-orchestration-docs.md)
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
 
@@ -32,7 +32,7 @@ Before beginning the review workflow, invoke the following skills and pass their
 
 Load project-specific settings if `.claude/code-review.local.md` exists.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md`.
+See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1.
 
 ---
 
@@ -128,7 +128,7 @@ Launch 4 synthesis agents with category pairs:
 
 ## Step 9: Validation
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-docs.md`:
+Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Validation Rules":
 - Filter false positives
 - Verify issue locations exist
 - Remove duplicates across agents
@@ -146,14 +146,14 @@ Aggregate validated findings:
 
 ## Step 11: Output
 
-Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`.
+Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Output Format".
 
 **Output config:**
 - Review Type: "Deep Documentation Review (13 invocations)"
 - Categories: All 6 documentation categories
 - Include AI instruction file standardization section
 
-Write to the output file path (see `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for filename generation).
+Write to the output file path (see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Filename Generation").
 
 Report completion to user with summary:
 - Total issues found by severity

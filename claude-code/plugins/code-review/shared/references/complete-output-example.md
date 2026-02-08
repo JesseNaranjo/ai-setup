@@ -2,7 +2,7 @@
 
 This reference file contains a complete example showing all format elements together for code review output. This example is loaded on-demand when formatting final review results.
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for format specifications and rules.
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "Output Format" for format specifications and rules.
 
 **Note:** This file contains a complete example inside a code block. The example demonstrates all format elements: Summary Table, Critical/Major/Minor Issues, Suggestions, Test Recommendations, and Cross-Cutting Insights.
 

@@ -9,7 +9,7 @@ model: opus
 Perform a fast code review using 4 agents (7 invocations total) for staged git changes, focusing on bugs, security, error handling, and test coverage.
 
 Parse arguments from `$ARGUMENTS`:
-- Optional: `--output-file <path>` to specify output location (default: see `output-format.md` Filename Generation)
+- Optional: `--output-file <path>` to specify output location (default: see Filename Generation in review-orchestration-code.md)
 - Optional: `--language dotnet|nodejs|react` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
@@ -22,11 +22,11 @@ Invoke superpowers skills (using-superpowers, brainstorming, systematic-debuggin
 
 ## Step 2: Load Settings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/settings-loader.md`. If `.claude/code-review.local.md` has `enabled: false`, stop. Apply: `output_dir`, `skip_agents`, `min_severity`, `language`.
+See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. If `.claude/code-review.local.md` has `enabled: false`, stop. Apply: `output_dir`, `skip_agents`, `min_severity`, `language`.
 
 ## Step 4: Context Discovery
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/context-discovery.md`.
+See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
 
 ---
 
@@ -77,7 +77,7 @@ Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 
 ## Steps 9-12: Validation, Aggregation, Output
 
-Validate per `${CLAUDE_PLUGIN_ROOT}/shared/validation-rules-code.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
+Validate per `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "Code Review Validation Rules". Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "Output Format". Write to file.
 
 **Output config:** Review Type: "Quick (7 invocations)", Categories: 4 only
 **Note:** Quick review should be extra conservative - skip theoretical edge cases.

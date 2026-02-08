@@ -73,7 +73,7 @@ For each vulnerability found, report:
 
 ## Output Schema
 
-See `agent-common-instructions.md` Output Schema for base fields and canonical example.
+See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
 
 **Security-specific extra fields:**
 
