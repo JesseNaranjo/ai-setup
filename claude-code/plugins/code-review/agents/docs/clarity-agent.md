@@ -1,7 +1,7 @@
 ---
 name: clarity-agent
 description: Detects readability problems, unexplained jargon, audience mismatches, confusing explanations, and poor sentence structure. Use for doc clarity or readability review.
-model: sonnet  # See orchestration-sequence.md Model Selection table
+model: sonnet  # See orchestration-sequence.md Documentation Review Model Selection table
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 ---

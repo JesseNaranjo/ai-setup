@@ -2,24 +2,6 @@
 
 This document defines the validation process for issues found by review agents.
 
-## Contents
-
-- [Batch Validation Process](#batch-validation-process)
-  - [Grouping Strategy](#grouping-strategy)
-  - [Validator Model Assignment](#validator-model-assignment)
-  - [Quick Review Validation Scope](#quick-review-validation-scope)
-  - [Cross-Cutting Insight Validation](#cross-cutting-insight-validation)
-  - [Batch Validator Prompt](#batch-validator-prompt)
-  - [Auto-Validation (Skip Validation)](#auto-validation-skip-validation)
-  - [Auto-Validation Output](#auto-validation-output)
-  - [Common False Positives to Check](#common-false-positives-to-check)
-  - [Validation Output](#validation-output)
-- [Aggregation Rules](#aggregation-rules)
-  - [Remove Invalid Issues](#1-remove-invalid-issues)
-  - [Apply Severity Downgrades](#2-apply-severity-downgrades)
-  - [Deduplicate Issues](#3-deduplicate-issues)
-  - [Consensus Detection Algorithm](#4-consensus-detection-algorithm)
-
 ## Batch Validation Process
 
 To optimize cost and latency, issues are validated in batches grouped by file rather than individually.
@@ -87,31 +69,26 @@ Synthesis agents produce `cross_cutting_insights` that require special validatio
 
 **Skip validation for:** Issues in test files (unless explicitly testing production code paths), style suggestions without functional impact, and documentation suggestions.
 
-For each file with issues, launch ONE validator with all issues for that file:
+For each file with issues, launch ONE validator. Prompt schema:
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `file_path` | string | File being validated |
+| `issues_to_validate[].id` | integer | Sequential issue ID |
+| `issues_to_validate[].title` | string | Issue title |
+| `issues_to_validate[].line` | integer | Line number |
+| `issues_to_validate[].category` | string | Issue category |
+| `issues_to_validate[].severity` | string | Issue severity |
+| `issues_to_validate[].description` | string | Issue description |
+
+**Required return format:**
 
 ```yaml
-Validate these issues in {file_path}:
-
-issues_to_validate:
-  - id: 1
-    title: "{title}"
-    line: {line}
-    category: "{category}"
-    severity: "{severity}"
-    description: "{description}"
-
-  - id: 2
-    title: "{title}"
-    ...
-
-Return format (YAML):
 validations:
   - id: 1
     verdict: VALID|INVALID|DOWNGRADE
     new_severity: # only if DOWNGRADE
     reason: "brief explanation"
-  - id: 2
-    ...
 ```
 
 ### Auto-Validation (Skip Validation)
@@ -182,4 +159,3 @@ When multiple agents flag the same issue:
 1. **Group by file** and detect overlapping issues (same file, intersecting line ranges: NOT (L2 < M1 OR M2 < L1))
 2. **Build clusters** transitively (if A overlaps B and B overlaps C, cluster = {A, B, C})
 3. **Merge each cluster**: use highest severity, longest description, combined categories, and add badge (`[2 agents]` or `[3+ agents]`) prepended to title
-

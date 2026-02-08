@@ -1,7 +1,7 @@
 ---
 name: api-contracts-agent
 description: Detects breaking changes, backward compatibility problems, interface contract violations, inconsistent API patterns, and schema changes affecting consumers. Use for API review, breaking changes, or contract issues.
-model: sonnet  # See orchestration-sequence.md Model Selection table
+model: sonnet  # See orchestration-sequence.md Code Review Model Selection table
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 ---

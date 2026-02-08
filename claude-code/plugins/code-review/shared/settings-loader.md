@@ -6,14 +6,6 @@ Load and apply project-specific settings from `.claude/code-review.local.md`.
 
 Settings are loaded at command execution time, not at Claude Code startup. Changes to `.claude/code-review.local.md` take effect immediately on the next review command invocation - no restart required.
 
-## Settings File Location
-
-```
-project-root/
-└── .claude/
-    └── code-review.local.md    # Project-specific settings
-```
-
 ## Loading Process
 
 Before starting the review, check for settings:
@@ -34,7 +26,7 @@ enabled: true
 output_dir: "."
 skip_agents: []
 min_severity: "suggestion"
-language: ""
+language: ""  # auto-detect
 additional_test_patterns: []
 ---
 ```
@@ -59,19 +51,6 @@ Apply settings to the review process:
 
 Read the markdown body (after the YAML frontmatter) and pass it to all review agents as additional context under "Project-Specific Instructions".
 
-## Default Settings
-
-When no settings file exists:
-
-```yaml
-enabled: true
-output_dir: "."
-skip_agents: []
-min_severity: "suggestion"
-language: ""  # auto-detect
-additional_test_patterns: []
-```
-
 ## Settings Priority
 
 Command-line flags extend or override settings file:
@@ -81,36 +60,6 @@ Command-line flags extend or override settings file:
 3. `--prompt` appends to project instructions (does not replace)
 
 ## Example Usage
-
-### Skip Certain Agents
-
-```yaml
----
-skip_agents: ["architecture", "api-contracts"]
----
-```
-
-This project only needs bug, security, performance, compliance, error-handling, and test-coverage checks.
-
-### Focus on Critical Issues Only
-
-```yaml
----
-min_severity: "major"
----
-```
-
-Only report Critical and Major issues; skip Minor and Suggestions.
-
-### Custom Output Location
-
-```yaml
----
-output_dir: "./docs/reviews"
----
-```
-
-Save review files to `docs/reviews/` instead of project root.
 
 ### Provide Project Context
 
@@ -129,13 +78,4 @@ This is a high-security financial application. Pay extra attention to:
 ## Known Patterns
 
 We use a custom ORM that sanitizes inputs automatically. Calls to `db.query()` are safe.
-```
-
-## Gitignore
-
-Remind users to add to `.gitignore`:
-
-```gitignore
-# Claude Code plugin settings (user-specific)
-.claude/*.local.md
 ```

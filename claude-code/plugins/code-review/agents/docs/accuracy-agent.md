@@ -1,7 +1,7 @@
 ---
 name: accuracy-agent
 description: Detects code-documentation sync problems, factual errors, outdated version references, incorrect API signatures, and misleading technical claims. Use for doc accuracy review.
-model: opus  # See orchestration-sequence.md Model Selection table
+model: opus  # See orchestration-sequence.md Documentation Review Model Selection table
 color: red
 tools: ["Read", "Grep", "Glob"]
 ---

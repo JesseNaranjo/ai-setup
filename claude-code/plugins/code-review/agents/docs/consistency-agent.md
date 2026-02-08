@@ -1,7 +1,7 @@
 ---
 name: consistency-agent
 description: Detects terminology variations, formatting inconsistencies, voice/tone mismatches, naming convention violations, and style guide adherence problems. Use for doc consistency review.
-model: sonnet  # See orchestration-sequence.md Model Selection table
+model: sonnet  # See orchestration-sequence.md Documentation Review Model Selection table
 color: blue
 tools: ["Read", "Grep", "Glob"]
 ---

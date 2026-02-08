@@ -129,14 +129,13 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
-│   ├── orchestration-sequence.md    # Phase definitions and model selection (authoritative)
+│   ├── orchestration-sequence.md    # Phase definitions and model selection for code + docs (authoritative)
 │   ├── invocation-patterns.md       # Task invocation patterns (agents + synthesis)
 │   ├── agent-common-instructions.md # Common MODE, false positives, gaps, language checks, pre-existing issue detection, output schema
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── staged-processing.md         # Staged input validation and content gathering
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── docs-orchestration-sequence.md  # Phase definitions for docs review (authoritative)
 │   ├── docs-processing.md             # Docs input validation and content gathering
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── validation-rules.md          # Validation process
@@ -236,7 +235,6 @@ There are more agents than available colors. When assigning colors:
 - `shared/file-processing.md` - Input validation and content gathering for file-based commands
 - `shared/staged-processing.md` - Input validation and content gathering for staged commands
 - `shared/context-discovery.md` - AI Agent Instructions and project type detection
-- `shared/docs-orchestration-sequence.md` - Phase definitions for documentation review
 - `shared/docs-processing.md` - Input validation and content gathering for docs commands
 - `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
 - `shared/validation-rules.md` - Issue validation process
@@ -281,7 +279,7 @@ When modifying the plugin:
 4. **Validation rules (code-specific)**: Edit `shared/validation-rules-code.md`
 5. **Validation rules (docs-specific)**: Edit `shared/validation-rules-docs.md`
 6. **Output format/generation**: Edit `shared/output-format.md`
-7. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection, language-specific focus)
+7. **Orchestration sequence**: Edit `shared/orchestration-sequence.md` (phase definitions, model selection for both code and docs reviews, language-specific focus)
 8. **Agent invocation patterns**: Edit `shared/invocation-patterns.md`
 9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks, gaps, pre-existing issue detection)
 10. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`

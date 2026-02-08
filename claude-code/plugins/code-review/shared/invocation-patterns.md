@@ -2,17 +2,6 @@
 
 This document defines how to invoke review agents via the Task tool.
 
-## Contents
-
-- [Related Files](#related-files)
-- [Subagent Types](#subagent-types)
-- [Invocation Template](#invocation-template)
-- [Model Selection](#model-selection)
-- [Content Distribution Optimization](#content-distribution-optimization)
-  - [Test File Distribution](#test-file-distribution)
-  - [AI Instructions Distribution](#ai-instructions-distribution)
-- [Synthesis Invocation](#synthesis-invocation)
-
 ## Related Files
 
 - `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` - Phase definitions and model selection table
@@ -41,95 +30,54 @@ Plugin agents are registered as subagent types with the pattern `code-review:[ag
 
 ## Invocation Template
 
-Use the Task tool to launch each agent:
+Use the Task tool to launch each agent. Always pass the `model` parameter explicitly (see `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md`).
 
 ```
 Task(
-  subagent_type: "code-review:security-agent",  // Use registered agent type
-  model: "opus",  // See orchestration-sequence.md for model selection
+  subagent_type: "code-review:<agent-name>",
+  model: "<model>",  // See orchestration-sequence.md Code Review Model Selection table
   description: "[Agent name] review for [scope]",
-  prompt: """
-MODE: thorough  // or gaps, quick
-
-project_type: nodejs  // or dotnet, or both
-
-files_to_review:
-  - path: "src/services/OrderService.ts"
-    has_changes: true
-    tier: "critical"
-    diff: |
-      @@ -45,8 +45,12 @@
-      +  const orders = await Order.findAll();
-      +  for (const order of orders) {
-      +    order.items = await OrderItem.findByOrderId(order.id);
-      +  }
-    full_content: |
-      import { Order, OrderItem } from '../models';
-      // ... full file content
-
-  # Peripheral files (for staged reviews - unchanged files for context)
-  - path: "src/db/schema.ts"
-    has_changes: false
-    tier: "peripheral"
-    preview: |
-      // Database schema definitions
-      import { Entity, Column } from 'typeorm';
-      // ... first 50 lines
-    line_count: 1250
-    full_content_available: true
-
-ai_instructions:
-  - source: "CLAUDE.md"
-    content: |
-      ## Security
-      - All API endpoints MUST have authentication
-
-related_tests:
-  - path: "src/services/OrderService.test.ts"
-    content: |
-      describe('OrderService', () => { ... });
-
-// For gaps mode only:
-previous_findings:
-  - title: "Issue already found in thorough mode"
-    file: "src/services/OrderService.ts"
-    line: 45
-    range: "45-48"  # Line range if multi-line, null if single line
-    category: "Performance"
-    severity: "Critical"
-
-// Skill-derived instructions (from --skills argument, orchestrator-interpreted):
-skill_instructions:
-  focus_areas:
-    - "OWASP Top 10 vulnerabilities"
-  checklist:
-    - category: "Injection Vulnerabilities"
-      severity: "Critical"
-      items: ["SQL injection", "Command injection", "XSS"]
-  auto_validate:
-    - "hardcoded_password"
-  false_positive_rules:
-    - "Passwords in test files"
-  methodology:
-    approach: "Explore multiple interpretations before concluding"
-    steps:
-      - "Consider why code might be correct"
-      - "Brainstorm failure modes"
-    questions:
-      - "What assumptions does this code make?"
-
-// Additional instructions (from settings file body + --prompt argument):
-additional_instructions: |
-  # Project-Specific Instructions
-  [content from .claude/code-review.local.md markdown body]
-
-  # Command-Line Instructions
-  [content from --prompt argument]
-
-Return findings as YAML per agent examples in your agent file.
-"""
+  prompt: "<prompt fields below>"
 )
 ```
+
+### Prompt Schema
+
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| `MODE` | string | Yes | `thorough`, `gaps`, or `quick` |
+| `project_type` | string | Yes | `nodejs`, `dotnet`, or both |
+| `files_to_review` | list | Yes | See File Entry Schema below |
+| `ai_instructions` | list | Conditional | Full content for architecture/compliance agents; summary-only for others (see AI Instructions Distribution) |
+| `related_tests` | list | Conditional | Only for bug-detection, technical-debt, test-coverage agents (see Test File Distribution) |
+| `previous_findings` | list | Gaps only | Prior findings for deduplication. Each entry: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
+| `skill_instructions` | object | Optional | From `--skills` argument. Fields: `focus_areas` (list), `checklist` (list of {category, severity, items}), `auto_validate` (list), `false_positive_rules` (list), `methodology` ({approach, steps, questions}) |
+| `additional_instructions` | string | Optional | Combined content from settings file body + `--prompt` argument |
+
+### File Entry Schema
+
+**Critical files** (has_changes: true, tier: "critical"):
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `path` | string | Relative file path |
+| `has_changes` | boolean | `true` |
+| `tier` | string | `"critical"` |
+| `diff` | string | Unified diff content |
+| `full_content` | string | Complete file content |
+
+**Peripheral files** (staged reviews — unchanged context files):
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `path` | string | Relative file path |
+| `has_changes` | boolean | `false` |
+| `tier` | string | `"peripheral"` |
+| `preview` | string | First ~50 lines |
+| `line_count` | integer | Total lines in file |
+| `full_content_available` | boolean | `true` (agent can use Read tool) |
+
+End the prompt with: `Return findings as YAML per agent examples in your agent file.`
 
 ## Model Selection
 
@@ -147,14 +95,12 @@ Pass `related_tests` content ONLY to agents that analyze test relationships:
 
 | Agent | Receives `related_tests` | Rationale |
 |-------|--------------------------|-----------|
-| bug-detection-agent | ✅ Yes | Uses test files to understand expected behavior |
-| technical-debt-agent | ✅ Yes | Identifies untested deprecated code |
-| test-coverage-agent | ✅ Yes | Primary consumer - analyzes test coverage |
-| All other agents | ❌ No | Can use Grep/Glob if cross-file analysis warrants |
+| bug-detection-agent | Yes | Uses test files to understand expected behavior |
+| technical-debt-agent | Yes | Identifies untested deprecated code |
+| test-coverage-agent | Yes | Primary consumer - analyzes test coverage |
+| All other agents | No | Can use Grep/Glob if cross-file analysis warrants |
 
-**Implementation:** When building agent prompts, only include `related_tests` section for bug-detection-agent, technical-debt-agent, and test-coverage-agent. Other agents can discover test files via tooling if needed.
-
-**Estimated savings:** 6 agents × ~300 lines average test content = ~1,800 lines per review
+**Estimated savings:** 6 agents x ~300 lines average test content = ~1,800 lines per review
 
 ### AI Instructions Distribution
 
@@ -162,13 +108,11 @@ Pass full `ai_instructions` content ONLY to agents that need project-specific ru
 
 | Agent | Receives full `ai_instructions` | Rationale |
 |-------|--------------------------------|-----------|
-| architecture-agent | ✅ Yes | Checks documented architectural patterns and conventions |
-| compliance-agent | ✅ Yes | Primary consumer - verifies adherence to documented standards |
-| All other agents | 📝 Summary only | Receive: "AI instructions exist at [paths]. Use Grep to check specific rules if needed." |
+| architecture-agent | Yes | Checks documented architectural patterns and conventions |
+| compliance-agent | Yes | Primary consumer - verifies adherence to documented standards |
+| All other agents | Summary only | Receive: "AI instructions exist at [paths]. Use Grep to check specific rules if needed." |
 
-**Implementation:** When building agent prompts, include full `ai_instructions` only for architecture-agent and compliance-agent. Other agents receive a brief summary with file paths.
-
-**Estimated savings:** 7 agents × ~500 lines average AI instructions = ~3,500 lines per review
+**Estimated savings:** 7 agents x ~500 lines average AI instructions = ~3,500 lines per review
 
 ## Synthesis Invocation
 
@@ -176,22 +120,16 @@ This section defines the invocation pattern for the synthesis agents. The synthe
 
 See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` (code reviews) or `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` (docs reviews) for the full agent definition and analysis logic.
 
-### Synthesis Invocation Parameters
+### Synthesis Prompt Schema
 
-When launching the synthesis agent, the orchestrating command MUST provide:
-
-```yaml
-# Required parameters for each synthesis agent invocation:
-synthesis_input:
-  category_a:
-    name: "Security"                # First category to analyze
-    findings: [...]                 # All findings from category_a (Phase 1 + Phase 2)
-  category_b:
-    name: "Performance"             # Second category to analyze
-    findings: [...]                 # All findings from category_b (Phase 1 + Phase 2)
-  cross_cutting_question: "Do any security fixes introduce performance issues?"
-  files_content: [...]              # File diffs and full content for context
-```
+| Field | Type | Required | Notes |
+|-------|------|----------|-------|
+| `synthesis_input.category_a.name` | string | Yes | First category name |
+| `synthesis_input.category_a.findings` | list | Yes | All findings from category_a (Phase 1 + Phase 2) |
+| `synthesis_input.category_b.name` | string | Yes | Second category name |
+| `synthesis_input.category_b.findings` | list | Yes | All findings from category_b (Phase 1 + Phase 2) |
+| `synthesis_input.cross_cutting_question` | string | Yes | The cross-cutting analysis question |
+| `synthesis_input.files_content` | list | Yes | File diffs and full content for context |
 
 ### Parallel Synthesis Pattern
 
@@ -200,47 +138,3 @@ Commands launch 5 instances of the synthesis agent simultaneously, each with dif
 **Authoritative source for category pairs:** See `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` "Synthesis" sections for the definitive list of pairs and cross-cutting questions for both deep review (5 pairs) and quick review (3 pairs).
 
 Each instance operates independently and returns its own `cross_cutting_insights` list. The orchestrating command merges all results.
-
-### Synthesis Invocation Format (Required)
-
-When invoking the synthesis agent, use the following YAML structure in the prompt:
-
-```yaml
-# REQUIRED: Synthesis agent invocation format
-synthesis_input:
-  category_a:
-    name: "Security"
-    findings:
-      - title: "SQL injection in getUser"
-        file: "src/db/users.ts"
-        line: 23
-        severity: "Critical"
-        description: "User input concatenated into SQL query"
-        fix_type: "diff"
-        fix_diff: |
-          - const query = `SELECT * FROM users WHERE id = ${userId}`;
-          + const query = 'SELECT * FROM users WHERE id = ?';
-          + const result = await db.query(query, [userId]);
-
-  category_b:
-    name: "Performance"
-    findings:
-      - title: "N+1 query in user list"
-        file: "src/services/users.ts"
-        line: 45
-        severity: "Major"
-        description: "Database query inside forEach loop"
-        fix_type: "prompt"
-        fix_prompt: "Batch the user queries using WHERE IN clause"
-
-  cross_cutting_question: "Do any security fixes introduce performance issues?"
-
-  files_content:
-    - path: "src/db/users.ts"
-      diff: |
-        @@ -20,6 +20,8 @@
-        +  const query = `SELECT * FROM users WHERE id = ${userId}`;
-        +  return await db.query(query);
-      full_content: "[full file content here]"
-```
-

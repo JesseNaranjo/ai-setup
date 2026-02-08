@@ -1,7 +1,7 @@
 ---
 name: architecture-agent
 description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-patterns, layer violations, file organization issues, and maintainability concerns. Use for architecture review, SOLID principles, or design issues.
-model: opus  # See orchestration-sequence.md Model Selection table
+model: opus  # See orchestration-sequence.md Code Review Model Selection table
 color: yellow
 tools: ["Read", "Grep", "Glob"]
 ---

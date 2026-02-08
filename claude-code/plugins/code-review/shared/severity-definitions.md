@@ -3,8 +3,6 @@
 This file defines the canonical severity levels used across all code review agents.
 Reference this file to ensure consistent severity classification.
 
----
-
 ## Critical
 
 Issues that must be fixed before merge. These represent:
@@ -15,8 +13,6 @@ Issues that must be fixed before merge. These represent:
 - **Broken core functionality**: Logic errors that prevent primary features from working
 
 **Action**: Block merge until resolved.
-
----
 
 ## Major
 
@@ -29,8 +25,6 @@ Issues that should be fixed but may not block merge in time-sensitive situations
 
 **Action**: Fix before merge unless time-critical with documented exception.
 
----
-
 ## Minor
 
 Issues that improve code quality but don't affect correctness:
@@ -42,8 +36,6 @@ Issues that improve code quality but don't affect correctness:
 
 **Action**: Fix when convenient or in follow-up PR.
 
----
-
 ## Suggestion
 
 Opportunities for improvement, not problems:
@@ -54,8 +46,6 @@ Opportunities for improvement, not problems:
 - **Test coverage recommendations**: Additional test cases that would improve confidence
 
 **Action**: Consider for future improvement.
-
----
 
 ## Severity by Category Examples
 
@@ -70,8 +60,6 @@ Opportunities for improvement, not problems:
 | **Test Coverage** | No tests for auth flow | Missing edge case test | Low branch coverage | Add property tests |
 | **Compliance** | Violates MUST rule | Violates SHOULD rule | Inconsistent with guideline | Could follow suggestion |
 | **Technical Debt** | Deprecated dependency with CVE | Major version 2+ behind | TODO without tracking | Modernization opportunity |
-
----
 
 ## Technical Debt Severity Guidelines
 

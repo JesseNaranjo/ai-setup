@@ -32,18 +32,6 @@ If `--output-file <path>` argument was provided, use that path instead.
 
 At the end, print: "Review saved to: [filepath]"
 
-### Fix Formatting Rules
-
-- **fix_type: diff** for single-location fixes ≤10 lines
-  - Show inline diff block with `-` and `+` lines
-  - Must be complete drop-in replacements (no "..." or partial code)
-
-- **fix_type: prompt** for multi-location, structural, or complex fixes
-  - Show copyable Claude Code prompt in blockquote format
-  - Must be specific and actionable
-
-**Only report ONE entry per unique issue. Do not duplicate issues.**
-
 ---
 
 ## Filename Generation
@@ -98,70 +86,24 @@ When no issues are found, use the standard header followed by "No issues found. 
 
 ## Issues Found
 
-When issues are found:
+When issues are found, output the standard header followed by:
 
-```markdown
-## Code Review
-
-**Reviewed:** [N] file(s) | **Branch:** [branch-name]
-**Review Depth:** [review-depth-description]
-
-### Summary
-
-| Category | Critical | Major | Minor | Suggestions |
-|----------|----------|-------|-------|-------------|
-| API Contracts | 0 | 0 | 0 | 0 |
-| Architecture | 0 | 0 | 0 | 0 |
-| Bugs | 0 | 0 | 0 | 0 |
-| Compliance | 0 | 0 | 0 | 0 |
-| Error Handling | 0 | 0 | 0 | 0 |
-| Performance | 0 | 0 | 0 | 0 |
-| Security | 0 | 0 | 0 | 0 |
-| Technical Debt | 0 | 0 | 0 | 0 |
-| Test Coverage | 0 | 0 | 0 | 0 |
-| **Total** | **0** | **0** | **0** | **0** |
-
-### Critical Issues (Must Fix)
-
-### Major Issues (Should Fix)
-
-### Minor Issues
-
-### Suggestions
-
-### Cross-Cutting Insights
-
-### Test Recommendations
-
----
-Review saved to: [filepath]
-```
+1. **Summary table**: Categories as rows, severity levels as columns (`Critical | Major | Minor | Suggestions`), with a `**Total**` row. Include only reviewed categories (9 for deep, 4 for quick).
+2. **Severity-grouped sections**: `### Critical Issues (Must Fix)`, `### Major Issues (Should Fix)`, `### Minor Issues`, `### Suggestions` — only include sections with issues.
+3. **Cross-Cutting Insights**: After severity sections, before Test Recommendations (see below).
+4. **Test Recommendations**: If applicable.
+5. Footer: `Review saved to: [filepath]`
 
 ## Cross-Cutting Insights Section
 
-After the regular severity-grouped issues, include cross-cutting insights from the synthesis phase. These are issues that span multiple review categories and represent ripple effects or hidden interactions.
-
-### Format
-
-```markdown
-### Cross-Cutting Insights
-
-Issues spanning multiple categories:
+After the regular severity-grouped issues, include cross-cutting insights from the synthesis phase. Format each insight as:
 
 **[N]. [Insight title]** `[Severity]` `[Primary Category] + [Secondary Category]`
 `path/to/file.ts:line`
-
-[Description of the cross-cutting concern - what it is and why it matters. Reference which findings from each category are related.]
-
+[Description of the cross-cutting concern. Reference which findings from each category are related.]
 [Fix suggestion using diff or prompt format]
-```
 
-### When to Include
-
-- Only include if synthesis agents produced `cross_cutting_insights`
-- Cross-cutting insights appear AFTER the regular severity-grouped issues
-- Cross-cutting insights appear BEFORE Test Recommendations
-- If no cross-cutting insights, omit this section entirely
+**When to include:** Only if synthesis agents produced `cross_cutting_insights`. Appears AFTER severity-grouped issues, BEFORE Test Recommendations. If none, omit section entirely.
 
 ## Issue Entry Format
 
@@ -179,11 +121,7 @@ Each issue entry follows this format:
 
 ### Severity Badge
 
-Use inline code format:
-- `` `Critical` ``
-- `` `Major` ``
-- `` `Minor` ``
-- `` `Suggestion` ``
+Use inline code format: `` `Critical` ``, `` `Major` ``, `` `Minor` ``, `` `Suggestion` ``
 
 ### Consensus Badge
 
@@ -193,12 +131,13 @@ When multiple agents flag the same issue:
 
 ### File Location
 
-Use inline code format with path and line range:
-`` `src/utils/helper.ts:42-48` ``
+Use inline code format with path and line range: `` `src/utils/helper.ts:42-48` ``
 
 ## Actionable Fix Formats
 
 Fixes should be actionable - users can apply them directly without interpretation. Choose the format based on fix complexity.
+
+**Only report ONE entry per unique issue. Do not duplicate issues.**
 
 ### Fix Type Classification
 
@@ -209,7 +148,7 @@ Fixes should be actionable - users can apply them directly without interpretatio
 
 ### Inline Diffs (fix_type: diff)
 
-For simple, single-location fixes where the exact code change is known:
+For simple, single-location fixes. Must be complete drop-in replacements (no "..." or partial code), ≤10 lines, requiring no changes elsewhere.
 
 ````markdown
 **Fix**:
@@ -219,17 +158,9 @@ For simple, single-location fixes where the exact code change is known:
 ```
 ````
 
-**Requirements for diff blocks:**
-- Lines starting with `-` show code to remove
-- Lines starting with `+` show code to add
-- Must be complete (no "..." or partial code)
-- Must be a drop-in replacement
-- Must not require changes elsewhere
-- Should be ≤10 lines changed
-
 ### Fix Prompts (fix_type: prompt)
 
-For complex fixes requiring multiple locations, structural changes, or context decisions:
+For complex fixes requiring multiple locations, structural changes, or context decisions. Use blockquote format (`>`) for easy copying. Start with action verb, list specific files and changes.
 
 ````markdown
 **Fix prompt** (copy to Claude Code):
@@ -238,12 +169,6 @@ For complex fixes requiring multiple locations, structural changes, or context d
 > 2. Move login(), logout(), validateToken() from UserService
 > 3. Update imports in src/api/auth.ts and src/middleware/auth.ts
 ````
-
-**Requirements for prompt blocks:**
-- Use blockquote format (`>`) for easy copying
-- Start with the action verb (Refactor, Extract, Add, Fix, etc.)
-- List specific files and changes when multi-location
-- Be specific enough that Claude Code can execute without clarification
 
 ## Complete Output Example
 

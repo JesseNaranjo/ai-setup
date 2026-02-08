@@ -71,7 +71,7 @@ This document defines the authoritative execution sequences for review pipelines
 
 4. **Validation, Aggregation, Output** (same as deep)
 
-## Model Selection (Authoritative Source)
+## Code Review Model Selection (Authoritative Source)
 
 | Agent | Model (thorough) | Model (gaps) | Model (quick) |
 |-------|------------------|--------------|---------------|
@@ -126,3 +126,72 @@ For mixed codebases (monorepos):
 - React files receive both nodejs.md AND react.md checks
 - Agents receive language-specific checks per file, not all configs
 - Cross-language issues (e.g., API contract mismatches) are handled by architecture and API agents
+
+## Documentation Review Orchestration
+
+### Deep Docs Review Orchestration (13 agent invocations)
+
+1. **Steps 1-3: Input, Context, Content**
+   - Discover and validate documentation files
+   - Gather doc content and related code references
+   - OUTPUT: Documentation files, related code snippets, AI instruction files
+
+2. **Phase 1: Thorough Review** (6 agents in parallel)
+   - Launch: accuracy, clarity, completeness, consistency, examples, structure
+   - Models: accuracy, completeness, examples (Opus); clarity, consistency, structure (Sonnet)
+   - MODE: `thorough` for all agents
+   - **CRITICAL: WAIT** - DO NOT proceed to Phase 2 until ALL 6 agents complete
+   - OUTPUT: Phase 1 findings (grouped by category)
+
+3. **Phase 2: Gaps Review** (3 Sonnet agents in parallel)
+   - Launch: accuracy, completeness, consistency
+   - MODE: `gaps`
+   - Model: Sonnet (cost-optimized for constrained task)
+   - INPUT: Phase 1 findings passed as `previous_findings`
+   - **CRITICAL: WAIT** - DO NOT proceed to Synthesis until ALL 3 agents complete
+   - OUTPUT: Phase 2 findings (subtle issues, edge cases)
+
+4. **Synthesis** (4 agents in parallel)
+   - **CRITICAL: DO NOT START until Phase 1 AND Phase 2 are FULLY COMPLETE**
+   - Launch: 4 instances of synthesis-docs-agent with category pairs
+   - INPUT: ALL findings from Phase 1 AND Phase 2
+   - Pairs and questions:
+     - Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
+     - Clarity+Structure: "Does poor structure contribute to clarity issues, or vice versa?"
+     - Completeness+Consistency: "Are missing sections causing terminology inconsistencies elsewhere?"
+     - Consistency+Structure: "Do formatting inconsistencies reflect structural organization problems?"
+   - WAIT: All 4 must complete
+   - OUTPUT: `cross_cutting_insights` list
+
+5. **Validation, Aggregation, Output**
+   - Validate all issues, filter invalid, deduplicate, generate report
+
+### Quick Docs Review Orchestration (7 agent invocations)
+
+1. **Steps 1-3: Input, Context, Content** (same as deep)
+
+2. **Review** (4 agents in parallel)
+   - Launch: accuracy, clarity, examples, structure
+   - MODE: `quick` for all agents
+   - OUTPUT: Quick review findings
+
+3. **Synthesis** (3 agents in parallel)
+   - Pairs and questions:
+     - Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
+     - Clarity+Structure: "Does poor structure contribute to clarity issues, or vice versa?"
+     - Examples+Structure: "Are example placements and references structurally sound?"
+   - OUTPUT: `cross_cutting_insights` list
+
+4. **Validation, Aggregation, Output** (same as deep)
+
+### Documentation Review Model Selection (Authoritative Source)
+
+| Agent | Model (thorough) | Model (gaps) | Model (quick) |
+|-------|------------------|--------------|---------------|
+| accuracy-agent | opus | sonnet | opus |
+| clarity-agent | sonnet | N/A | sonnet |
+| completeness-agent | opus | sonnet | N/A |
+| consistency-agent | sonnet | sonnet | N/A |
+| examples-agent | opus | N/A | opus |
+| structure-agent | sonnet | N/A | sonnet |
+| synthesis-docs-agent | sonnet | N/A | sonnet |

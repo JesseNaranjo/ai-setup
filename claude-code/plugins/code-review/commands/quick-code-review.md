@@ -46,7 +46,7 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 ## Step 7: 4-Agent Quick Review
 
 See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Model Selection** table
+- `${CLAUDE_PLUGIN_ROOT}/shared/orchestration-sequence.md` for phase definitions and **Code Review Model Selection** table
 - `${CLAUDE_PLUGIN_ROOT}/shared/invocation-patterns.md` for Task invocation template
 
 ### Review Phase (4 agents in parallel)

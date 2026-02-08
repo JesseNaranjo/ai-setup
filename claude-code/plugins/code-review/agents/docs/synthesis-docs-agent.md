@@ -1,7 +1,7 @@
 ---
 name: synthesis-docs-agent
 description: Analyzes findings from multiple documentation review categories to identify cross-cutting concerns and issues spanning multiple documentation domains. Use after documentation review agents complete.
-model: sonnet  # See docs-orchestration-sequence.md Model Selection table
+model: sonnet  # See orchestration-sequence.md Documentation Review Model Selection table
 color: white
 tools: ["Read", "Grep", "Glob"]
 ---

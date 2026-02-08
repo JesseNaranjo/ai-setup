@@ -1,7 +1,7 @@
 ---
 name: error-handling-agent
 description: Detects missing try/catch blocks, swallowed exceptions, missing cleanup, improper error propagation, and resilience gaps. Use for error handling review or exception issues.
-model: sonnet  # See orchestration-sequence.md Model Selection table
+model: sonnet  # See orchestration-sequence.md Code Review Model Selection table
 color: orange
 tools: ["Read", "Grep", "Glob"]
 ---

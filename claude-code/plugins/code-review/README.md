@@ -386,10 +386,9 @@ code-review/
 │   ├── agent-common-instructions.md # Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema)
 │   ├── invocation-patterns.md       # Task invocation patterns (agents + synthesis)
 │   ├── context-discovery.md         # Context discovery instructions
-│   ├── docs-orchestration-sequence.md # Documentation review phase definitions
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
-│   ├── orchestration-sequence.md    # Phase definitions and model selection
+│   ├── orchestration-sequence.md    # Phase definitions and model selection (code + docs)
 │   ├── output-format.md             # Output schema, templates, and generation process
 │   ├── settings-loader.md           # Settings loading and application
 │   ├── severity-definitions.md      # Severity classification

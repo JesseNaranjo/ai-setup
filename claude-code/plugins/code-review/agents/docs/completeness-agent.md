@@ -1,7 +1,7 @@
 ---
 name: completeness-agent
 description: Detects missing sections, undocumented features, incomplete setup instructions, missing error handling docs, and coverage gaps. Use for doc completeness review.
-model: opus  # See orchestration-sequence.md Model Selection table
+model: opus  # See orchestration-sequence.md Documentation Review Model Selection table
 color: green
 tools: ["Read", "Grep", "Glob"]
 ---
