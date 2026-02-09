@@ -35,15 +35,15 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ## Plugin Skills
 
-| Skill | Trigger Phrases |
-|-------|-----------------|
-| `reviewing-architecture-principles` | "check SOLID principles", "review SOLID", "find SOLID violations", "check DRY", "find code duplication", "find duplicate code", "check YAGNI", "find over-engineering", "check SoC", "separation of concerns", "mixed concerns", "file organization", "consolidate files", "architecture principles review" |
-| `reviewing-bugs` | "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", "debug this code" |
-| `reviewing-compliance` | "check CLAUDE.md compliance", "review against coding standards", "check AI agent instructions", "verify guidelines", "check coding conventions", "check naming conventions" |
-| `reviewing-documentation` | "review documentation", "check docs", "audit README", "check CLAUDE.md", "verify AI instructions", "standardize docs", "review markdown", "check docs accuracy" |
-| `reviewing-performance` | "check performance", "review for performance issues", "find slow code", "optimize", "check for memory leaks", "find N+1 queries", "check complexity", "profile code", "latency issues" |
-| `reviewing-security` | "security review", "check for vulnerabilities", "audit security", "find security issues", "security scan", "check for injection", "find hardcoded secrets", "OWASP check" |
-| `reviewing-technical-debt` | "find technical debt", "check for deprecated code", "find outdated patterns", "identify dead code", "check for workarounds", "find TODO comments", "assess code health", "code modernization review", "legacy code review" |
+| Skill | Focus |
+|-------|-------|
+| `reviewing-architecture-principles` | SOLID, DRY, YAGNI, SoC violations |
+| `reviewing-bugs` | Logical errors, null references, edge cases, race conditions |
+| `reviewing-compliance` | CLAUDE.md and coding standards compliance |
+| `reviewing-documentation` | Documentation accuracy, structure, AI instructions |
+| `reviewing-performance` | Performance issues, memory leaks, N+1 queries |
+| `reviewing-security` | Vulnerabilities, injection, secrets, OWASP |
+| `reviewing-technical-debt` | Deprecated code, dead code, outdated patterns |
 
 ## Architecture
 
@@ -79,51 +79,20 @@ claude-code/plugins/code-review/
 │       ├── examples-agent.md        # Code example validity
 │       ├── structure-agent.md       # Organization, links, AI instructions
 │       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
-├── skills/                          # Targeted review skills (progressive disclosure)
+├── skills/                          # 7 review skills (progressive disclosure)
 │   ├── reviewing-architecture-principles/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   │   └── solid-dry-yagni-patterns.md
-│   │   └── examples/
-│   │       └── example-output.md
 │   ├── reviewing-bugs/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   │   └── common-bugs.md
-│   │   └── examples/
-│   │       └── example-output.md
 │   ├── reviewing-compliance/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   │   └── compliance-patterns.md
-│   │   └── examples/
-│   │       └── example-output.md
-│   ├── reviewing-documentation/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   │   ├── ai-instruction-templates.md
-│   │   │   └── documentation-best-practices.md
-│   │   └── examples/
-│   │       └── example-output.md
+│   ├── reviewing-documentation/     # Has 2 reference files
 │   ├── reviewing-performance/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   │   └── performance-patterns.md
-│   │   └── examples/
-│   │       └── example-output.md
-│   ├── reviewing-security/
-│   │   ├── SKILL.md                 # Core skill instructions
+│   ├── reviewing-security/          # Expanded example (all 7 skills follow this pattern):
+│   │   ├── SKILL.md                 # Core skill instructions (~90-155 lines)
 │   │   ├── references/              # Detailed patterns (loaded on-demand)
 │   │   │   ├── common-vulnerabilities.md
 │   │   │   └── owasp-reference.md
 │   │   └── examples/                # Sample output format
 │   │       └── example-output.md
 │   └── reviewing-technical-debt/
-│       ├── SKILL.md
-│       ├── references/
-│       │   └── technical-debt-patterns.md
-│       └── examples/
-│           └── example-output.md
 ├── languages/                       # Language-specific configs
 │   ├── dotnet.md                    # .NET/C# checks
 │   ├── nodejs.md                    # Node.js/TypeScript checks
@@ -149,44 +118,9 @@ claude-code/plugins/code-review/
 └── README.md
 ```
 
-### Agent Configuration
-
-See the following files for authoritative agent configuration:
-- `shared/review-orchestration-code.md` - Code review: model selection, phase definitions, invocation patterns, language-specific focus, gaps mode behavior
-- `shared/review-orchestration-docs.md` - Docs review: model selection, phase definitions, invocation patterns, gaps mode behavior
-- `shared/output-format.md` - Output format specification (shared by code and docs pipelines)
-- `shared/agent-common-instructions.md` - Common MODE, false positives, language checks, output schema, compact severity definitions
-
 ### Agent Colors
 
-Each agent has a unique color for visual identification during parallel execution:
-
-#### Code Review Agents (10)
-
-| Agent | Color |
-|-------|-------|
-| api-contracts-agent | cyan |
-| architecture-agent | yellow |
-| bug-detection-agent | red |
-| compliance-agent | blue |
-| error-handling-agent | orange |
-| performance-agent | green |
-| security-agent | purple |
-| synthesis-code-agent | white |
-| technical-debt-agent | brown |
-| test-coverage-agent | white |
-
-#### Documentation Review Agents (7)
-
-| Agent | Color |
-|-------|-------|
-| accuracy-agent | red |
-| clarity-agent | cyan |
-| completeness-agent | green |
-| consistency-agent | blue |
-| examples-agent | yellow |
-| structure-agent | purple |
-| synthesis-docs-agent | white |
+Agent colors are defined in each agent's YAML frontmatter (`color: <color>`).
 
 **Color Assignment Rules:**
 
@@ -235,26 +169,6 @@ There are more agents than available colors. When assigning colors:
 - **fix_type: diff**: Inline code diff for single-location fixes ≤10 lines
 - **fix_type: prompt**: Claude Code prompt for multi-location/structural fixes
 
-### Key Files
-
-- `agents/code/*.md` - Code review agent definitions with MODE support
-- `agents/docs/*.md` - Documentation review agent definitions
-- `languages/*.md` - Language-specific checks and patterns
-- `commands/*.md` - Self-contained orchestration documents (inline common steps, reference shared/)
-- `shared/review-orchestration-code.md` - Code review: phases, model selection, invocation patterns, language-specific focus, gaps mode behavior
-- `shared/review-orchestration-docs.md` - Docs review: phases, model selection, invocation patterns, gaps mode behavior
-- `shared/output-format.md` - Output format specification (shared by code and docs pipelines)
-- `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, language checks, output schema, compact severity definitions)
-- `shared/pre-review-setup.md` - Settings loading and context discovery (combined)
-- `shared/file-processing.md` - Input validation and content gathering for file-based commands
-- `shared/staged-processing.md` - Input validation, content gathering, and pre-existing issue detection for staged commands
-- `shared/docs-processing.md` - Input validation and content gathering for docs commands
-- `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
-- `shared/references/validation-rules-code.md` - Code review validation, aggregation, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
-- `shared/references/validation-rules-docs.md` - Docs review validation, aggregation, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
-- `skills/*/SKILL.md` - Skill definitions
-- `templates/code-review.local.md.example` - User settings template
-
 ### Project Settings
 
 Users can customize plugin behavior per-project by creating `.claude/code-review.local.md`:
@@ -273,11 +187,31 @@ language: ""
 
 See `shared/pre-review-setup.md` for loading logic and `README.md` for full documentation.
 
-## Language Detection
+### Language Detection
 
 - **Node.js/TypeScript**: Detected by `package.json`
 - **React**: Detected by `react` or `react-dom` in package.json dependencies (extends Node.js checks)
 - **.NET/C#**: Detected by `*.csproj`, `*.sln`, or `*.slnx`
+
+### Skill Structure (Progressive Disclosure)
+
+Each skill follows progressive disclosure: `SKILL.md` (~90-155 lines) is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand. Skills are self-contained with their own workflow procedures.
+
+### Skill-Informed Orchestration
+
+When `--skills` is provided to review commands, the orchestrator (running as Opus) interprets skill content and makes orchestration decisions:
+
+1. **Skill Resolution**: Skills are resolved to SKILL.md files
+2. **Structured Parsing**: Skills are parsed into structured data (focus_categories, auto_validated_patterns, false_positive_rules, methodology)
+3. **Agent-Specific Instructions**: The orchestrator generates tailored `skill_instructions` per agent:
+   - Review skills (reviewing-security, etc.) target their primary agent with checklists and focus areas
+   - Methodology skills (superpowers:brainstorming, etc.) apply universally to all agents
+4. **Validation Adjustments**: Auto-validated patterns skip validation; false positive rules filter findings
+5. **Synthesis Adjustments**: Skill-specific cross-cutting questions may be added
+
+See `shared/skill-handling.md` for implementation details.
+
+**Skill Loading:** The orchestrator MUST use the Skill() tool to load skills. Direct file read is only used as fallback if Skill() tool fails.
 
 ## Making Changes
 
@@ -293,14 +227,37 @@ When modifying the plugin:
 8. **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior)
 9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks)
 10. **Pre-existing issue detection**: Edit `shared/staged-processing.md` "Pre-Existing Issue Detection" section
-11. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
+11. **Skills**: Edit `skills/*/SKILL.md` for self-contained workflows, add patterns to `references/`, examples to `examples/`
 12. **Command arguments**: Edit command YAML frontmatter in `commands/`
-13. **Skills**: Edit skill files in `skills/*/SKILL.md`
-14. **Skill references**: Add detailed patterns to `skills/*/references/`
-15. **Skill examples**: Add sample outputs to `skills/*/examples/`
-16. **Settings options**: Edit `shared/pre-review-setup.md` and `templates/code-review.local.md.example`
+13. **Settings options**: Edit `shared/pre-review-setup.md` and `templates/code-review.local.md.example`
 
 ## Coding Conventions
+
+### Instruction Quality Preservation
+
+**REQUIRED:** When modifying instruction content (agents, skills, shared files, commands), preserve the quality and precision of existing guidance.
+
+- **Preserve specificity**: Never replace concrete patterns, examples, or exact checks with vague or generalized guidance
+- **Preserve rationale**: Keep "why" explanations alongside rules — these prevent future contributors from removing seemingly arbitrary constraints
+- **Preserve calibration**: Do not change severity thresholds, false positive rules, or validation patterns without explicit request
+- **No lossy compression**: When consolidating, moving, or restructuring content, diff before/after to confirm no meaningful guidance was dropped
+- **No unsolicited cleanup**: Do not reword, simplify, or "improve" instruction prose that wasn't part of the requested change
+
+**Rationale:** The instruction files in this repo are LLM prompts whose effectiveness depends on precise wording, specific examples, and calibrated thresholds. Generic editing instincts (simplify, shorten, generalize) directly degrade agent performance.
+
+### Content Categories
+
+**CRITICAL:** Every file in this plugin belongs to exactly one of three categories. Never place content in a directory belonging to a different category. This is the most consequential convention in this file — violating it silently degrades review performance by polluting the Opus orchestrator's context window with irrelevant content.
+
+| Category | Directories | Consumed By | When |
+|----------|-------------|-------------|------|
+| **Development-time guidance** | `CLAUDE.md` | Claude Code | When authoring/modifying the plugin |
+| **Plugin runtime content** | `commands/`, `agents/`, `shared/`, `skills/`, `languages/` | Opus orchestrator + agents | During every review execution |
+| **User-facing documentation** | `README.md`, `CHANGELOG.md`, `templates/` | Human users | When configuring or understanding the plugin |
+
+**The core rule:** Runtime directories (`commands/`, `agents/`, `shared/`, `skills/`, `languages/`) are loaded into the Opus orchestrator's context window during review execution. Every token has a direct cost on every review. **Never place development-time authoring guidance or documentation into runtime directories.**
+
+**Common violation:** The instinct to "extract" CLAUDE.md content into `shared/references/` moves tokens from a cheap context (loaded once per authoring session) into an expensive context (loaded on every review). Ask "who consumes this content and when?" — if a developer modifying the plugin, it belongs in `CLAUDE.md`.
 
 ### Alphabetical Ordering
 
@@ -309,29 +266,15 @@ When modifying the plugin:
 Apply alphabetical ordering to:
 - Agent listings in orchestration documents (e.g., `review-orchestration-code.md`)
 - Category pairs in synthesis configurations (order by first category)
-- Tables with agent/skill names (e.g., Agent Colors table, Model Selection table)
+- Tables with agent/skill names (e.g., Model Selection table)
 - Bullet lists of agents or categories
 - YAML keys within related_findings and similar structures
 - Directory structure listings in documentation
 
-**Examples:**
-
-Agent listings:
+**Example:**
 ```
 # Correct (alphabetical)
 - Launch: api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage
-
-# Incorrect (not alphabetical)
-- Launch: bug, performance, security, technical-debt, api, architecture, compliance, error-handling, test-coverage
-```
-
-Category pairs (alphabetize by first category):
-```
-# Correct
-- Pairs: Architecture+Test Coverage, Bugs+Error Handling, Compliance+Technical Debt, Performance+Security
-
-# Incorrect
-- Pairs: Security+Performance, Architecture+Test Coverage, Bugs+Error Handling, Compliance+Bugs
 ```
 
 **Rationale:** Alphabetical ordering ensures consistent, neutral presentation without implying priority or importance. It also makes it easier to find specific items in long lists.
@@ -354,19 +297,11 @@ This applies to:
 
 ### Command Step Inlining
 
-**CURRENT APPROACH:** Each command file inlines its pre-review setup steps (methodology, settings, context discovery, skills) and post-review steps (validation, aggregation, output) directly, rather than referencing a shared common-steps file. All 4 code review commands follow this pattern with identical inlined content. The 2 docs review commands also inline their steps but use a different layout.
+Each command file inlines its pre-review setup and post-review steps directly rather than referencing a shared common-steps file. The 4 code review commands share ~60 lines of identical inlined content; the 2 docs review commands use a different layout.
 
-**Rationale:** A shared `command-common-steps.md` file was tried previously but created a second level of indirection — commands referenced common-steps, which referenced the actual shared files. This added an extra file to the orchestrator's Opus context window without adding value, and violated the "keep references one level deep" principle. Inlining keeps each command self-contained with direct references to shared files (one hop, not two).
+**Rationale:** A shared `command-common-steps.md` was tried but created a second level of indirection (commands → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps commands self-contained with one-hop references to shared files.
 
-**Tradeoff:** The 4 code review commands share ~60 lines of identical inlined content (Steps 1, 2, 4, 6, 9-12, and Notes). This duplication is accepted because:
-- Shared files (`shared/*.md`) load into the expensive Opus orchestrator context — adding files there has high cost
-- Command files are the orchestrator's entry point and are always loaded — inlining adds zero extra file reads
-- The docs-review commands already used this pattern successfully
-
-**Revisit this decision if:**
-- The number of code review commands grows beyond 6, making duplication maintenance burdensome
-- The shared steps diverge significantly between commands (suggesting they aren't truly shared)
-- A way is found to share steps without adding an extra file to the orchestrator's context window
+**Revisit if:** command count exceeds 6, shared steps diverge significantly, or a way is found to share steps without extra Opus context files.
 
 ### Commands Directory
 
@@ -374,70 +309,25 @@ Commands remain in `commands/` despite Anthropic's Plugin Reference labeling it 
 
 ### File Path References
 
-Plugin files use two distinct path reference patterns based on the official Anthropic skill best practices:
+Plugin files use two distinct path reference patterns:
 
-**1. Cross-Plugin References (to `shared/`, `languages/`, `agents/`)**
-
-Use `${CLAUDE_PLUGIN_ROOT}` for references that cross skill/component boundaries:
+**1. Cross-Plugin References (to `shared/`, `languages/`, `agents/`)** — use `${CLAUDE_PLUGIN_ROOT}`:
 
 ```markdown
 See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for validation rules.
-See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md#security` for Node.js checks.
 See `${CLAUDE_PLUGIN_ROOT}/agents/code/security-agent.md` for agent definition.
 ```
 
-**2. Intra-Skill References (local `references/` and `examples/`)**
-
-Use relative paths for references within a skill's own directory structure:
+**2. Intra-Skill References (local `references/` and `examples/`)** — use relative paths:
 
 ```markdown
 # In skills/reviewing-security/SKILL.md
 See `references/common-vulnerabilities.md` for vulnerability patterns.
-See `examples/example-output.md` for sample output format.
 ```
 
-**Rationale:** This follows the official Anthropic skill authoring best practices which shows relative paths for intra-skill references:
+**Rationale:** Follows Anthropic skill authoring best practices — relative paths enable progressive disclosure where Claude loads reference files only when needed.
 
-> "**Pattern 1: High-level guide with references**
-> `**Form filling**: See [FORMS.md](FORMS.md) for complete guide`
-> Claude loads FORMS.md, REFERENCE.md, or EXAMPLES.md only when needed."
-
-**Do NOT convert intra-skill relative paths to `${CLAUDE_PLUGIN_ROOT}` paths** - this would break the documented progressive disclosure pattern.
-
-## Skill Structure (Progressive Disclosure)
-
-Each skill follows progressive disclosure pattern:
-
-1. **SKILL.md** (~90-155 lines): Self-contained workflow loaded when skill triggers
-2. **references/** (optional): Detailed patterns loaded on-demand
-3. **examples/** (optional): Sample output formats for reference
-
-```
-skills/skill-name/
-├── SKILL.md              # Always loaded when skill triggers (~90-155 lines)
-├── references/           # Loaded when Claude needs detailed patterns
-│   └── patterns.md
-└── examples/             # Loaded when Claude needs output format reference
-    └── example-output.md
-```
-
-Each skill is self-contained with its own workflow procedures (determining scope, gathering context, validating findings, and reporting results) to minimize file lookups during execution.
-
-## Skill-Informed Orchestration
-
-When `--skills` is provided to review commands, the orchestrator (running as Opus) interprets skill content and makes orchestration decisions:
-
-1. **Skill Resolution**: Skills are resolved to SKILL.md files
-2. **Structured Parsing**: Skills are parsed into structured data (focus_categories, auto_validated_patterns, false_positive_rules, methodology)
-3. **Agent-Specific Instructions**: The orchestrator generates tailored `skill_instructions` per agent:
-   - Review skills (reviewing-security, etc.) target their primary agent with checklists and focus areas
-   - Methodology skills (superpowers:brainstorming, etc.) apply universally to all agents
-4. **Validation Adjustments**: Auto-validated patterns skip validation; false positive rules filter findings
-5. **Synthesis Adjustments**: Skill-specific cross-cutting questions may be added
-
-See `shared/skill-handling.md` for implementation details.
-
-**Skill Loading:** The orchestrator MUST use the Skill() tool to load skills. Direct file read is only used as fallback if Skill() tool fails.
+**Do NOT convert intra-skill relative paths to `${CLAUDE_PLUGIN_ROOT}` paths** — this would break the documented progressive disclosure pattern.
 
 ## Version Management
 
@@ -447,13 +337,8 @@ When preparing a new release:
 
 1. **Find changes since last release:**
    ```bash
-   # List git tags to find previous version
    git tag -l --sort=-v:refname | head -5
-
-   # View commits since last tag (replace <prev> with previous version)
    git log <prev>..HEAD --oneline -- claude-code/plugins/code-review/
-
-   # View files changed
    git diff <prev>..HEAD --stat -- claude-code/plugins/code-review/
    ```
 
@@ -466,37 +351,20 @@ When preparing a new release:
    - Add new version section at top (after header)
    - Document all Added, Changed, Fixed, Removed items
    - Follow [Keep a Changelog](https://keepachangelog.com/) format
-   - **Base release notes on actual file changes (`git diff`), not commit messages** - commit messages may be incomplete or misleading
+   - **Base release notes on actual file changes (`git diff`), not commit messages**
 
 4. **Update version in all locations:**
-
    - `claude-code/plugins/code-review/.claude-plugin/plugin.json`
    - `.claude-plugin/marketplace.json` (repository root)
    - `claude-code/plugins/code-review/README.md` (Current Version line)
 
    > **Note:** Per Anthropic's plugin guidance, only `plugin.json` should contain the authoritative version. Individual agent, skill, and command files should NOT have version fields.
 
-5. **Verify versions are consistent:**
+5. **Verify, commit, and tag:**
    ```bash
-   # Verify no old version remains (exclude CHANGELOG history)
    grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
-
-   # Verify new version count (3: 1 plugin.json + 1 marketplace.json + 1 README)
-   grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
-
-   # Verify CHANGELOG has new section
+   grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l  # expect 3
    head -20 claude-code/plugins/code-review/CHANGELOG.md
-   ```
-
-6. **Commit changes:**
-   ```bash
-   git add -A
-   git commit -m "Release v<new>: <summary of changes>"
-   ```
-
-7. **Create and push git tag:**
-   ```bash
-   git tag v<new>
-   git push origin main
-   git push origin v<new>
+   git add -A && git commit -m "Release v<new>: <summary of changes>"
+   git tag v<new> && git push origin main && git push origin v<new>
    ```
