@@ -52,7 +52,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 ```
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata
-├── commands/                        # Self-contained orchestration documents (inline common steps, reference shared/)
+├── commands/                        # Orchestration entry points (inline steps, reference shared/; see "Commands Directory" convention)
 │   ├── deep-code-review.md          # Deep file review (19 agent invocations)
 │   ├── deep-code-review-staged.md   # Deep staged review (19 agent invocations)
 │   ├── deep-docs-review.md          # Deep documentation review (13 invocations)
@@ -118,30 +118,29 @@ claude-code/plugins/code-review/
 └── README.md
 ```
 
-### Agent Colors
+### Agent Frontmatter
 
-Agent colors are defined in each agent's YAML frontmatter (`color: <color>`).
+All 17 agents use the same YAML frontmatter fields:
 
-**Color Assignment Rules:**
+```yaml
+---
+name: <domain>-agent           # Required
+description: <third-person>    # Required. "Detects...", "Reviews...", "Analyzes..."
+model: opus|sonnet             # See review-orchestration-{code|docs}.md Model Selection table
+color: <color>                 # See color rules below
+tools: ["Read", "Grep", "Glob"]
+---
+```
 
-There are more agents than available colors. When assigning colors:
+Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, `skills`, `mcpServers`, `hooks`, `memory`) are not used.
 
-1. **Do not change existing colors** - Existing agent colors should not be changed unless absolutely necessary
-2. **Minimize conflicts within each Phase** - Agents running in parallel within the same phase should have distinct colors when possible
-3. **Repeating across Phases is acceptable** - Colors can be reused in different phases since they run sequentially
-4. **Use white for overflow** - When colors must repeat within a phase, use white
-
-**Current Color Usage:**
-- Phase 1 code review agents have unique colors except synthesis and test-coverage (both white)
-- Phase 2 reuses colors from Phase 1 (runs sequentially after Phase 1 completes)
-- Synthesis phase runs parallel instances of synthesis-code-agent or synthesis-docs-agent, all using white
-- Documentation agents reuse code agent colors since they run in separate pipelines (docs-review commands vs code-review commands)
+**Color rules:** Minimize conflicts within each parallel phase; reuse across sequential phases is fine. Use `white` for overflow. Do not change existing colors without necessity.
 
 ### Deep Review Pipeline
 
 1. **Phase 1** (9 agents parallel): Thorough mode review (5 Opus, 4 Sonnet)
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
-3. **Synthesis** (5 agents parallel): Cross-cutting concern detection
+3. **Synthesis** (5 agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
 4. **Validation**: All issues validated before output
 
 ### Gaps Mode Agent Selection Rationale
@@ -195,7 +194,7 @@ See `shared/pre-review-setup.md` for loading logic and `README.md` for full docu
 
 ### Skill Structure (Progressive Disclosure)
 
-Each skill follows progressive disclosure: `SKILL.md` (~90-155 lines) is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand. Skills are self-contained with their own workflow procedures.
+Each skill follows progressive disclosure: `SKILL.md` (~90-155 lines) is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Skill and agent `description` fields use third-person verb form ("Detects...", "Reviews...").
 
 ### Skill-Informed Orchestration
 
@@ -217,19 +216,26 @@ See `shared/skill-handling.md` for implementation details.
 
 When modifying the plugin:
 
-1. **Agent behavior**: Edit agent files in `agents/code/` or `agents/docs/`
-2. **Language-specific checks**: Edit files in `languages/` directory
-3. **Validation rules (code)**: Edit `shared/references/validation-rules-code.md` (includes validation process, aggregation, auto-validation patterns, false positive rules)
-4. **Validation rules (docs)**: Edit `shared/references/validation-rules-docs.md` (includes validation process, aggregation, auto-validation patterns, false positive rules)
-5. **Output format/generation**: Edit `shared/output-format.md`
-6. **Severity definitions**: Edit `shared/agent-common-instructions.md` "Severity Definitions" section
-7. **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus, gaps mode behavior)
-8. **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior)
-9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks)
-10. **Pre-existing issue detection**: Edit `shared/staged-processing.md` "Pre-Existing Issue Detection" section
-11. **Skills**: Edit `skills/*/SKILL.md` for self-contained workflows, add patterns to `references/`, examples to `examples/`
-12. **Command arguments**: Edit command YAML frontmatter in `commands/`
-13. **Settings options**: Edit `shared/pre-review-setup.md` and `templates/code-review.local.md.example`
+### Agent & Orchestration
+- **Agent behavior**: Edit `agents/code/` or `agents/docs/`
+- **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks)
+- **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus, gaps mode behavior)
+- **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior)
+
+### Validation & Output
+- **Validation rules (code)**: Edit `shared/references/validation-rules-code.md` (validation process, aggregation, auto-validation patterns, false positive rules)
+- **Validation rules (docs)**: Edit `shared/references/validation-rules-docs.md` (validation process, aggregation, auto-validation patterns, false positive rules)
+- **Output format/generation**: Edit `shared/output-format.md`
+- **Severity definitions**: Edit `shared/agent-common-instructions.md` "Severity Definitions" section
+
+### Skills & Language
+- **Skills**: Edit `skills/*/SKILL.md`; add patterns to `references/`, examples to `examples/`
+- **Language-specific checks**: Edit files in `languages/`
+
+### Commands & Settings
+- **Command arguments**: Edit command YAML frontmatter in `commands/`
+- **Settings options**: Edit `shared/pre-review-setup.md` and `templates/code-review.local.md.example`
+- **Pre-existing issue detection**: Edit `shared/staged-processing.md` "Pre-Existing Issue Detection" section
 
 ## Coding Conventions
 
@@ -307,6 +313,8 @@ Each command file inlines its pre-review setup and post-review steps directly ra
 
 Commands remain in `commands/` despite Anthropic's Plugin Reference labeling it as "legacy; use `skills/` for new skills." The command YAML frontmatter uses fields (`allowed-tools`, `argument-hint`, `model`) that are command-specific and not part of the skill YAML schema (`name`, `description` only). These are complex orchestration entry points, not simple trigger-response commands. Migrating would break orchestrator invocation for zero context reduction.
 
+**Command frontmatter fields:** `name`, `allowed-tools`, `description`, `argument-hint`, `model`. All commands use `model: opus`. The `allowed-tools` list includes `Task` (agent invocation), git-scoped `Bash` patterns, `Read`, `Write`, `Glob`.
+
 ### File Path References
 
 Plugin files use two distinct path reference patterns:
@@ -329,42 +337,22 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 
 **Do NOT convert intra-skill relative paths to `${CLAUDE_PLUGIN_ROOT}` paths** — this would break the documented progressive disclosure pattern.
 
+## Common Gotchas
+
+- **Trailing newlines**: Subagent file rewrites often drop trailing newlines. Verify with `tail -c 1` after bulk operations.
+- **Reference integrity**: When moving content between files, `grep -r "section name"` before AND after to catch all references (commands, skills, shared files).
+- **Content category violations**: Before adding content to `shared/` or `shared/references/`, ask "who consumes this?" If the answer is "a developer modifying the plugin," it belongs in CLAUDE.md, not runtime directories.
+- **Synthesis constraint**: Synthesis insights require findings in BOTH input categories. Single-category insights are rejected at validation.
+
 ## Version Management
 
-### Release Process
+**Version bump rules:** Patch = fixes/docs. Minor = new features/agents/commands. Major = breaking changes.
 
-When preparing a new release:
+**Version locations** (all three must match): `plugin.json`, `marketplace.json` (repo root), `README.md` ("Current Version"). Per Anthropic guidance, only `plugin.json` is authoritative — individual agent/skill/command files must NOT have version fields.
 
-1. **Find changes since last release:**
-   ```bash
-   git tag -l --sort=-v:refname | head -5
-   git log <prev>..HEAD --oneline -- claude-code/plugins/code-review/
-   git diff <prev>..HEAD --stat -- claude-code/plugins/code-review/
-   ```
-
-2. **Determine version bump:**
-   - **Patch (3.0.x)**: Bug fixes, documentation updates, minor enhancements
-   - **Minor (3.x.0)**: New features, new commands, new agents
-   - **Major (x.0.0)**: Breaking changes, architecture overhauls
-
-3. **Update CHANGELOG.md first:**
-   - Add new version section at top (after header)
-   - Document all Added, Changed, Fixed, Removed items
-   - Follow [Keep a Changelog](https://keepachangelog.com/) format
-   - **Base release notes on actual file changes (`git diff`), not commit messages**
-
-4. **Update version in all locations:**
-   - `claude-code/plugins/code-review/.claude-plugin/plugin.json`
-   - `.claude-plugin/marketplace.json` (repository root)
-   - `claude-code/plugins/code-review/README.md` (Current Version line)
-
-   > **Note:** Per Anthropic's plugin guidance, only `plugin.json` should contain the authoritative version. Individual agent, skill, and command files should NOT have version fields.
-
-5. **Verify, commit, and tag:**
-   ```bash
-   grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
-   grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l  # expect 3
-   head -20 claude-code/plugins/code-review/CHANGELOG.md
-   git add -A && git commit -m "Release v<new>: <summary of changes>"
-   git tag v<new> && git push origin main && git push origin v<new>
-   ```
+**Release steps:**
+1. Find previous tag and diff changes: `git tag -l --sort=-v:refname | head -5` then `git log <prev>..HEAD --oneline -- claude-code/plugins/code-review/`
+2. Update CHANGELOG.md first (Keep a Changelog format, base on `git diff` not commit messages)
+3. Update version in all 3 locations
+4. Verify: `grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG` (expect 0) and `grep -r "<new>" ... | wc -l` (expect 3)
+5. Commit, tag, push: `git tag v<new> && git push origin main && git push origin v<new>`
