@@ -1,6 +1,6 @@
 # Validation and Aggregation
 
-> Domain-specific content (Validator Model Assignment, Auto-Validation Patterns, Category-Specific False Positive Rules) remains in `review-orchestration-code.md` or `review-orchestration-docs.md`.
+> Domain-specific content (Validator Model Assignment, Auto-Validation Patterns, Category-Specific False Positive Rules) is in `shared/references/validation-rules-code.md` or `shared/references/validation-rules-docs.md`.
 
 ## Batch Validation Process
 

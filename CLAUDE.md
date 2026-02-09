@@ -134,15 +134,17 @@ claude-code/plugins/code-review/
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── output-format.md             # Output format specification (progressive disclosure, loaded at Steps 9-12)
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, domain-specific validation
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, domain-specific validation
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── staged-processing.md         # Staged input validation and content gathering
 │   ├── validation-aggregation.md    # Common validation process and aggregation rules (progressive disclosure, loaded at Steps 9-12)
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
-│       └── skill-troubleshooting.md # Common issues and solutions
+│       ├── skill-troubleshooting.md # Common issues and solutions
+│       ├── validation-rules-code.md # Code review validation rules, auto-validation patterns, false positive rules
+│       └── validation-rules-docs.md # Docs review validation rules, auto-validation patterns, false positive rules
 ├── templates/
 │   └── code-review.local.md.example # Settings template for users
 └── README.md
@@ -151,8 +153,8 @@ claude-code/plugins/code-review/
 ### Agent Configuration
 
 See the following files for authoritative agent configuration:
-- `shared/review-orchestration-code.md` - Code review: model selection, phase definitions, invocation patterns, language-specific focus, domain-specific validation patterns
-- `shared/review-orchestration-docs.md` - Docs review: model selection, phase definitions, invocation patterns, domain-specific validation patterns
+- `shared/review-orchestration-code.md` - Code review: model selection, phase definitions, invocation patterns, language-specific focus
+- `shared/review-orchestration-docs.md` - Docs review: model selection, phase definitions, invocation patterns
 - `shared/validation-aggregation.md` - Common validation process and aggregation rules (shared by code and docs pipelines)
 - `shared/output-format.md` - Output format specification (shared by code and docs pipelines)
 - `shared/agent-common-instructions.md` - Common MODE, false positives, language checks, gaps behavior, pre-existing issue detection, output schema, severity definitions
@@ -241,8 +243,8 @@ There are more agents than available colors. When assigning colors:
 - `agents/docs/*.md` - Documentation review agent definitions
 - `languages/*.md` - Language-specific checks and patterns
 - `commands/*.md` - Self-contained orchestration documents (inline common steps, reference shared/)
-- `shared/review-orchestration-code.md` - Code review: phases, model selection, invocation patterns, language-specific focus, domain-specific validation patterns
-- `shared/review-orchestration-docs.md` - Docs review: phases, model selection, invocation patterns, domain-specific validation patterns
+- `shared/review-orchestration-code.md` - Code review: phases, model selection, invocation patterns, language-specific focus
+- `shared/review-orchestration-docs.md` - Docs review: phases, model selection, invocation patterns
 - `shared/output-format.md` - Output format specification (shared by code and docs pipelines)
 - `shared/validation-aggregation.md` - Common validation process and aggregation rules (shared by code and docs pipelines)
 - `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema, severity definitions)
@@ -251,6 +253,8 @@ There are more agents than available colors. When assigning colors:
 - `shared/staged-processing.md` - Input validation and content gathering for staged commands
 - `shared/docs-processing.md` - Input validation and content gathering for docs commands
 - `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
+- `shared/references/validation-rules-code.md` - Code review validation rules, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
+- `shared/references/validation-rules-docs.md` - Docs review validation rules, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
 - `skills/*/SKILL.md` - Skill definitions
 - `templates/code-review.local.md.example` - User settings template
 
@@ -285,8 +289,8 @@ When modifying the plugin:
 1. **Agent behavior**: Edit agent files in `agents/code/` or `agents/docs/`
 2. **Language-specific checks**: Edit files in `languages/` directory
 3. **Validation rules (common)**: Edit `shared/validation-aggregation.md` for shared validation/aggregation logic
-4. **Validation rules (code domain-specific)**: Edit `shared/review-orchestration-code.md` "Code Review Validation Rules" section
-5. **Validation rules (docs domain-specific)**: Edit `shared/review-orchestration-docs.md` "Documentation Review Validation Rules" section
+4. **Validation rules (code domain-specific)**: Edit `shared/references/validation-rules-code.md`
+5. **Validation rules (docs domain-specific)**: Edit `shared/references/validation-rules-docs.md`
 6. **Output format/generation**: Edit `shared/output-format.md`
 7. **Severity definitions**: Edit `shared/agent-common-instructions.md` "Severity Definitions" section
 8. **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus)
@@ -366,6 +370,10 @@ This applies to:
 - The number of code review commands grows beyond 6, making duplication maintenance burdensome
 - The shared steps diverge significantly between commands (suggesting they aren't truly shared)
 - A way is found to share steps without adding an extra file to the orchestrator's context window
+
+### Commands Directory
+
+Commands remain in `commands/` despite Anthropic's Plugin Reference labeling it as "legacy; use `skills/` for new skills." The command YAML frontmatter uses fields (`allowed-tools`, `argument-hint`, `model`) that are command-specific and not part of the skill YAML schema (`name`, `description` only). These are complex orchestration entry points, not simple trigger-response commands. Migrating would break orchestrator invocation for zero context reduction.
 
 ### File Path References
 

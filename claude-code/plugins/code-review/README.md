@@ -387,14 +387,16 @@ code-review/
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, validation rules, output format
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, validation rules, output format
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation and content gathering for staged commands
-│   └── references/                  # Detailed reference content
+│   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
-│       └── skill-troubleshooting.md # Common issues and solutions
+│       ├── skill-troubleshooting.md # Common issues and solutions
+│       ├── validation-rules-code.md # Code review validation rules, auto-validation patterns, false positive rules
+│       └── validation-rules-docs.md # Docs review validation rules, auto-validation patterns, false positive rules
 └── README.md
 ```
 
@@ -497,7 +499,7 @@ Detected by presence of `*.csproj` or `*.sln`. See `languages/dotnet.md` for:
 
 ## Output Format
 
-See the "Output Format" section in `shared/review-orchestration-code.md` for complete output templates.
+See `shared/output-format.md` for complete output templates.
 
 ### Summary Table
 

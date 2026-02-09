@@ -1,6 +1,6 @@
 ---
 name: reviewing-bugs
-description: Detects runtime errors, null references, off-by-one errors, boundary conditions, race conditions, and state management issues. Use when user mentions "find bugs", "check for bugs", "review for errors", "find logical errors", "check for null references", "find edge cases", "check for race conditions", or "debug this code".
+description: Detects runtime errors, null references, off-by-one errors, boundary conditions, race conditions, and state management issues. Use for bug hunting, edge cases, or logical errors.
 ---
 
 # Bug Detection Code Review Skill
@@ -55,7 +55,7 @@ Uses thorough mode with focus areas below.
 
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
+High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`.
 
 ---
 

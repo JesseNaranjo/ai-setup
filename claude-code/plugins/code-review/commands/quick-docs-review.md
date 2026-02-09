@@ -113,7 +113,7 @@ Launch 3 synthesis agents with category pairs:
 
 ## Step 9: Validation
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-aggregation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Validation Rules" (domain-specific patterns):
+Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-aggregation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` (domain-specific patterns):
 - Filter false positives
 - Verify issue locations exist
 - Remove duplicates

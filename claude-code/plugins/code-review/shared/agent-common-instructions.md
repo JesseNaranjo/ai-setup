@@ -98,8 +98,8 @@ Code with lint-disable/suppress comments or documented intentional suppressions.
 
 ### Category-Specific False Positive Rules
 
-- **Code reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "Category-Specific False Positive Rules (Code) > [Your Category]"
-- **Docs reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Category-Specific False Positive Rules (Documentation) > [Your Category]"
+- **Code reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` "Category-Specific False Positive Rules (Code) > [Your Category]"
+- **Docs reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` "Category-Specific False Positive Rules (Documentation) > [Your Category]"
 
 ## Gaps Mode Behavior Template
 
