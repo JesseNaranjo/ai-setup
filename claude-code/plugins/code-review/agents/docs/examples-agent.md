@@ -1,6 +1,6 @@
 ---
 name: examples-agent
-description: Detects broken examples, missing imports, incorrect syntax, outdated API usage, incomplete examples, and example-documentation mismatches. Use for code example review.
+description: Detects broken examples, missing imports, incorrect syntax, outdated API usage, incomplete examples, and example-documentation mismatches. Use for code example review, example accuracy verification, or API usage correctness check.
 model: opus  # See review-orchestration-docs.md Documentation Review Model Selection table
 color: yellow
 tools: ["Read", "Grep", "Glob"]

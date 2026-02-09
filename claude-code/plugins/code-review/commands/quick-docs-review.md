@@ -16,15 +16,9 @@ Parse arguments from `$ARGUMENTS`:
 
 ---
 
-## Step 1: Invoke Methodology Skills (Recommended)
+## Step 1: Invoke Methodology Skills
 
-Before beginning the review workflow, invoke the following skills and pass their methodology to subagents:
-
-1. `superpowers:using-superpowers` - Skill usage methodology (ALWAYS FIRST)
-2. `superpowers:brainstorming` - Explore interpretations before concluding
-3. `superpowers:verification-before-completion` - Verify findings before reporting
-
-**Fallback:** If the superpowers plugin is not installed, proceed with standard review workflow.
+Invoke superpowers skills (using-superpowers, brainstorming, systematic-debugging, verification-before-completion, writing-plans, executing-plans, requesting-code-review, dispatching-parallel-agents, subagent-driven-development) and pass methodology to all subagents via `skill_instructions.methodology`. If superpowers plugin unavailable, proceed without.
 
 ---
 
@@ -119,7 +113,7 @@ Launch 3 synthesis agents with category pairs:
 
 ## Step 9: Validation
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Validation Rules":
+Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/validation-aggregation.md` and `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Validation Rules" (domain-specific patterns):
 - Filter false positives
 - Verify issue locations exist
 - Remove duplicates
@@ -137,13 +131,13 @@ Aggregate validated findings:
 
 ## Step 11: Output
 
-Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Output Format".
+Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`.
 
 **Output config:**
 - Review Type: "Quick Documentation Review (7 invocations)"
 - Categories: Accuracy, Clarity, Examples, Structure
 
-Write to the output file path (see `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Filename Generation").
+Write to the output file path (see `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` "Filename Generation").
 
 Report completion to user with summary:
 - Total issues found by severity

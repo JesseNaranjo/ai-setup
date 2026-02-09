@@ -1,6 +1,6 @@
 ---
 name: synthesis-docs-agent
-description: Analyzes findings from multiple documentation review categories to identify cross-cutting concerns and issues spanning multiple documentation domains. Use after documentation review agents complete.
+description: Analyzes findings from multiple documentation review categories to identify cross-cutting concerns, ripple effects, and issues spanning multiple documentation domains. Use after other agents complete, for cross-cutting analysis, or ripple effect detection.
 model: sonnet  # See review-orchestration-docs.md Documentation Review Model Selection table
 color: white
 tools: ["Read", "Grep", "Glob"]

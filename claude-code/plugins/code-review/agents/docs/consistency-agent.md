@@ -1,6 +1,6 @@
 ---
 name: consistency-agent
-description: Detects terminology variations, formatting inconsistencies, voice/tone mismatches, naming convention violations, and style guide adherence problems. Use for doc consistency review.
+description: Detects terminology variations, formatting inconsistencies, voice/tone mismatches, naming convention violations, and style guide adherence problems. Use for doc consistency review, terminology standardization, or style uniformity check.
 model: sonnet  # See review-orchestration-docs.md Documentation Review Model Selection table
 color: blue
 tools: ["Read", "Grep", "Glob"]
