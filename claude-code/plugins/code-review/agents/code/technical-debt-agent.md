@@ -106,10 +106,10 @@ For each issue found, report:
   - When it should be addressed (urgency)
 - **Category**: "Technical Debt"
 - **Suggested severity**:
-  - Critical: Deprecated dependency with CVE, blocking modernization
-  - Major: Major version 2+ behind, extensive workaround code
-  - Minor: Outdated patterns that still work, untracked TODOs
-  - Suggestion: Modernization opportunities, optional cleanup
+  - Critical: Deprecated dependency with known vulnerabilities (CVE), removed API usage requiring immediate migration, blocking modernization path
+  - Major: Major version 2+ behind with breaking changes pending, scalability blocker in production, extensive workaround code affecting multiple files
+  - Minor: Outdated patterns that still work correctly, TODO/FIXME without urgency or tracking, minor documentation gaps
+  - Suggestion: Code modernization opportunity, style improvements, optional refactoring for consistency
 
 ## Output Schema
 

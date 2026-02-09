@@ -138,13 +138,12 @@ claude-code/plugins/code-review/
 │   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── staged-processing.md         # Staged input validation and content gathering
-│   ├── validation-aggregation.md    # Common validation process and aggregation rules (progressive disclosure, loaded at Steps 9-12)
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
 │       ├── skill-troubleshooting.md # Common issues and solutions
-│       ├── validation-rules-code.md # Code review validation rules, auto-validation patterns, false positive rules
-│       └── validation-rules-docs.md # Docs review validation rules, auto-validation patterns, false positive rules
+│       ├── validation-rules-code.md # Code review validation, aggregation, auto-validation patterns, false positive rules
+│       └── validation-rules-docs.md # Docs review validation, aggregation, auto-validation patterns, false positive rules
 ├── templates/
 │   └── code-review.local.md.example # Settings template for users
 └── README.md
@@ -155,7 +154,6 @@ claude-code/plugins/code-review/
 See the following files for authoritative agent configuration:
 - `shared/review-orchestration-code.md` - Code review: model selection, phase definitions, invocation patterns, language-specific focus
 - `shared/review-orchestration-docs.md` - Docs review: model selection, phase definitions, invocation patterns
-- `shared/validation-aggregation.md` - Common validation process and aggregation rules (shared by code and docs pipelines)
 - `shared/output-format.md` - Output format specification (shared by code and docs pipelines)
 - `shared/agent-common-instructions.md` - Common MODE, false positives, language checks, gaps behavior, pre-existing issue detection, output schema, severity definitions
 
@@ -246,15 +244,14 @@ There are more agents than available colors. When assigning colors:
 - `shared/review-orchestration-code.md` - Code review: phases, model selection, invocation patterns, language-specific focus
 - `shared/review-orchestration-docs.md` - Docs review: phases, model selection, invocation patterns
 - `shared/output-format.md` - Output format specification (shared by code and docs pipelines)
-- `shared/validation-aggregation.md` - Common validation process and aggregation rules (shared by code and docs pipelines)
 - `shared/agent-common-instructions.md` - Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema, severity definitions)
 - `shared/pre-review-setup.md` - Settings loading and context discovery (combined)
 - `shared/file-processing.md` - Input validation and content gathering for file-based commands
 - `shared/staged-processing.md` - Input validation and content gathering for staged commands
 - `shared/docs-processing.md` - Input validation and content gathering for docs commands
 - `shared/skill-handling.md` - Skill resolution and orchestration (lazy-loaded when --skills used)
-- `shared/references/validation-rules-code.md` - Code review validation rules, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
-- `shared/references/validation-rules-docs.md` - Docs review validation rules, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
+- `shared/references/validation-rules-code.md` - Code review validation, aggregation, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
+- `shared/references/validation-rules-docs.md` - Docs review validation, aggregation, auto-validation patterns, false positive rules (lazy-loaded at Steps 9-12)
 - `skills/*/SKILL.md` - Skill definitions
 - `templates/code-review.local.md.example` - User settings template
 
@@ -288,20 +285,19 @@ When modifying the plugin:
 
 1. **Agent behavior**: Edit agent files in `agents/code/` or `agents/docs/`
 2. **Language-specific checks**: Edit files in `languages/` directory
-3. **Validation rules (common)**: Edit `shared/validation-aggregation.md` for shared validation/aggregation logic
-4. **Validation rules (code domain-specific)**: Edit `shared/references/validation-rules-code.md`
-5. **Validation rules (docs domain-specific)**: Edit `shared/references/validation-rules-docs.md`
-6. **Output format/generation**: Edit `shared/output-format.md`
-7. **Severity definitions**: Edit `shared/agent-common-instructions.md` "Severity Definitions" section
-8. **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus)
-9. **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns)
-10. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks, gaps, pre-existing issue detection)
-11. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
-12. **Command arguments**: Edit command YAML frontmatter in `commands/`
-13. **Skills**: Edit skill files in `skills/*/SKILL.md`
-14. **Skill references**: Add detailed patterns to `skills/*/references/`
-15. **Skill examples**: Add sample outputs to `skills/*/examples/`
-16. **Settings options**: Edit `shared/pre-review-setup.md` and `templates/code-review.local.md.example`
+3. **Validation rules (code)**: Edit `shared/references/validation-rules-code.md` (includes validation process, aggregation, auto-validation patterns, false positive rules)
+4. **Validation rules (docs)**: Edit `shared/references/validation-rules-docs.md` (includes validation process, aggregation, auto-validation patterns, false positive rules)
+5. **Output format/generation**: Edit `shared/output-format.md`
+6. **Severity definitions**: Edit `shared/agent-common-instructions.md` "Severity Definitions" section
+7. **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus)
+8. **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns)
+9. **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks, gaps, pre-existing issue detection)
+10. **Common skill steps**: Skill workflows are self-contained in each `skills/*/SKILL.md`
+11. **Command arguments**: Edit command YAML frontmatter in `commands/`
+12. **Skills**: Edit skill files in `skills/*/SKILL.md`
+13. **Skill references**: Add detailed patterns to `skills/*/references/`
+14. **Skill examples**: Add sample outputs to `skills/*/examples/`
+15. **Settings options**: Edit `shared/pre-review-setup.md` and `templates/code-review.local.md.example`
 
 ## Coding Conventions
 
