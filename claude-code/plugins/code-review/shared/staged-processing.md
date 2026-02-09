@@ -125,3 +125,23 @@ Staged reviews use tiered context to balance thoroughness with context efficienc
 - Changed files receive full content (critical tier)
 - Unchanged files receive preview + metadata (peripheral tier)
 - Agents can Read peripheral files on-demand if cross-file analysis discovers relevance
+
+## Pre-Existing Issue Detection (For Staged Reviews)
+
+**CRITICAL**: When reviewing staged changes or diffs, agents must only flag issues in CHANGED lines.
+
+**Context provided to agents:**
+1. Diff content with line markers (lines starting with `+` are additions)
+2. Surrounding unchanged lines (for understanding context only)
+3. Full file content (for reference only, not for flagging issues)
+
+**Rules for what to flag:**
+- Issue is in a line starting with `+` in the diff (newly added code)
+- Change INTRODUCES the issue (e.g., removes null check that protected existing code)
+- Change WORSENS an existing issue (e.g., increases scope of vulnerability)
+
+**Do NOT flag:**
+- Issues in unchanged code (lines without `+` prefix)
+- Pre-existing problems not made worse by the change
+- Style issues in untouched code nearby
+- Issues visible in "full file" context but not in the diff

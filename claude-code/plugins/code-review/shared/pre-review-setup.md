@@ -22,18 +22,9 @@ If the file does not exist, use default settings and continue.
 
 #### 2. Parse YAML Frontmatter
 
-If the file exists, parse the YAML frontmatter to extract settings:
+If the file exists, parse the YAML frontmatter to extract settings.
 
-```yaml
----
-enabled: true
-output_dir: "."
-skip_agents: []
-min_severity: "suggestion"
-language: ""  # auto-detect
-additional_test_patterns: []
----
-```
+Fields: `enabled`, `output_dir`, `skip_agents`, `min_severity`, `language` (empty = auto-detect), `additional_test_patterns`.
 
 #### 3. Check Enabled Flag
 
@@ -63,26 +54,7 @@ Command-line flags extend or override settings file:
 2. `--language` overrides `language`
 3. `--prompt` appends to project instructions (does not replace)
 
-### Example Usage
-
-#### Provide Project Context
-
-```yaml
----
-enabled: true
----
-
-# Project Context
-
-This is a high-security financial application. Pay extra attention to:
-- Input validation on all user-facing endpoints
-- SQL injection in database queries
-- Proper error handling that doesn't leak sensitive information
-
-## Known Patterns
-
-We use a custom ORM that sanitizes inputs automatically. Calls to `db.query()` are safe.
-```
+For a full settings example with project context, see `${CLAUDE_PLUGIN_ROOT}/templates/code-review.local.md.example`.
 
 ## Section 2: Context Discovery
 
@@ -124,25 +96,9 @@ For each file being reviewed, find corresponding test files based on detected la
 
 ### Step 4: Return Discovery Results
 
-Return a structured result with all discovered context:
+Return a structured `discovery_results` with fields: `ai_instructions` (path + applies_to), `detected_languages` (language → file list), `detected_frameworks` (framework → file list), `test_files` (source → tests), `language_override` (from --language flag or null).
 
-```yaml
-discovery_results:
-  ai_instructions:
-    - path: "CLAUDE.md"
-      applies_to: ["src/api/handler.ts"]
-  detected_languages:
-    nodejs: ["src/api/handler.ts"]
-    dotnet: ["Services/UserService.cs"]
-  detected_frameworks:
-    react: ["src/components/Button.tsx"]
-  test_files:
-    - source: "src/api/handler.ts"
-      tests: ["src/api/__tests__/handler.test.ts"]
-  language_override: null  # or "nodejs" / "react" / "dotnet" if --language was used
-```
-
-**Note:** `detected_languages` enables lazy loading of language configs - only load `languages/nodejs.md` if `detected_languages.nodejs` has files. `detected_frameworks` tracks React detection that extends base language configs.
+**Note:** `detected_languages` enables lazy loading of language configs — only load `languages/nodejs.md` if `detected_languages.nodejs` has files. `detected_frameworks` tracks React detection that extends base language configs.
 
 ## Error Handling
 

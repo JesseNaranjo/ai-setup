@@ -100,7 +100,7 @@ After Phase 1 completes, launch 3 agents with **gaps** mode, passing Phase 1 fin
 
 **Agents**: Accuracy, Completeness, Consistency
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "Gaps Mode Behavior Template" for gaps mode rules (duplicate detection, constraints). See each agent's MODE Parameter section for category-specific focus areas.
+See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Gaps Mode Behavior" for gaps mode rules (duplicate detection, constraints). Include the Gaps Mode Behavior rules (duplicate detection skip zones, severity constraints, 5-finding cap) in each gaps agent's `additional_instructions` field. See each agent's MODE Parameter section for category-specific focus areas.
 
 **CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
 

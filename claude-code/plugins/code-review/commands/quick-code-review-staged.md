@@ -32,7 +32,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
 
 ## Steps 3 & 5: Input Validation and Content Gathering
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md` for the validation, content gathering, and tiered context behavior.
+See `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md` for the validation, content gathering, and tiered context behavior. Include the Pre-Existing Issue Detection rules from `staged-processing.md` in each agent's `additional_instructions` prompt field.
 
 ---
 

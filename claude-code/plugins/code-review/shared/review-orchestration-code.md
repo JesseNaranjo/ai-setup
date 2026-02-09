@@ -28,7 +28,7 @@ Task(
 | `related_tests` | list | Conditional | Only for bug-detection, technical-debt, test-coverage agents (see Test File Distribution) |
 | `previous_findings` | list | Gaps only | Prior findings for deduplication. Each entry: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
 | `skill_instructions` | object | Optional | From `--skills` argument. Fields: `focus_areas` (list), `checklist` (list of {category, severity, items}), `auto_validate` (list), `false_positive_rules` (list), `methodology` ({approach, steps, questions}) |
-| `additional_instructions` | string | Optional | Combined content from settings file body + `--prompt` argument |
+| `additional_instructions` | string | Optional | Combined content from settings file body + `--prompt` argument + orchestrator-injected rules (gaps behavior, pre-existing detection) |
 
 ### File Entry Schema
 
@@ -83,6 +83,30 @@ Pass full `ai_instructions` content ONLY to agents that need project-specific ru
 | All other agents | Summary only | Receive: "AI instructions exist at [paths]. Use Grep to check specific rules if needed." |
 
 **Estimated savings:** 7 agents x ~500 lines average AI instructions = ~3,500 lines per review
+
+## Gaps Mode Behavior
+
+When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid duplicates.
+
+### Duplicate Detection (Common to All Gaps Agents)
+
+- Skip issues in same file within +/-5 lines of prior findings
+- Skip same issue type on same function/method
+- For range findings (lines A-B): skip zone = [A-5, B+5]
+
+See Prompt Schema table above (`previous_findings` field) for the schema.
+
+### Constraints (Common to All Gaps Agents)
+
+- Only report Major or Critical severity (skip Minor/Suggestion)
+- Maximum 5 new findings per agent
+- Model: Always Sonnet (cost optimization)
+
+### Gaps-Supporting Agents
+
+**Code review:** bug-detection, compliance, performance, security, technical-debt.
+
+See each agent file for category-specific focus areas (what subtle issues thorough mode misses).
 
 ## Deep Code Review Sequence (19 agent invocations)
 
@@ -223,7 +247,3 @@ Commands launch multiple instances of the synthesis agent simultaneously, each w
 # Code Review Validation Rules
 
 See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` for validation rules, auto-validation patterns, and category-specific false positive rules. Load at Steps 9-12 only.
-
-# Output Format
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` for the complete output format specification.

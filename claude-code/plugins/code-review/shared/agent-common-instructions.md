@@ -101,62 +101,6 @@ Code with lint-disable/suppress comments or documented intentional suppressions.
 - **Code reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` "Category-Specific False Positive Rules (Code) > [Your Category]"
 - **Docs reviews:** See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` "Category-Specific False Positive Rules (Documentation) > [Your Category]"
 
-## Gaps Mode Behavior Template
-
-When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid duplicates.
-
-### Duplicate Detection (Common to All Gaps Agents)
-
-- Skip issues in same file within +/-5 lines of prior findings
-- Skip same issue type on same function/method
-- For range findings (lines A-B): skip zone = [A-5, B+5]
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` Prompt Schema table (`previous_findings` field) for the schema.
-
-### Constraints (Common to All Gaps Agents)
-
-- Only report Major or Critical severity (skip Minor/Suggestion)
-- Maximum 5 new findings per agent
-- Model: Always Sonnet (cost optimization)
-
-### Gaps-Supporting Agents
-
-**Code review:** bug-detection, compliance, performance, security, technical-debt.
-**Documentation review:** accuracy, completeness, consistency.
-
-See each agent file for category-specific focus areas (what subtle issues thorough mode misses).
-
-## Pre-Existing Issue Detection (For Staged/Diff Reviews)
-
-**CRITICAL**: When reviewing staged changes or diffs, agents must only flag issues in CHANGED lines.
-
-**Context provided to agents:**
-1. Diff content with line markers (lines starting with `+` are additions)
-2. Surrounding unchanged lines (for understanding context only)
-3. Full file content (for reference only, not for flagging issues)
-
-**Rules for what to flag:**
-- Issue is in a line starting with `+` in the diff (newly added code)
-- Change INTRODUCES the issue (e.g., removes null check that protected existing code)
-- Change WORSENS an existing issue (e.g., increases scope of vulnerability)
-
-**Do NOT flag:**
-- Issues in unchanged code (lines without `+` prefix)
-- Pre-existing problems not made worse by the change
-- Style issues in untouched code nearby
-- Issues visible in "full file" context but not in the diff
-
-**Example:**
-```diff
-  function getUser(id) {
-+   const user = await db.query(`SELECT * FROM users WHERE id = ${id}`);  // FLAG: SQL injection
-    if (existingBuggyCode) {  // DO NOT FLAG: pre-existing, not in diff
-      return null;
-    }
-+   return user;
-  }
-```
-
 ### Automatic Cross-File Analysis
 
 Agents perform cross-file analysis automatically using tools when code suggests cross-cutting concerns (imports/exports, class/interface definitions, API contracts, shared types). See `${CLAUDE_PLUGIN_ROOT}/agents/code/architecture-agent.md` for detailed triggers.
@@ -176,47 +120,10 @@ Use the YAML schema shown in your agent's examples. Each issue requires these ba
 
 ## Severity Definitions
 
-### Critical
-
-Issues that must be fixed before merge. These represent:
-
-- **Exploitable security vulnerabilities**: SQL injection, XSS, authentication bypass, command injection
-- **Data loss or corruption risks**: Unhandled writes, race conditions affecting data integrity
-- **System crashes or service unavailability**: Null pointer dereferences in critical paths, infinite loops
-- **Broken core functionality**: Logic errors that prevent primary features from working
-
-**Action**: Block merge until resolved.
-
-### Major
-
-Issues that should be fixed but may not block merge in time-sensitive situations:
-
-- **Security issues requiring specific conditions**: CSRF without sensitive actions, information disclosure requiring authentication
-- **Significant performance degradation**: O(n²) in hot paths, memory leaks over time, N+1 queries
-- **Logic errors affecting key workflows**: Incorrect calculations, wrong branch conditions
-- **Breaking API changes**: Removed endpoints, changed response shapes, incompatible parameter changes
-
-**Action**: Fix before merge unless time-critical with documented exception.
-
-### Minor
-
-Issues that improve code quality but don't affect correctness:
-
-- **Code quality issues**: Duplicated code, overly complex functions, poor naming
-- **Non-critical performance inefficiencies**: Suboptimal but not problematic performance
-- **Style/pattern inconsistencies**: Deviations from project conventions
-- **Missing edge case handling**: Uncommon scenarios without explicit handling
-
-**Action**: Fix when convenient or in follow-up PR.
-
-### Suggestion
-
-Opportunities for improvement, not problems:
-
-- **Improvement opportunities**: Better algorithms, cleaner patterns
-- **Better alternatives exist**: More idiomatic approaches available
-- **Documentation gaps**: Missing comments on complex logic
-- **Test coverage recommendations**: Additional test cases that would improve confidence
-
-**Action**: Consider for future improvement.
+| Severity | Threshold | Action |
+|----------|-----------|--------|
+| Critical | Exploitable vulnerabilities (SQLi, XSS, auth bypass), data loss/corruption, crashes (null deref in critical paths, infinite loops), broken core functionality | Block merge |
+| Major | Conditional security issues (CSRF, info disclosure), significant perf degradation (O(n^2) hot paths, N+1, memory leaks), logic errors, breaking API changes | Fix before merge unless time-critical |
+| Minor | Code quality (duplication, complexity, naming), non-critical perf, style inconsistencies, uncommon edge cases | Fix when convenient |
+| Suggestion | Better alternatives, improvement opportunities, documentation gaps, test coverage ideas | Consider for future |
 

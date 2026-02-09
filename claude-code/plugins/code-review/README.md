@@ -383,14 +383,14 @@ code-review/
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
-│   ├── agent-common-instructions.md # Common agent instructions (MODE, false positives, language checks, gaps, pre-existing issue detection, output schema, severity definitions)
+│   ├── agent-common-instructions.md # Common agent instructions (MODE, false positives, language checks, output schema, compact severity definitions)
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode behavior
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode behavior
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
-│   ├── staged-processing.md         # Input validation and content gathering for staged commands
+│   ├── staged-processing.md         # Input validation, content gathering, and pre-existing issue detection for staged commands
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
