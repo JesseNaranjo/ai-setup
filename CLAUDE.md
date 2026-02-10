@@ -1,6 +1,13 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file and nearly all content in this repository is written for LLM consumption, not humans. This file provides guidance to Claude Code when working with code in this repository. All other plugin files (`commands/`, `agents/`, `shared/`, `skills/`, `languages/`, `templates/`) are LLM prompts executed by the Opus orchestrator and review agents at runtime.
+
+The only human-readable files are:
+- `README.md` and `CHANGELOG.md`
+- `.claude-plugin/marketplace.json` (`name` and `description` fields only)
+- `claude-code/plugins/code-review/.claude-plugin/plugin.json` (`name` and `description` fields only)
+
+Do not optimize any other file for human readability. Do not add prose softeners, transitional phrases, or explanatory filler that aids human reading but adds tokens to LLM context windows.
 
 ## Repository Overview
 
@@ -114,7 +121,7 @@ claude-code/plugins/code-review/
 │       ├── validation-rules-code.md # Code review validation, aggregation, auto-validation patterns, false positive rules
 │       └── validation-rules-docs.md # Docs review validation, aggregation, auto-validation patterns, false positive rules
 ├── templates/
-│   └── code-review.local.md.example # Settings template for users
+│   └── code-review.local.md.example # Settings template (parsed by orchestrator at runtime)
 └── README.md
 ```
 
@@ -241,7 +248,7 @@ When modifying the plugin:
 
 ### Instruction Quality Preservation
 
-**REQUIRED:** When modifying instruction content (agents, skills, shared files, commands), preserve the quality and precision of existing guidance.
+**REQUIRED:** When modifying instruction content (CLAUDE.md, agents, skills, shared files, commands), preserve the quality and precision of existing guidance.
 
 - **Preserve specificity**: Never replace concrete patterns, examples, or exact checks with vague or generalized guidance
 - **Preserve rationale**: Keep "why" explanations alongside rules — these prevent future contributors from removing seemingly arbitrary constraints
@@ -251,19 +258,34 @@ When modifying the plugin:
 
 **Rationale:** The instruction files in this repo are LLM prompts whose effectiveness depends on precise wording, specific examples, and calibrated thresholds. Generic editing instincts (simplify, shorten, generalize) directly degrade agent performance.
 
-### Content Categories
+### Content Audience
 
-**CRITICAL:** Every file in this plugin belongs to exactly one of three categories. Never place content in a directory belonging to a different category. This is the most consequential convention in this file — violating it silently degrades review performance by polluting the Opus orchestrator's context window with irrelevant content.
+**CRITICAL:** Nearly all content in this repository is written for LLM consumption. Do not adjust content for human readability unless the file is explicitly listed as human-readable below.
 
-| Category | Directories | Consumed By | When |
-|----------|-------------|-------------|------|
-| **Development-time guidance** | `CLAUDE.md` | Claude Code | When authoring/modifying the plugin |
-| **Plugin runtime content** | `commands/`, `agents/`, `shared/`, `skills/`, `languages/` | Opus orchestrator + agents | During every review execution |
-| **User-facing documentation** | `README.md`, `CHANGELOG.md`, `templates/` | Human users | When configuring or understanding the plugin |
+**LLM-consumed content** (everything except the files listed below):
 
-**The core rule:** Runtime directories (`commands/`, `agents/`, `shared/`, `skills/`, `languages/`) are loaded into the Opus orchestrator's context window during review execution. Every token has a direct cost on every review. **Never place development-time authoring guidance or documentation into runtime directories.**
+| Subcategory | Files | Consumer | When |
+|-------------|-------|----------|------|
+| Development-time | `CLAUDE.md` | Claude Code | When authoring/modifying the plugin |
+| Runtime | `commands/`, `agents/`, `shared/`, `skills/`, `languages/`, `templates/` | Opus orchestrator + agents | During every review execution |
 
-**Common violation:** The instinct to "extract" CLAUDE.md content into `shared/references/` moves tokens from a cheap context (loaded once per authoring session) into an expensive context (loaded on every review). Ask "who consumes this content and when?" — if a developer modifying the plugin, it belongs in `CLAUDE.md`.
+**Human-readable files** (exhaustive list):
+- `README.md` — plugin documentation for users
+- `CHANGELOG.md` — release notes for users
+- `.claude-plugin/marketplace.json` — `name` and `description` fields only
+- `claude-code/plugins/code-review/.claude-plugin/plugin.json` — `name` and `description` fields only
+
+**Everything not listed above is an LLM prompt.** This includes `templates/` (the settings format is parsed by the Opus orchestrator at runtime).
+
+**Anti-drift rules:**
+- Do not add prose transitions, softening language, or filler that aids human scanning but adds tokens
+- Do not cite "human documentation standards" as rationale for LLM prompt conventions
+- Do not use "developer" or "user" when the actual consumer is Claude Code or the Opus orchestrator
+- When unsure about audience, default to LLM-optimized — the human-readable list above is exhaustive
+
+**The core rule:** Runtime files are loaded into the Opus orchestrator's context window during every review. Every token has a direct cost. Never place development-time guidance into runtime directories.
+
+**Common violation:** The instinct to "extract" CLAUDE.md content into `shared/references/` moves tokens from a cheap context (loaded once per authoring session) into an expensive context (loaded on every review). Ask "who consumes this content and when?" — if Claude Code when modifying the plugin, it belongs in `CLAUDE.md`.
 
 ### Alphabetical Ordering
 
@@ -294,7 +316,7 @@ This applies to:
 - Agent workflows in `agents/code/*.md` and `agents/docs/*.md`
 - Skill workflows in `skills/*/SKILL.md`
 
-**Rationale:** Human documentation standards and consistency with agent workflows. All 17 agents already use Step 1 as their first step.
+**Rationale:** Consistency with agent workflows. All 17 agents already use Step 1 as their first step.
 
 **Step layout in commands:**
 - Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills) - inlined in each command
@@ -341,7 +363,7 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 
 - **Trailing newlines**: Subagent file rewrites often drop trailing newlines. Verify with `tail -c 1` after bulk operations.
 - **Reference integrity**: When moving content between files, `grep -r "section name"` before AND after to catch all references (commands, skills, shared files).
-- **Content category violations**: Before adding content to `shared/` or `shared/references/`, ask "who consumes this?" If the answer is "a developer modifying the plugin," it belongs in CLAUDE.md, not runtime directories.
+- **Content category violations**: Before adding content to `shared/` or `shared/references/`, ask "who consumes this?" If the answer is "Claude Code when modifying the plugin," it belongs in CLAUDE.md, not runtime directories.
 - **Synthesis constraint**: Synthesis insights require findings in BOTH input categories. Single-category insights are rejected at validation.
 
 ## Version Management
