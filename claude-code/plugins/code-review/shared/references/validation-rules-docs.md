@@ -10,7 +10,6 @@ To optimize cost and latency, issues are validated in batches grouped by file ra
 
 1. **Group by file**: All issues for the same file are validated in a single agent call
 2. **Group by validator model**: Issues requiring same model (Opus vs Sonnet) are grouped together
-3. **Benefit**: Reduces agent invocations from N issues to M files (typically 60-80% reduction)
 
 ### Quick Review Validation Scope
 
@@ -71,12 +70,6 @@ validations:
 
 Some high-confidence patterns skip validation entirely and are marked `auto_validated: true`:
 
-**Notes on pattern matching:**
-- Patterns are case-insensitive for SQL keywords
-- Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`
-- Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`
-- Empty catch pattern allows a single comment line to avoid flagging intentional empty catches with explanation
-
 ### Auto-Validation Output
 
 ```yaml
@@ -121,7 +114,7 @@ Each validator returns:
 
 **Cross-cutting insights** (from synthesis-docs-agent) always use **Opus** for validation.
 
-**Note for Quick Reviews:** Despite the quick review philosophy of using Sonnet where possible, cross-cutting insights still use Opus for validation because they represent novel connections between categories that require more nuanced judgment to validate. The time savings of Sonnet validation does not justify the risk of missing subtle cross-category interactions.
+**Quick Reviews:** Cross-cutting insights still use Opus for validation (novel cross-category connections require nuanced judgment).
 
 ## Aggregation Rules
 

@@ -48,7 +48,7 @@ For each file:
 
 ### Step 3: Report Bugs
 
-Report per Output Schema in agent-common-instructions.md. For each bug:
+Report per Output Schema provided in your prompt. For each bug:
 - **Description** should include: what the bug is, how it manifests at runtime, conditions under which it occurs
 - **Category**: "Bugs"
 - **Severity thresholds**:
@@ -59,7 +59,7 @@ Report per Output Schema in agent-common-instructions.md. For each bug:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Bugs-specific extra fields:**
 

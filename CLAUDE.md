@@ -105,7 +105,7 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
-│   ├── agent-common-instructions.md # Common MODE, false positives, language checks, output schema
+│   ├── agent-common-instructions.md # Common MODE, false positives, output schema (read by orchestrator, distributed to agents)
 │   ├── docs-processing.md           # Docs input validation and content gathering
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── output-format.md             # Output format specification (progressive disclosure, loaded at Steps 9-12)
@@ -117,7 +117,6 @@ claude-code/plugins/code-review/
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
-│       ├── skill-troubleshooting.md # Common issues and solutions
 │       ├── validation-rules-code.md # Code review validation, aggregation, auto-validation patterns, false positive rules
 │       └── validation-rules-docs.md # Docs review validation, aggregation, auto-validation patterns, false positive rules
 ├── templates/
@@ -149,6 +148,12 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
 3. **Synthesis** (5 agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
 4. **Validation**: All issues validated before output
+
+### Agent Content Distribution
+
+The orchestrator reads `agent-common-instructions.md`, `validation-rules-{code|docs}.md`, and `languages/*.md` ONCE, then distributes only the relevant portions to each agent via `additional_instructions`. Agents do not read these shared files directly — they receive output schema, MODE definition, false positive rules (general + category-specific), and language-specific checks via their prompt.
+
+See `shared/review-orchestration-code.md` "Agent Common Content Distribution" and `shared/review-orchestration-docs.md` for implementation details.
 
 ### Gaps Mode Agent Selection Rationale
 
@@ -229,7 +234,7 @@ When modifying the plugin:
 
 ### Agent & Orchestration
 - **Agent behavior**: Edit `agents/code/` or `agents/docs/`
-- **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, language checks)
+- **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, output schema — distributed to agents by orchestrator)
 - **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus, gaps mode behavior)
 - **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior)
 
@@ -369,6 +374,18 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 - **Reference integrity**: When moving content between files, `grep -r "section name"` before AND after to catch all references (commands, skills, shared files).
 - **Content category violations**: Before adding content to `shared/` or `shared/references/`, ask "who consumes this?" If the answer is "Claude Code when modifying the plugin," it belongs in CLAUDE.md, not runtime directories.
 - **Synthesis constraint**: Synthesis insights require findings in BOTH input categories. Single-category insights are rejected at validation.
+
+### Auto-Validation Pattern Design Notes
+
+These notes apply when modifying patterns in `validation-rules-{code|docs}.md`:
+- Patterns are case-insensitive for SQL keywords
+- Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`
+- Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`
+- Empty catch pattern allows a single comment line to avoid flagging intentional empty catches with explanation
+
+### Content Strategy Rationale
+
+Agents have access to Read, Grep, and Glob tools. For Phase 2 (gaps) and Synthesis, providing file paths instead of full content allows agents to fetch content on-demand, reducing baseline token usage while preserving capability. Phase 1 provides full file content and diffs; Phase 2 provides diffs only; Synthesis provides file paths only. The operational details are in the Review Sequence sections of `review-orchestration-code.md`.
 
 ## Version Management
 

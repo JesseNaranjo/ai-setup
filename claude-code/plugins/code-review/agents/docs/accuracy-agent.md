@@ -71,7 +71,7 @@ Check version consistency:
 
 ### Step 4: Report Inaccuracies
 
-Report per Output Schema in agent-common-instructions.md. For each inaccuracy:
+Report per Output Schema provided in your prompt. For each inaccuracy:
 - **Description** should include: what the documentation says, what the code actually does, impact of the discrepancy
 - **Category**: "Accuracy"
 - **Severity thresholds**:
@@ -82,7 +82,7 @@ Report per Output Schema in agent-common-instructions.md. For each inaccuracy:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Accuracy-specific extra fields:**
 

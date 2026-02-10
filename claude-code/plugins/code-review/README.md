@@ -394,7 +394,6 @@ code-review/
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── complete-output-example.md # Complete output format example
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
-│       ├── skill-troubleshooting.md # Common issues and solutions
 │       ├── validation-rules-code.md # Code review validation rules, auto-validation patterns, false positive rules
 │       └── validation-rules-docs.md # Docs review validation rules, auto-validation patterns, false positive rules
 └── README.md
@@ -601,12 +600,45 @@ Create a new `.md` file in `commands/` with the appropriate frontmatter.
 **Wrong language detected:**
 - Use `--language nodejs`, `--language react`, or `--language dotnet` flag
 - Or set `language` in settings file
+- Run review from the specific project subdirectory
+- Check if both package.json and .csproj exist in the repo (mixed project)
+- Check if files are in a subdirectory with different project type
 
 **Too many findings:**
 - Increase `min_severity` to "major" or "critical"
 - Skip certain agents via `skip_agents` setting
 
-For more troubleshooting, see `shared/references/skill-troubleshooting.md`.
+**Agent returns no issues but problems exist:**
+- Verify file content is included in the prompt
+- Check that diffs show the problematic lines
+- Ensure project_type is correctly detected
+- Try expanding scope to include related files
+- Re-run with explicit file paths instead of staged changes
+- Check if file is in .gitignore (won't appear in staged)
+- Verify the issue is in changed lines (not pre-existing)
+
+**Too many false positives:**
+- Are issues in test files? (often intentional)
+- Are issues in commented code?
+- Are "vulnerabilities" in internal-only code?
+- Increase min_severity to "Major" in settings
+- Exclude test files if not relevant
+- Add context about intentional exceptions in project settings
+
+**Agent times out:**
+- Reduce scope to fewer files
+- Split large files into focused reviews
+- Use quick mode for initial scan, then deep review specific areas
+
+**Skill not triggering:**
+- Verify plugin is listed in `/help`
+- Use exact trigger phrases (see Skills section above)
+- Restart Claude Code to reload plugins
+
+**Cross-cutting issues missed:**
+- Use `/deep-code-review` which includes synthesis phase
+- Explicitly ask: "Check if security fixes affect performance"
+- Review related files together, not in isolation
 
 ## Version History
 

@@ -48,7 +48,7 @@ Analyze code for error handling issues and resilience gaps.
 
 ### Step 3: Report Error Handling Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the error handling issue is, what can go wrong, impact of the missing/incorrect handling
 - **Category**: "Error Handling"
 - **Severity thresholds**:
@@ -59,7 +59,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Error Handling-specific extra fields:**
 

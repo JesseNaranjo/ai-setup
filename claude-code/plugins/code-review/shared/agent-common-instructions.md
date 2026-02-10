@@ -1,5 +1,7 @@
 # Common Agent Instructions
 
+> **Consumption pattern:** This file is read by the Opus orchestrator and distributed to agents via additional_instructions. Agents do not read this file directly.
+
 ## Standard Agent Input
 
 **Required:** files_to_review (diffs/content), project_type (nodejs/dotnet/both), MODE (thorough/gaps/quick)
@@ -11,10 +13,6 @@
 - **thorough**: Comprehensive review, all issues in agent's domain
 - **gaps**: Subtle issues missed by thorough; receives previous_findings to skip duplicates
 - **quick**: Critical issues only (highest-impact, merge-blocking)
-
-## Language-Specific Checks
-
-Check `${CLAUDE_PLUGIN_ROOT}/languages/{nodejs|dotnet|react}.md#[your-category]` for detected project languages.
 
 ## False Positive Rules
 
@@ -28,10 +26,6 @@ Check `${CLAUDE_PLUGIN_ROOT}/languages/{nodejs|dotnet|react}.md#[your-category]`
 
 **Deep review** can flag more issues but still skip pre-existing, silenced, and pure style.
 **Quick review**: only blocking issues; ignore minor style, skip theoretical edge cases.
-
-**Category-specific rules:**
-- Code reviews: See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` "Category-Specific False Positive Rules (Code) > [Your Category]"
-- Docs reviews: See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` "Category-Specific False Positive Rules (Documentation) > [Your Category]"
 
 ## Output Schema
 

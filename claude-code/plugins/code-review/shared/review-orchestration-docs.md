@@ -54,6 +54,24 @@ Task(
 
 End the prompt with: `Return findings as YAML per agent examples in your agent file.`
 
+### Content Distribution Optimization
+
+#### Agent Common Content Distribution
+
+The orchestrator reads shared content files ONCE and distributes relevant portions to each agent via `additional_instructions`, eliminating per-agent file reads.
+
+**Source files (read by orchestrator, not by agents):**
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`
+- `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` "Category-Specific False Positive Rules"
+
+**Distribution per agent** (append to `additional_instructions`):
+1. **Output schema** from agent-common-instructions.md
+2. **MODE definition** matching the current mode
+3. **General false positive rules** from agent-common-instructions.md
+4. **Category-specific false positive rules** — extract ONLY the agent's category section from validation-rules-docs.md
+
+Synthesis agents are excluded from this distribution.
+
 ## Gaps Mode Behavior
 
 When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid duplicates.
@@ -164,9 +182,7 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` for the full age
 
 ### Parallel Synthesis Pattern
 
-Commands launch multiple instances of the synthesis agent simultaneously, each with different category pairs. Each instance operates independently and returns its own `cross_cutting_insights` list. The orchestrating command merges all results.
-
-**Authoritative source for category pairs:** See Deep Docs Review Sequence (4 pairs) and Quick Docs Review Sequence (3 pairs) above.
+Launch multiple synthesis instances simultaneously with different category pairs. Each returns independent `cross_cutting_insights`; orchestrator merges all results. Category pairs: see Deep Docs Review Sequence (4 pairs) and Quick Docs Review Sequence (3 pairs) above.
 
 ---
 

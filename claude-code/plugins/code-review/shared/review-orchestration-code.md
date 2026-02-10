@@ -70,8 +70,6 @@ Pass `related_tests` content ONLY to agents that analyze test relationships:
 | test-coverage-agent | Yes | Primary consumer - analyzes test coverage |
 | All other agents | No | Can use Grep/Glob if cross-file analysis warrants |
 
-**Estimated savings:** 6 agents x ~300 lines average test content = ~1,800 lines per review
-
 #### AI Instructions Distribution
 
 Pass full `ai_instructions` content ONLY to agents that need project-specific rules:
@@ -82,7 +80,33 @@ Pass full `ai_instructions` content ONLY to agents that need project-specific ru
 | compliance-agent | Yes | Primary consumer - verifies adherence to documented standards |
 | All other agents | Summary only | Receive: "AI instructions exist at [paths]. Use Grep to check specific rules if needed." |
 
-**Estimated savings:** 7 agents x ~500 lines average AI instructions = ~3,500 lines per review
+#### Agent Common Content Distribution
+
+The orchestrator reads shared content files ONCE and distributes relevant portions to each agent via `additional_instructions`, eliminating per-agent file reads.
+
+**Source files (read by orchestrator, not by agents):**
+- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`
+- `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` "Category-Specific False Positive Rules"
+- `${CLAUDE_PLUGIN_ROOT}/languages/{detected}.md` per-category sections
+
+**Distribution per agent** (append to `additional_instructions`):
+1. **Output schema** from agent-common-instructions.md
+2. **MODE definition** matching the current mode
+3. **General false positive rules** from agent-common-instructions.md
+4. **Category-specific false positive rules** — extract ONLY the agent's category section from validation-rules-code.md
+5. **Language-specific checks** — extract ONLY the agent's category anchor from detected language files
+
+| Agent | Language anchor |
+|-------|----------------|
+| architecture-agent | `{#architecture}` |
+| bug-detection-agent | `{#bugs}` |
+| error-handling-agent | `{#errors}` |
+| performance-agent | `{#performance}` |
+| security-agent | `{#security}` |
+| technical-debt-agent | `{#debt}` |
+| test-coverage-agent | `{#tests}` |
+
+Agents without language anchors (api-contracts, compliance) skip step 5. Synthesis agents are excluded from this distribution.
 
 ## Gaps Mode Behavior
 
@@ -126,6 +150,7 @@ See each agent file for category-specific focus areas (what subtle issues thorou
    - MODE: `gaps`
    - Model: Sonnet (cost-optimized for constrained task)
    - INPUT: Phase 1 findings passed as `previous_findings`
+   - Content: Diff only (no full file content — agents use Read tool for deeper analysis)
    - **CRITICAL: WAIT** - DO NOT proceed to Synthesis until ALL 5 agents complete
    - OUTPUT: Phase 2 findings (subtle issues, edge cases)
 
@@ -133,6 +158,7 @@ See each agent file for category-specific focus areas (what subtle issues thorou
    - **CRITICAL: DO NOT START until Phase 1 AND Phase 2 are FULLY COMPLETE**
    - Launch: 5 instances of synthesis-code-agent with category pairs
    - INPUT: ALL findings from Phase 1 AND Phase 2
+   - Content: File paths only (no file content — agents Read for cross-reference)
    - Pairs and questions:
      - Architecture+Test Coverage: "Are architectural changes covered by tests?"
      - Bugs+Compliance: "Do compliance violations introduce or mask bugs?"
@@ -178,32 +204,6 @@ See each agent file for category-specific focus areas (what subtle issues thorou
 | technical-debt-agent | opus | sonnet | N/A |
 | test-coverage-agent | sonnet | N/A | sonnet |
 
-## Content Strategy by Phase
-
-Different phases have different content requirements. This strategy reduces token usage while maintaining review quality.
-
-**Phase 1 (Thorough):**
-- Full file content provided
-- Full diff content provided
-- AI instructions per distribution rules (see Content Distribution Optimization above)
-- Test files per distribution rules (see Content Distribution Optimization above)
-- Agents perform comprehensive analysis
-
-**Phase 2 (Gaps):**
-- Diff content always provided
-- Full file content: Not provided by default - agents use Read tool if deeper analysis needed
-- Previous findings provided (defines skip zones)
-- Focus: Subtle issues, edge cases not caught in Phase 1
-- Model: Sonnet (cost-optimized for constrained task with prior context)
-
-**Synthesis:**
-- Findings from Phase 1 + Phase 2 provided
-- File paths provided (agents can Read if cross-reference needed)
-- Focus: Cross-cutting concerns only
-- No file content passed by default
-
-**Rationale:** Agents have access to Read, Grep, and Glob tools. Providing file paths instead of full content for later phases allows agents to fetch content on-demand, reducing baseline token usage while preserving capability.
-
 ## Language-Specific Focus
 
 Load language configs ONLY for detected languages/frameworks to minimize context usage:
@@ -238,9 +238,7 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` for the full age
 
 ### Parallel Synthesis Pattern
 
-Commands launch multiple instances of the synthesis agent simultaneously, each with different category pairs. Each instance operates independently and returns its own `cross_cutting_insights` list. The orchestrating command merges all results.
-
-**Authoritative source for category pairs:** See Deep Code Review Sequence (5 pairs) and Quick Code Review Sequence (3 pairs) above.
+Launch multiple synthesis instances simultaneously with different category pairs. Each returns independent `cross_cutting_insights`; orchestrator merges all results. Category pairs: see Deep Code Review Sequence (5 pairs) and Quick Code Review Sequence (3 pairs) above.
 
 ---
 

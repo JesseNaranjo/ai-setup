@@ -62,7 +62,7 @@ For each section:
 
 ### Step 4: Report Clarity Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: the specific clarity problem, why it's confusing, who would be confused (audience segment)
 - **Category**: "Clarity"
 - **Severity thresholds**:
@@ -73,7 +73,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Clarity-specific extra fields:**
 

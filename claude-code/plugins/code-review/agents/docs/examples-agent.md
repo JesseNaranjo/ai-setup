@@ -97,7 +97,7 @@ Verify examples are self-contained or properly contextualized:
 
 ### Step 6: Report Example Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what's wrong with the example, how it would fail if run, the correct form
 - **Category**: "Examples"
 - **Severity thresholds**:
@@ -108,7 +108,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Examples-specific extra fields:**
 

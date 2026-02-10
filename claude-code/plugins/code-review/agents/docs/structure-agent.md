@@ -101,7 +101,7 @@ See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruct
 
 ### Step 6: Report Structure Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what's wrong structurally, how it affects navigation/usability, recommended fix
 - **Category**: "Structure"
 - **Severity thresholds**:
@@ -112,7 +112,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Structure-specific extra fields:**
 

@@ -41,7 +41,7 @@ For each file being reviewed:
 
 ### Step 4: Report Violations
 
-Report per Output Schema in agent-common-instructions.md. For each violation:
+Report per Output Schema provided in your prompt. For each violation:
 - **Description** should include: the exact rule being violated (quote from instruction file), why this code violates the rule, impact of the violation
 - **Category**: "Compliance"
 - **Severity thresholds**:
@@ -51,7 +51,7 @@ Report per Output Schema in agent-common-instructions.md. For each violation:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Compliance-specific extra fields:**
 

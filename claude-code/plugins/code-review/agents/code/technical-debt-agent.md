@@ -89,7 +89,7 @@ When cross-file analysis is warranted:
 
 ### Step 4: Report Technical Debt Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the debt is, why it's debt (impact on maintainability/modernization), when it should be addressed (urgency)
 - **Category**: "Technical Debt"
 - **Severity thresholds**:
@@ -100,7 +100,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Technical Debt-specific extra fields:**
 

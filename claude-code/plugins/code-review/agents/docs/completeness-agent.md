@@ -91,7 +91,7 @@ Compare discovered items against documentation coverage.
 
 ### Step 4: Report Completeness Issues
 
-Report per Output Schema in agent-common-instructions.md. For each gap:
+Report per Output Schema provided in your prompt. For each gap:
 - **Description** should include: what is missing, why it's needed, what problems its absence causes
 - **Category**: "Completeness"
 - **Severity thresholds**:
@@ -102,7 +102,7 @@ Report per Output Schema in agent-common-instructions.md. For each gap:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Completeness-specific extra fields:**
 

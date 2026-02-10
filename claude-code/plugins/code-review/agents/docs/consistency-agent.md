@@ -79,7 +79,7 @@ Check for consistency in:
 
 ### Step 5: Report Consistency Issues
 
-Report per Output Schema in agent-common-instructions.md. For each inconsistency:
+Report per Output Schema provided in your prompt. For each inconsistency:
 - **Description** should include: what is inconsistent, the variant forms found, recommended canonical form
 - **Category**: "Consistency"
 - **Severity thresholds**:
@@ -90,7 +90,7 @@ Report per Output Schema in agent-common-instructions.md. For each inconsistency
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Consistency-specific extra fields:**
 

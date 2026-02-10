@@ -50,7 +50,7 @@ Analyze code for security vulnerabilities and weaknesses.
 
 ### Step 3: Report Vulnerabilities
 
-Report per Output Schema in agent-common-instructions.md. For each vulnerability:
+Report per Output Schema provided in your prompt. For each vulnerability:
 - **Description** should include: type of vulnerability, how it could be exploited, potential impact
 - **Category**: "Security"
 - **Severity thresholds**:
@@ -61,7 +61,7 @@ Report per Output Schema in agent-common-instructions.md. For each vulnerability
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Security-specific extra fields:**
 

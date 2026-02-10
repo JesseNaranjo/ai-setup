@@ -68,7 +68,7 @@ For each gap found, provide:
 
 ### Step 5: Report Test Coverage Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what code is not tested, why it should be tested, risk of not testing
 - **Category**: "Test Coverage"
 - **Severity thresholds**:
@@ -78,7 +78,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Test Coverage-specific extra fields:**
 

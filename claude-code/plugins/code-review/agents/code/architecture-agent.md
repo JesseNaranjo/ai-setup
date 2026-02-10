@@ -96,7 +96,7 @@ When cross-file analysis is warranted:
 
 ### Step 4: Report Architecture Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the architectural issue is, which principle or pattern is violated, impact on maintainability
 - **Category**: "Architecture"
 - **Severity thresholds**:
@@ -106,7 +106,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Architecture-specific extra fields:**
 

@@ -42,7 +42,7 @@ Analyze code for performance issues that will have measurable impact.
 
 ### Step 3: Report Performance Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the performance issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem
 - **Category**: "Performance"
 - **Severity thresholds**:
@@ -53,7 +53,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **Performance-specific extra fields:**
 

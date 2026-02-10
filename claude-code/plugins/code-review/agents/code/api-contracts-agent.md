@@ -53,7 +53,7 @@ For each API change:
 
 ### Step 4: Report API Issues
 
-Report per Output Schema in agent-common-instructions.md. For each issue:
+Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the API change is, impact on consumers, migration path (if any)
 - **Category**: "API Contracts"
 - **Severity thresholds**:
@@ -64,7 +64,7 @@ Report per Output Schema in agent-common-instructions.md. For each issue:
 
 ## Output Schema
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` Output Schema for base fields and canonical example.
+See Output Schema in additional_instructions for base fields.
 
 **API Contracts-specific extra fields:**
 
