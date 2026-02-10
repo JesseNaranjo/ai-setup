@@ -10,13 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze documentation for factual correctness and code synchronization.
 
-## MODE Parameter
-
-**Accuracy-specific modes:**
-- **thorough**: All code references, API signatures, version numbers, CLI commands, configuration options
-- **gaps**: Default value drift (code changed defaults, docs still show old), behavior edge cases (error conditions, empty inputs, null handling), implicit contract changes (return type narrowing, new exceptions), deprecation without documentation, new optional parameters with important defaults. Duplicate detection: skip issues in same file within ±3 lines of prior findings; skip same issue type on same code reference.
-- **quick**: Critical mismatches (wrong function names, incorrect return types, broken examples)
-
 ## Review Process
 
 ### Step 1: Identify Accuracy Categories (Based on MODE)
@@ -40,6 +33,7 @@ Analyze documentation for factual correctness and code synchronization.
 - Order-dependent behavior changes
 - Deprecated but still documented features
 - New required parameters not documented
+- Duplicate detection: skip issues in same file within ±3 lines of prior findings; skip same issue type on same code reference
 
 **quick mode - Check for:**
 - Incorrect function/method names

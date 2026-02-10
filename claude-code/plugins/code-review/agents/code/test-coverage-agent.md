@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for test coverage gaps and provide specific test recommendations.
 
-## MODE Parameter
-
-**Test coverage-specific modes:**
-- **thorough**: Unit tests, integration tests, edge cases, test quality
-- **quick**: New public functions without tests, critical paths untested
-
-*Note: This agent does not use "gaps" mode.*
-
 ## Review Process
 
 ### Step 1: Detect Test Files

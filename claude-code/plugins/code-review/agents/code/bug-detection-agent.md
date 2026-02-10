@@ -10,13 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for bugs that will cause incorrect behavior at runtime.
 
-## MODE Parameter
-
-**Bug detection-specific modes:**
-- **thorough**: Comprehensive bug hunting - logical errors, null references, off-by-one errors, type mismatches
-- **gaps**: Boundary conditions (empty arrays, zero values, max values), race conditions in concurrent code, state management issues (stale state, incorrect updates), resource cleanup failures in error paths, time-of-check to time-of-use issues, integer overflow/underflow
-- **quick**: Most obvious and critical bugs only
-
 ## Review Process
 
 ### Step 1: Identify Bug Categories (Based on MODE)

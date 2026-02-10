@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for error handling issues and resilience gaps.
 
-## MODE Parameter
-
-**Error handling-specific modes:**
-- **thorough**: Exception handling, cleanup, propagation, resilience patterns
-- **quick**: Swallowed exceptions, missing cleanup, crash-causing gaps
-
-*Note: This agent does not use "gaps" mode.*
-
 ## Review Process
 
 ### Step 1: Identify Error Handling Categories (Based on MODE)

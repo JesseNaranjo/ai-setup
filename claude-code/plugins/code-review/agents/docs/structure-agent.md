@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze documentation for organization, navigation, and structural integrity.
 
-## MODE Parameter
-
-**Structure-specific modes:**
-- **thorough**: Full structure analysis, all links, heading hierarchy, AI instruction standardization
-- **quick**: Broken links, major navigation issues, critical structural problems
-
-**Note:** This agent does not support gaps mode.
-
 ## Review Process
 
 ### Step 1: Identify Structure Categories (Based on MODE)

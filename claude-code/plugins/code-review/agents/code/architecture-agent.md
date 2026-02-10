@@ -10,13 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for architectural issues affecting maintainability and scalability.
 
-## MODE Parameter
-
-**Architecture-specific modes:**
-- **thorough**: Coupling, cohesion, SOLID principles, design patterns
-
-*Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
-
 ## Review Process
 
 ### Step 1: Identify Architecture Categories (Based on MODE)

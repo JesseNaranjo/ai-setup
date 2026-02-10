@@ -10,13 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for API compatibility and contract compliance issues.
 
-## MODE Parameter
-
-**API contracts-specific modes:**
-- **thorough**: Breaking changes, compatibility, versioning, contract consistency
-
-*Note: This agent does not use "gaps" mode and is not invoked during quick reviews.*
-
 ## Review Process
 
 ### Step 1: Identify API Categories (Based on MODE)

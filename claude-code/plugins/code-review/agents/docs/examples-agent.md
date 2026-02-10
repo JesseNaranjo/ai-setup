@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code examples in documentation for correctness and completeness.
 
-## MODE Parameter
-
-**Examples-specific modes:**
-- **thorough**: All code examples, imports, syntax, API correctness, completeness, output accuracy
-- **quick**: Critical example errors (syntax errors, missing critical imports, completely wrong API usage)
-
-**Note:** This agent does not support gaps mode.
-
 ## Review Process
 
 ### Step 1: Identify Example Categories (Based on MODE)

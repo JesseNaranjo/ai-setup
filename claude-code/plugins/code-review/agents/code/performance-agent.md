@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for performance issues that will have measurable impact.
 
-## MODE Parameter
-
-**Performance-specific modes:**
-- **thorough**: Algorithmic complexity, memory usage, I/O patterns, database access
-- **gaps**: Hidden N+1 queries (lazy loading, nested loops with DB calls), memory retention through closures or event listeners, inefficient serialization/deserialization, cache invalidation issues, unnecessary data copying, batch operation opportunities, hot path inefficiencies
-
-*Note: This agent is not invoked during quick reviews.*
-
 ## Review Process
 
 ### Step 1: Identify Performance Categories (Based on MODE)

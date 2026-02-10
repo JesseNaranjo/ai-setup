@@ -10,13 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for security vulnerabilities and weaknesses.
 
-## MODE Parameter
-
-**Security-specific modes:**
-- **thorough**: All OWASP categories, authentication, authorization, cryptography, data handling
-- **gaps**: Second-order injection (stored XSS, delayed command execution), authorization edge cases (role escalation, missing checks on related resources), timing attacks and side channels, race conditions affecting security, error messages leaking sensitive information, weak randomness in security-critical code
-- **quick**: Direct injection, obvious auth bypass, hardcoded secrets
-
 ## Review Process
 
 ### Step 1: Identify Security Categories (Based on MODE)

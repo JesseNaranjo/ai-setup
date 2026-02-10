@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze documentation for coverage gaps and missing content.
 
-## MODE Parameter
-
-**Completeness-specific modes:**
-- **thorough**: All standard sections, feature coverage, setup completeness, error documentation
-- **gaps**: Undocumented edge cases in documented features, missing caveats and limitations, implicit assumptions about user environment, default values differing from common expectations, platform-specific behavior variations, error recovery steps. Duplicate detection: skip issues about same missing section already reported; skip same feature's documentation already flagged.
-
-**Note:** This agent does not support quick mode.
-
 ## Review Process
 
 ### Step 1: Identify Completeness Categories (Based on MODE)
@@ -43,6 +35,7 @@ Analyze documentation for coverage gaps and missing content.
 - Missing security considerations
 - Undocumented breaking changes
 - Version compatibility gaps
+- Duplicate detection: skip issues about same missing section already reported; skip same feature's documentation already flagged
 
 ### Step 2: Cross-Reference Code to Docs
 

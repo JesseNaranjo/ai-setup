@@ -145,3 +145,18 @@ Staged reviews use tiered context to balance thoroughness with context efficienc
 - Pre-existing problems not made worse by the change
 - Style issues in untouched code nearby
 - Issues visible in "full file" context but not in the diff
+
+## Tiered Context Agent Guidance
+
+For staged reviews, inject the following into each agent's `additional_instructions`:
+
+When files include tier information (staged reviews):
+
+**For `tier: "critical"` files:**
+- Full content is provided - analyze thoroughly
+- This is the primary review focus
+
+**For `tier: "peripheral"` files:**
+- Only a preview (first 50 lines) is provided
+- Use the preview to understand file purpose
+- If cross-file analysis discovers relevance, use Read tool to get full content

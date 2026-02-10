@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze code for accumulated technical debt affecting maintainability, modernization, and long-term sustainability.
 
-## MODE Parameter
-
-**Technical Debt-specific modes:**
-- **thorough**: Comprehensive debt discovery across all 6 categories
-- **gaps**: Subtle debt not caught in thorough pass, context-dependent debt (patterns fine in some contexts but debt in this project), debt requiring deeper cross-file analysis, edge cases in deprecated pattern detection
-
-*Note: This agent does not use "quick" mode and is not invoked during quick reviews.*
-
 ## Review Process
 
 ### Step 1: Identify Technical Debt Categories (Based on MODE)

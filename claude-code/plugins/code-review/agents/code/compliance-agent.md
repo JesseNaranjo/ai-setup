@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Review code for compliance with CLAUDE.md and other AI Agent Instructions files (AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md).
 
-## MODE Parameter
-
-**Compliance-specific modes:**
-- **thorough**: All compliance issues, every rule against every changed file
-- **gaps**: Rules with exceptions that weren't properly applied, inconsistent application of guidelines across files, context-dependent violations (correct in one place, wrong in another), subtle spirit-of-the-rule violations that technically pass
-
-*Note: This agent is not invoked during quick reviews.*
-
 ## Review Process
 
 ### Step 1: Parse Instructions

@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze documentation for uniformity in terminology, formatting, and style.
 
-## MODE Parameter
-
-**Consistency-specific modes:**
-- **thorough**: Full terminology scan, formatting rules, voice analysis, naming conventions
-- **gaps**: Near-synonyms that aren't obvious duplicates, subtle capitalization differences in mid-sentence, inconsistent spacing around punctuation, varying placeholder patterns in examples, inconsistent emphasis (bold vs italics for similar purposes). Duplicate detection: skip terminology pairs already flagged; skip formatting categories already addressed.
-
-**Note:** This agent does not support quick mode.
-
 ## Review Process
 
 ### Step 1: Identify Consistency Categories (Based on MODE)
@@ -41,6 +33,7 @@ Analyze documentation for uniformity in terminology, formatting, and style.
 - Inconsistent example naming patterns
 - Subtle punctuation differences
 - Whitespace and indentation variations
+- Duplicate detection: skip terminology pairs already flagged; skip formatting categories already addressed
 
 ### Step 2: Build Terminology Map
 

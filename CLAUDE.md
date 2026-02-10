@@ -105,7 +105,7 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
-│   ├── agent-common-instructions.md # Common MODE, false positives, language checks, output schema, compact severity definitions
+│   ├── agent-common-instructions.md # Common MODE, false positives, language checks, output schema
 │   ├── docs-processing.md           # Docs input validation and content gathering
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── output-format.md             # Output format specification (progressive disclosure, loaded at Steps 9-12)
@@ -237,7 +237,7 @@ When modifying the plugin:
 - **Validation rules (code)**: Edit `shared/references/validation-rules-code.md` (validation process, aggregation, auto-validation patterns, false positive rules)
 - **Validation rules (docs)**: Edit `shared/references/validation-rules-docs.md` (validation process, aggregation, auto-validation patterns, false positive rules)
 - **Output format/generation**: Edit `shared/output-format.md`
-- **Severity definitions**: Edit `shared/agent-common-instructions.md` "Severity Definitions" section
+- **Severity definitions**: Each agent defines calibrated thresholds in its own file under `agents/code/` or `agents/docs/`
 
 ### Skills & Language
 - **Skills**: Edit `skills/*/SKILL.md`; add patterns to `references/`, examples to `examples/`

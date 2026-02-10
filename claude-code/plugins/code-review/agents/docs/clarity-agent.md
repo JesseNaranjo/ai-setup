@@ -10,14 +10,6 @@ tools: ["Read", "Grep", "Glob"]
 
 Analyze documentation for readability and comprehension issues.
 
-## MODE Parameter
-
-**Clarity-specific modes:**
-- **thorough**: Full readability analysis, jargon detection, audience assessment, explanation quality
-- **quick**: Critical clarity issues (completely unclear sections, undefined acronyms, major ambiguities)
-
-**Note:** This agent does not support gaps mode.
-
 ## Review Process
 
 ### Step 1: Identify Clarity Categories (Based on MODE)
