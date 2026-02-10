@@ -242,6 +242,41 @@ Commands launch multiple instances of the synthesis agent simultaneously, each w
 
 **Authoritative source for category pairs:** See Deep Code Review Sequence (5 pairs) and Quick Code Review Sequence (3 pairs) above.
 
+## Skill Instructions Agent Guidance
+
+When `--skills` is active, inject the following into each agent's `additional_instructions`:
+
+When `skill_instructions` is present in the prompt, apply it as follows:
+
+1. **focus_areas**: Prioritize checking these categories FIRST before standard checks. Structure findings around these areas where applicable.
+2. **checklist**: For each checklist category, explicitly verify EVERY item. If an item is clean (no issues found), acknowledge it was checked.
+3. **auto_validate**: Issues matching these pattern IDs should include `auto_validated: true` in output.
+4. **false_positive_rules**: Apply these as ADDITIONAL false positive filters beyond this agent's standard rules.
+
+For methodology skills (like `superpowers:brainstorming`):
+1. **methodology.approach**: Adopt this mindset throughout analysis
+2. **methodology.steps**: Follow these steps as part of your review process
+3. **methodology.questions**: Consider these questions when evaluating each potential finding
+
+**Note:** Agents without a primary review skill (api-contracts-agent, error-handling-agent, synthesis-code-agent, synthesis-docs-agent, test-coverage-agent) receive only the methodology section.
+
+When `skill_instructions` is absent, proceed with standard review process.
+
+## Tiered Context Agent Guidance
+
+For staged reviews, inject the following into each agent's `additional_instructions`:
+
+When files include tier information (staged reviews):
+
+**For `tier: "critical"` files:**
+- Full content is provided - analyze thoroughly
+- This is the primary review focus
+
+**For `tier: "peripheral"` files:**
+- Only a preview (first 50 lines) is provided
+- Use the preview to understand file purpose
+- If cross-file analysis discovers relevance, use Read tool to get full content
+
 ---
 
 # Code Review Validation Rules

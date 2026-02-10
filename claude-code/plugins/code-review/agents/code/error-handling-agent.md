@@ -1,7 +1,7 @@
 ---
 name: error-handling-agent
-description: Detects missing try/catch blocks, swallowed exceptions, missing cleanup, improper error propagation, and resilience gaps. Use for error handling review or exception issues.
-model: sonnet  # See review-orchestration-code.md Code Review Model Selection table
+description: "Error handling specialist. Use for detecting missing try/catch blocks, swallowed exceptions, improper error propagation, missing cleanup, or resilience gaps."
+model: sonnet
 color: orange
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -56,15 +56,10 @@ Analyze code for error handling issues and resilience gaps.
 
 ### Step 3: Report Error Handling Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the error handling issue
-- **File path and line range**: Where the issue occurs
-- **Description**:
-  - What the error handling issue is
-  - What can go wrong
-  - Impact of the missing/incorrect handling
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what the error handling issue is, what can go wrong, impact of the missing/incorrect handling
 - **Category**: "Error Handling"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Can cause data loss or security issues
   - Major: Can cause application crashes or incorrect behavior
   - Minor: Reduces resilience but doesn't cause immediate issues

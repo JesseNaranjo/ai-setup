@@ -1,7 +1,7 @@
 ---
 name: technical-debt-agent
-description: Detects deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt. Use for tech debt assessment or code modernization.
-model: opus  # See review-orchestration-code.md Code Review Model Selection table
+description: "Technical debt specialist. Use for detecting deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, or documentation debt."
+model: opus
 color: brown
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -97,15 +97,10 @@ When cross-file analysis is warranted:
 
 ### Step 4: Report Technical Debt Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the technical debt
-- **File path and line range**: Where the debt is located
-- **Description**:
-  - What the debt is
-  - Why it's debt (impact on maintainability/modernization)
-  - When it should be addressed (urgency)
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what the debt is, why it's debt (impact on maintainability/modernization), when it should be addressed (urgency)
 - **Category**: "Technical Debt"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Deprecated dependency with known vulnerabilities (CVE), removed API usage requiring immediate migration, blocking modernization path
   - Major: Major version 2+ behind with breaking changes pending, scalability blocker in production, extensive workaround code affecting multiple files
   - Minor: Outdated patterns that still work correctly, TODO/FIXME without urgency or tracking, minor documentation gaps

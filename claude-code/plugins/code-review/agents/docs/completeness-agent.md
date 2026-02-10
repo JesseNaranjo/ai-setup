@@ -1,7 +1,7 @@
 ---
 name: completeness-agent
-description: Detects missing sections, undocumented features, incomplete setup instructions, missing error handling docs, and coverage gaps. Use for doc completeness review, missing content discovery, or feature coverage gap analysis.
-model: opus  # See review-orchestration-docs.md Documentation Review Model Selection table
+description: "Documentation completeness specialist. Use for detecting missing sections, undocumented features, incomplete setup instructions, or coverage gaps."
+model: opus
 color: green
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -98,15 +98,10 @@ Compare discovered items against documentation coverage.
 
 ### Step 4: Report Completeness Issues
 
-For each gap found, report:
-- **Issue title**: Brief description of what's missing
-- **File path and line**: Where the content should be added (or nearest relevant location)
-- **Description**:
-  - What is missing
-  - Why it's needed
-  - What problems its absence causes
+Report per Output Schema in agent-common-instructions.md. For each gap:
+- **Description** should include: what is missing, why it's needed, what problems its absence causes
 - **Category**: "Completeness"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Missing info that blocks users from using the project
   - Major: Missing important documentation, causes significant friction
   - Minor: Would be helpful but users can figure it out

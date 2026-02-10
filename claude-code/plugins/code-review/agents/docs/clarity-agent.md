@@ -1,7 +1,7 @@
 ---
 name: clarity-agent
-description: Detects readability problems, unexplained jargon, audience mismatches, confusing explanations, and poor sentence structure. Use for doc clarity or readability review.
-model: sonnet  # See review-orchestration-docs.md Documentation Review Model Selection table
+description: "Documentation clarity specialist. Use for detecting readability problems, unexplained jargon, audience mismatches, or confusing explanations."
+model: sonnet
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -70,15 +70,10 @@ For each section:
 
 ### Step 4: Report Clarity Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the clarity problem
-- **File path and line**: Location in documentation
-- **Description**:
-  - The specific clarity problem
-  - Why it's confusing
-  - Who would be confused (audience segment)
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: the specific clarity problem, why it's confusing, who would be confused (audience segment)
 - **Category**: "Clarity"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Completely incomprehensible, would block users
   - Major: Significant confusion likely for target audience
   - Minor: Could be clearer but understandable with effort

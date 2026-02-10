@@ -1,7 +1,7 @@
 ---
 name: test-coverage-agent
-description: Identifies missing tests, test quality issues, edge cases not covered, and provides specific test recommendations. Use for test coverage gaps or test recommendations.
-model: sonnet  # See review-orchestration-code.md Code Review Model Selection table
+description: "Test coverage specialist. Use for identifying missing tests, test quality issues, edge cases not covered, and providing specific test recommendations."
+model: sonnet
 color: white
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -76,15 +76,10 @@ For each gap found, provide:
 
 ### Step 5: Report Test Coverage Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the coverage gap
-- **File path and line range**: Code location lacking tests
-- **Description**:
-  - What code is not tested
-  - Why it should be tested
-  - Risk of not testing
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what code is not tested, why it should be tested, risk of not testing
 - **Category**: "Test Coverage"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Major: Critical path without tests
   - Minor: Non-critical code lacking tests
   - Suggestion: Additional edge case tests recommended

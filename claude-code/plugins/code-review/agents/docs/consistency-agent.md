@@ -1,7 +1,7 @@
 ---
 name: consistency-agent
-description: Detects terminology variations, formatting inconsistencies, voice/tone mismatches, naming convention violations, and style guide adherence problems. Use for doc consistency review, terminology standardization, or style uniformity check.
-model: sonnet  # See review-orchestration-docs.md Documentation Review Model Selection table
+description: "Documentation consistency specialist. Use for detecting terminology variations, formatting inconsistencies, voice/tone mismatches, or naming convention violations."
+model: sonnet
 color: blue
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -86,15 +86,10 @@ Check for consistency in:
 
 ### Step 5: Report Consistency Issues
 
-For each inconsistency found, report:
-- **Issue title**: Brief description of the inconsistency
-- **File path and line**: Primary location
-- **Description**:
-  - What is inconsistent
-  - The variant forms found
-  - Recommended canonical form
+Report per Output Schema in agent-common-instructions.md. For each inconsistency:
+- **Description** should include: what is inconsistent, the variant forms found, recommended canonical form
 - **Category**: "Consistency"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Inconsistency causes confusion or errors (rare)
   - Major: Significant inconsistency affecting professionalism
   - Minor: Noticeable but doesn't impede understanding

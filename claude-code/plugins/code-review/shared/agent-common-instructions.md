@@ -7,46 +7,15 @@ This document contains shared instructions for all review agents. Agents referen
 All review agents receive the following inputs. Agents should NOT repeat this in their own documentation.
 
 **Required inputs:**
-- **Files to review**: Diffs and/or full content (see Using Tiered Context below)
+- **Files to review**: Diffs and/or full content
 - **Detected project type**: Node.js, .NET, or both
 - **MODE parameter**: thorough, gaps, or quick (see MODE Parameter below)
 
 **Optional inputs:**
-- **skill_instructions**: Skill-derived focus areas and methodology (see below)
+- **skill_instructions**: Skill-derived focus areas and methodology
 - **previous_findings**: Prior findings for gaps mode deduplication
 
 **Available tools:** `["Read", "Grep", "Glob"]`
-
-## Using skill_instructions
-
-When `skill_instructions` is present in the prompt, apply it as follows:
-
-1. **focus_areas**: Prioritize checking these categories FIRST before standard checks. Structure findings around these areas where applicable.
-2. **checklist**: For each checklist category, explicitly verify EVERY item. If an item is clean (no issues found), acknowledge it was checked.
-3. **auto_validate**: Issues matching these pattern IDs should include `auto_validated: true` in output.
-4. **false_positive_rules**: Apply these as ADDITIONAL false positive filters beyond this agent's standard rules.
-
-For methodology skills (like `superpowers:brainstorming`):
-1. **methodology.approach**: Adopt this mindset throughout analysis
-2. **methodology.steps**: Follow these steps as part of your review process
-3. **methodology.questions**: Consider these questions when evaluating each potential finding
-
-**Note:** Agents without a primary review skill (api-contracts-agent, error-handling-agent, synthesis-code-agent, synthesis-docs-agent, test-coverage-agent) receive only the methodology section.
-
-When `skill_instructions` is absent, proceed with standard review process.
-
-## Using Tiered Context
-
-When files include tier information (staged reviews):
-
-**For `tier: "critical"` files:**
-- Full content is provided - analyze thoroughly
-- This is the primary review focus
-
-**For `tier: "peripheral"` files:**
-- Only a preview (first 50 lines) is provided
-- Use the preview to understand file purpose
-- If cross-file analysis discovers relevance, use Read tool to get full content
 
 ## MODE Parameter (Common)
 

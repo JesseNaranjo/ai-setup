@@ -1,7 +1,7 @@
 ---
 name: api-contracts-agent
-description: Detects breaking changes, backward compatibility problems, interface contract violations, inconsistent API patterns, and schema changes affecting consumers. Use for API review, breaking changes, or contract issues.
-model: sonnet  # See review-orchestration-code.md Code Review Model Selection table
+description: "API contracts specialist. Use for detecting breaking changes, backward compatibility problems, interface contract violations, or inconsistent API patterns in code changes."
+model: sonnet
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -60,15 +60,10 @@ For each API change:
 
 ### Step 4: Report API Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the API issue
-- **File path and line range**: Where the change occurs
-- **Description**:
-  - What the API change is
-  - Impact on consumers
-  - Migration path (if any)
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what the API change is, impact on consumers, migration path (if any)
 - **Category**: "API Contracts"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Breaking change without migration path
   - Major: Breaking change with workaround available
   - Minor: Inconsistency or documentation gap

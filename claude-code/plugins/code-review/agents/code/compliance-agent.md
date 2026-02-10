@@ -1,7 +1,7 @@
 ---
 name: compliance-agent
-description: Reviews adherence to project-specific coding standards, CLAUDE.md guidelines, and AI agent instruction files. Use for standards compliance or convention checks.
-model: sonnet  # See review-orchestration-code.md Code Review Model Selection table
+description: "Coding standards compliance specialist. Use for checking adherence to CLAUDE.md guidelines, AI agent instructions, or project-specific coding standards."
+model: sonnet
 color: blue
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -49,15 +49,10 @@ For each file being reviewed:
 
 ### Step 4: Report Violations
 
-For each violation found, report:
-- **Issue title**: Brief description of the violation
-- **File path and line range**: Where the violation occurs
-- **Description**: Detailed explanation including:
-  - The exact rule being violated (quote from instruction file)
-  - Why this code violates the rule
-  - Impact of the violation
+Report per Output Schema in agent-common-instructions.md. For each violation:
+- **Description** should include: the exact rule being violated (quote from instruction file), why this code violates the rule, impact of the violation
 - **Category**: "Compliance"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Major: Explicit rule violation (MUST, MUST NOT, ALWAYS, NEVER)
   - Minor: Guideline violation (SHOULD, SHOULD NOT)
   - Suggestion: Best practice not followed

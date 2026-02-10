@@ -1,7 +1,7 @@
 ---
 name: security-agent
-description: Detects injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, OWASP top 10 issues, and other security concerns. Use for security review, vulnerability audit, or secret scanning.
-model: opus  # See review-orchestration-code.md Code Review Model Selection table
+description: "Security vulnerability specialist. Use for detecting injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, or OWASP top 10 issues."
+model: opus
 color: purple
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -57,15 +57,10 @@ Analyze code for security vulnerabilities and weaknesses.
 
 ### Step 3: Report Vulnerabilities
 
-For each vulnerability found, report:
-- **Issue title**: Brief description of the vulnerability
-- **File path and line range**: Exact location
-- **Description**:
-  - Type of vulnerability
-  - How it could be exploited
-  - Potential impact
+Report per Output Schema in agent-common-instructions.md. For each vulnerability:
+- **Description** should include: type of vulnerability, how it could be exploited, potential impact
 - **Category**: "Security"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Direct exploitation risk, data breach potential, RCE
   - Major: Exploitable under specific conditions
   - Minor: Defense-in-depth issue, requires chain of exploits

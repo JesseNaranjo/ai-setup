@@ -1,7 +1,7 @@
 ---
 name: performance-agent
-description: Detects algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, excessive allocations, and hot path inefficiencies. Use for performance review, optimization, or latency issues.
-model: opus  # See review-orchestration-code.md Code Review Model Selection table
+description: "Performance review specialist. Use for detecting algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, or hot path inefficiencies."
+model: opus
 color: green
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -50,15 +50,10 @@ Analyze code for performance issues that will have measurable impact.
 
 ### Step 3: Report Performance Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the performance issue
-- **File path and line range**: Exact location
-- **Description**:
-  - What the performance issue is
-  - Expected impact (time complexity, memory usage)
-  - Scale at which it becomes a problem
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what the performance issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem
 - **Category**: "Performance"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Will cause outages or system degradation at normal scale
   - Major: Significant impact at expected scale
   - Minor: Noticeable but manageable impact

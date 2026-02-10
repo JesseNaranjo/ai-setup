@@ -1,7 +1,7 @@
 ---
 name: examples-agent
-description: Detects broken examples, missing imports, incorrect syntax, outdated API usage, incomplete examples, and example-documentation mismatches. Use for code example review, example accuracy verification, or API usage correctness check.
-model: opus  # See review-orchestration-docs.md Documentation Review Model Selection table
+description: "Code example specialist. Use for detecting broken examples, missing imports, incorrect syntax, outdated API usage, or example-documentation mismatches."
+model: opus
 color: yellow
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -105,15 +105,10 @@ Verify examples are self-contained or properly contextualized:
 
 ### Step 6: Report Example Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the example problem
-- **File path and line**: Location of the code block
-- **Description**:
-  - What's wrong with the example
-  - How it would fail if run
-  - The correct form
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what's wrong with the example, how it would fail if run, the correct form
 - **Category**: "Examples"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Example would crash/fail immediately, completely wrong
   - Major: Example has significant errors, wouldn't work as shown
   - Minor: Example works but has issues (deprecated, suboptimal)

@@ -1,6 +1,6 @@
 ---
 name: reviewing-architecture-principles
-description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-patterns, layer violations, file organization issues, and maintainability concerns. Use for architecture review, SOLID principles, or design issues.
+description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-patterns, layer violations, and file organization issues. Use when checking for architecture violations, coupling problems, or maintainability concerns during code review.
 ---
 
 # Architecture Principles Review Skill

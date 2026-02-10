@@ -1,6 +1,6 @@
 ---
 name: reviewing-technical-debt
-description: Detects deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt. Use for tech debt assessment or code modernization.
+description: Detects deprecated dependencies, outdated patterns, workarounds, dead code, and scalability concerns. Use when assessing technical debt, identifying dead code, or evaluating code modernization needs during code review.
 ---
 
 # Technical Debt Code Review Skill

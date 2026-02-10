@@ -132,8 +132,8 @@ All 17 agents use the same YAML frontmatter fields:
 ```yaml
 ---
 name: <domain>-agent           # Required
-description: <third-person>    # Required. "Detects...", "Reviews...", "Analyzes..."
-model: opus|sonnet             # See review-orchestration-{code|docs}.md Model Selection table
+description: <role+trigger>    # Required. "[Role] specialist. Use [for/when] [triggers]."
+model: opus|sonnet
 color: <color>                 # See color rules below
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -201,7 +201,11 @@ See `shared/pre-review-setup.md` for loading logic and `README.md` for full docu
 
 ### Skill Structure (Progressive Disclosure)
 
-Each skill follows progressive disclosure: `SKILL.md` (~90-155 lines) is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Skill and agent `description` fields use third-person verb form ("Detects...", "Reviews...").
+Each skill follows progressive disclosure: `SKILL.md` (~90-155 lines) is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures.
+
+**Description patterns:**
+- Skills: `"[What in third person]. Use when [specific triggers]."` — e.g., `"Detects injection attacks... Use when checking for security vulnerabilities during code review."`
+- Agents: `"[Role] specialist. Use [for] [triggers]."` — e.g., `"Security vulnerability specialist. Use for detecting injection attacks..."`
 
 ### Skill-Informed Orchestration
 

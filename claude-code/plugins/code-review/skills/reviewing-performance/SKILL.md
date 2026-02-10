@@ -1,6 +1,6 @@
 ---
 name: reviewing-performance
-description: Detects algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, excessive allocations, and hot path inefficiencies. Use for performance review, optimization, or latency issues.
+description: Detects algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, and hot path inefficiencies. Use when checking for performance issues, optimization opportunities, or latency concerns during code review.
 ---
 
 # Performance Code Review Skill

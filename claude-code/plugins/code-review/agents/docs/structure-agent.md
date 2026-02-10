@@ -1,7 +1,7 @@
 ---
 name: structure-agent
-description: Detects organization problems, broken links, navigation issues, heading hierarchy problems, and AI instruction file standardization violations. Use for doc structure review, link validation, or navigation integrity check.
-model: sonnet  # See review-orchestration-docs.md Documentation Review Model Selection table
+description: "Documentation structure specialist. Use for detecting organization problems, broken links, navigation issues, heading hierarchy problems, or AI instruction file issues."
+model: sonnet
 color: purple
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -109,15 +109,10 @@ See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruct
 
 ### Step 6: Report Structure Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the structural problem
-- **File path and line**: Location (or general if file-level issue)
-- **Description**:
-  - What's wrong structurally
-  - How it affects navigation/usability
-  - Recommended fix
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what's wrong structurally, how it affects navigation/usability, recommended fix
 - **Category**: "Structure"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Blocks access to content, major broken navigation
   - Major: Significant structural problem affecting usability
   - Minor: Could be better organized but still usable

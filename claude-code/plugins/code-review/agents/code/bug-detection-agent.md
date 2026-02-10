@@ -1,7 +1,7 @@
 ---
 name: bug-detection-agent
-description: Detects runtime errors, null references, off-by-one errors, boundary conditions, race conditions, and state management issues. Use for bug hunting, edge cases, or logical errors.
-model: opus  # See review-orchestration-code.md Code Review Model Selection table
+description: "Bug detection specialist. Use for finding runtime errors, null references, off-by-one errors, boundary conditions, race conditions, or state management issues."
+model: opus
 color: red
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -55,15 +55,10 @@ For each file:
 
 ### Step 3: Report Bugs
 
-For each bug found, report:
-- **Issue title**: Brief description of the bug
-- **File path and line range**: Exact location
-- **Description**:
-  - What the bug is
-  - How it manifests at runtime
-  - Conditions under which it occurs
+Report per Output Schema in agent-common-instructions.md. For each bug:
+- **Description** should include: what the bug is, how it manifests at runtime, conditions under which it occurs
 - **Category**: "Bugs"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Will cause crashes, data corruption, or security issues
   - Major: Will cause incorrect behavior in common scenarios
   - Minor: Edge case that affects uncommon scenarios

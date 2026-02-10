@@ -1,7 +1,7 @@
 ---
 name: accuracy-agent
-description: Detects code-documentation sync problems, factual errors, outdated version references, incorrect API signatures, and misleading technical claims. Use for doc accuracy review.
-model: opus  # See review-orchestration-docs.md Documentation Review Model Selection table
+description: "Documentation accuracy specialist. Use for detecting code-documentation sync problems, factual errors, outdated version references, or incorrect API signatures."
+model: opus
 color: red
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -77,15 +77,10 @@ Check version consistency:
 
 ### Step 4: Report Inaccuracies
 
-For each inaccuracy found, report:
-- **Issue title**: Brief description of the mismatch
-- **File path and line**: Location in documentation
-- **Description**:
-  - What the documentation says
-  - What the code actually does
-  - Impact of the discrepancy
+Report per Output Schema in agent-common-instructions.md. For each inaccuracy:
+- **Description** should include: what the documentation says, what the code actually does, impact of the discrepancy
 - **Category**: "Accuracy"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Critical: Would cause user code to fail or produce wrong results
   - Major: Significant confusion or subtle bugs
   - Minor: Cosmetic differences, unlikely to cause issues

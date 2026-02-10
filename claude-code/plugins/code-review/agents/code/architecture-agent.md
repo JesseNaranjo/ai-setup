@@ -1,7 +1,7 @@
 ---
 name: architecture-agent
-description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-patterns, layer violations, file organization issues, and maintainability concerns. Use for architecture review, SOLID principles, or design issues.
-model: opus  # See review-orchestration-code.md Code Review Model Selection table
+description: "Architecture review specialist. Use for checking SOLID, DRY, YAGNI, SoC violations, coupling problems, anti-patterns, layer violations, or file organization issues."
+model: opus
 color: yellow
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -103,15 +103,10 @@ When cross-file analysis is warranted:
 
 ### Step 4: Report Architecture Issues
 
-For each issue found, report:
-- **Issue title**: Brief description of the architectural issue
-- **File path and line range**: Where the issue is most visible
-- **Description**:
-  - What the architectural issue is
-  - Which principle or pattern is violated
-  - Impact on maintainability
+Report per Output Schema in agent-common-instructions.md. For each issue:
+- **Description** should include: what the architectural issue is, which principle or pattern is violated, impact on maintainability
 - **Category**: "Architecture"
-- **Suggested severity**:
+- **Severity thresholds**:
   - Major: Significant impact on maintainability or testability
   - Minor: Could be improved but functional
   - Suggestion: Better pattern exists but current is acceptable

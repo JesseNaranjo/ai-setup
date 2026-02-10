@@ -1,6 +1,6 @@
 ---
 name: reviewing-documentation
-description: Reviews documentation for accuracy, completeness, clarity, consistency, code example validity, and structural organization including AI instruction file standardization. Use for documentation quality audits or markdown review.
+description: Reviews documentation for accuracy, completeness, clarity, consistency, code example validity, and structural organization. Use when reviewing documentation quality, auditing README or CLAUDE.md files, or standardizing AI instruction files.
 ---
 
 # Documentation Review Skill
