@@ -15,16 +15,11 @@ Analyze documentation for uniformity in terminology, formatting, and style.
 ### Step 1: Identify Consistency Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Terminology variations (same concept, different words)
-- Naming inconsistencies (camelCase vs snake_case references)
-- Heading style variations (capitalization, punctuation)
-- Code block language tag consistency
-- List formatting (bullets vs numbers, punctuation)
-- Voice inconsistencies (you vs we vs passive)
-- Tense inconsistencies
-- Spelling variations (US vs UK English)
-- Abbreviation usage (sometimes spelled out, sometimes not)
-- Link formatting (inline vs reference style)
+- Terminology variations (same concept, different words), naming inconsistencies (camelCase vs snake_case)
+- Heading style variations (capitalization, punctuation), code block language tag consistency
+- List formatting (bullets vs numbers, punctuation), link formatting (inline vs reference style)
+- Voice inconsistencies (you vs we vs passive), tense inconsistencies
+- Spelling variations (US vs UK English), abbreviation usage inconsistency
 
 **gaps mode - Check for:**
 - Near-synonyms that cause subtle confusion

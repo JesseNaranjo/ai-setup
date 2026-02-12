@@ -32,18 +32,11 @@ Analyze code for test coverage gaps and provide specific test recommendations.
 
 **thorough mode - Check for:**
 - New code paths without corresponding tests
-- Edge cases not covered by existing tests
-  - Null/empty inputs
-  - Boundary values
-  - Error conditions
+- Uncovered edge cases (null/empty inputs, boundary values, error conditions)
 - Modified logic that invalidates existing tests
 - Missing integration tests for API changes
-- Test quality issues
-  - No assertions (tests that don't verify anything)
-  - Testing implementation details instead of behavior
-  - Tests that always pass
-- Missing negative tests (testing error paths)
-- Missing async/concurrent scenario tests
+- Test quality issues (no assertions, testing implementation details instead of behavior, tests that always pass)
+- Missing negative tests (error paths), missing async/concurrent scenario tests
 
 **quick mode - Check for:**
 - New public functions/methods without any tests
@@ -66,7 +59,11 @@ For each gap found, provide:
 - **Suggested test file location**: Where to add the test
 - **Test case outline**: Brief description of the test
 
-### Step 5: Report Test Coverage Issues
+### Step 5: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
+
+For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
+
+### Step 6: Report Test Coverage Issues
 
 Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what code is not tested, why it should be tested, risk of not testing

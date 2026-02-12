@@ -17,46 +17,29 @@ Analyze code for accumulated technical debt affecting maintainability, moderniza
 **thorough mode - Check all 6 categories:**
 
 #### 1. Deprecated Dependencies
-- Packages with deprecation warnings (npm, NuGet)
-- Major version 2+ behind with breaking changes pending
-- Libraries marked as discontinued or unmaintained
-- Dependencies with known security vulnerabilities requiring upgrade
+- Packages with deprecation warnings, major version 2+ behind with breaking changes pending
+- Libraries discontinued/unmaintained, dependencies with known CVEs requiring upgrade
 
 #### 2. Outdated Patterns
-- Callback patterns where async/await is standard
-- Class components in React 18+ projects
-- CommonJS `require()` in ESM-configured projects
-- Legacy bundler configurations (Webpack 4, Gulp, Grunt)
-- Pre-TypeScript 4.0 patterns in modern projects
-- Sync-over-async patterns (.Result, .Wait() in .NET)
+- Callback patterns where async/await is standard, class components in React 18+
+- CommonJS `require()` in ESM-configured projects, legacy bundlers (Webpack 4, Gulp, Grunt)
+- Pre-TypeScript 4.0 patterns, sync-over-async (.Result, .Wait() in .NET)
 
 #### 3. Workarounds and Hacks
-- Code with HACK, WORKAROUND, or XXX comments
-- Temporary fixes that became permanent
-- Monkey patches and runtime modifications
-- Version-specific workarounds for fixed issues
-- Copy-pasted code to work around import issues
+- Code with HACK/WORKAROUND/XXX comments, temporary fixes that became permanent
+- Monkey patches, version-specific workarounds for fixed issues, copy-pasted import workarounds
 
 #### 4. Dead Code
-- Unused exports never imported elsewhere
-- Commented-out code blocks (10+ lines)
-- Unreachable code paths
-- Feature flags for features already released/abandoned
-- Unused configuration options
+- Unused exports never imported, commented-out code blocks (10+ lines), unreachable code paths
+- Feature flags for released/abandoned features, unused configuration options
 
 #### 5. Scalability Concerns
-- Patterns that work now but won't scale
-- Hardcoded limits that will need changing
-- In-memory solutions that should be externalized
-- Single-threaded bottlenecks in parallelizable operations
-- Unbounded collections without pagination
+- Patterns that won't scale (hardcoded limits, in-memory solutions needing externalization)
+- Single-threaded bottlenecks in parallelizable operations, unbounded collections without pagination
 
 #### 6. Documentation Debt
-- TODO/FIXME comments without issue tracking
-- Stale comments describing wrong behavior
-- Missing documentation for public APIs
-- Outdated README sections
-- Missing architecture decision records (ADRs)
+- TODO/FIXME without issue tracking, stale comments describing wrong behavior
+- Missing public API docs, outdated README sections, missing ADRs
 
 **gaps mode - Focus on:**
 - Subtle debt not caught in thorough pass

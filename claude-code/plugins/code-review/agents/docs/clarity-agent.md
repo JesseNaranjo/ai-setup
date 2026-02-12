@@ -15,16 +15,11 @@ Analyze documentation for readability and comprehension issues.
 ### Step 1: Identify Clarity Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Unexplained technical jargon
-- Undefined acronyms and abbreviations
-- Ambiguous pronouns and references
-- Overly complex sentence structures
-- Missing context for concepts
-- Inconsistent explanation depth
-- Assumed knowledge not stated
-- Passive voice overuse obscuring actors
-- Double negatives
-- Wall-of-text paragraphs lacking structure
+- Unexplained technical jargon, undefined acronyms/abbreviations
+- Ambiguous pronouns and references, missing context for concepts
+- Overly complex sentence structures, double negatives
+- Inconsistent explanation depth, assumed knowledge not stated
+- Passive voice overuse obscuring actors, wall-of-text paragraphs lacking structure
 
 **quick mode - Check for:**
 - Completely undefined acronyms

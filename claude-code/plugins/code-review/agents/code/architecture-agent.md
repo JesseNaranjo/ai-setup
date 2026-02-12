@@ -16,37 +16,16 @@ Analyze code for architectural issues affecting maintainability and scalability.
 
 **thorough mode - Check for:**
 - High coupling between unrelated components
-- SOLID principle violations
-  - Single Responsibility: Classes/modules doing too much
-  - Open/Closed: Requiring modification for extension
-  - Liskov Substitution: Subtype behavior violations
-  - Interface Segregation: Fat interfaces
-  - Dependency Inversion: Depending on concretions
+- SOLID violations (SRP: classes doing too much, OCP: requiring modification for extension, LSP: subtype behavior violations, ISP: fat interfaces, DIP: depending on concretions)
 - Anti-patterns (god objects, feature envy, shotgun surgery)
 - Layer violations (presentation accessing data directly)
 - Missing abstractions that hurt maintainability
 - Inappropriate intimacy between classes
 - Dead code and unused dependencies
-- DRY (Don't Repeat Yourself) violations
-  - Duplicated code blocks (>10 lines, >80% similarity)
-  - Copy-pasted logic with minor variations
-  - Repeated configuration values that should be constants
-  - Similar utility functions across modules
-- YAGNI (You Ain't Gonna Need It) violations
-  - Unused abstractions (interfaces with single implementation, never extended)
-  - Over-engineered patterns (factory for single product type)
-  - Speculative generality (parameters/options never used)
-  - Premature optimization structures
-- SoC (Separation of Concerns) violations
-  - Mixed concerns in single file (UI logic + business logic + data access)
-  - Cross-cutting concerns not properly isolated (logging, auth, caching scattered)
-  - Configuration mixed with implementation
-  - Test utilities mixed with production code
-- File organization issues
-  - Related code scattered across many small files that should be consolidated
-  - Overly fragmented modules (evaluate consolidation conservatively)
-  - Single-use helpers in separate files instead of colocated
-  - Related types/interfaces scattered instead of grouped
+- DRY violations (duplicated code blocks >10 lines />80% similarity, copy-pasted logic with minor variations, repeated config values, similar utility functions across modules)
+- YAGNI violations (unused abstractions with single implementation never extended, over-engineered patterns, speculative generality, premature optimization structures)
+- SoC violations (mixed concerns in single file, cross-cutting concerns not isolated, configuration mixed with implementation, test utilities in production code)
+- File organization issues (related code scattered across too many files, overly fragmented modules, single-use helpers not colocated, related types/interfaces scattered)
 
 ### Step 2: Analyze Code Structure
 
@@ -94,7 +73,11 @@ When cross-file analysis is warranted:
 - File defines an interface → check implementations
 - File modifies a shared type → check all usages
 
-### Step 4: Report Architecture Issues
+### Step 4: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
+
+For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
+
+### Step 5: Report Architecture Issues
 
 Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the architectural issue is, which principle or pattern is violated, impact on maintainability

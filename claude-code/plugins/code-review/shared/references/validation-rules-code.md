@@ -180,16 +180,3 @@ Some high-confidence patterns skip validation entirely and are marked `auto_vali
 | `hack_comment` | `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?` | Explicit HACK/WORKAROUND/XXX marker |
 | `outdated_callback` | `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)` | Callback pattern in async context |
 
-## Category-Specific False Positive Rules (Code)
-
-Each category has specific exclusions in addition to the general false positive rules in `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`.
-
-- **API Contracts**: Additive-only changes; beta/experimental APIs marked as unstable; changes following established deprecation process
-- **Architecture**: Pragmatic compromises with clear justification; patterns overkill for project scale
-- **Bug Detection**: Code with explicit comments explaining why it's correct
-- **Compliance**: Explicit override comments; ambiguous rules with reasonable compliance; style preferences not stated as rules
-- **Error Handling**: Errors intentionally ignored with explicit comments; logging-only catch blocks as intended behavior
-- **Performance**: Micro-optimizations without measurable impact; code that runs rarely
-- **Security**: Internal-only code with no untrusted input exposure; vulnerabilities mitigated elsewhere in the code
-- **Technical Debt**: Dependencies pinned for compatibility (documented reason); dead code that's conditionally compiled (build flags); TODO comments referencing issue tracking (TODO(#123)); workarounds with documented upstream bugs; class components in projects intentionally supporting older React versions
-- **Test Coverage**: Code impractical to unit test (better for integration tests); code covered by higher-level tests; generated code/boilerplate; dead code that should be removed rather than tested

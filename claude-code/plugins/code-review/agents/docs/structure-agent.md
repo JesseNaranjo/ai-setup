@@ -16,15 +16,10 @@ Analyze documentation for organization, navigation, and structural integrity.
 
 **thorough mode - Check for:**
 - Heading hierarchy issues (skipped levels, inconsistent depth)
-- Broken internal links (to other docs)
-- Broken external links (to websites)
-- Missing cross-references between related docs
-- Orphaned documents (no links pointing to them)
-- Circular navigation paths
-- Table of contents mismatches
-- Anchor link validity
-- File naming convention issues
-- Directory structure problems
+- Broken links (internal to other docs, external to websites), anchor link validity
+- Missing cross-references between related docs, orphaned documents
+- Circular navigation paths, table of contents mismatches
+- File naming convention issues, directory structure problems
 - **AI instruction file standardization** (see below)
 
 **quick mode - Check for:**

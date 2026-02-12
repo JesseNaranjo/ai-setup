@@ -15,25 +15,11 @@ Analyze code for API compatibility and contract compliance issues.
 ### Step 1: Identify API Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Breaking changes to public APIs
-  - Removed methods, properties, or fields
-  - Changed method signatures (parameters, return types)
-  - Changed behavior of existing methods
-- Backward compatibility issues
-  - New required parameters without defaults
-  - Changed response formats
-  - Changed error codes or error formats
-- Interface contract violations
-  - Methods not implementing interface correctly
-  - Changed contracts in derived classes
-- Inconsistent API patterns
-  - Naming conventions
-  - Parameter ordering
-  - Error handling patterns
-- Schema changes affecting consumers
-  - Database schema changes
-  - API response schema changes
-  - Configuration schema changes
+- Breaking changes to public APIs (removed methods/properties/fields, changed signatures, changed behavior)
+- Backward compatibility issues (new required parameters without defaults, changed response/error formats)
+- Interface contract violations (incorrect implementations, changed contracts in derived classes)
+- Inconsistent API patterns (naming, parameter ordering, error handling)
+- Schema changes affecting consumers (database, API response, configuration schemas)
 - Missing versioning on breaking changes
 
 ### Step 2: Analyze API Surface

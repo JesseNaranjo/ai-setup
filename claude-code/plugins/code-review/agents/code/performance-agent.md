@@ -40,7 +40,11 @@ Analyze code for performance issues that will have measurable impact.
 3. Consider the scale of data being processed
 4. Evaluate memory allocation patterns
 
-### Step 3: Report Performance Issues
+### Step 3: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
+
+For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
+
+### Step 4: Report Performance Issues
 
 Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the performance issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem

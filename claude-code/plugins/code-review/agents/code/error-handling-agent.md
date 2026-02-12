@@ -15,20 +15,11 @@ Analyze code for error handling issues and resilience gaps.
 ### Step 1: Identify Error Handling Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Missing error handling for operations that can fail
-  - I/O operations (file, network, database)
-  - External service calls
-  - Parsing and deserialization
-- Swallowed exceptions
-  - Empty catch blocks
-  - Catch blocks that only log
+- Missing error handling on fail-prone operations (I/O, network, database, external services, parsing/deserialization)
+- Swallowed exceptions (empty catch blocks, catch blocks that only log)
 - Error messages that leak sensitive information
-- Missing cleanup/finally blocks
-  - Resources not released on error
-  - State not reset on failure
-- Incorrect error propagation
-  - Catching and not re-throwing when appropriate
-  - Wrapping errors incorrectly (losing stack trace)
+- Missing cleanup/finally blocks (resources not released on error, state not reset on failure)
+- Incorrect error propagation (not re-throwing when appropriate, wrapping errors losing stack trace)
 - Missing retry logic for transient failures
 - Missing circuit breaker patterns
 - Error recovery that leaves inconsistent state
@@ -46,7 +37,11 @@ Analyze code for error handling issues and resilience gaps.
 3. Check for proper cleanup and recovery
 4. Verify errors are propagated appropriately
 
-### Step 3: Report Error Handling Issues
+### Step 3: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
+
+For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
+
+### Step 4: Report Error Handling Issues
 
 Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the error handling issue is, what can go wrong, impact of the missing/incorrect handling

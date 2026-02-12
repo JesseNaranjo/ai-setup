@@ -15,17 +15,11 @@ Analyze code examples in documentation for correctness and completeness.
 ### Step 1: Identify Example Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Syntax errors in code blocks
-- Missing import statements
-- Incorrect function/method signatures
-- Wrong parameter types or order
-- Missing required parameters
-- Deprecated API usage
-- Incomplete examples (partial code that can't run)
+- Syntax errors in code blocks, missing import statements, missing language tags
+- Incorrect function/method signatures (wrong parameter types/order, missing required parameters)
+- Deprecated API usage, incomplete examples (partial code that can't run)
 - Missing error handling in examples that need it
-- Incorrect output/result comments
-- Examples that contradict prose explanation
-- Missing language tags on code blocks
+- Incorrect output/result comments, examples that contradict prose explanation
 - Examples using non-existent files or resources
 
 **quick mode - Check for:**

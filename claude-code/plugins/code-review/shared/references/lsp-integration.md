@@ -1,6 +1,16 @@
 # Language Server Integration Reference
 
-LSP integration details extracted from language configuration files. Agents can leverage LSP diagnostics for enhanced accuracy when available. LSP supplements (does not replace) pattern-based detection.
+## Quick Reference for Agents
+
+**When to use:** Read this file when reviewing code in a project with LSP available. LSP diagnostics provide compiler-level precision that supplements (does not replace) pattern-based detection.
+
+**How to check availability:**
+- **Node.js/TypeScript:** Check for `typescript-lsp` in enabled plugins
+- **.NET/C#:** Check for `csharp-lsp` or OmniSharp in enabled plugins
+
+**If LSP is unavailable:** Skip this file entirely. Fall back to pattern-based detection — all agents function without LSP.
+
+**If LSP is available:** Use the diagnostic code mappings and agent usage guidelines below for your language. Prioritize LSP diagnostics for type-related and null-reference issues; combine LSP + patterns for security and cross-cutting concerns.
 
 ## Node.js/TypeScript LSP Integration
 

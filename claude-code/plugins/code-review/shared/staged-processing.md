@@ -1,42 +1,20 @@
 # Staged Processing: Validation and Content Gathering
 
-This document combines input validation and content gathering for staged commands (`/deep-code-review-staged`, `/quick-code-review-staged`).
-
-## Contents
-
-- [Input Validation](#input-validation)
-- [Content Gathering](#content-gathering)
-
----
-
 ## Input Validation
 
 Check if there are any staged changes:
 
 ### 1. Verify Git Repository
 
-Check if the current directory is a git repository:
-```bash
-git rev-parse --git-dir
-```
-
-If not a git repository, stop and inform the user: "Not a git repository."
+Check if the current directory is a git repository. If not, stop and inform the user: "Not a git repository."
 
 ### 2. Check for Staged Changes
 
-Run to see all staged changes:
-```bash
-git diff --cached --stat
-```
-
-If there are no staged changes, stop and inform the user: "No staged changes to review."
+Check for staged changes. If there are none, stop and inform the user: "No staged changes to review."
 
 ### 3. Get Staged File List
 
-Run to get the list of staged files:
-```bash
-git diff --cached --name-only
-```
+Get the list of staged files.
 
 ### 4. Parse Arguments
 
@@ -51,23 +29,13 @@ Pass to Content Gathering:
 - Parsed output file path
 - Parsed language override (if any)
 
----
-
 ## Content Gathering
 
 Launch a Sonnet agent to gather the content to review:
 
 ### 1. Get Staged Diff
 
-```bash
-git diff --cached
-```
-
 ### 2. Get Current Branch
-
-```bash
-git branch --show-current
-```
 
 ### 3. Read Full File Content (Tiered)
 
@@ -118,13 +86,6 @@ Return to the review step:
 | Related test files | critical | Need full content for coverage analysis |
 | AI instruction files | critical | Always fully loaded |
 | Unchanged source files | peripheral | Context only - agents Read on-demand |
-
-## Tiered Context Behavior
-
-Staged reviews use tiered context to balance thoroughness with context efficiency:
-- Changed files receive full content (critical tier)
-- Unchanged files receive preview + metadata (peripheral tier)
-- Agents can Read peripheral files on-demand if cross-file analysis discovers relevance
 
 ## Pre-Existing Issue Detection (For Staged Reviews)
 

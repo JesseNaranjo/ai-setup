@@ -1,14 +1,8 @@
 # Pre-Review Setup
 
-This document combines settings loading and context discovery, loaded once during the pre-review setup phase.
-
 ## Section 1: Settings Loader
 
 Load and apply project-specific settings from `.claude/code-review.local.md`.
-
-### Settings Timing
-
-Settings are loaded at command execution time, not at Claude Code startup. Changes to `.claude/code-review.local.md` take effect immediately on the next review command invocation - no restart required.
 
 ### Loading Process
 
@@ -46,19 +40,9 @@ Apply settings to the review process:
 
 Read the markdown body (after the YAML frontmatter) and pass it to all review agents as additional context under "Project-Specific Instructions".
 
-### Settings Priority
-
-Command-line flags extend or override settings file:
-
-1. `--output-file` overrides `output_dir`
-2. `--language` overrides `language`
-3. `--prompt` appends to project instructions (does not replace)
-
-For a full settings example with project context, see `${CLAUDE_PLUGIN_ROOT}/templates/code-review.local.md.example`.
+Command-line flags override corresponding settings; `--prompt` appends to project instructions.
 
 ## Section 2: Context Discovery
-
-Instructions for gathering review context before the main review phase.
 
 ### Step 1: Find AI Agent Instructions Files
 
@@ -100,8 +84,4 @@ Return a structured `discovery_results` with fields: `ai_instructions` (path + a
 
 **Note:** `detected_languages` enables lazy loading of language configs — only load `languages/nodejs.md` if `detected_languages.nodejs` has files. `detected_frameworks` tracks React detection that extends base language configs.
 
-## Error Handling
-
-- If no AI instruction files are found, continue with empty list (review still proceeds)
-- If language cannot be detected for a file, log a warning and skip language-specific checks
-- If test files cannot be found, continue without test context (not a blocker)
+If language cannot be detected for a file, log a warning and skip language-specific checks.

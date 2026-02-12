@@ -64,7 +64,7 @@ When reviewing directories, automatically prioritize:
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "False Positive Rules" section.
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules" section.
 
 **Security-specific additions** - do NOT flag:
 - Placeholder values (`"changeme"`, `"TODO"`)

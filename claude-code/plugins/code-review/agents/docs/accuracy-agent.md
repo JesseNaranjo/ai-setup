@@ -15,16 +15,12 @@ Analyze documentation for factual correctness and code synchronization.
 ### Step 1: Identify Accuracy Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Function/method signature accuracy (names, parameters, return types)
-- Class and type documentation correctness
-- CLI command and flag accuracy
-- Configuration option validity
-- Version number consistency
-- Dependency version accuracy
+- Function/method signature accuracy (names, parameters, return types), class/type documentation correctness
+- CLI command/flag accuracy, configuration option validity
+- Version number and dependency version consistency
 - Code example correctness (syntax, imports, usage)
 - API endpoint accuracy (paths, methods, payloads)
-- Environment variable documentation
-- Error message accuracy
+- Environment variable and error message accuracy
 
 **gaps mode - Check for:**
 - Parameter default value changes not reflected in docs

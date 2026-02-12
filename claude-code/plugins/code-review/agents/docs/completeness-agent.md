@@ -16,14 +16,9 @@ Analyze documentation for coverage gaps and missing content.
 
 **thorough mode - Check for:**
 - Missing standard sections (see Expected Sections below)
-- Undocumented public APIs/exports
-- Undocumented CLI commands and flags
-- Missing configuration option documentation
-- Incomplete installation/setup instructions
-- Missing prerequisites
-- Undocumented environment variables
-- Missing error/troubleshooting documentation
-- Absent migration/upgrade guides
+- Undocumented public APIs/exports, CLI commands/flags, configuration options, environment variables
+- Incomplete installation/setup instructions, missing prerequisites
+- Missing error/troubleshooting documentation, absent migration/upgrade guides
 - Missing examples for complex features
 
 **gaps mode - Check for:**

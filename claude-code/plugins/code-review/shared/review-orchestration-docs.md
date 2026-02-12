@@ -4,7 +4,7 @@ This document defines agent invocation patterns and execution sequences for docu
 
 ## Agent Invocation
 
-Plugin agents are registered as subagent types with the pattern `code-review:<agent-name>`. Always pass the `model` parameter explicitly (see Documentation Review Model Selection table below).
+Always pass the `model` parameter explicitly (see Documentation Review Model Selection table below).
 
 ### Prompt Schema
 
@@ -47,19 +47,59 @@ End the prompt with: `Return findings as YAML per agent examples in your agent f
 
 #### Agent Common Content Distribution
 
-The orchestrator reads shared content files ONCE and distributes relevant portions to each agent via `additional_instructions`, eliminating per-agent file reads.
-
-**Source files (read by orchestrator, not by agents):**
-- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`
-- `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` "Category-Specific False Positive Rules"
+The orchestrator distributes relevant portions of the content below to each agent via `additional_instructions`, eliminating per-agent file reads.
 
 **Distribution per agent** (append to `additional_instructions`):
-1. **Output schema** from agent-common-instructions.md
-2. **MODE definition** matching the current mode
-3. **General false positive rules** from agent-common-instructions.md
-4. **Category-specific false positive rules** — extract ONLY the agent's category section from validation-rules-docs.md
+1. **Output schema** from Agent Common Instructions below
+2. **MODE definition** matching the current mode from Agent Common Instructions below
+3. **General false positive rules** from Agent Common Instructions below
+4. **Category-specific false positive rules** — extract ONLY the agent's category from Category-Specific False Positive Rules below
 
 Synthesis agents are excluded from this distribution.
+
+### Agent Common Instructions (Distributed to All Agents)
+
+#### Standard Agent Input
+
+**Required:** files_to_review (diffs/content), project_type (nodejs/dotnet/both), MODE (thorough/gaps/quick)
+**Optional:** skill_instructions (skill-derived focus), previous_findings (gaps mode deduplication)
+**Tools:** Read, Grep, Glob
+
+#### MODE Parameter
+
+- **thorough**: Comprehensive review, all issues in agent's domain
+- **gaps**: Subtle issues missed by thorough; receives previous_findings to skip duplicates
+- **quick**: Critical issues only (highest-impact, merge-blocking)
+
+#### False Positive Rules
+
+**Do NOT flag:**
+- **Correct Code**: Non-obvious but valid edge case handling or intentional patterns
+- **Linter Territory**: Formatting/import issues handled by linters (do NOT run linters to verify)
+- **Pedantic Concerns**: Minor style preferences a senior engineer would not flag
+- **Pre-existing Issues**: Issues existing before current changes, not modified
+- **Scope Limitations**: General quality unless required in AI instructions; test code unless reviewing tests; theoretical edge cases extremely unlikely in practice
+- **Silenced Issues**: Code with lint-disable/suppress comments or documented suppressions
+
+**Deep review** can flag more issues but still skip pre-existing, silenced, and pure style.
+**Quick review**: only blocking issues; ignore minor style, skip theoretical edge cases.
+
+#### Output Schema
+
+Each issue requires: `title`, `file`, `line`, `range` (string or null), `category`, `severity` (Critical/Major/Minor/Suggestion), `description`, `fix_type` (diff/prompt), `fix_diff` or `fix_prompt`.
+
+See agent file for category-specific extra fields.
+
+### Category-Specific False Positive Rules (Documentation)
+
+Each category has specific exclusions in addition to the general false positive rules above.
+
+- **Accuracy**: Intentionally simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; documentation for planned features marked as such
+- **Clarity**: Jargon appropriate for stated expert audience; acronyms defined earlier in the same document; intentionally terse reference docs (vs tutorials)
+- **Completeness**: Internal/private APIs not for external use; features marked experimental/unstable; sections that would duplicate linked content
+- **Consistency**: Code/API names that must match implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections that intentionally differ
+- **Examples**: Pseudocode marked as illustrative (not runnable); partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`
+- **Structure**: Intentionally orphaned archive/historical documents; heading hierarchy violations in code-generated documentation; AI instruction files in projects not using AI assistants (if explicitly stated)
 
 ## Gaps Mode Behavior
 
@@ -158,23 +198,8 @@ The synthesis agents are designed to be invoked **multiple times in parallel** w
 
 See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` for the full agent definition and analysis logic.
 
-### Synthesis Prompt Schema
-
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| `synthesis_input.category_a.name` | string | Yes | First category name |
-| `synthesis_input.category_a.findings` | list | Yes | All findings from category_a (Phase 1 + Phase 2) |
-| `synthesis_input.category_b.name` | string | Yes | Second category name |
-| `synthesis_input.category_b.findings` | list | Yes | All findings from category_b (Phase 1 + Phase 2) |
-| `synthesis_input.cross_cutting_question` | string | Yes | The cross-cutting analysis question |
-| `synthesis_input.files_content` | list | Yes | File diffs and full content for context |
-
-### Parallel Synthesis Pattern
-
-Launch all category pairs simultaneously; merge results. Pairs defined in Deep Docs Review Sequence (4) and Quick Docs Review Sequence (3) above.
-
 ---
 
 # Documentation Review Validation Rules
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` for validation rules, auto-validation patterns, and category-specific false positive rules. Load at Steps 9-12 only.
+See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` for validation rules and auto-validation patterns. Load at Steps 9-12 only.

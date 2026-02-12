@@ -15,13 +15,11 @@ Analyze code for bugs that will cause incorrect behavior at runtime.
 ### Step 1: Identify Bug Categories (Based on MODE)
 
 **thorough mode - Focus on:**
-- Null/undefined reference errors
+- Null/undefined reference errors, uninitialized variables
 - Off-by-one errors in loops and arrays
 - Incorrect conditionals (wrong operator, inverted logic)
 - Type mismatches causing runtime failures
-- Uninitialized variables
-- Incorrect function return values
-- Resource leaks
+- Incorrect function return values, resource leaks
 
 **gaps mode - Focus on:**
 - Boundary condition failures (empty arrays, zero values, max values)
@@ -46,7 +44,11 @@ For each file:
 3. Consider how the code interacts with surrounding context
 4. Check for issues at integration points
 
-### Step 3: Report Bugs
+### Step 3: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
+
+For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
+
+### Step 4: Report Bugs
 
 Report per Output Schema provided in your prompt. For each bug:
 - **Description** should include: what the bug is, how it manifests at runtime, conditions under which it occurs

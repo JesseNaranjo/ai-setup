@@ -1,14 +1,5 @@
 # File Processing: Validation and Content Gathering
 
-This document combines input validation and content gathering for file-based commands (`/deep-code-review`, `/quick-code-review`).
-
-## Contents
-
-- [Input Validation](#input-validation)
-- [Content Gathering](#content-gathering)
-
----
-
 ## Input Validation
 
 Validate the input and check for changes:
@@ -22,12 +13,7 @@ Extract from the command arguments:
 
 ### 2. Verify Git Repository
 
-Check if the current directory is a git repository:
-```bash
-git rev-parse --git-dir
-```
-
-If not a git repository, stop and inform the user: "Not a git repository."
+Check if the current directory is a git repository. If not, stop and inform the user: "Not a git repository."
 
 ### 3. Verify File Existence
 
@@ -38,12 +24,7 @@ For each specified file path:
 
 ### 4. Check for Uncommitted Changes
 
-For each valid file, check if there are uncommitted changes:
-```bash
-git diff HEAD -- <file>
-```
-
-Create two lists:
+For each valid file, check if there are uncommitted changes. Create two lists:
 - **Files with changes**: Files that have uncommitted changes (review the changes)
 - **Files without changes**: Files that have no uncommitted changes (review entire file)
 
@@ -59,22 +40,16 @@ Pass to Content Gathering:
 - Parsed output file path
 - Parsed language override (if any)
 
----
-
 ## Content Gathering
 
 Launch a Sonnet agent to gather the content to review:
 
 ### 1. Get Current Branch
 
-```bash
-git branch --show-current
-```
-
 ### 2. Gather Content for Files with Changes
 
 For each file that has uncommitted changes:
-- Run `git diff HEAD -- <file>` to get the diff
+- Get the diff
 - Also read the full file content for broader context
 
 ### 3. Gather Content for Files without Changes

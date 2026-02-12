@@ -128,7 +128,7 @@ High-confidence patterns that skip validation. For full definitions, see `${CLAU
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md` "False Positive Rules" section.
+Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules" section.
 
 **Architecture-specific additions** - do NOT flag:
 - Intentional duplication for clarity (documented)

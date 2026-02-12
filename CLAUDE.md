@@ -105,19 +105,18 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
-│   ├── agent-common-instructions.md # Common MODE, false positives, output schema (read by orchestrator, distributed to agents)
 │   ├── docs-processing.md           # Docs input validation and content gathering
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── output-format.md             # Output format specification (progressive disclosure, loaded at Steps 9-12)
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode behavior
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode behavior
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── staged-processing.md         # Staged input validation, content gathering, and pre-existing issue detection
 │   └── references/                  # Detailed reference content (progressive disclosure)
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
-│       ├── validation-rules-code.md # Code review validation, aggregation, auto-validation patterns, false positive rules
-│       └── validation-rules-docs.md # Docs review validation, aggregation, auto-validation patterns, false positive rules
+│       ├── validation-rules-code.md # Code review validation, aggregation, auto-validation patterns
+│       └── validation-rules-docs.md # Docs review validation, aggregation, auto-validation patterns
 ├── templates/
 │   └── code-review.local.md.example # Settings template (parsed by orchestrator at runtime)
 └── README.md
@@ -150,7 +149,7 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 ### Agent Content Distribution
 
-The orchestrator reads `agent-common-instructions.md`, `validation-rules-{code|docs}.md`, and `languages/*.md` ONCE, then distributes only the relevant portions to each agent via `additional_instructions`. Agents do not read these shared files directly — they receive output schema, MODE definition, false positive rules (general + category-specific), and language-specific checks via their prompt.
+The orchestration files (`review-orchestration-code.md`, `review-orchestration-docs.md`) contain inlined agent common instructions (MODE, false positives, output schema) and category-specific false positive rules. The orchestrator distributes relevant portions to each agent via `additional_instructions`, along with language-specific checks from `languages/*.md`. Agents do not read these shared files directly.
 
 See `shared/review-orchestration-code.md` "Agent Common Content Distribution" and `shared/review-orchestration-docs.md` for implementation details.
 
@@ -233,13 +232,12 @@ When modifying the plugin:
 
 ### Agent & Orchestration
 - **Agent behavior**: Edit `agents/code/` or `agents/docs/`
-- **Common agent instructions**: Edit `shared/agent-common-instructions.md` (MODE, false positives, output schema — distributed to agents by orchestrator)
-- **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus, gaps mode behavior)
-- **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior)
+- **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus, gaps mode behavior, agent common instructions, category-specific FP rules)
+- **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category-specific FP rules)
 
 ### Validation & Output
-- **Validation rules (code)**: Edit `shared/references/validation-rules-code.md` (validation process, aggregation, auto-validation patterns, false positive rules)
-- **Validation rules (docs)**: Edit `shared/references/validation-rules-docs.md` (validation process, aggregation, auto-validation patterns, false positive rules)
+- **Validation rules (code)**: Edit `shared/references/validation-rules-code.md` (validation process, aggregation, auto-validation patterns)
+- **Validation rules (docs)**: Edit `shared/references/validation-rules-docs.md` (validation process, aggregation, auto-validation patterns)
 - **Output format/generation**: Edit `shared/output-format.md`
 - **Severity definitions**: Each agent defines calibrated thresholds in its own file under `agents/code/` or `agents/docs/`
 
@@ -265,6 +263,14 @@ When modifying the plugin:
 - **No unsolicited cleanup**: Do not reword, simplify, or "improve" instruction prose that wasn't part of the requested change
 
 **Rationale:** The instruction files in this repo are LLM prompts whose effectiveness depends on precise wording, specific examples, and calibrated thresholds. Generic editing instincts (simplify, shorten, generalize) directly degrade agent performance.
+
+### Agent Checklist Compression
+
+Agent thorough mode checklists compress standard knowledge into parenthetical lists (e.g., `"SOLID violations (SRP, OCP, LSP, ISP, DIP)"`) while preserving:
+- Specific thresholds and calibration numbers verbatim
+- Non-obvious heuristics and language-specific gotchas
+- All gaps and quick mode items verbatim (calibrated filters)
+- MODE differentiation (thorough/gaps/quick sections intact)
 
 ### Content Audience
 

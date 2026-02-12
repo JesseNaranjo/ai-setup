@@ -164,13 +164,3 @@ Some high-confidence patterns skip validation entirely and are marked `auto_vali
 | `missing_ai_instruction_header` | N/A (detected via header check) | CLAUDE.md missing required header comment |
 | `ai_instruction_wrong_location` | N/A (detected via path check) | AI instruction file in wrong directory |
 
-## Category-Specific False Positive Rules (Documentation)
-
-Each category has specific exclusions in addition to the general false positive rules in `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`.
-
-- **Accuracy**: Intentionally simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; documentation for planned features marked as such
-- **Clarity**: Jargon appropriate for stated expert audience; acronyms defined earlier in the same document; intentionally terse reference docs (vs tutorials)
-- **Completeness**: Internal/private APIs not for external use; features marked experimental/unstable; sections that would duplicate linked content
-- **Consistency**: Code/API names that must match implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections that intentionally differ
-- **Examples**: Pseudocode marked as illustrative (not runnable); partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`
-- **Structure**: Intentionally orphaned archive/historical documents; heading hierarchy violations in code-generated documentation; AI instruction files in projects not using AI assistants (if explicitly stated)

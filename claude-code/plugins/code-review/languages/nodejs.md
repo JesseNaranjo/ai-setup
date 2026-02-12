@@ -1,22 +1,3 @@
-# Node.js / TypeScript Language Configuration
-
-Language-specific checks and patterns for Node.js and TypeScript projects.
-
-## Detection
-
-Detect Node.js projects by checking for `package.json` in the repository root or parent directories.
-
-## Runtime Detection
-
-Detect runtime environment for runtime-specific checks:
-
-| Runtime | Detection | Special Checks |
-|---------|-----------|----------------|
-| Bun | `bun.lockb` or `bunfig.toml` | Bun namespace, SQLite |
-| Browser | No runtime markers + DOM usage | Window, document patterns |
-| Deno | `deno.json` or `deno.jsonc` | Deno namespace, permissions |
-| Node.js | `package.json` engines.node | Buffer, fs, process patterns |
-
 ## Test File Patterns
 
 - `*.test.ts`
@@ -50,46 +31,45 @@ Detect runtime environment for runtime-specific checks:
 - .mjs/.cjs extension issues — wrong extension for module type
 - Package.json "type" mismatch — files using wrong module syntax for package type
 
-## Language Server Integration (Optional)
+## LSP Integration
 
-> **LSP Integration (agent-only):** See `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for TypeScript LSP integration details. Not loaded during orchestration.
+Agent-loadable reference: `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`
 
 ## Category-Specific Checks
 
 ### Bugs {#bugs}
 
-- Unhandled promise rejections — promises without `.catch()` or in async functions without try/catch
-- `undefined`/`null` issues — accessing properties on potentially null/undefined values
-- Incorrect `this` binding — arrow functions vs regular functions in callbacks, class methods
-- Async/await pitfalls — missing `await`, returning instead of awaiting, parallel vs sequential execution
-- Type coercion bugs — loose equality (`==`), implicit type conversions
+- Unhandled promise rejections — missing `.catch()` or try/catch around await
+- `undefined`/`null` property access
+- Incorrect `this` binding — arrow vs regular functions in callbacks/class methods
+- Async/await pitfalls — missing `await`, parallel vs sequential execution
+- Type coercion bugs — loose equality (`==`), implicit conversions
 - Event loop blocking
 - Promise.all partial failure — use Promise.allSettled where appropriate
 - JSON.parse without try-catch
-- Array method on possibly empty — calling .reduce() on potentially empty arrays without initial value
-- Timezone-naive Date operations — using new Date() without timezone consideration in server code
+- Array .reduce() on possibly empty array without initial value
+- Timezone-naive Date operations in server code
 
 ### Security {#security}
 
-- Prototype pollution — Object.assign with user input, recursive merge without safeguards
-- ReDoS — regular expressions vulnerable to catastrophic backtracking
-- Dynamic code execution — code evaluation functions, dynamic require with user input
-- Insecure dependencies
-- JWT validation — missing signature verification, weak algorithms, improper token storage
-- XSS via template literals — unescaped user input in template strings used in HTML
+- Prototype pollution — Object.assign/recursive merge with user input
+- ReDoS — regexes vulnerable to catastrophic backtracking
+- Dynamic code execution (eval, dynamic require with user input)
+- JWT validation — missing signature verification, weak algorithms, improper storage
+- XSS via template literals — unescaped user input in HTML template strings
 - Command injection
 - Path traversal
-- Server-side request forgery (SSRF) — user input in fetch/axios URLs without allowlist validation
-- Mass assignment — Object.assign/spread with user input to model objects
+- SSRF — user input in fetch/axios URLs without allowlist
+- Mass assignment — spread/Object.assign with user input to model objects
 - Sensitive data in error messages
 - Express helmet missing
 - Rate limiting absent
 
 ### Performance {#performance}
 
-- Event loop blocking — CPU-intensive operations without worker threads, sync I/O in async context
-- Memory leaks — unclosed event listeners, closures capturing large objects, unbounded caches
-- Inefficient array methods — `forEach` in hot paths where `for` loop is faster, repeated `find()`/`filter()`
+- Event loop blocking — CPU-intensive ops without worker threads, sync I/O in async context
+- Memory leaks — unclosed listeners, closures capturing large objects, unbounded caches
+- Inefficient array methods — `forEach` in hot paths, repeated `find()`/`filter()`
 - Missing stream usage
 - N+1 queries
 
@@ -97,9 +77,9 @@ Detect runtime environment for runtime-specific checks:
 
 - Barrel file abuse — re-exports causing bundle size issues
 - Circular imports
-- CommonJS vs ESM issues — mixing `require()` and `import`, incorrect file extensions
+- CommonJS/ESM mixing — `require()` and `import` in same project, wrong extensions
 - God modules
-- Improper TypeScript typing — `any` abuse, incorrect type assertions, missing generics
+- `any` abuse, incorrect type assertions, missing generics
 - Missing noImplicitAny
 - Missing noUncheckedIndexedAccess
 - Missing strictNullChecks
@@ -109,29 +89,27 @@ Detect runtime environment for runtime-specific checks:
 
 - Unhandled promise rejections
 - Missing `.catch()`
-- Swallowed errors — empty catch blocks, catch blocks that only log
+- Swallowed errors — empty catch blocks, catch-only-log
 - Improper error propagation
 - Missing finally cleanup
 
 ### Test Coverage {#tests}
 
-- Missing unit tests
-- Missing integration tests
-- Missing edge case tests
+- Missing unit/integration/edge case tests
 - Async test issues
-- Test isolation — tests sharing state, order-dependent tests
+- Test isolation — shared state, order-dependent tests
 
 ### Technical Debt {#debt}
 
-- Deprecated dependencies — packages with npm deprecation warnings, major version 2+ behind
+- Deprecated dependencies — npm deprecation warnings, major version 2+ behind
 - Callback patterns
-- CommonJS in ESM — `require()` usage in ESM-configured projects (`"type": "module"`)
-- Legacy bundler config — Webpack 4 config, Gulp/Grunt in modern projects
-- Outdated TypeScript — TS <4.0 patterns, pre-strict mode code, excessive `any` usage
+- CommonJS in ESM — `require()` in `"type": "module"` projects
+- Legacy bundler config — Webpack 4, Gulp/Grunt in modern projects
+- Outdated TypeScript — TS <4.0 patterns, pre-strict mode, excessive `any`
 - TODO/FIXME debt
-- Commented code — large blocks of commented-out code (10+ lines)
+- Commented code (10+ lines)
 - Event emitter abuse
-- Monolithic modules — single files with 1000+ lines or 50+ exports
+- Monolithic modules — 1000+ lines or 50+ exports
 
 ## Framework-Specific Checks
 
@@ -140,7 +118,7 @@ Apply these checks when the corresponding framework is detected by context-disco
 ### Express Checks
 
 - Missing error middleware — no app.use((err, req, res, next)) handler
-- Route parameter injection — req.params used in SQL/shell without validation
+- Route parameter injection — req.params in SQL/shell without validation
 - Trust proxy misconfiguration
 - Body parser limits — express.json() without size limits
 

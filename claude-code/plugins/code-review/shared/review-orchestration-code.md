@@ -4,7 +4,7 @@ This document defines agent invocation patterns and execution sequences for code
 
 ## Agent Invocation
 
-Plugin agents are registered as subagent types with the pattern `code-review:<agent-name>`. Always pass the `model` parameter explicitly (see Code Review Model Selection table below).
+Always pass the `model` parameter explicitly (see Code Review Model Selection table below).
 
 ### Prompt Schema
 
@@ -46,8 +46,6 @@ End the prompt with: `Return findings as YAML per agent examples in your agent f
 
 ### Content Distribution Optimization
 
-To reduce Execution Context usage, not all agents receive all content. The orchestrator should distribute content selectively based on agent requirements.
-
 #### Test File Distribution
 
 Pass `related_tests` content ONLY to agents that analyze test relationships:
@@ -71,18 +69,16 @@ Pass full `ai_instructions` content ONLY to agents that need project-specific ru
 
 #### Agent Common Content Distribution
 
-The orchestrator reads shared content files ONCE and distributes relevant portions to each agent via `additional_instructions`, eliminating per-agent file reads.
+The orchestrator distributes relevant portions of the content below to each agent via `additional_instructions`, eliminating per-agent file reads.
 
-**Source files (read by orchestrator, not by agents):**
-- `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`
-- `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` "Category-Specific False Positive Rules"
+**Additional source file (read by orchestrator, not by agents):**
 - `${CLAUDE_PLUGIN_ROOT}/languages/{detected}.md` per-category sections
 
 **Distribution per agent** (append to `additional_instructions`):
-1. **Output schema** from agent-common-instructions.md
-2. **MODE definition** matching the current mode
-3. **General false positive rules** from agent-common-instructions.md
-4. **Category-specific false positive rules** — extract ONLY the agent's category section from validation-rules-code.md
+1. **Output schema** from Agent Common Instructions below
+2. **MODE definition** matching the current mode from Agent Common Instructions below
+3. **General false positive rules** from Agent Common Instructions below
+4. **Category-specific false positive rules** — extract ONLY the agent's category from Category-Specific False Positive Rules below
 5. **Language-specific checks** — extract ONLY the agent's category anchor from detected language files
 
 | Agent | Language anchor |
@@ -96,6 +92,53 @@ The orchestrator reads shared content files ONCE and distributes relevant portio
 | test-coverage-agent | `{#tests}` |
 
 Agents without language anchors (api-contracts, compliance) skip step 5. Synthesis agents are excluded from this distribution.
+
+### Agent Common Instructions (Distributed to All Agents)
+
+#### Standard Agent Input
+
+**Required:** files_to_review (diffs/content), project_type (nodejs/dotnet/both), MODE (thorough/gaps/quick)
+**Optional:** skill_instructions (skill-derived focus), previous_findings (gaps mode deduplication)
+**Tools:** Read, Grep, Glob
+
+#### MODE Parameter
+
+- **thorough**: Comprehensive review, all issues in agent's domain
+- **gaps**: Subtle issues missed by thorough; receives previous_findings to skip duplicates
+- **quick**: Critical issues only (highest-impact, merge-blocking)
+
+#### False Positive Rules
+
+**Do NOT flag:**
+- **Correct Code**: Non-obvious but valid edge case handling or intentional patterns
+- **Linter Territory**: Formatting/import issues handled by linters (do NOT run linters to verify)
+- **Pedantic Concerns**: Minor style preferences a senior engineer would not flag
+- **Pre-existing Issues**: Issues existing before current changes, not modified
+- **Scope Limitations**: General quality unless required in AI instructions; test code unless reviewing tests; theoretical edge cases extremely unlikely in practice
+- **Silenced Issues**: Code with lint-disable/suppress comments or documented suppressions
+
+**Deep review** can flag more issues but still skip pre-existing, silenced, and pure style.
+**Quick review**: only blocking issues; ignore minor style, skip theoretical edge cases.
+
+#### Output Schema
+
+Each issue requires: `title`, `file`, `line`, `range` (string or null), `category`, `severity` (Critical/Major/Minor/Suggestion), `description`, `fix_type` (diff/prompt), `fix_diff` or `fix_prompt`.
+
+See agent file for category-specific extra fields.
+
+### Category-Specific False Positive Rules (Code)
+
+Each category has specific exclusions in addition to the general false positive rules above.
+
+- **API Contracts**: Additive-only changes; beta/experimental APIs marked as unstable; changes following established deprecation process
+- **Architecture**: Pragmatic compromises with clear justification; patterns overkill for project scale
+- **Bug Detection**: Code with explicit comments explaining why it's correct
+- **Compliance**: Explicit override comments; ambiguous rules with reasonable compliance; style preferences not stated as rules
+- **Error Handling**: Errors intentionally ignored with explicit comments; logging-only catch blocks as intended behavior
+- **Performance**: Micro-optimizations without measurable impact; code that runs rarely
+- **Security**: Internal-only code with no untrusted input exposure; vulnerabilities mitigated elsewhere in the code
+- **Technical Debt**: Dependencies pinned for compatibility (documented reason); dead code that's conditionally compiled (build flags); TODO comments referencing issue tracking (TODO(#123)); workarounds with documented upstream bugs; class components in projects intentionally supporting older React versions
+- **Test Coverage**: Code impractical to unit test (better for integration tests); code covered by higher-level tests; generated code/boilerplate; dead code that should be removed rather than tested
 
 ## Gaps Mode Behavior
 
@@ -123,9 +166,7 @@ See each agent file for category-specific focus areas (what subtle issues thorou
 
 ## Deep Code Review Sequence (19 agent invocations)
 
-1. **Steps 1-3: Input, Context, Content**
-   - Validate input, discover context, gather file content
-   - OUTPUT: Files to review, diffs, AI instructions, test files
+1. **Steps 1-3: Input, Context, Content** (defined in command file)
 
 2. **Phase 1: Thorough Review** (9 agents in parallel)
    - Launch: api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage
@@ -208,23 +249,8 @@ The synthesis agents are designed to be invoked **multiple times in parallel** w
 
 See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` for the full agent definition and analysis logic.
 
-### Synthesis Prompt Schema
-
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| `synthesis_input.category_a.name` | string | Yes | First category name |
-| `synthesis_input.category_a.findings` | list | Yes | All findings from category_a (Phase 1 + Phase 2) |
-| `synthesis_input.category_b.name` | string | Yes | Second category name |
-| `synthesis_input.category_b.findings` | list | Yes | All findings from category_b (Phase 1 + Phase 2) |
-| `synthesis_input.cross_cutting_question` | string | Yes | The cross-cutting analysis question |
-| `synthesis_input.files_content` | list | Yes | File diffs and full content for context |
-
-### Parallel Synthesis Pattern
-
-Launch all category pairs simultaneously; merge results. Pairs defined in Deep Code Review Sequence (5) and Quick Code Review Sequence (3) above.
-
 ---
 
 # Code Review Validation Rules
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` for validation rules, auto-validation patterns, and category-specific false positive rules. Load at Steps 9-12 only.
+See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md` for validation rules and auto-validation patterns. Load at Steps 9-12 only.

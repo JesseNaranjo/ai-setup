@@ -1,25 +1,3 @@
-# .NET / C# Language Configuration
-
-Language-specific checks and patterns for .NET and C# projects.
-
-## Detection
-
-Detect .NET projects by checking for any of these files:
-- `*.csproj` (project file)
-- `*.sln` (solution file)
-- `*.slnx` (solution file, newer format)
-
-## .NET Version Detection
-
-Detect target framework for version-specific checks:
-
-| Target | Detection | Special Checks |
-|--------|-----------|----------------|
-| .NET 8+ | `<TargetFramework>net8.0</TargetFramework>` | Primary constructors, collection expressions |
-| .NET 6-7 | `<TargetFramework>net6.0</TargetFramework>` | Minimal APIs, file-scoped namespaces |
-| .NET Framework | `<TargetFramework>net48</TargetFramework>` | Legacy patterns flagged |
-| .NET Standard | `<TargetFramework>netstandard2.0</TargetFramework>` | Compatibility concerns |
-
 ## Test File Patterns
 
 - `*.Tests.cs`
@@ -28,19 +6,19 @@ Detect target framework for version-specific checks:
 - `*.IntegrationTests/` projects
 - `tests/` directories
 
-## Language Server Integration (Optional)
+## LSP Integration
 
-> **LSP Integration (agent-only):** See `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for .NET LSP integration details. Not loaded during orchestration.
+Agent-loadable reference: `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`
 
 ## Category-Specific Checks
 
 ### Bugs {#bugs}
 
 - Null reference exceptions
-- `IDisposable` not disposed — objects not disposed or not in using blocks
-- Async deadlocks — using `.Result` or `.Wait()` on async tasks (blocks thread pool)
-- LINQ deferred execution issues — queries executed multiple times unintentionally
-- String comparison issues — case-sensitive comparisons where case-insensitive is needed
+- `IDisposable` not disposed — missing using blocks
+- Async deadlocks — `.Result` or `.Wait()` on async tasks (blocks thread pool)
+- LINQ deferred execution — queries executed multiple times unintentionally
+- String comparison issues — case-sensitive where case-insensitive needed
 - Collection modification during iteration
 - CancellationToken ignored
 - DbContext disposed early
@@ -49,69 +27,66 @@ Detect target framework for version-specific checks:
 ### Security {#security}
 
 - SQL injection via string concatenation
-- Insecure deserialization — deserializing untrusted data without type validation
+- Insecure deserialization — untrusted data without type validation
 - Hardcoded connection strings
 - Missing `[Authorize]` attributes
 - Path traversal
-- Weak cryptography — MD5/SHA1 for security purposes, weak encryption modes
+- Weak cryptography — MD5/SHA1 for security, weak encryption modes
 - CSRF vulnerabilities
-- XXE vulnerabilities — XML parsing without disabling external entities
+- XXE — XML parsing without disabling external entities
 - Open redirect in Redirect()
-- Model over-binding — [Bind] or [FromBody] allowing sensitive property binding
-- JWT without validation — JwtSecurityTokenHandler without validation parameters
+- Model over-binding — [Bind]/[FromBody] allowing sensitive property binding
+- JWT without validation parameters
 
 ### Performance {#performance}
 
 - Boxing/unboxing overhead
 - LINQ in hot loops
-- Excessive allocations — creating objects in loops, string concatenation in loops
-- Missing `ConfigureAwait(false)` — in library code
+- Excessive allocations — object creation in loops, string concat in loops
+- Missing `ConfigureAwait(false)` in library code
 - N+1 EF queries
 - Missing async I/O
-- Large object heap allocations — repeatedly allocating objects > 85KB
+- Large object heap — repeatedly allocating >85KB objects
 - Sync over async in middleware
 - Missing response compression
 - Missing AsNoTracking
 - Include without filter
-- ToList() before filter — materializing query before applying Where()
+- ToList() before filter — materializing query before Where()
 
 ### Architecture {#architecture}
 
-- DI anti-patterns — service locator pattern, captive dependencies, improper scoping
+- DI anti-patterns — service locator, captive dependencies, improper scoping
 - Missing interfaces for testability
-- Controller bloat — controllers with business logic instead of delegation
+- Controller bloat — business logic in controllers
 - Improper layering violations
 - Static abuse
 - Circular dependencies
 
 ### Error Handling {#errors}
 
-- Missing exception handling
-- Swallowed exceptions — empty catch blocks, catch blocks that only log
-- Improper `Task` handling — tasks not awaited, fire-and-forget without error handling
+- Swallowed exceptions — empty catch blocks, catch-only-log
+- Improper `Task` handling — unawaited tasks, fire-and-forget without error handling
 - Missing try-finally for cleanup
 - Generic exception catching — catching `Exception` instead of specific types
-- Improper exception wrapping — losing stack trace when re-throwing
+- Improper exception wrapping — losing stack trace on re-throw
 
 ### Test Coverage {#tests}
 
-- Missing unit tests
-- Missing integration tests
-- Missing edge case tests
+- Missing unit/integration/edge case tests
 - Async test issues
-- Test isolation — tests sharing state, database state not reset between tests
+- Test isolation — shared state, database state not reset
 - Missing mock verification
 
 ### Technical Debt {#debt}
 
 - Deprecated NuGet packages
-- Pre-.NET 6 patterns — `WebClient`, sync-over-async, old configuration patterns
-- Obsolete attributes — code using `[Obsolete]` APIs without migration plan
-- Legacy serialization — `BinaryFormatter`, non-JSON serialization in modern code
-- Task.Result usage — sync-over-async patterns blocking threads (`.Result`, `.Wait()`)
-- Pre-nullable context — code not using nullable reference types (`#nullable enable`)
+- Pre-.NET 6 patterns — `WebClient`, sync-over-async, old configuration
+- Obsolete attributes — `[Obsolete]` APIs without migration plan
+- Legacy serialization — `BinaryFormatter`, non-JSON serialization
+- Task.Result usage — sync-over-async blocking threads
+- Pre-nullable context — missing `#nullable enable`
 - TODO/FIXME debt
-- Commented code — large blocks of commented-out code (10+ lines)
+- Commented code (10+ lines)
 - Static class abuse
 - Missing async suffix
 
@@ -121,15 +96,15 @@ Apply when EF Core is detected (Microsoft.EntityFrameworkCore in csproj).
 
 ### Query Issues
 
-- N+1 via lazy loading — navigation properties accessed in loops
-- Client-side evaluation — LINQ expressions evaluated in memory instead of SQL
+- N+1 via lazy loading — navigation properties in loops
+- Client-side evaluation — LINQ evaluated in memory instead of SQL
 - Raw SQL injection — FromSqlRaw with string interpolation
 - Missing AsSplitQuery — large Include graphs causing Cartesian explosion
 
 ### Context Issues
 
 - Long-lived DbContext
-- DbContext in Singleton — scoped DbContext injected into Singleton service
+- DbContext in Singleton — scoped DbContext injected into Singleton
 - Missing transactions — multiple SaveChanges without TransactionScope
 - Concurrent DbContext access
 
