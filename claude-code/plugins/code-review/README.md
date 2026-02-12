@@ -392,7 +392,6 @@ code-review/
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation, content gathering, and pre-existing issue detection for staged commands
 │   └── references/                  # Detailed reference content (progressive disclosure)
-│       ├── complete-output-example.md # Complete output format example
 │       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
 │       ├── validation-rules-code.md # Code review validation rules, auto-validation patterns, false positive rules
 │       └── validation-rules-docs.md # Docs review validation rules, auto-validation patterns, false positive rules

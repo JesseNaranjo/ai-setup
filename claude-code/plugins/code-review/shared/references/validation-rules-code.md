@@ -23,22 +23,11 @@ This differs from deep reviews, which validate all severity levels.
 
 ### Cross-Cutting Insight Validation
 
-Synthesis agents produce `cross_cutting_insights` that require special validation:
+Cross-cutting insights are added to the issue pool AFTER synthesis, BEFORE validation. Each specifies a `category` field for model assignment. Always validate with **Opus**.
 
-1. **Integration Point**: Cross-cutting insights are added to the issue pool AFTER synthesis completes, BEFORE validation begins
-2. **Category Assignment**: Each insight specifies a `category` field - use this for validator model assignment
-3. **Validator Model**: Cross-cutting insights always use **Opus** for validation
-4. **Related Findings Check**: Validator must verify that BOTH `related_findings` references exist in the original findings
+**Validation checks:** (1) Both `related_findings` references exist and are not false positives, (2) describes genuine interaction between the two, (3) not a duplicate of either original finding, (4) adds value beyond individual category findings.
 
-**Cross-Cutting Validation Checks:**
-1. Verify both related findings are real issues (not false positives)
-2. Verify the insight describes a genuine interaction between the two
-3. Verify the insight is NOT a duplicate of either original finding
-4. Verify the insight adds value beyond what each category found independently
-
-**Cross-Cutting Deduplication**: If a cross-cutting insight duplicates an issue from the original category findings:
-- Mark as INVALID with reason: "Duplicates existing finding from [category]"
-- The original finding takes precedence
+**Deduplication**: If a cross-cutting insight duplicates an original finding, mark INVALID ("Duplicates existing finding from [category]"). Original takes precedence.
 
 ### Batch Validator Prompt
 
@@ -68,38 +57,20 @@ validations:
 
 ### Auto-Validation (Skip Validation)
 
-Some high-confidence patterns skip validation entirely and are marked `auto_validated: true`:
-
-### Auto-Validation Output
-
-```yaml
-issues:
-  - title: "Hardcoded database password"
-    auto_validated: true
-    confidence_pattern: "hardcoded_credential"
-    ...
-```
-
-**Domain-specific patterns:** See Auto-Validation Patterns (Code) section below.
+Some high-confidence patterns skip validation entirely and are marked `auto_validated: true`. See Auto-Validation Patterns (Code) section below.
 
 ### Common False Positives to Check
 
-Validators should check for these common false positive patterns:
+Validators should check for these pipeline-specific false positive patterns:
 
-1. **Pre-existing issues**: The issue existed before the changes being reviewed
-2. **Context makes it correct**: The code appears wrong but has valid context
-3. **Handled elsewhere**: The issue is addressed in another part of the codebase
-4. **Explicit ignore comments**: The issue is intentionally silenced (lint-ignore, etc.)
-5. **Theoretical only**: The issue requires unrealistic conditions to manifest
-6. **Test/dev code**: The issue is in test or development-only code paths
-7. **Internal code**: The issue is in internal code with no external exposure
+1. **Explicit ignore comments**: The issue is intentionally silenced (lint-ignore, suppress, etc.)
+2. **Handled elsewhere**: The issue is addressed in another part of the codebase
+3. **Test/dev code**: The issue is in test or development-only code paths
+4. **Internal code**: The issue is in internal code with no external exposure
 
 ### Validation Output
 
-Each validator returns:
-- **VALID**: Issue is confirmed, keep original severity
-- **INVALID**: Issue is a false positive, remove from results
-- **DOWNGRADE**: Issue is real but severity should be lower
+Each validator returns: **VALID** (confirmed, keep severity), **INVALID** (false positive, remove), or **DOWNGRADE** (real but lower severity).
 
 ## Validator Model Assignment
 
@@ -213,68 +184,12 @@ Some high-confidence patterns skip validation entirely and are marked `auto_vali
 
 Each category has specific exclusions in addition to the general false positive rules in `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`.
 
-### API Contracts
-
-- Internal/private API changes
-- Changes to APIs with no external consumers
-- Additive changes that don't break existing consumers
-- Changes that follow established deprecation process
-- Beta/experimental APIs clearly marked as unstable
-
-### Architecture
-
-- Pragmatic compromises with clear justification
-- Patterns that are overkill for the scale of the project
-- Architecture decisions already documented and justified
-- Temporary code with clear TODOs
-
-### Bug Detection
-
-- Code that appears buggy but is correct in context
-- Defensive code that handles edge cases (unless it has a bug)
-- Code with explicit comments explaining why it's correct
-
-### Compliance
-
-- Code that appears to violate a rule but has an explicit override comment
-- Ambiguous rules where the code could reasonably be compliant
-- Rules that don't apply to this file type or context
-- Style preferences not explicitly stated as rules
-
-### Error Handling
-
-- Code where errors are intentionally ignored with explicit comments
-- Errors that are handled at a higher level
-- Internal code with documented error handling strategy
-- Logging-only catch blocks where that's the intended behavior
-
-### Performance
-
-- Micro-optimizations that won't have measurable impact
-- Performance issues in code that runs rarely
-- Code that prioritizes readability over minor performance gains
-
-### Security
-
-- Internal-only code with no untrusted input exposure
-- Code with explicit security comments explaining the design
-- Vulnerabilities already mitigated elsewhere in the code
-
-### Technical Debt
-
-- Dependencies intentionally pinned for compatibility (documented reason)
-- Legacy patterns in legacy modules explicitly marked as deprecated
-- Dead code that's actually conditionally compiled (build flags)
-- TODO comments that reference issue tracking (TODO(#123))
-- Workarounds with documented upstream bugs and tracking
-- Class components in projects supporting older React versions intentionally
-
-### Test Coverage
-
-- Private/internal implementation details
-- Code that's impractical to unit test (better suited for integration tests)
-- Code already covered by higher-level tests
-- Test files themselves (don't require tests of tests)
-- Generated code or boilerplate
-- Configuration files or constants
-- Dead code that should be removed rather than tested
+- **API Contracts**: Additive-only changes; beta/experimental APIs marked as unstable; changes following established deprecation process
+- **Architecture**: Pragmatic compromises with clear justification; patterns overkill for project scale
+- **Bug Detection**: Code with explicit comments explaining why it's correct
+- **Compliance**: Explicit override comments; ambiguous rules with reasonable compliance; style preferences not stated as rules
+- **Error Handling**: Errors intentionally ignored with explicit comments; logging-only catch blocks as intended behavior
+- **Performance**: Micro-optimizations without measurable impact; code that runs rarely
+- **Security**: Internal-only code with no untrusted input exposure; vulnerabilities mitigated elsewhere in the code
+- **Technical Debt**: Dependencies pinned for compatibility (documented reason); dead code that's conditionally compiled (build flags); TODO comments referencing issue tracking (TODO(#123)); workarounds with documented upstream bugs; class components in projects intentionally supporting older React versions
+- **Test Coverage**: Code impractical to unit test (better for integration tests); code covered by higher-level tests; generated code/boilerplate; dead code that should be removed rather than tested

@@ -2,10 +2,6 @@
 
 This section defines the output format for review results and serves as the **authoritative output schema reference** for all agents.
 
-## Related Files
-
-- `${CLAUDE_PLUGIN_ROOT}/shared/references/complete-output-example.md` - Complete output example (reference)
-
 ## Output Generation Process
 
 ### 0. Generate Review Output
@@ -155,7 +151,42 @@ For complex fixes requiring multiple locations, structural changes, or context d
 > 3. Update imports in src/api/auth.ts and src/middleware/auth.ts
 ````
 
-## Complete Output Example
+## Output Structure Overview
 
-For a complete example showing all format elements together, see:
-`${CLAUDE_PLUGIN_ROOT}/shared/references/complete-output-example.md`
+Output elements in order:
+
+## Code Review
+
+**Reviewed:** [N] file(s) | **Branch:** [branch-name]
+**Review Depth:** [review-depth-description]
+
+### Summary
+
+| Category | Critical | Major | Minor | Suggestions |
+
+### Critical Issues (Must Fix)
+
+**[N]. [Title]** `Critical` `[Category]`
+
+### Major Issues (Should Fix)
+
+**[N]. [Title]** `Major` `[Category]`
+
+### Minor Issues
+
+**[N]. [Title]** `Minor` `[Category]`
+
+### Suggestions
+
+**[N]. [Title]** `Suggestion` `[Category]`
+
+### Cross-Cutting Insights
+
+**[N]. [Title]** `[Severity]` `[Category A] + [Category B]`
+
+### Test Recommendations
+
+**[N]. [Title]** `Suggestion` `Test Coverage`
+
+---
+Review saved to: [filepath]

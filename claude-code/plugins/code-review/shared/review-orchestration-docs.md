@@ -4,18 +4,7 @@ This document defines agent invocation patterns and execution sequences for docu
 
 ## Agent Invocation
 
-Plugin agents are registered as subagent types with the pattern `code-review:<agent-name>`.
-
-Use the Task tool to launch each agent. Always pass the `model` parameter explicitly (see Documentation Review Model Selection table below).
-
-```
-Task(
-  subagent_type: "code-review:<agent-name>",
-  model: "<model>",  // See Documentation Review Model Selection table
-  description: "[Agent name] review for [scope]",
-  prompt: "<prompt fields below>"
-)
-```
+Plugin agents are registered as subagent types with the pattern `code-review:<agent-name>`. Always pass the `model` parameter explicitly (see Documentation Review Model Selection table below).
 
 ### Prompt Schema
 
@@ -182,7 +171,7 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` for the full age
 
 ### Parallel Synthesis Pattern
 
-Launch multiple synthesis instances simultaneously with different category pairs. Each returns independent `cross_cutting_insights`; orchestrator merges all results. Category pairs: see Deep Docs Review Sequence (4 pairs) and Quick Docs Review Sequence (3 pairs) above.
+Launch all category pairs simultaneously; merge results. Pairs defined in Deep Docs Review Sequence (4) and Quick Docs Review Sequence (3) above.
 
 ---
 

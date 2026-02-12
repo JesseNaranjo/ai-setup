@@ -23,22 +23,11 @@ This differs from deep reviews, which validate all severity levels.
 
 ### Cross-Cutting Insight Validation
 
-Synthesis agents produce `cross_cutting_insights` that require special validation:
+Cross-cutting insights are added to the issue pool AFTER synthesis, BEFORE validation. Each specifies a `category` field for model assignment. Always validate with **Opus**.
 
-1. **Integration Point**: Cross-cutting insights are added to the issue pool AFTER synthesis completes, BEFORE validation begins
-2. **Category Assignment**: Each insight specifies a `category` field - use this for validator model assignment
-3. **Validator Model**: Cross-cutting insights always use **Opus** for validation
-4. **Related Findings Check**: Validator must verify that BOTH `related_findings` references exist in the original findings
+**Validation checks:** (1) Both `related_findings` references exist and are not false positives, (2) describes genuine interaction between the two, (3) not a duplicate of either original finding, (4) adds value beyond individual category findings.
 
-**Cross-Cutting Validation Checks:**
-1. Verify both related findings are real issues (not false positives)
-2. Verify the insight describes a genuine interaction between the two
-3. Verify the insight is NOT a duplicate of either original finding
-4. Verify the insight adds value beyond what each category found independently
-
-**Cross-Cutting Deduplication**: If a cross-cutting insight duplicates an issue from the original category findings:
-- Mark as INVALID with reason: "Duplicates existing finding from [category]"
-- The original finding takes precedence
+**Deduplication**: If a cross-cutting insight duplicates an original finding, mark INVALID ("Duplicates existing finding from [category]"). Original takes precedence.
 
 ### Batch Validator Prompt
 
@@ -68,38 +57,20 @@ validations:
 
 ### Auto-Validation (Skip Validation)
 
-Some high-confidence patterns skip validation entirely and are marked `auto_validated: true`:
-
-### Auto-Validation Output
-
-```yaml
-issues:
-  - title: "Hardcoded database password"
-    auto_validated: true
-    confidence_pattern: "hardcoded_credential"
-    ...
-```
-
-**Domain-specific patterns:** See Auto-Validation Patterns (Documentation) section below.
+Some high-confidence patterns skip validation entirely and are marked `auto_validated: true`. See Auto-Validation Patterns (Documentation) section below.
 
 ### Common False Positives to Check
 
-Validators should check for these common false positive patterns:
+Validators should check for these pipeline-specific false positive patterns:
 
-1. **Pre-existing issues**: The issue existed before the changes being reviewed
-2. **Context makes it correct**: The code appears wrong but has valid context
-3. **Handled elsewhere**: The issue is addressed in another part of the codebase
-4. **Explicit ignore comments**: The issue is intentionally silenced (lint-ignore, etc.)
-5. **Theoretical only**: The issue requires unrealistic conditions to manifest
-6. **Test/dev code**: The issue is in test or development-only code paths
-7. **Internal code**: The issue is in internal code with no external exposure
+1. **Explicit ignore comments**: The issue is intentionally silenced (lint-ignore, suppress, etc.)
+2. **Handled elsewhere**: The issue is addressed in another part of the codebase
+3. **Test/dev code**: The issue is in test or development-only code paths
+4. **Internal code**: The issue is in internal code with no external exposure
 
 ### Validation Output
 
-Each validator returns:
-- **VALID**: Issue is confirmed, keep original severity
-- **INVALID**: Issue is a false positive, remove from results
-- **DOWNGRADE**: Issue is real but severity should be lower
+Each validator returns: **VALID** (confirmed, keep severity), **INVALID** (false positive, remove), or **DOWNGRADE** (real but lower severity).
 
 ## Validator Model Assignment
 
@@ -197,50 +168,9 @@ Some high-confidence patterns skip validation entirely and are marked `auto_vali
 
 Each category has specific exclusions in addition to the general false positive rules in `${CLAUDE_PLUGIN_ROOT}/shared/agent-common-instructions.md`.
 
-### Accuracy
-
-- Intentionally simplified examples (marked as "simplified" or "basic example")
-- Pseudocode clearly marked as illustrative
-- Version-specific documentation with version clearly noted
-- Documentation for planned/upcoming features marked as such
-
-### Clarity
-
-- Jargon appropriate for stated expert audience
-- Acronyms defined earlier in the same document
-- Industry-standard terms in domain-specific docs (e.g., "REST" in API docs)
-- Intentionally terse reference documentation (vs tutorials)
-- Code comments within code blocks (different standards apply)
-
-### Completeness
-
-- Internal/private APIs not intended for external use
-- Features clearly marked as experimental/unstable
-- Configuration options with sensible defaults that rarely need changing
-- Platform-specific docs when project only targets one platform
-- Sections that would duplicate content available elsewhere (with link)
-
-### Consistency
-
-- Intentional variations for emphasis or clarity
-- Code/API names that must match implementation (even if inconsistent with prose style)
-- Quoted text that preserves original formatting
-- Version-specific sections that intentionally differ
-- External content (quotes, references) with different style
-
-### Examples
-
-- Pseudocode clearly marked as illustrative (not runnable)
-- Intentionally simplified examples with explicit notes about what's omitted
-- Partial examples with "..." indicating omitted code
-- Examples for older versions in clearly versioned documentation
-- Examples showing error cases (intentionally incorrect code to demonstrate what not to do)
-- Shell examples with placeholder values like `<your-token>`
-
-### Structure
-
-- Intentionally orphaned archive/historical documents
-- External links to known-stable resources (official docs, RFCs)
-- Heading hierarchy violations in code-generated documentation
-- Alternative navigation paths that are intentional (multiple entry points)
-- AI instruction files in projects that don't use AI assistants (if explicitly stated)
+- **Accuracy**: Intentionally simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; documentation for planned features marked as such
+- **Clarity**: Jargon appropriate for stated expert audience; acronyms defined earlier in the same document; intentionally terse reference docs (vs tutorials)
+- **Completeness**: Internal/private APIs not for external use; features marked experimental/unstable; sections that would duplicate linked content
+- **Consistency**: Code/API names that must match implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections that intentionally differ
+- **Examples**: Pseudocode marked as illustrative (not runnable); partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`
+- **Structure**: Intentionally orphaned archive/historical documents; heading hierarchy violations in code-generated documentation; AI instruction files in projects not using AI assistants (if explicitly stated)

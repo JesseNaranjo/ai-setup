@@ -4,18 +4,7 @@ This document defines agent invocation patterns and execution sequences for code
 
 ## Agent Invocation
 
-Plugin agents are registered as subagent types with the pattern `code-review:<agent-name>`.
-
-Use the Task tool to launch each agent. Always pass the `model` parameter explicitly (see Code Review Model Selection table below).
-
-```
-Task(
-  subagent_type: "code-review:<agent-name>",
-  model: "<model>",  // See Code Review Model Selection table
-  description: "[Agent name] review for [scope]",
-  prompt: "<prompt fields below>"
-)
-```
+Plugin agents are registered as subagent types with the pattern `code-review:<agent-name>`. Always pass the `model` parameter explicitly (see Code Review Model Selection table below).
 
 ### Prompt Schema
 
@@ -213,12 +202,6 @@ Load language configs ONLY for detected languages/frameworks to minimize context
 - If `detected_frameworks.react` has files: Also load `${CLAUDE_PLUGIN_ROOT}/languages/react.md`
 - Skip loading configs for languages/frameworks not present in the review
 
-For mixed codebases (monorepos):
-- Each file receives only its relevant language config
-- React files receive both nodejs.md AND react.md checks
-- Agents receive language-specific checks per file, not all configs
-- Cross-language issues (e.g., API contract mismatches) are handled by architecture and API agents
-
 ## Synthesis Invocation
 
 The synthesis agents are designed to be invoked **multiple times in parallel** with different category pairs.
@@ -238,7 +221,7 @@ See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` for the full age
 
 ### Parallel Synthesis Pattern
 
-Launch multiple synthesis instances simultaneously with different category pairs. Each returns independent `cross_cutting_insights`; orchestrator merges all results. Category pairs: see Deep Code Review Sequence (5 pairs) and Quick Code Review Sequence (3 pairs) above.
+Launch all category pairs simultaneously; merge results. Pairs defined in Deep Code Review Sequence (5) and Quick Code Review Sequence (3) above.
 
 ---
 
