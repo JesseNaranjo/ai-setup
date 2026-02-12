@@ -149,7 +149,7 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 ### Agent Content Distribution
 
-The orchestration files (`review-orchestration-code.md`, `review-orchestration-docs.md`) contain inlined agent common instructions (MODE, false positives, output schema) and category-specific false positive rules. The orchestrator distributes relevant portions to each agent via `additional_instructions`, along with language-specific checks from `languages/*.md`. Agents do not read these shared files directly.
+The orchestration files (`review-orchestration-code.md`, `review-orchestration-docs.md`) contain inlined agent common instructions (MODE, false positives, output schema) and category-specific false positive rules. The orchestrator distributes relevant portions to each agent via `additional_instructions`, along with language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Agents do not read these shared files directly.
 
 See `shared/review-orchestration-code.md` "Agent Common Content Distribution" and `shared/review-orchestration-docs.md` for implementation details.
 
@@ -334,16 +334,26 @@ This applies to:
 
 **Step layout in commands:**
 - Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills) - inlined in each command
-- Steps 3, 5, 7-8: Input validation, content gathering, review execution - command-specific
-- Steps 9-12: Post-review (validation, aggregation, output, write) - inlined in each command
+- Steps 3, 5: Input validation, content gathering - command-specific
+- Steps 7-8: Review execution, synthesis - references to orchestration files
+- Steps 9-12: Post-review (validation, aggregation, output, write) - compressed inline
 
 ### Command Step Inlining
 
-Each command file inlines its pre-review setup and post-review steps directly rather than referencing a shared common-steps file. The 4 code review commands share ~60 lines of identical inlined content; the 2 docs review commands use a different layout.
+Each command file inlines its pre-review setup steps (Steps 1-6) directly rather than referencing a shared common-steps file. Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline. The 4 code review commands share ~40 lines of identical inlined content; the 2 docs review commands use a different layout.
 
 **Rationale:** A shared `command-common-steps.md` was tried but created a second level of indirection (commands → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps commands self-contained with one-hop references to shared files.
 
 **Revisit if:** command count exceeds 6, shared steps diverge significantly, or a way is found to share steps without extra Opus context files.
+
+### Intentional Cross-File Duplication
+
+| File Pair | Shared Content | ~Lines | Rationale |
+|-----------|---------------|--------|-----------|
+| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~53 | Only one loaded per execution; extracting adds a file read |
+| `validation-rules-code.md` / `validation-rules-docs.md` | Batch Validation Process, Aggregation Rules | ~90 | Only one loaded per execution; extracting adds a file read |
+
+**Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.
 
 ### Commands Directory
 

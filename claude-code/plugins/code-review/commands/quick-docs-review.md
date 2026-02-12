@@ -73,74 +73,22 @@ Gather:
 
 ## Step 7: Quick Review
 
-See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for phase definitions and **Documentation Review Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` for Task invocation template
-
-### Review (4 agents in parallel)
-
-Launch 4 documentation agents with **quick** mode:
-
-**Agents**: Accuracy, Clarity, Examples, Structure
-
-- Accuracy (Opus): Critical mismatches, wrong function names, broken examples
-- Clarity (Sonnet): Incomprehensible sections, undefined critical acronyms
-- Examples (Opus): Syntax errors, missing critical imports, wrong API calls
-- Structure (Sonnet): Broken links, major navigation issues, AI instruction file errors
-
-Pass to all agents:
-- Documentation file contents
-- Related code snippets for verification
-- AI instruction file status
-- Additional prompt instructions (if provided)
-
-**CRITICAL: WAIT** - All 4 Review phase agents must complete before proceeding to Synthesis.
+Execute the **Quick Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`:
+- Use the **Documentation Review Model Selection** table for model assignments
+- Use the **Agent Common Content Distribution** rules
+- Follow all CRITICAL WAIT barriers
 
 ---
 
-## Step 8: Cross-Agent Synthesis (3 agents in parallel)
+## Step 8: Cross-Agent Synthesis
 
-**CRITICAL: DO NOT START Synthesis until the Review phase (Step 7) is FULLY COMPLETE.**
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for synthesis pairs.
-
-Launch 3 synthesis agents with category pairs:
-- Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
-- Clarity+Structure: "Does poor structure contribute to clarity issues, or vice versa?"
-- Examples+Structure: "Are example placements and references structurally sound?"
+Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`.
 
 ---
 
-## Step 9: Validation
+## Steps 9-12: Validation, Aggregation, Output
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md`:
-- Filter false positives
-- Verify issue locations exist
-- Remove duplicates
+Validate per `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
 
----
-
-## Step 10: Aggregation
-
-Aggregate validated findings:
-- Group by category (Accuracy, Clarity, Examples, Structure)
-- Sort by severity within categories
-- Include cross-cutting insights from synthesis
-
----
-
-## Step 11: Output
-
-Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`.
-
-**Output config:**
-- Review Type: "Quick Documentation Review (7 invocations)"
-- Categories: Accuracy, Clarity, Examples, Structure
-
-Write to the output file path (see `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` "Filename Generation").
-
-Report completion to user with summary:
-- Total issues found by severity
-- Issues by category
-- AI instruction standardization status (if issues found)
-- Path to full report
+**Output config:** Review Type: "Quick Documentation Review (7 invocations)", Categories: Accuracy, Clarity, Examples, Structure
+Include AI instruction file standardization section. Report summary: total issues by severity, issues by category, AI instruction standardization status, path to report.

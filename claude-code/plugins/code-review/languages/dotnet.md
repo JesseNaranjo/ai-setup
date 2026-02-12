@@ -6,10 +6,6 @@
 - `*.IntegrationTests/` projects
 - `tests/` directories
 
-## LSP Integration
-
-Agent-loadable reference: `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`
-
 ## Category-Specific Checks
 
 ### Bugs {#bugs}

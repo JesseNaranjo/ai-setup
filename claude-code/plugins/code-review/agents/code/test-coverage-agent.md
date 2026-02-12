@@ -59,11 +59,7 @@ For each gap found, provide:
 - **Suggested test file location**: Where to add the test
 - **Test case outline**: Brief description of the test
 
-### Step 5: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
-
-For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
-
-### Step 6: Report Test Coverage Issues
+### Step 5: Report Test Coverage Issues
 
 Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what code is not tested, why it should be tested, risk of not testing

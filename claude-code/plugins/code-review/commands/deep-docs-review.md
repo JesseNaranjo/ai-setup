@@ -75,82 +75,22 @@ Gather:
 
 ## Step 7: Two-Phase Deep Review
 
-See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for phase definitions and **Documentation Review Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` for Task invocation template
-
-### Phase 1: Thorough Review (6 agents in parallel)
-
-Launch all 6 documentation agents with **thorough** mode. See `review-orchestration-docs.md` "Documentation Review Model Selection" for model assignments.
-
-**Agents**: Accuracy, Clarity, Completeness, Consistency, Examples, Structure
-
-Pass to all agents:
-- Documentation file contents
-- Related code snippets for verification
-- Project metadata
-- AI instruction file status
-- Additional prompt instructions (if provided)
-
-### Phase 2: Gaps Review (3 Sonnet agents in parallel)
-
-**CRITICAL: WAIT** - All Phase 1 agents must complete before starting Phase 2.
-
-After Phase 1 completes, launch 3 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
-
-**Agents**: Accuracy, Completeness, Consistency
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Gaps Mode Behavior" for gaps mode rules (duplicate detection, constraints). Include the Gaps Mode Behavior rules (duplicate detection skip zones, severity constraints, 5-finding cap) in each gaps agent's `additional_instructions` field. See each agent's Review Process for category-specific focus areas.
-
-**CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
+Execute the **Deep Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`:
+- Use the **Documentation Review Model Selection** table for model assignments
+- Use the **Agent Common Content Distribution** rules
+- Follow all CRITICAL WAIT barriers between phases
 
 ---
 
-## Step 8: Cross-Agent Synthesis (4 agents in parallel)
+## Step 8: Cross-Agent Synthesis
 
-**CRITICAL: DO NOT START Synthesis until Phase 1 AND Phase 2 (Step 7) are FULLY COMPLETE.**
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Orchestration" for synthesis pairs.
-
-Launch 4 synthesis agents with category pairs:
-- Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
-- Clarity+Structure: "Does poor structure contribute to clarity issues, or vice versa?"
-- Completeness+Consistency: "Are missing sections causing terminology inconsistencies elsewhere?"
-- Consistency+Structure: "Do formatting inconsistencies reflect structural organization problems?"
+Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`.
 
 ---
 
-## Step 9: Validation
+## Steps 9-12: Validation, Aggregation, Output
 
-Validate all findings per `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md`:
-- Filter false positives
-- Verify issue locations exist
-- Remove duplicates across agents
+Validate per `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
 
----
-
-## Step 10: Aggregation
-
-Aggregate validated findings:
-- Group by category (Accuracy, Clarity, Completeness, Consistency, Examples, Structure)
-- Sort by severity within categories
-- Include cross-cutting insights from synthesis
-
----
-
-## Step 11: Output
-
-Generate the review report using `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`.
-
-**Output config:**
-- Review Type: "Deep Documentation Review (13 invocations)"
-- Categories: All 6 documentation categories
-- Include AI instruction file standardization section
-
-Write to the output file path (see `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md` "Filename Generation").
-
-Report completion to user with summary:
-- Total issues found by severity
-- Issues by category
-- AI instruction standardization status
-- Path to full report
+**Output config:** Review Type: "Deep Documentation Review (13 invocations)", Categories: All 6
+Include AI instruction file standardization section. Report summary: total issues by severity, issues by category, AI instruction standardization status, path to report.

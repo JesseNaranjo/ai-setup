@@ -43,34 +43,18 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 
 ---
 
-## Step 7: 4-Agent Quick Review
+## Step 7: Quick Review
 
-See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for phase definitions and **Code Review Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for Task invocation template
-
-### Review Phase (4 agents in parallel)
-
-Launch 4 agents with **quick** mode. See `review-orchestration-code.md` for model assignments.
-
-**Agents**: Bug Detection (Opus), Security (Opus), Error Handling (Sonnet), Test Coverage (Sonnet)
-
-**Quick mode agents focus on**:
-- Critical and Major severity issues only
-- Most obvious and impactful problems
-- Issues that would block a merge
-
-**CRITICAL: WAIT** - All Review phase agents must complete before proceeding to Synthesis.
+Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
+- Use the **Code Review Model Selection** table for model assignments
+- Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
+- Follow all CRITICAL WAIT barriers
 
 ---
 
-## Step 8: Cross-Agent Synthesis (3 agents in parallel)
+## Step 8: Cross-Agent Synthesis
 
-**CRITICAL: Synthesis receives ALL findings from prior phases. Do NOT launch until prior phases are FULLY COMPLETE.**
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for category pairs.
-
-Launch 3 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
+Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 
@@ -82,15 +66,3 @@ Validate per `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`.
 **Note:** Quick review should be extra conservative - skip theoretical edge cases.
 
 *For comprehensive review, run `/deep-code-review <files>` or `/deep-code-review-staged` for staged changes.*
-
----
-
-## Notes
-
-- Use git CLI to interact with the repository. Do not use GitHub CLI.
-- Create a todo list before starting.
-- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
-- When referencing AI Agent Instructions rules, quote the exact rule being violated.
-- File paths should be relative to the repository root.
-- Line numbers should reference the lines in the actual file (not diff line numbers for file reviews, working copy lines for staged reviews).
-- When reviewing full files (no changes), be more lenient - focus on clear bugs, not style issues.

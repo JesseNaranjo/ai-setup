@@ -2,6 +2,15 @@
 
 This document defines agent invocation patterns and execution sequences for documentation review pipelines.
 
+## Orchestrator Notes
+
+- Use git CLI to interact with the repository. Do not use GitHub CLI.
+- Create a todo list before starting.
+- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
+- When referencing AI Agent Instructions rules, quote the exact rule being violated.
+- File paths should be relative to the repository root.
+- Line numbers should reference the lines in the actual file (not diff line numbers).
+
 ## Agent Invocation
 
 Always pass the `model` parameter explicitly (see Documentation Review Model Selection table below).
@@ -136,6 +145,7 @@ See each agent file for category-specific focus areas (what subtle issues thorou
    - Launch: accuracy, clarity, completeness, consistency, examples, structure
    - Models: accuracy, completeness, examples (Opus); clarity, consistency, structure (Sonnet)
    - MODE: `thorough` for all agents
+   - Pass to all agents: documentation file contents, related code snippets for verification, project metadata, AI instruction file status, additional prompt instructions (if provided)
    - **CRITICAL: WAIT** - DO NOT proceed to Phase 2 until ALL 6 agents complete
    - OUTPUT: Phase 1 findings (grouped by category)
 
@@ -144,6 +154,7 @@ See each agent file for category-specific focus areas (what subtle issues thorou
    - MODE: `gaps`
    - Model: Sonnet (cost-optimized for constrained task)
    - INPUT: Phase 1 findings passed as `previous_findings`
+   - Distribute Gaps Mode Behavior rules from this document (duplicate detection skip zones, severity constraints, 5-finding cap) to each gaps agent's `additional_instructions`
    - **CRITICAL: WAIT** - DO NOT proceed to Synthesis until ALL 3 agents complete
    - OUTPUT: Phase 2 findings (subtle issues, edge cases)
 
@@ -168,7 +179,13 @@ See each agent file for category-specific focus areas (what subtle issues thorou
 
 2. **Review** (4 agents in parallel)
    - Launch: accuracy, clarity, examples, structure
+   - Models: accuracy (Opus), clarity (Sonnet), examples (Opus), structure (Sonnet)
    - MODE: `quick` for all agents
+   - Accuracy: Critical mismatches, wrong function names, broken examples
+   - Clarity: Incomprehensible sections, undefined critical acronyms
+   - Examples: Syntax errors, missing critical imports, wrong API calls
+   - Structure: Broken links, major navigation issues, AI instruction file errors
+   - Pass to all agents: documentation file contents, related code snippets for verification, AI instruction file status, additional prompt instructions (if provided)
    - OUTPUT: Quick review findings
 
 3. **Synthesis** (3 agents in parallel)

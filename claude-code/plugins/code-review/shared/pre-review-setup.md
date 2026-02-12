@@ -72,6 +72,17 @@ Detect the programming language for EACH file being reviewed using file extensio
 
 For Node.js/TypeScript files, check nearest `package.json` for `react` or `react-dom` in dependencies/devDependencies. `--language react` implies Node.js base checks + React-specific checks.
 
+### Step 2c: Detect LSP Availability
+
+Check for Language Server Protocol plugins that provide compiler-level diagnostics:
+
+- **Node.js/TypeScript**: Check if `typescript-lsp` plugin is available in enabled plugins
+- **.NET/C#**: Check if `csharp-lsp` or OmniSharp is available in enabled plugins
+
+If any LSP is available, read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` once and store the content for orchestrator distribution. Add `lsp_available` with detected language types to discovery results.
+
+If no LSP is available, skip — all agents function without LSP via pattern-based detection.
+
 ### Step 3: Find Related Test Files
 
 For each file being reviewed, find corresponding test files based on detected language. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` and `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md` for default test patterns.
@@ -80,7 +91,7 @@ For each file being reviewed, find corresponding test files based on detected la
 
 ### Step 4: Return Discovery Results
 
-Return a structured `discovery_results` with fields: `ai_instructions` (path + applies_to), `detected_languages` (language → file list), `detected_frameworks` (framework → file list), `test_files` (source → tests), `language_override` (from --language flag or null).
+Return a structured `discovery_results` with fields: `ai_instructions` (path + applies_to), `detected_languages` (language → file list), `detected_frameworks` (framework → file list), `test_files` (source → tests), `language_override` (from --language flag or null), `lsp_available` (language types with LSP or null).
 
 **Note:** `detected_languages` enables lazy loading of language configs — only load `languages/nodejs.md` if `detected_languages.nodejs` has files. `detected_frameworks` tracks React detection that extends base language configs.
 

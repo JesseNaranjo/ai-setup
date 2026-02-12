@@ -2,6 +2,16 @@
 
 This document defines agent invocation patterns and execution sequences for code review pipelines.
 
+## Orchestrator Notes
+
+- Use git CLI to interact with the repository. Do not use GitHub CLI.
+- Create a todo list before starting.
+- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
+- When referencing AI Agent Instructions rules, quote the exact rule being violated.
+- File paths should be relative to the repository root.
+- Line numbers should reference the lines in the actual file (not diff line numbers for file reviews, working copy lines for staged reviews).
+- When reviewing full files (no changes), be more lenient - focus on clear bugs, not style issues.
+
 ## Agent Invocation
 
 Always pass the `model` parameter explicitly (see Code Review Model Selection table below).
@@ -92,6 +102,17 @@ The orchestrator distributes relevant portions of the content below to each agen
 | test-coverage-agent | `{#tests}` |
 
 Agents without language anchors (api-contracts, compliance) skip step 5. Synthesis agents are excluded from this distribution.
+6. **LSP diagnostic codes** — if `lsp_available` in discovery results, extract ONLY the agent's category rows from the Diagnostic Code Mapping tables in `lsp-integration.md` (already read during context discovery), plus the Agent Usage Guidelines for detected languages
+
+| Agent | LSP Category filter |
+|-------|---------------------|
+| architecture-agent | Architecture |
+| bug-detection-agent | Bugs |
+| error-handling-agent | Error Handling |
+| performance-agent | Performance |
+| security-agent | Security |
+
+Agents not in this table skip step 6. If LSP unavailable, skip entirely (zero overhead).
 
 ### Agent Common Instructions (Distributed to All Agents)
 
@@ -181,6 +202,7 @@ See each agent file for category-specific focus areas (what subtle issues thorou
    - Model: Sonnet (cost-optimized for constrained task)
    - INPUT: Phase 1 findings passed as `previous_findings`
    - Content: Diff only (no full file content — agents use Read tool for deeper analysis)
+   - Distribute Gaps Mode Behavior rules from this document (duplicate detection skip zones, severity constraints, 5-finding cap) to each gaps agent's `additional_instructions`
    - **CRITICAL: WAIT** - DO NOT proceed to Synthesis until ALL 5 agents complete
    - OUTPUT: Phase 2 findings (subtle issues, edge cases)
 

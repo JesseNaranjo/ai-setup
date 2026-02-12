@@ -110,7 +110,3 @@ Apply when Next.js is detected by context-discovery (presence of `next` in deps)
 - Missing authentication
 - Missing rate limiting
 - Improper error responses
-
-## LSP Integration
-
-Agent-loadable reference: `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`

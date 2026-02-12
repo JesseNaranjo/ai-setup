@@ -37,11 +37,7 @@ Analyze code for error handling issues and resilience gaps.
 3. Check for proper cleanup and recovery
 4. Verify errors are propagated appropriately
 
-### Step 3: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
-
-For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
-
-### Step 4: Report Error Handling Issues
+### Step 3: Report Error Handling Issues
 
 Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what the error handling issue is, what can go wrong, impact of the missing/incorrect handling

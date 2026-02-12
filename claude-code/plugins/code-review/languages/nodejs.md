@@ -31,10 +31,6 @@
 - .mjs/.cjs extension issues — wrong extension for module type
 - Package.json "type" mismatch — files using wrong module syntax for package type
 
-## LSP Integration
-
-Agent-loadable reference: `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`
-
 ## Category-Specific Checks
 
 ### Bugs {#bugs}

@@ -48,11 +48,7 @@ Analyze code for security vulnerabilities and weaknesses.
 3. Check for validation, sanitization, and encoding at each step
 4. Verify authorization checks are in place
 
-### Step 3: LSP-Enhanced Analysis (TypeScript/JavaScript or .NET/C# projects)
-
-For TypeScript/JavaScript projects, check if `typescript-lsp` is available. For .NET/C# projects, check if `csharp-lsp` or OmniSharp is available. If LSP is available, Read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` for diagnostic codes and enhanced analysis patterns. Use LSP diagnostics to augment pattern-based analysis with type-level insights.
-
-### Step 4: Report Vulnerabilities
+### Step 3: Report Vulnerabilities
 
 Report per Output Schema provided in your prompt. For each vulnerability:
 - **Description** should include: type of vulnerability, how it could be exploited, potential impact

@@ -44,39 +44,18 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 
 ## Step 7: Two-Phase Deep Review
 
-See:
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for phase definitions and **Code Review Model Selection** table
-- `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for Task invocation template
+Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
+- Use the **Code Review Model Selection** table for model assignments
+- Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
+- Follow all CRITICAL WAIT barriers between phases
 
-### Phase 1: Thorough Review (9 agents in parallel)
-
-Launch all 9 agents with **thorough** mode. See `review-orchestration-code.md` for model assignments.
-
-**Agents**: API Contracts, Architecture, Bug Detection, Compliance, Error Handling, Performance, Security, Technical Debt, Test Coverage
-
-Each agent receives staged diff, full file content, and AI Agent Instructions.
-
-### Phase 2: Gaps Review (5 Sonnet agents in parallel)
-
-**CRITICAL: WAIT** - All Phase 1 agents must complete before starting Phase 2.
-
-After Phase 1 completes, launch 5 agents with **gaps** mode, passing Phase 1 findings as `previous_findings`.
-
-**Agents**: Bug Detection, Compliance, Performance, Security, Technical Debt
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "Gaps Mode Behavior" for gaps mode rules (duplicate detection, constraints). Include the Gaps Mode Behavior rules (duplicate detection skip zones, severity constraints, 5-finding cap) in each gaps agent's `additional_instructions` field. See each agent's Review Process for category-specific focus areas.
-
-**CRITICAL: WAIT** - All Phase 2 agents must complete before proceeding to Synthesis.
+Each agent receives staged diff and full file content per the tier classification in `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md`.
 
 ---
 
-## Step 8: Cross-Agent Synthesis (5 agents in parallel)
+## Step 8: Cross-Agent Synthesis
 
-**CRITICAL: Synthesis receives ALL findings from prior phases. Do NOT launch until prior phases are FULLY COMPLETE.**
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for category pairs.
-
-Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
+Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 
@@ -85,15 +64,3 @@ Launch 5 synthesis agents with category pairs from `${CLAUDE_PLUGIN_ROOT}/shared
 Validate per `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
 
 **Output config:** Review Type: "Deep (19 invocations)", Categories: All 9
-
----
-
-## Notes
-
-- Use git CLI to interact with the repository. Do not use GitHub CLI.
-- Create a todo list before starting.
-- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
-- When referencing AI Agent Instructions rules, quote the exact rule being violated.
-- File paths should be relative to the repository root.
-- Line numbers should reference the lines in the actual file (not diff line numbers for file reviews, working copy lines for staged reviews).
-- When reviewing full files (no changes), be more lenient - focus on clear bugs, not style issues.
