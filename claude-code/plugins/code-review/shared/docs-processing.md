@@ -52,18 +52,6 @@ If specific files provided, validate those. Otherwise, discover documentation:
 - `.github/ISSUE_TEMPLATE/*.md`
 - `.github/PULL_REQUEST_TEMPLATE.md`
 
-**Discovery commands:**
-```bash
-# Find standard docs
-ls -la README.md CLAUDE.md CHANGELOG.md CONTRIBUTING.md 2>/dev/null
-
-# Find docs directories
-find docs documentation -name "*.md" -type f 2>/dev/null
-
-# Find AI instruction files
-ls -la .ai/AI-AGENT-INSTRUCTIONS.md AI-AGENT-INSTRUCTIONS.md .github/copilot-instructions.md 2>/dev/null
-```
-
 ### 4. Check for AI Instruction File Standardization
 
 Track standardization status for reporting:
@@ -116,62 +104,17 @@ git branch --show-current
 
 ### 2. Read Documentation Files
 
-For each documentation file identified in validation:
-- Read the full file content
-- Note the file's location and purpose (README, API docs, tutorial, etc.)
+For each documentation file: read full content and classify its type (README, API docs, tutorial, etc.)
 
-### 3. Extract Code References
+### 3. Extract and Gather Code References
 
-Scan documentation for code references that need verification:
+Scan documentation for verifiable code references (function/class names, file paths, import statements, API endpoints, CLI commands). For each referenced code file that exists, read relevant sections to extract signatures, definitions, and exports for accuracy verification.
 
-**Inline code references:**
-- Function/method names mentioned in backticks
-- Class/type names
-- CLI commands and flags
-- Configuration keys
+### 4. Check Package/Project Metadata
 
-**Code block references:**
-- File paths mentioned above code blocks (e.g., "In `src/utils.ts`:")
-- Import statements in examples
-- Function signatures shown
+Read project metadata for version verification: `package.json`, `*.csproj`, `pyproject.toml`/`setup.py`, `VERSION` file, git tags.
 
-**API documentation:**
-- Endpoint paths
-- Request/response schemas
-- Parameter names and types
-
-### 4. Gather Related Code Files
-
-For accuracy verification, read the actual code files referenced:
-
-```bash
-# Find files mentioned in documentation
-grep -oE '`[a-zA-Z0-9_/.-]+\.(ts|js|py|cs|go|rs)`' <doc-file> | tr -d '`' | sort -u
-```
-
-For each referenced code file that exists:
-- Read the file (or relevant sections)
-- Extract function signatures, class definitions, exports
-- Note any version-specific behavior
-
-### 5. Check Package/Project Metadata
-
-Read project metadata for version verification:
-
-**Node.js:**
-- `package.json` (version, scripts, dependencies)
-
-**.NET:**
-- `*.csproj` (version, package references)
-
-**Python:**
-- `pyproject.toml` or `setup.py` (version, dependencies)
-
-**General:**
-- `VERSION` file if present
-- Git tags for release versions
-
-### 6. Gather AI Instruction File Context
+### 5. Gather AI Instruction File Context
 
 If reviewing AI instruction files, gather cross-reference context:
 
@@ -182,7 +125,7 @@ If reviewing AI instruction files, gather cross-reference context:
 - Check for header consistency
 - Verify cross-references are valid
 
-### 7. Create Summary
+### 6. Create Summary
 
 Summarize what will be reviewed:
 - Documentation files and their types

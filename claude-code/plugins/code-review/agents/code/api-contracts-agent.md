@@ -1,7 +1,6 @@
 ---
 name: api-contracts-agent
 description: "API contracts specialist. Use for detecting breaking changes, backward compatibility problems, interface contract violations, or inconsistent API patterns in code changes."
-model: sonnet
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -24,18 +23,11 @@ Analyze code for API compatibility and contract compliance issues.
 
 ### Step 2: Analyze API Surface
 
-1. Identify public API boundaries (exports, endpoints, interfaces)
-2. Compare changes against existing contracts
-3. Check for downstream impact
-4. Verify versioning strategy is followed
+Identify public API boundaries (exports, endpoints, interfaces), compare changes against existing contracts, check downstream impact, verify versioning strategy.
 
 ### Step 3: Check Contract Consistency
 
-For each API change:
-- Is the change backward compatible?
-- Is there a migration path for consumers?
-- Is the change properly versioned?
-- Are deprecation warnings in place for removed features?
+For each API change: backward compatible? Migration path for consumers? Properly versioned? Deprecation warnings for removed features?
 
 ### Step 4: Report API Issues
 

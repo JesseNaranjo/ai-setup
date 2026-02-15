@@ -1,28 +1,6 @@
 # SOLID/DRY/YAGNI Detection Patterns
 
-Detailed patterns and heuristics for detecting design principle violations.
-
-## Contents
-
-- [SOLID Principle Patterns](#solid-principle-patterns)
-  - [Single Responsibility Principle (SRP)](#single-responsibility-principle-srp)
-  - [Open/Closed Principle (OCP)](#openclosed-principle-ocp)
-  - [Liskov Substitution Principle (LSP)](#liskov-substitution-principle-lsp)
-  - [Interface Segregation Principle (ISP)](#interface-segregation-principle-isp)
-  - [Dependency Inversion Principle (DIP)](#dependency-inversion-principle-dip)
-- [DRY Violation Patterns](#dry-violation-patterns)
-  - [Code Duplication](#code-duplication)
-  - [Repeated Configuration](#repeated-configuration)
-- [YAGNI Violation Patterns](#yagni-violation-patterns)
-  - [Unused Abstractions](#unused-abstractions)
-  - [Over-Engineering](#over-engineering)
-  - [Speculative Generality](#speculative-generality)
-
-## SOLID Principle Patterns
-
-### Single Responsibility Principle (SRP)
-
-**Detection heuristics:**
+## SRP Detection
 
 | Indicator | Threshold | Severity |
 |-----------|-----------|----------|
@@ -31,8 +9,6 @@ Detailed patterns and heuristics for detecting design principle violations.
 | Function parameter count | >10 parameters | Major |
 | Import count from different domains | >5 unrelated domains | Minor |
 | Mixed keywords (UI + DB + HTTP) | Present in same file | Major |
-
-**Code patterns to flag:**
 
 ```typescript
 // BAD: Class doing authentication AND user profile AND notifications
@@ -46,24 +22,15 @@ class UserService {
 }
 ```
 
-**Grep patterns:**
-- `class.*Service.*{` followed by methods from multiple domains
-- Files importing both `@nestjs/common` and direct database drivers
-- Files with both `fetch`/`axios` and DOM manipulation
+**Grep:** `class.*Service.*{` with methods from multiple domains; files importing both `@nestjs/common` and direct DB drivers; files with both `fetch`/`axios` and DOM manipulation
 
----
-
-### Open/Closed Principle (OCP)
-
-**Detection heuristics:**
+## OCP Detection
 
 | Indicator | Severity |
 |-----------|----------|
 | Switch on type/kind string | Minor |
 | If-else chains checking instanceof | Minor |
 | Adding new case requires modifying existing code | Minor |
-
-**Code patterns to flag:**
 
 ```typescript
 // BAD: Must modify to add new payment type
@@ -72,28 +39,19 @@ function processPayment(type: string) {
     case 'credit': return processCreditCard();
     case 'debit': return processDebitCard();
     case 'paypal': return processPayPal();
-    // Must add case here for new payment type
   }
 }
 ```
 
-**Grep patterns:**
-- `switch.*type|kind|variant` followed by string literals
-- `if.*instanceof.*else if.*instanceof`
+**Grep:** `switch.*type|kind|variant` with string literals; `if.*instanceof.*else if.*instanceof`
 
----
-
-### Liskov Substitution Principle (LSP)
-
-**Detection heuristics:**
+## LSP Detection
 
 | Indicator | Severity |
 |-----------|----------|
 | `throw new NotImplementedError` in overridden methods | Major |
 | `instanceof` checks on function parameters | Major |
 | Type assertions after calling interface methods | Major |
-
-**Code patterns to flag:**
 
 ```typescript
 // BAD: Square violates Rectangle's setWidth/setHeight contract
@@ -106,22 +64,13 @@ class Square extends Rectangle {
 
 // BAD: Runtime type check on interface parameter
 function processShape(shape: IShape) {
-  if (shape instanceof Circle) {
-    // Special handling for Circle
-  }
+  if (shape instanceof Circle) { /* Special handling */ }
 }
 ```
 
-**Grep patterns:**
-- `throw new NotImplemented`
-- `override.*{[^}]*throw`
-- `instanceof.*\?.*:`
+**Grep:** `throw new NotImplemented`; `override.*{[^}]*throw`; `instanceof.*\?.*:`
 
----
-
-### Interface Segregation Principle (ISP)
-
-**Detection heuristics:**
+## ISP Detection
 
 | Indicator | Threshold | Severity |
 |-----------|-----------|----------|
@@ -129,43 +78,18 @@ function processShape(shape: IShape) {
 | Empty method implementations | Any | Minor |
 | Methods returning `undefined` or throwing | Any | Minor |
 
-**Code patterns to flag:**
-
 ```typescript
-// BAD: Fat interface
-interface IRepository<T> {
-  findById(id: string): T;
-  findAll(): T[];
-  create(item: T): T;
-  update(id: string, item: T): T;
-  delete(id: string): void;
-  softDelete(id: string): void;
-  restore(id: string): void;
-  count(): number;
-  exists(id: string): boolean;
-  findByName(name: string): T[];
-  findByDate(date: Date): T[];
-  // ... more methods
-}
-
-// BAD: Partial implementation
+// BAD: Partial implementation of fat interface
 class ReadOnlyRepo implements IRepository<User> {
   create(item: User) { throw new Error('Not supported'); }
   update(id: string, item: User) { throw new Error('Not supported'); }
   delete(id: string) { throw new Error('Not supported'); }
-  // ...
 }
 ```
 
-**Grep patterns:**
-- `interface.*{` followed by >10 method signatures
-- `implements.*{[^}]*throw new Error\(['"]Not`
+**Grep:** `interface.*{` with >10 method signatures; `implements.*{[^}]*throw new Error\(['"]Not`
 
----
-
-### Dependency Inversion Principle (DIP)
-
-**Detection heuristics:**
+## DIP Detection
 
 | Indicator | Severity |
 |-----------|----------|
@@ -173,42 +97,24 @@ class ReadOnlyRepo implements IRepository<User> {
 | Import of concrete implementations (not interfaces) | Minor |
 | Circular imports between modules | Major |
 
-**Code patterns to flag:**
-
 ```typescript
 // BAD: Direct instantiation of dependency
 class OrderService {
   private emailService = new EmailService(); // Should be injected
-
-  processOrder(order: Order) {
-    this.emailService.send(order.customer.email);
-  }
 }
-
-// BAD: Depending on concrete class
-import { PostgresUserRepository } from './PostgresUserRepository';
-// Should import IUserRepository interface
 ```
 
-**Grep patterns:**
-- `private.*=.*new [A-Z].*Service`
-- `import.*Repository|Service.*from.*(?!interface)`
+**Grep:** `private.*=.*new [A-Z].*Service`; `import.*Repository|Service.*from.*(?!interface)`
 
----
-
-## DRY Violation Patterns
-
-### Code Duplication
-
-**Detection heuristics:**
+## DRY Violations
 
 | Indicator | Threshold | Severity |
 |-----------|-----------|----------|
 | Similar code blocks | >10 lines, >80% similar | Minor |
 | Identical function bodies | >5 lines | Minor |
 | Copy-pasted validation | >3 occurrences | Minor |
-
-**Code patterns to flag:**
+| Same literal value | >3 occurrences | Minor |
+| Magic numbers | Any unexplained number | Suggestion |
 
 ```typescript
 // BAD: Duplicated validation in multiple handlers
@@ -220,35 +126,7 @@ function createUser(data: UserDTO) {
 }
 ```
 
----
-
-### Repeated Configuration
-
-**Detection heuristics:**
-
-| Indicator | Threshold | Severity |
-|-----------|-----------|----------|
-| Same literal value | >3 occurrences | Minor |
-| Magic numbers | Any unexplained number | Suggestion |
-| Repeated strings | >2 occurrences | Minor |
-
-**Code patterns to flag:**
-
-```typescript
-// BAD: Magic numbers
-setTimeout(callback, 30000); // What does 30000 mean?
-if (retries > 3) { /* ... */ }
-const PAGE_SIZE = 20; // Good
-if (results.length > 20) { /* Bad - should use PAGE_SIZE */ }
-```
-
----
-
-## YAGNI Violation Patterns
-
-### Unused Abstractions
-
-**Detection heuristics:**
+## YAGNI Violations
 
 | Indicator | Severity |
 |-----------|----------|
@@ -256,52 +134,10 @@ if (results.length > 20) { /* Bad - should use PAGE_SIZE */ }
 | Abstract class with exactly 1 subclass | Suggestion |
 | Factory creating exactly 1 product type | Suggestion |
 | Generic type parameter always same type | Suggestion |
-
-**Grep patterns:**
-- `implements I[A-Z].*` appearing exactly once in codebase
-- `extends Abstract` appearing exactly once
-- `Factory` classes with single `create` return type
-
----
-
-### Over-Engineering
-
-**Detection heuristics:**
-
-| Indicator | Severity |
-|-----------|----------|
 | Options parameter always empty/default | Suggestion |
 | Plugin/extension system with 0 plugins | Suggestion |
-| Event emitter with 0 listeners | Suggestion |
-
-**Code patterns to flag:**
-
-```typescript
-// BAD: Options never used
-function fetchData(url: string, options: FetchOptions = {}) {
-  // options is never anything but {}
-  return fetch(url);
-}
-
-// All callers:
-fetchData('/api/users');
-fetchData('/api/orders');
-// No caller ever passes options
-```
-
----
-
-### Speculative Generality
-
-**Detection heuristics:**
-
-| Indicator | Severity |
-|-----------|----------|
 | Parameters always same value | Suggestion |
 | Switch/if branches never executed | Suggestion |
 | Exported functions never imported | Suggestion |
 
-**Grep patterns:**
-- Function parameter always passed same literal
-- `case 'x':` where 'x' never appears as input value
-- `export function` with 0 imports elsewhere
+**Grep:** `implements I[A-Z].*` appearing exactly once; `extends Abstract` appearing exactly once; `export function` with 0 imports elsewhere

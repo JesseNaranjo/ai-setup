@@ -1,7 +1,6 @@
 ---
 name: clarity-agent
 description: "Documentation clarity specialist. Use for detecting readability problems, unexplained jargon, audience mismatches, or confusing explanations."
-model: sonnet
 color: cyan
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -30,30 +29,11 @@ Analyze documentation for readability and comprehension issues.
 
 ### Step 2: Audience Assessment
 
-Determine the apparent target audience:
-- **Beginner**: Needs explanations of basic concepts
-- **Intermediate**: Familiar with domain, new to project
-- **Expert**: Deep domain knowledge assumed
-
-Flag mismatches where content doesn't match apparent audience:
-- Beginner docs using unexplained advanced concepts
-- Expert docs over-explaining fundamentals (less critical)
+Determine target audience (beginner/intermediate/expert). Flag mismatches: beginner docs using unexplained advanced concepts, expert docs over-explaining fundamentals (less critical).
 
 ### Step 3: Readability Analysis
 
-For each section:
-
-1. **Sentence complexity**
-   - Flag sentences > 40 words without structure
-   - Flag nested clauses > 3 levels deep
-
-2. **Jargon density**
-   - Count technical terms per paragraph
-   - Flag paragraphs with > 5 unexplained terms
-
-3. **Explanation quality**
-   - Check if "what" and "why" are both addressed
-   - Verify examples follow abstract explanations
+Check sentence complexity (flag >40 words without structure, >3 nested clause levels), jargon density (flag >5 unexplained terms per paragraph), explanation quality (both "what" and "why" addressed, examples follow abstract explanations).
 
 ### Step 4: Report Clarity Issues
 

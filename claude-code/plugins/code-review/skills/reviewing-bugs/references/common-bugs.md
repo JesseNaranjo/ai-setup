@@ -1,87 +1,32 @@
 # Common Bug Patterns
 
-Detailed patterns for bugs by category.
-
-## Contents
-
-- [Null/Undefined Reference](#nullundefined-reference)
-  - [Unchecked Null Access](#unchecked-null-access)
-  - [Null Return Values](#null-return-values)
-- [Off-by-One Errors](#off-by-one-errors)
-  - [Array Index Errors](#array-index-errors)
-- [Async/Promise Issues](#asyncpromise-issues)
-  - [Unhandled Promise Rejection](#unhandled-promise-rejection)
-  - [Race Conditions](#race-conditions)
-  - [Floating Promises](#floating-promises)
-- [Type Coercion Issues](#type-coercion-issues)
-  - [Loose Equality Bugs](#loose-equality-bugs)
-  - [String/Number Confusion](#stringnumber-confusion)
-- [State Management](#state-management)
-  - [Mutating Shared State](#mutating-shared-state)
-  - [Stale Closure](#stale-closure)
-- [Error Handling](#error-handling)
-  - [Swallowed Exceptions](#swallowed-exceptions)
-  - [Wrong Error Type Caught](#wrong-error-type-caught)
-- [.NET Specific](#net-specific)
-  - [IDisposable Not Disposed](#idisposable-not-disposed)
-  - [Async Deadlock](#async-deadlock)
-- [Quick Reference](#quick-reference)
-
 ## Null/Undefined Reference
-
-### Unchecked Null Access
-
-**Pattern**: Accessing properties on potentially null objects.
 
 ```javascript
 // BUG
 function getUserName(user) {
   return user.profile.name; // Crashes if user or profile is null
 }
-
 // SAFE
 function getUserName(user) {
   return user?.profile?.name ?? 'Unknown';
 }
 ```
 
-**.NET**:
 ```csharp
 // BUG
 public string GetUserName(User user) {
   return user.Profile.Name; // NullReferenceException
 }
-
 // SAFE
 public string GetUserName(User user) {
   return user?.Profile?.Name ?? "Unknown";
 }
 ```
 
-**Severity**: Major (crashes), Minor (causes undefined behavior)
-
-### Null Return Values
-
-**Pattern**: Functions that may return null without documentation.
-
-```javascript
-// DANGEROUS - caller doesn't know it can return null
-function findUser(id) {
-  return users.find(u => u.id === id); // undefined if not found
-}
-
-// Use later
-const user = findUser(id);
-console.log(user.name); // Crashes if user not found
-```
-
-**Severity**: Major
+**Severity**: Major (crashes), Minor (undefined behavior)
 
 ## Off-by-One Errors
-
-### Array Index Errors
-
-**Pattern**: Using wrong bounds in loops or array access.
 
 ```javascript
 // BUG - includes non-existent index
@@ -89,20 +34,10 @@ for (let i = 0; i <= arr.length; i++) {
   console.log(arr[i]); // arr[arr.length] is undefined
 }
 
-// CORRECT
-for (let i = 0; i < arr.length; i++) {
-  console.log(arr[i]);
-}
-```
-
-**Pattern**: Fence post errors in counting.
-
-```javascript
 // BUG - counts spaces, not words
 function countWords(str) {
   return str.split(' ').length - 1;
 }
-
 // CORRECT
 function countWords(str) {
   return str.trim().split(/\s+/).length;
@@ -115,29 +50,19 @@ function countWords(str) {
 
 ### Unhandled Promise Rejection
 
-**Pattern**: Promises without catch handlers.
-
 ```javascript
 // BUG - unhandled rejection
 async function loadData() {
-  const data = await fetch('/api/data'); // May throw
+  const data = await fetch('/api/data');
   return data.json();
 }
 loadData(); // No .catch()
-
-// SAFE
-loadData().catch(err => console.error(err));
-// Or use try/catch in the caller
 ```
-
-**Severity**: Major
 
 ### Race Conditions
 
-**Pattern**: State changed between await calls.
-
 ```javascript
-// BUG - race condition
+// BUG - state changed between await calls
 async function updateUser(id, data) {
   const user = await getUser(id);
   user.count += 1;
@@ -154,19 +79,11 @@ async function updateUser(id, data) {
 
 ### Floating Promises
 
-**Pattern**: Async function called without await.
-
 ```javascript
 // BUG - doesn't wait for save
 function handleSubmit(data) {
   saveData(data); // Forgot await!
   showSuccess(); // Shows before save completes
-}
-
-// CORRECT
-async function handleSubmit(data) {
-  await saveData(data);
-  showSuccess();
 }
 ```
 
@@ -174,31 +91,14 @@ async function handleSubmit(data) {
 
 ## Type Coercion Issues
 
-### Loose Equality Bugs
-
-**Pattern**: Using == instead of === with unexpected coercion.
-
 ```javascript
 // UNEXPECTED
 0 == ''       // true
 null == undefined  // true
 [] == false   // true
 
-// SAFE
-0 === ''      // false
-null === undefined  // false
-[] === false  // false
-```
-
-**Severity**: Minor to Major
-
-### String/Number Confusion
-
-**Pattern**: Math on strings or comparisons with type mismatch.
-
-```javascript
-// BUG
-const total = '10' + 5;  // '105' (string concat)
+// BUG - string concat instead of addition
+const total = '10' + 5;  // '105'
 const sorted = [1, 10, 2].sort();  // [1, 10, 2] (string sort)
 
 // CORRECT
@@ -206,13 +106,11 @@ const total = Number('10') + 5;  // 15
 const sorted = [1, 10, 2].sort((a, b) => a - b);  // [1, 2, 10]
 ```
 
-**Severity**: Major
+**Severity**: Minor to Major
 
 ## State Management
 
 ### Mutating Shared State
-
-**Pattern**: Modifying objects that are used elsewhere.
 
 ```javascript
 // BUG
@@ -220,46 +118,29 @@ function processItems(items) {
   items.sort(); // Mutates original array!
   return items.slice(0, 5);
 }
-
 // SAFE
 function processItems(items) {
   return [...items].sort().slice(0, 5);
 }
 ```
 
-**Severity**: Major
-
 ### Stale Closure
-
-**Pattern**: Closures capturing outdated values.
 
 ```javascript
 // BUG - always logs initial count
 function Counter() {
   const [count, setCount] = useState(0);
-
   useEffect(() => {
     setInterval(() => {
       console.log(count); // Always 0!
     }, 1000);
   }, []);
 }
-
-// CORRECT
-useEffect(() => {
-  setInterval(() => {
-    console.log(countRef.current);
-  }, 1000);
-}, []);
 ```
 
 **Severity**: Major
 
 ## Error Handling
-
-### Swallowed Exceptions
-
-**Pattern**: Catching errors without handling them.
 
 ```javascript
 // BUG - error silently ignored
@@ -269,37 +150,18 @@ try {
   // Empty catch
 }
 
-// PROPER
-try {
-  await saveData(data);
-} catch (e) {
-  logger.error('Failed to save:', e);
-  throw e; // Or handle appropriately
-}
-```
-
-**Severity**: Major
-
-### Wrong Error Type Caught
-
-**Pattern**: Catching too broad or wrong exceptions.
-
-```javascript
-// BUG - catches everything
+// BUG - catches too broad
 try {
   JSON.parse(input);
 } catch (e) {
   return null; // Also catches programmer errors!
 }
-
 // BETTER
 try {
   JSON.parse(input);
 } catch (e) {
-  if (e instanceof SyntaxError) {
-    return null;
-  }
-  throw e; // Re-throw unexpected errors
+  if (e instanceof SyntaxError) return null;
+  throw e;
 }
 ```
 
@@ -309,26 +171,18 @@ try {
 
 ### IDisposable Not Disposed
 
-**Pattern**: Disposable objects not cleaned up.
-
 ```csharp
 // BUG - connection may leak
 var connection = new SqlConnection(connString);
 connection.Open();
-// ... use connection
 // Missing: connection.Dispose()
 
 // CORRECT
 using var connection = new SqlConnection(connString);
 connection.Open();
-// Automatically disposed
 ```
 
-**Severity**: Major
-
 ### Async Deadlock
-
-**Pattern**: .Result or .Wait() on async code.
 
 ```csharp
 // DEADLOCK in ASP.NET
@@ -348,12 +202,12 @@ public async Task<ActionResult> Index() {
 
 ## Quick Reference
 
-| Bug Type | Typical Severity | Detection |
-|----------|-----------------|-----------|
-| Null Reference | Major | Static analysis, optional chaining check |
+| Bug Type | Severity | Detection |
+|----------|----------|-----------|
+| Null Reference | Major | Optional chaining check |
 | Off-by-One | Major | Loop bounds, array access |
 | Unhandled Promise | Major | Missing await/catch |
 | Race Condition | Critical | Concurrent state access |
-| Empty Catch | Major | Catch blocks without logging/handling |
+| Empty Catch | Major | Catch blocks without handling |
 | IDisposable Leak | Major | Using statement check |
 | Async Deadlock | Critical | .Result/.Wait() usage |

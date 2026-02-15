@@ -1,37 +1,9 @@
 # Common Security Vulnerabilities
 
-Detailed patterns for security issues by category.
-
-## Contents
-
-- [Injection Vulnerabilities](#injection-vulnerabilities)
-  - [SQL Injection](#sql-injection)
-  - [Command Injection](#command-injection)
-  - [XSS (Cross-Site Scripting)](#xss-cross-site-scripting)
-- [Authentication & Authorization](#authentication--authorization)
-  - [Missing Authentication](#missing-authentication)
-  - [Broken Access Control](#broken-access-control)
-- [Sensitive Data Exposure](#sensitive-data-exposure)
-  - [Hardcoded Secrets](#hardcoded-secrets)
-  - [Sensitive Data in Logs](#sensitive-data-in-logs)
-- [Cryptographic Issues](#cryptographic-issues)
-  - [Weak Hashing](#weak-hashing)
-  - [Insecure Random](#insecure-random)
-- [Input Validation](#input-validation)
-  - [Path Traversal](#path-traversal)
-  - [Regex DoS (ReDoS)](#regex-dos-redos)
-- [Deserialization](#deserialization)
-  - [Unsafe Deserialization](#unsafe-deserialization)
-- [Security Headers](#security-headers)
-  - [Missing Headers](#missing-headers)
-
 ## Injection Vulnerabilities
 
 ### SQL Injection
 
-**Pattern**: User input concatenated directly into SQL queries.
-
-**Node.js Examples**:
 ```javascript
 // VULNERABLE
 const query = `SELECT * FROM users WHERE id = ${userId}`;
@@ -42,7 +14,6 @@ const query = 'SELECT * FROM users WHERE id = ?';
 db.query(query, [userId]);
 ```
 
-**.NET Examples**:
 ```csharp
 // VULNERABLE
 var query = "SELECT * FROM Users WHERE Id = " + userId;
@@ -57,9 +28,6 @@ cmd.Parameters.AddWithValue("@id", userId);
 
 ### Command Injection
 
-**Pattern**: User input passed to shell commands.
-
-**Node.js Examples**:
 ```javascript
 // VULNERABLE
 exec(`ls ${userInput}`);
@@ -69,7 +37,6 @@ spawn('sh', ['-c', userInput]);
 execFile('ls', [sanitizedPath]);
 ```
 
-**.NET Examples**:
 ```csharp
 // VULNERABLE
 Process.Start("cmd", "/c " + userInput);
@@ -82,9 +49,6 @@ var psi = new ProcessStartInfo("myapp", escapedArgs);
 
 ### XSS (Cross-Site Scripting)
 
-**Pattern**: User input rendered in HTML without escaping.
-
-**Node.js Examples**:
 ```javascript
 // VULNERABLE
 res.send(`<div>${userInput}</div>`);
@@ -95,7 +59,6 @@ res.send(`<div>${escapeHtml(userInput)}</div>`);
 element.textContent = userInput;
 ```
 
-**.NET Examples**:
 ```csharp
 // VULNERABLE
 @Html.Raw(userInput)
@@ -111,9 +74,6 @@ element.textContent = userInput;
 
 ### Missing Authentication
 
-**Pattern**: Endpoints accessible without authentication.
-
-**Node.js Examples**:
 ```javascript
 // VULNERABLE - no auth middleware
 app.get('/api/admin/users', (req, res) => { ... });
@@ -122,7 +82,6 @@ app.get('/api/admin/users', (req, res) => { ... });
 app.get('/api/admin/users', requireAuth, requireAdmin, (req, res) => { ... });
 ```
 
-**.NET Examples**:
 ```csharp
 // VULNERABLE - missing [Authorize]
 [HttpGet("admin/users")]
@@ -137,8 +96,6 @@ public IActionResult GetUsers() { ... }
 **Severity**: Critical
 
 ### Broken Access Control
-
-**Pattern**: Users can access resources they shouldn't.
 
 ```javascript
 // VULNERABLE - no ownership check
@@ -161,8 +118,6 @@ app.get('/api/orders/:id', async (req, res) => {
 
 ### Hardcoded Secrets
 
-**Pattern**: API keys, passwords, tokens in source code.
-
 ```javascript
 // VULNERABLE
 const API_KEY = 'sk-1234567890abcdef';
@@ -172,7 +127,7 @@ const password = 'admin123';
 const API_KEY = process.env.API_KEY;
 ```
 
-**Detection Patterns**:
+**Detection regex:**
 - `password\s*=\s*["'][^"']+["']`
 - `api[_-]?key\s*=\s*["'][^"']+["']`
 - `secret\s*=\s*["'][^"']+["']`
@@ -181,8 +136,6 @@ const API_KEY = process.env.API_KEY;
 **Severity**: Critical
 
 ### Sensitive Data in Logs
-
-**Pattern**: Logging passwords, tokens, PII.
 
 ```javascript
 // VULNERABLE
@@ -198,39 +151,23 @@ logger.info('Request:', sanitizeForLogging(req.body));
 
 ## Cryptographic Issues
 
-### Weak Hashing
-
-**Pattern**: Using MD5, SHA1, or no salt for passwords.
-
 ```javascript
-// VULNERABLE
+// VULNERABLE - weak hash
 const hash = crypto.createHash('md5').update(password).digest('hex');
-
 // SAFE
 const hash = await bcrypt.hash(password, 12);
-```
 
-**Severity**: Critical
-
-### Insecure Random
-
-**Pattern**: Using Math.random() for security purposes.
-
-```javascript
-// VULNERABLE
+// VULNERABLE - insecure random
 const token = Math.random().toString(36);
-
 // SAFE
 const token = crypto.randomBytes(32).toString('hex');
 ```
 
-**Severity**: Major
+**Severity**: Critical (weak hash), Major (insecure random)
 
 ## Input Validation
 
 ### Path Traversal
-
-**Pattern**: User input in file paths without validation.
 
 ```javascript
 // VULNERABLE
@@ -246,8 +183,6 @@ const filePath = path.join('/uploads', filename);
 
 ### Regex DoS (ReDoS)
 
-**Pattern**: User input matched against vulnerable regex.
-
 ```javascript
 // VULNERABLE - catastrophic backtracking
 const emailRegex = /^([a-zA-Z0-9]+)+@[a-zA-Z0-9]+$/;
@@ -259,22 +194,15 @@ const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+$/;
 
 **Severity**: Major
 
-## Deserialization
-
-### Unsafe Deserialization
-
-**Pattern**: Deserializing untrusted data.
+## Unsafe Deserialization
 
 ```javascript
 // VULNERABLE
 const obj = eval('(' + userInput + ')');
-const data = JSON.parse(userInput); // with reviver that executes code
-
 // SAFE
 const data = JSON.parse(userInput); // plain JSON.parse is safe
 ```
 
-**.NET Examples**:
 ```csharp
 // VULNERABLE
 var obj = JsonConvert.DeserializeObject(input, new JsonSerializerSettings {
@@ -289,13 +217,21 @@ var obj = JsonConvert.DeserializeObject<MyType>(input);
 
 ## Security Headers
 
-### Missing Headers
-
-Check for these security headers:
-- `Content-Security-Policy`
-- `X-Content-Type-Options: nosniff`
-- `X-Frame-Options: DENY` or `SAMEORIGIN`
-- `Strict-Transport-Security`
-- `X-XSS-Protection: 1; mode=block`
+Required headers: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY|SAMEORIGIN`, `Strict-Transport-Security`, `X-XSS-Protection: 1; mode=block`
 
 **Severity**: Minor to Major depending on context
+
+## Quick Detection Patterns
+
+| Category | Key Patterns to Search For |
+|----------|---------------------------|
+| A01 | Missing authz checks, IDOR, directory traversal, `../`, role checks |
+| A02 | MD5, SHA1, hardcoded keys, `password`, `secret`, `apiKey` in code |
+| A03 | String concatenation in queries, `eval(`, `exec(`, `${}` in SQL |
+| A04 | Missing rate limits, no CAPTCHA, business logic without validation |
+| A05 | `DEBUG=true`, default ports, verbose errors, missing HTTPS |
+| A06 | Old package versions, `npm audit`, `dotnet list`, outdated deps |
+| A07 | Weak password regex, missing MFA, session in URL, no lockout |
+| A08 | `deserialize(`, `pickle.loads(`, `unserialize(`, unsigned data |
+| A09 | Missing `log.`, sensitive data in logs, no audit trail |
+| A10 | `fetch(userInput)`, `request(url)`, `curl`, internal IPs |

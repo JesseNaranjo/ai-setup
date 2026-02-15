@@ -1,7 +1,6 @@
 ---
 name: security-agent
 description: "Security vulnerability specialist. Use for detecting injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, or OWASP top 10 issues."
-model: opus
 color: purple
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -43,10 +42,7 @@ Analyze code for security vulnerabilities and weaknesses.
 
 ### Step 2: Analyze Security Boundaries
 
-1. Identify all inputs from untrusted sources
-2. Trace data flow from input to sensitive operations
-3. Check for validation, sanitization, and encoding at each step
-4. Verify authorization checks are in place
+Identify all inputs from untrusted sources, trace data flow to sensitive operations, check for validation/sanitization/encoding at each step, verify authorization checks.
 
 ### Step 3: Report Vulnerabilities
 

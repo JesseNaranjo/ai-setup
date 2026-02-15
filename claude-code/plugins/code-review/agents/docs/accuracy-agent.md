@@ -1,7 +1,6 @@
 ---
 name: accuracy-agent
 description: "Documentation accuracy specialist. Use for detecting code-documentation sync problems, factual errors, outdated version references, or incorrect API signatures."
-model: opus
 color: red
 tools: ["Read", "Grep", "Glob"]
 ---

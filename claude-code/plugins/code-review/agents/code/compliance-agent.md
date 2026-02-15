@@ -1,7 +1,6 @@
 ---
 name: compliance-agent
 description: "Coding standards compliance specialist. Use for checking adherence to CLAUDE.md guidelines, AI agent instructions, or project-specific coding standards."
-model: sonnet
 color: blue
 tools: ["Read", "Grep", "Glob"]
 ---

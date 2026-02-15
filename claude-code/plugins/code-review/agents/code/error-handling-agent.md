@@ -1,7 +1,6 @@
 ---
 name: error-handling-agent
 description: "Error handling specialist. Use for detecting missing try/catch blocks, swallowed exceptions, improper error propagation, missing cleanup, or resilience gaps."
-model: sonnet
 color: orange
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -32,10 +31,7 @@ Analyze code for error handling issues and resilience gaps.
 
 ### Step 2: Analyze Error Flows
 
-1. Identify all operations that can fail
-2. Trace error handling path for each
-3. Check for proper cleanup and recovery
-4. Verify errors are propagated appropriately
+Identify all operations that can fail, trace error handling path for each, check for proper cleanup and recovery, verify errors propagated appropriately.
 
 ### Step 3: Report Error Handling Issues
 

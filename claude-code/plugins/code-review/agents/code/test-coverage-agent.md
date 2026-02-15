@@ -1,7 +1,6 @@
 ---
 name: test-coverage-agent
 description: "Test coverage specialist. Use for identifying missing tests, test quality issues, edge cases not covered, and providing specific test recommendations."
-model: sonnet
 color: white
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -12,23 +11,7 @@ Analyze code for test coverage gaps and provide specific test recommendations.
 
 ## Review Process
 
-### Step 1: Detect Test Files
-
-**Node.js/TypeScript:**
-- `*.test.ts`, `*.spec.ts`
-- `*.test.js`, `*.spec.js`
-- `*-test.js`, `*-spec.js`
-- Files in `__tests__/` directories
-- Files in `tests/` directories
-
-**.NET/C#:**
-- `*.Tests.cs`
-- Files in `*Tests/` projects
-- Files in `*.UnitTests/` projects
-- Files in `*.IntegrationTests/` projects
-- Files in `tests/` directories
-
-### Step 2: Identify Coverage Categories (Based on MODE)
+### Step 1: Identify Coverage Categories (Based on MODE)
 
 **thorough mode - Check for:**
 - New code paths without corresponding tests
@@ -43,23 +26,19 @@ Analyze code for test coverage gaps and provide specific test recommendations.
 - Critical paths (auth, payment, data mutation) without tests
 - Modified functions with no updated tests
 
-### Step 3: Analyze Test Gaps
+### Step 2: Analyze Test Gaps
 
 For each changed/reviewed file:
 1. Identify all public functions/methods/exports
-2. Map to existing test coverage
+2. Map to existing test coverage (use related_tests from orchestrator context)
 3. Identify untested code paths
 4. Note edge cases that should be tested
 
-### Step 4: Generate Test Recommendations
+### Step 3: Generate Test Recommendations
 
-For each gap found, provide:
-- **What to test**: Specific function/method/scenario
-- **Expected behavior**: What the test should verify
-- **Suggested test file location**: Where to add the test
-- **Test case outline**: Brief description of the test
+For each gap: what to test, expected behavior, suggested test file location, test case outline.
 
-### Step 5: Report Test Coverage Issues
+### Step 4: Report Test Coverage Issues
 
 Report per Output Schema provided in your prompt. For each issue:
 - **Description** should include: what code is not tested, why it should be tested, risk of not testing

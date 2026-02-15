@@ -95,8 +95,7 @@ claude-code/plugins/code-review/
 │   ├── reviewing-security/          # Expanded example (all 7 skills follow this pattern):
 │   │   ├── SKILL.md                 # Core skill instructions (~90-155 lines)
 │   │   ├── references/              # Detailed patterns (loaded on-demand)
-│   │   │   ├── common-vulnerabilities.md
-│   │   │   └── owasp-reference.md
+│   │   │   └── common-vulnerabilities.md
 │   │   └── examples/                # Sample output format
 │   │       └── example-output.md
 │   └── reviewing-technical-debt/
@@ -130,7 +129,6 @@ All 17 agents use the same YAML frontmatter fields:
 ---
 name: <domain>-agent           # Required
 description: <role+trigger>    # Required. "[Role] specialist. Use [for/when] [triggers]."
-model: opus|sonnet
 color: <color>                 # See color rules below
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -350,7 +348,7 @@ Each command file inlines its pre-review setup steps (Steps 1-6) directly rather
 
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
-| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~53 | Only one loaded per execution; extracting adds a file read |
+| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~72 | Only one loaded per execution; extracting adds a file read |
 | `validation-rules-code.md` / `validation-rules-docs.md` | Batch Validation Process, Aggregation Rules | ~90 | Only one loaded per execution; extracting adds a file read |
 
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.

@@ -4,13 +4,10 @@ This document defines agent invocation patterns and execution sequences for code
 
 ## Orchestrator Notes
 
-- Use git CLI to interact with the repository. Do not use GitHub CLI.
-- Create a todo list before starting.
-- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
-- When referencing AI Agent Instructions rules, quote the exact rule being violated.
-- File paths should be relative to the repository root.
-- Line numbers should reference the lines in the actual file (not diff line numbers for file reviews, working copy lines for staged reviews).
-- When reviewing full files (no changes), be more lenient - focus on clear bugs, not style issues.
+- Use git CLI (not GitHub CLI). Create a todo list before starting.
+- Cite issues with file path and line numbers (e.g., `src/utils.ts:42-48`). Quote exact AI instruction rules when violated.
+- Paths relative to repo root. Line numbers reference actual file lines (not diff lines for file reviews, working copy lines for staged reviews).
+- Full file reviews (no changes): be more lenient — focus on clear bugs, not style.
 
 ## Agent Invocation
 
@@ -258,18 +255,14 @@ See each agent file for category-specific focus areas (what subtle issues thorou
 
 ## Language-Specific Focus
 
-Load language configs ONLY for detected languages/frameworks to minimize context usage:
-
-- If `detected_languages.dotnet` has files: Load `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
-- If `detected_languages.nodejs` has files: Load `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`
-- If `detected_frameworks.react` has files: Also load `${CLAUDE_PLUGIN_ROOT}/languages/react.md`
-- Skip loading configs for languages/frameworks not present in the review
+Load language configs ONLY for detected languages/frameworks:
+- `detected_languages.dotnet` → `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`
+- `detected_languages.nodejs` → `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md`
+- `detected_frameworks.react` → also `${CLAUDE_PLUGIN_ROOT}/languages/react.md`
 
 ## Synthesis Invocation
 
-The synthesis agents are designed to be invoked **multiple times in parallel** with different category pairs.
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` for the full agent definition and analysis logic.
+Invoke synthesis agents **multiple times in parallel** with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md` for agent definition.
 
 ---
 

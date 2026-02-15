@@ -1,7 +1,6 @@
 ---
 name: technical-debt-agent
 description: "Technical debt specialist. Use for detecting deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, or documentation debt."
-model: opus
 color: brown
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -15,31 +14,12 @@ Analyze code for accumulated technical debt affecting maintainability, moderniza
 ### Step 1: Identify Technical Debt Categories (Based on MODE)
 
 **thorough mode - Check all 6 categories:**
-
-#### 1. Deprecated Dependencies
-- Packages with deprecation warnings, major version 2+ behind with breaking changes pending
-- Libraries discontinued/unmaintained, dependencies with known CVEs requiring upgrade
-
-#### 2. Outdated Patterns
-- Callback patterns where async/await is standard, class components in React 18+
-- CommonJS `require()` in ESM-configured projects, legacy bundlers (Webpack 4, Gulp, Grunt)
-- Pre-TypeScript 4.0 patterns, sync-over-async (.Result, .Wait() in .NET)
-
-#### 3. Workarounds and Hacks
-- Code with HACK/WORKAROUND/XXX comments, temporary fixes that became permanent
-- Monkey patches, version-specific workarounds for fixed issues, copy-pasted import workarounds
-
-#### 4. Dead Code
-- Unused exports never imported, commented-out code blocks (10+ lines), unreachable code paths
-- Feature flags for released/abandoned features, unused configuration options
-
-#### 5. Scalability Concerns
-- Patterns that won't scale (hardcoded limits, in-memory solutions needing externalization)
-- Single-threaded bottlenecks in parallelizable operations, unbounded collections without pagination
-
-#### 6. Documentation Debt
-- TODO/FIXME without issue tracking, stale comments describing wrong behavior
-- Missing public API docs, outdated README sections, missing ADRs
+1. **Deprecated Dependencies**: Packages with deprecation warnings, major version 2+ behind, discontinued/unmaintained libraries, dependencies with known CVEs
+2. **Outdated Patterns**: Callbacks where async/await is standard, class components in React 18+, CommonJS `require()` in ESM projects, legacy bundlers (Webpack 4, Gulp, Grunt), pre-TypeScript 4.0 patterns, sync-over-async (.Result, .Wait() in .NET)
+3. **Workarounds and Hacks**: HACK/WORKAROUND/XXX comments, permanent temporary fixes, monkey patches, version-specific workarounds for fixed issues
+4. **Dead Code**: Unused exports never imported, commented-out code blocks (10+ lines), unreachable paths, feature flags for released/abandoned features
+5. **Scalability Concerns**: Hardcoded limits, in-memory solutions needing externalization, single-threaded bottlenecks, unbounded collections without pagination
+6. **Documentation Debt**: TODO/FIXME without issue tracking, stale comments, missing public API docs, outdated README sections
 
 **gaps mode - Focus on:**
 - Subtle debt not caught in thorough pass
@@ -49,26 +29,11 @@ Analyze code for accumulated technical debt affecting maintainability, moderniza
 
 ### Step 2: Analyze Debt Impact
 
-For each identified debt item:
-1. Assess urgency (blocking, soon, low)
-2. Estimate effort (trivial, small, medium, large)
-3. Identify dependencies and blockers
-4. Consider migration path complexity
+For each debt item: assess urgency (blocking, soon, low), estimate effort (trivial, small, medium, large), identify dependencies and migration path complexity.
 
 ### Step 3: Cross-File Analysis (When Needed)
 
-Perform cross-file analysis when the reviewed code suggests wider debt issues:
-- Import/export statements referencing deprecated modules
-- Shared utilities with outdated patterns
-- Configuration files with legacy options
-- Package manifests with outdated dependencies
-
-#### Cross-File Process
-When cross-file analysis is warranted:
-1. Use Grep to find usages of deprecated patterns across codebase
-2. Use Glob to find related configuration files
-3. Read package.json, *.csproj to check dependency versions
-4. Check for TODO/FIXME patterns across files
+When code suggests wider debt issues (deprecated module imports, outdated shared utilities, legacy config options), use Grep/Glob/Read to trace patterns across codebase, check dependency versions in package.json/csproj, and find TODO/FIXME patterns.
 
 ### Step 4: Report Technical Debt Issues
 

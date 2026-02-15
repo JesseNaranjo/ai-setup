@@ -1,67 +1,28 @@
 # Performance Patterns
 
-Detailed patterns for performance issues by category.
-
-## Contents
-
-- [Algorithmic Complexity](#algorithmic-complexity)
-  - [O(n²) Nested Loops](#on²-nested-loops)
-  - [Repeated Expensive Operations](#repeated-expensive-operations)
-- [Database Performance](#database-performance)
-  - [N+1 Query Problem](#n1-query-problem)
-  - [Missing Indexes](#missing-indexes)
-  - [Unbounded Queries](#unbounded-queries)
-- [Memory Issues](#memory-issues)
-  - [Memory Leaks](#memory-leaks)
-  - [Large Object Allocation](#large-object-allocation)
-- [Async/Await Performance](#asyncawait-performance)
-  - [Sequential Awaits (Waterfall)](#sequential-awaits-waterfall)
-  - [Blocking Event Loop (Node.js)](#blocking-event-loop-nodejs)
-- [String Operations](#string-operations)
-  - [String Concatenation in Loops](#string-concatenation-in-loops)
-- [.NET Specific](#net-specific)
-  - [Boxing/Unboxing](#boxingunboxing)
-  - [LINQ in Hot Paths](#linq-in-hot-paths)
-  - [Async Void](#async-void)
-- [Caching Opportunities](#caching-opportunities)
-  - [Repeated Computations](#repeated-computations)
-- [Quick Reference](#quick-reference)
-
 ## Algorithmic Complexity
 
-### O(n²) Nested Loops
-
-**Pattern**: Nested loops over collections that could be O(n).
+### O(n^2) Nested Loops
 
 ```javascript
-// SLOW - O(n²)
+// SLOW - O(n^2)
 for (const user of users) {
   for (const order of orders) {
-    if (order.userId === user.id) {
-      // process
-    }
+    if (order.userId === user.id) { /* process */ }
   }
 }
 
 // FAST - O(n)
 const ordersByUser = new Map();
 for (const order of orders) {
-  if (!ordersByUser.has(order.userId)) {
-    ordersByUser.set(order.userId, []);
-  }
+  if (!ordersByUser.has(order.userId)) ordersByUser.set(order.userId, []);
   ordersByUser.get(order.userId).push(order);
-}
-for (const user of users) {
-  const userOrders = ordersByUser.get(user.id) || [];
-  // process
 }
 ```
 
-**Severity**: Major (on large datasets), Minor (on small fixed datasets)
+**Severity**: Major (large datasets), Minor (small fixed datasets)
 
 ### Repeated Expensive Operations
-
-**Pattern**: Same expensive operation called multiple times.
 
 ```javascript
 // SLOW
@@ -71,21 +32,11 @@ function processItems(items) {
     return transform(item, config);
   });
 }
-
-// FAST
-function processItems(items) {
-  const config = loadConfigFromDisk(); // Called once
-  return items.map(item => transform(item, config));
-}
 ```
-
-**Severity**: Major
 
 ## Database Performance
 
 ### N+1 Query Problem
-
-**Pattern**: One query per item instead of batched query.
 
 ```javascript
 // SLOW - N+1 queries
@@ -96,59 +47,39 @@ for (const user of users) {
 
 // FAST - 2 queries
 const users = await User.findAll();
-const userIds = users.map(u => u.id);
-const orders = await Order.findByUserIds(userIds);
+const orders = await Order.findByUserIds(users.map(u => u.id));
 const ordersByUser = groupBy(orders, 'userId');
-users.forEach(u => u.orders = ordersByUser[u.id] || []);
 ```
 
-**.NET Example**:
 ```csharp
 // SLOW
 foreach (var user in users) {
   user.Orders = await _db.Orders.Where(o => o.UserId == user.Id).ToListAsync();
 }
-
-// FAST - Include
+// FAST
 var users = await _db.Users.Include(u => u.Orders).ToListAsync();
 ```
 
-**Severity**: Critical (in hot paths), Major (otherwise)
+**Severity**: Critical (hot paths), Major (otherwise)
 
 ### Missing Indexes
 
-**Pattern**: Queries filtering on non-indexed columns.
-
-**Signs**:
-- WHERE clauses on columns without indexes
-- JOIN conditions on non-indexed foreign keys
-- ORDER BY on non-indexed columns
+WHERE clauses on non-indexed columns, JOIN on non-indexed foreign keys, ORDER BY on non-indexed columns.
 
 **Severity**: Major
 
 ### Unbounded Queries
 
-**Pattern**: SELECT without LIMIT on potentially large tables.
-
 ```javascript
 // DANGEROUS
 const allUsers = await db.query('SELECT * FROM users');
-
 // SAFE
 const users = await db.query('SELECT * FROM users LIMIT 100 OFFSET 0');
 ```
 
-**Severity**: Major
-
 ## Memory Issues
 
 ### Memory Leaks
-
-**Patterns**:
-- Event listeners not removed
-- Closures holding large objects
-- Growing caches without eviction
-- Timers not cleared
 
 ```javascript
 // LEAK - listener never removed
@@ -159,12 +90,10 @@ class Component {
   // Missing: removeEventListener in cleanup
 }
 
-// LEAK - growing Map
+// LEAK - growing Map without eviction
 const cache = new Map();
 function getCached(key) {
-  if (!cache.has(key)) {
-    cache.set(key, expensiveComputation(key)); // Never evicts!
-  }
+  if (!cache.has(key)) cache.set(key, expensiveComputation(key));
   return cache.get(key);
 }
 ```
@@ -173,28 +102,13 @@ function getCached(key) {
 
 ### Large Object Allocation
 
-**Pattern**: Creating large objects unnecessarily.
-
-```javascript
-// SLOW - creates new array each call
-function getDefaults() {
-  return [1, 2, 3, 4, 5, /* ... 1000 items */];
-}
-
-// FAST - reuse constant
-const DEFAULTS = Object.freeze([1, 2, 3, 4, 5, /* ... */]);
-function getDefaults() {
-  return DEFAULTS;
-}
-```
+Functions that create large objects per call instead of reusing constants (`Object.freeze()`).
 
 **Severity**: Minor to Major
 
 ## Async/Await Performance
 
 ### Sequential Awaits (Waterfall)
-
-**Pattern**: Awaiting independent operations sequentially.
 
 ```javascript
 // SLOW - sequential (3 seconds)
@@ -204,44 +118,31 @@ const products = await fetchProducts(); // 1s
 
 // FAST - parallel (1 second)
 const [users, orders, products] = await Promise.all([
-  fetchUsers(),
-  fetchOrders(),
-  fetchProducts()
+  fetchUsers(), fetchOrders(), fetchProducts()
 ]);
 ```
 
-**Severity**: Major
-
 ### Blocking Event Loop (Node.js)
-
-**Pattern**: CPU-intensive work blocking the event loop.
 
 ```javascript
 // BLOCKING
 function processLargeFile(data) {
-  for (let i = 0; i < data.length; i++) {
-    // CPU-intensive processing
-  }
+  for (let i = 0; i < data.length; i++) { /* CPU-intensive */ }
 }
 
 // NON-BLOCKING
 async function processLargeFile(data) {
   const CHUNK_SIZE = 1000;
   for (let i = 0; i < data.length; i += CHUNK_SIZE) {
-    const chunk = data.slice(i, i + CHUNK_SIZE);
-    processChunk(chunk);
-    await setImmediate(); // Yield to event loop
+    processChunk(data.slice(i, i + CHUNK_SIZE));
+    await setImmediate();
   }
 }
 ```
 
-**Severity**: Critical (in servers), Major (in scripts)
+**Severity**: Critical (servers), Major (scripts)
 
-## String Operations
-
-### String Concatenation in Loops
-
-**Pattern**: Building strings with += in loops.
+## String Concatenation in Loops
 
 ```javascript
 // SLOW
@@ -249,113 +150,63 @@ let result = '';
 for (const item of items) {
   result += item.toString(); // Creates new string each time
 }
-
 // FAST
 const result = items.map(i => i.toString()).join('');
 ```
 
-**.NET**:
 ```csharp
-// SLOW
+// SLOW - O(n^2)
 string result = "";
-foreach (var item in items) {
-  result += item.ToString(); // O(n²)
-}
-
+foreach (var item in items) { result += item.ToString(); }
 // FAST
 var sb = new StringBuilder();
-foreach (var item in items) {
-  sb.Append(item);
-}
-var result = sb.ToString();
+foreach (var item in items) { sb.Append(item); }
 ```
-
-**Severity**: Major (large loops), Minor (small loops)
 
 ## .NET Specific
 
 ### Boxing/Unboxing
 
-**Pattern**: Value types converted to reference types.
-
 ```csharp
 // BOXING
-int value = 42;
-object boxed = value;  // Boxing
-int unboxed = (int)boxed;  // Unboxing
-
-// AVOID - ArrayList boxes ints
 var list = new ArrayList();
-list.Add(42);
+list.Add(42); // boxes int
 
-// PREFER - List<int> no boxing
+// NO BOXING
 var list = new List<int>();
 list.Add(42);
 ```
 
-**Severity**: Minor (isolated), Major (in hot loops)
+**Severity**: Minor (isolated), Major (hot loops)
 
 ### LINQ in Hot Paths
-
-**Pattern**: LINQ creating allocations in frequently called code.
 
 ```csharp
 // ALLOCATES
 var first = items.FirstOrDefault(x => x.Id == id);
-var filtered = items.Where(x => x.Active).ToList();
-
-// For hot paths, consider:
-foreach (var item in items) {
-  if (item.Id == id) return item;
-}
+// For hot paths, use manual loop instead
+foreach (var item in items) { if (item.Id == id) return item; }
 ```
 
-**Severity**: Minor to Major
-
 ### Async Void
-
-**Pattern**: async void instead of async Task.
 
 ```csharp
 // BAD - exceptions lost, can't await
 async void ProcessAsync() { ... }
-
 // GOOD
 async Task ProcessAsync() { ... }
 ```
 
 **Severity**: Major (also a correctness issue)
 
-## Caching Opportunities
-
-### Repeated Computations
-
-**Pattern**: Same computation performed multiple times.
-
-```javascript
-// SLOW
-function render(items) {
-  const sorted = items.sort((a, b) => a.name.localeCompare(b.name));
-  // ... render sorted
-  const filtered = items.filter(i => i.active);
-  // Oops, sort mutated items, filter sees sorted array
-}
-
-// Consider memoization for expensive pure functions
-const memoizedSort = memoize((items) => [...items].sort(...));
-```
-
-**Severity**: Suggestion to Major
-
 ## Quick Reference
 
-| Issue | Typical Severity | Fix Difficulty |
-|-------|-----------------|----------------|
+| Issue | Severity | Fix Difficulty |
+|-------|----------|----------------|
 | N+1 Queries | Critical/Major | Medium |
-| O(n²) Loops | Major | Medium |
+| O(n^2) Loops | Major | Medium |
 | Memory Leaks | Critical | High |
 | Sequential Awaits | Major | Low |
 | String Concat in Loop | Major | Low |
-| Missing Indexes | Major | Low |
 | Unbounded Queries | Major | Low |
 | Boxing in Loops | Minor/Major | Low |

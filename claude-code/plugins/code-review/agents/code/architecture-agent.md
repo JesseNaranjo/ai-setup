@@ -1,7 +1,6 @@
 ---
 name: architecture-agent
 description: "Architecture review specialist. Use for checking SOLID, DRY, YAGNI, SoC violations, coupling problems, anti-patterns, layer violations, or file organization issues."
-model: opus
 color: yellow
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -29,49 +28,18 @@ Analyze code for architectural issues affecting maintainability and scalability.
 
 ### Step 2: Analyze Code Structure
 
-1. Identify component boundaries
-2. Check coupling between components
-3. Evaluate cohesion within components
-4. Look for design pattern misuse or missing patterns
+Identify component boundaries, check coupling and cohesion, look for design pattern misuse or missing patterns.
 
 ### Step 3: Cross-File Analysis (When Needed)
 
-Perform cross-file analysis automatically when the reviewed code suggests cross-cutting concerns. Trigger cross-file analysis when you observe:
-- Import/export statements that reference other project files
-- Class inheritance or interface implementations
-- Dependency injection or service references
-- Shared types, constants, or utilities
-- API contracts that may have consumers
+Trigger cross-file analysis when code has imports/exports referencing other project files, class inheritance, dependency injection, shared types, or API contracts with consumers.
 
-#### Import/Export Issues
-- **Unused exports**: Code exported but never imported elsewhere
-- **Circular dependencies**: A→B→C→A chains causing initialization issues
-- **Missing imports**: References to modules not properly imported
-- **Deep import chains**: Excessive indirection through barrel files
+**Check for:**
+- Circular dependencies (A→B→C→A), unused exports, deep import chains
+- Inconsistent naming across files, duplicate implementations, mismatched interfaces
+- Broken call chains (changed signatures, unchecked callers), type mismatches at module boundaries
 
-#### Consistency Issues
-- **Inconsistent naming**: Same concept named differently across files
-- **Duplicate implementations**: Same logic implemented in multiple places
-- **Mismatched interfaces**: Implementations that drift from their contracts
-
-#### Integration Issues
-- **Broken call chains**: Function signatures changed but callers not updated
-- **Type mismatches at boundaries**: Incompatible types at module boundaries
-- **Contract violations**: Implementations that don't match expected behavior
-
-#### Cross-File Process
-When cross-file analysis is warranted:
-1. Use Grep to find usages of exported functions/classes/types
-2. Use Glob to find related files (same directory, test files, implementations)
-3. Read relevant connected files to understand relationships
-4. Check interface contracts at component boundaries
-5. Look for inconsistencies across the dependency graph
-
-**Automatic triggers**:
-- File exports a class/function → check for consumers
-- File imports from another project file → verify contract compatibility
-- File defines an interface → check implementations
-- File modifies a shared type → check all usages
+**Process:** Use Grep to find usages of exported functions/classes/types, Glob to find related files, Read to understand relationships and check contracts at boundaries.
 
 ### Step 4: Report Architecture Issues
 

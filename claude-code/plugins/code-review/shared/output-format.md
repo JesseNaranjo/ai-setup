@@ -1,30 +1,13 @@
 # Output Format
 
-This section defines the output format for review results and serves as the **authoritative output schema reference** for all agents.
+Authoritative output schema reference for all agents.
 
 ## Output Generation Process
 
-### 0. Generate Review Output
-
-1. **Header**: Use the review depth description provided by the command
-2. **Summary Table**: Include only the categories that were reviewed
-3. **Issues**: Group by severity (Critical, Major, Minor, Suggestions)
-4. **Cross-Cutting Insights**: Include if synthesis agents produced insights
-5. **Test Recommendations**: Include if applicable
-
-### 1. Display Output
-
-Display the formatted review in the terminal.
-
-### 2. Write to File
-
-Write the same content to a file using the generated filename (see [Filename Generation](#filename-generation)).
-
-If `--output-file <path>` argument was provided, use that path instead.
-
-### 3. Confirm Output
-
-At the end, print: "Review saved to: [filepath]"
+1. **Generate**: Header (review depth from command) → Summary Table (reviewed categories only) → Issues (by severity) → Cross-Cutting Insights (if any) → Test Recommendations (if applicable)
+2. **Display** in terminal
+3. **Write** to file using generated filename (or `--output-file <path>` if provided)
+4. Print: "Review saved to: [filepath]"
 
 ---
 
@@ -100,25 +83,11 @@ Each issue entry follows this format:
 [For larger fixes - prompt block]
 ```
 
-### Severity Badge
-
-Use inline code format: `` `Critical` ``, `` `Major` ``, `` `Minor` ``, `` `Suggestion` ``
-
-### Consensus Badge
-
-When multiple agents flag the same issue:
-- `[2 agents]` - Flagged by 2 agents
-- `[3+ agents]` - Flagged by 3 or more agents
-
-### File Location
-
-Use inline code format with path and line range: `` `src/utils/helper.ts:42-48` ``
+Badges: `` `Critical` `` / `` `Major` `` / `` `Minor` `` / `` `Suggestion` `` for severity. `[2 agents]` or `[3+ agents]` for consensus. File location: `` `src/utils/helper.ts:42-48` ``
 
 ## Actionable Fix Formats
 
-Fixes should be actionable - users can apply them directly without interpretation. Choose the format based on fix complexity.
-
-**Only report ONE entry per unique issue. Do not duplicate issues.**
+Fixes must be directly applicable. **Only report ONE entry per unique issue.**
 
 ### Fix Type Classification
 

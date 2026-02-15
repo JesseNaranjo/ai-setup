@@ -1,7 +1,6 @@
 ---
 name: bug-detection-agent
 description: "Bug detection specialist. Use for finding runtime errors, null references, off-by-one errors, boundary conditions, race conditions, or state management issues."
-model: opus
 color: red
 tools: ["Read", "Grep", "Glob"]
 ---
@@ -38,11 +37,7 @@ Analyze code for bugs that will cause incorrect behavior at runtime.
 
 ### Step 2: Analyze Code Paths
 
-For each file:
-1. Identify all code paths through changed/reviewed code
-2. Check each path for potential bugs based on MODE
-3. Consider how the code interacts with surrounding context
-4. Check for issues at integration points
+For each file: identify all code paths, check each for potential bugs based on MODE, consider interactions with surrounding context, check integration points.
 
 ### Step 3: Report Bugs
 

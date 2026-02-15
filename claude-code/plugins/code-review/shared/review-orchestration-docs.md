@@ -4,12 +4,9 @@ This document defines agent invocation patterns and execution sequences for docu
 
 ## Orchestrator Notes
 
-- Use git CLI to interact with the repository. Do not use GitHub CLI.
-- Create a todo list before starting.
-- Cite each issue with file path and line numbers (e.g., `src/utils.ts:42-48`).
-- When referencing AI Agent Instructions rules, quote the exact rule being violated.
-- File paths should be relative to the repository root.
-- Line numbers should reference the lines in the actual file (not diff line numbers).
+- Use git CLI (not GitHub CLI). Create a todo list before starting.
+- Cite issues with file path and line numbers (e.g., `src/utils.ts:42-48`). Quote exact AI instruction rules when violated.
+- Paths relative to repo root. Line numbers reference actual file lines (not diff lines).
 
 ## Agent Invocation
 
@@ -211,9 +208,7 @@ See each agent file for category-specific focus areas (what subtle issues thorou
 
 ## Synthesis Invocation
 
-The synthesis agents are designed to be invoked **multiple times in parallel** with different category pairs.
-
-See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` for the full agent definition and analysis logic.
+Invoke synthesis agents **multiple times in parallel** with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` for agent definition.
 
 ---
 
