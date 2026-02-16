@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Error Handling Review Agent
 
-Analyze code for error handling issues and resilience gaps.
-
 ## Review Process
 
 ### Step 1: Identify Error Handling Categories (Based on MODE)
@@ -35,8 +33,8 @@ Identify all operations that can fail, trace error handling path for each, check
 
 ### Step 3: Report Error Handling Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: what the error handling issue is, what can go wrong, impact of the missing/incorrect handling
+Report per Output Schema. For each issue:
+- **Description**: what the error handling issue is, what can go wrong, impact of the missing/incorrect handling
 - **Category**: "Error Handling"
 - **Severity thresholds**:
   - Critical: Can cause data loss or security issues

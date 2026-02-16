@@ -44,18 +44,6 @@ issues:
       +   validateOrder(data);
           // ... rest of handler
 
-  - title: "Over-engineered factory for single notification type"
-    file: "src/factories/NotificationFactory.ts"
-    line: 1
-    range: "1-52"
-    category: "Architecture"
-    severity: "Suggestion"
-    description: "NotificationFactory, INotification interface, and NotificationType enum exist but only EmailNotification is ever created. No other notification types exist in the codebase."
-    principle: "YAGNI (You Ain't Gonna Need It)"
-    impact: "Unnecessary abstraction adds cognitive overhead without providing extensibility benefits"
-    fix_type: "prompt"
-    fix_prompt: "Simplify notification system: 1) Remove NotificationFactory.ts, 2) Remove INotification interface, 3) Use EmailNotification directly where needed, 4) If SMS/Push needed later, extract interface then. Delete 52 lines of unused abstraction."
-
   - title: "Direct database instantiation violates Dependency Inversion"
     file: "src/services/OrderService.ts"
     line: 8
@@ -92,11 +80,7 @@ SOLID Violations:
 DRY Violations:
   - Code duplication: 1 Minor
 
-YAGNI Violations:
-  - Over-engineering: 1 Suggestion
-
-Total Issues: 4
+Total Issues: 3
   - Major: 2 (must fix)
   - Minor: 1 (should fix)
-  - Suggestion: 1 (consider)
 ```

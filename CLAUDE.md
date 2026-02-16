@@ -112,10 +112,8 @@ claude-code/plugins/code-review/
 │   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── staged-processing.md         # Staged input validation, content gathering, and pre-existing issue detection
-│   └── references/                  # Detailed reference content (progressive disclosure)
-│       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
-│       ├── validation-rules-code.md # Code review validation, aggregation, auto-validation patterns
-│       └── validation-rules-docs.md # Docs review validation, aggregation, auto-validation patterns
+│   └── references/                  # LSP integration details (progressive disclosure)
+│       └── lsp-integration.md       # LSP integration details for Node.js and .NET
 ├── templates/
 │   └── code-review.local.md.example # Settings template (parsed by orchestrator at runtime)
 └── README.md
@@ -234,8 +232,8 @@ When modifying the plugin:
 - **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category-specific FP rules)
 
 ### Validation & Output
-- **Validation rules (code)**: Edit `shared/references/validation-rules-code.md` (validation process, aggregation, auto-validation patterns)
-- **Validation rules (docs)**: Edit `shared/references/validation-rules-docs.md` (validation process, aggregation, auto-validation patterns)
+- **Validation rules (code)**: Edit `shared/review-orchestration-code.md` (validation process, aggregation, auto-validation patterns)
+- **Validation rules (docs)**: Edit `shared/review-orchestration-docs.md` (validation process, aggregation, auto-validation patterns)
 - **Output format/generation**: Edit `shared/output-format.md`
 - **Severity definitions**: Each agent defines calibrated thresholds in its own file under `agents/code/` or `agents/docs/`
 
@@ -348,8 +346,7 @@ Each command file inlines its pre-review setup steps (Steps 1-6) directly rather
 
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
-| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~49 | Only one loaded per execution; extracting adds a file read |
-| `validation-rules-code.md` / `validation-rules-docs.md` | Batch Validation Process, Aggregation Rules | ~90 | Only one loaded per execution; extracting adds a file read |
+| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core, Batch Validation Process, Aggregation Rules | ~139 | Only one loaded per execution; extracting adds a file read |
 
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.
 
@@ -390,7 +387,7 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 
 ### Auto-Validation Pattern Design Notes
 
-These notes apply when modifying patterns in `validation-rules-{code|docs}.md`:
+These notes apply when modifying patterns in `review-orchestration-{code|docs}.md`:
 - Patterns are case-insensitive for SQL keywords
 - Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`
 - Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`

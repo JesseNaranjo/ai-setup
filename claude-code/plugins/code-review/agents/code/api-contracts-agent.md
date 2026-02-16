@@ -7,18 +7,16 @@ tools: ["Read", "Grep", "Glob"]
 
 # API & Contracts Review Agent
 
-Analyze code for API compatibility and contract compliance issues.
-
 ## Review Process
 
 ### Step 1: Identify API Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Breaking changes to public APIs (removed methods/properties/fields, changed signatures, changed behavior)
-- Backward compatibility issues (new required parameters without defaults, changed response/error formats)
+- Breaking changes (removed methods/properties/fields, changed signatures/behavior)
+- Backward compatibility (new required parameters without defaults, changed response/error formats)
 - Interface contract violations (incorrect implementations, changed contracts in derived classes)
 - Inconsistent API patterns (naming, parameter ordering, error handling)
-- Schema changes affecting consumers (database, API response, configuration schemas)
+- Schema changes affecting consumers (database, API response, configuration)
 - Missing versioning on breaking changes
 
 ### Step 2: Analyze API Surface
@@ -31,8 +29,8 @@ For each API change: backward compatible? Migration path for consumers? Properly
 
 ### Step 4: Report API Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: what the API change is, impact on consumers, migration path (if any)
+Report per Output Schema. For each issue:
+- **Description**: what the API change is, impact on consumers, migration path (if any)
 - **Category**: "API Contracts"
 - **Severity thresholds**:
   - Critical: Breaking change without migration path

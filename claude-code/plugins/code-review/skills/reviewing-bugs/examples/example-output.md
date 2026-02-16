@@ -14,7 +14,7 @@ This is an example of the expected output format for a bug review.
 | Severity | Count |
 |----------|-------|
 | Critical | 1 |
-| Major | 2 |
+| Major | 1 |
 | Minor | 1 |
 
 ### Critical Issues (Must Fix)
@@ -62,40 +62,9 @@ const methodId = user.paymentMethod.id; // Crashes if no payment method
 
 ---
 
-**3. Unhandled Promise Rejection** `Major` `Bugs`
-`src/services/PaymentService.ts:89-92`
-
-Async function called without error handling. Failures will crash the process.
-
-```typescript
-function processWebhook(data: WebhookData) {
-  updatePaymentStatus(data.paymentId, data.status); // No await, no catch
-  return { received: true };
-}
-```
-
-**Fix**:
-```diff
-- function processWebhook(data: WebhookData) {
--   updatePaymentStatus(data.paymentId, data.status);
--   return { received: true };
-- }
-+ async function processWebhook(data: WebhookData) {
-+   try {
-+     await updatePaymentStatus(data.paymentId, data.status);
-+   } catch (error) {
-+     logger.error('Failed to update payment status:', error);
-+     // Consider: retry logic or dead-letter queue
-+   }
-+   return { received: true };
-+ }
-```
-
----
-
 ### Minor Issues
 
-**4. Off-by-One in Pagination** `Minor` `Bugs`
+**3. Off-by-One in Pagination** `Minor` `Bugs`
 `src/utils/calculations.ts:23`
 
 Page calculation uses `<=` instead of `<`, returning one extra page.
@@ -131,7 +100,7 @@ Or better:
 ### Summary
 
 - **1 Critical bug**: Race condition can cause financial data corruption
-- **2 Major bugs**: Null reference and unhandled promise rejection
+- **1 Major bug**: Null reference crash
 - **1 Minor bug**: Off-by-one error in pagination
 
 ---

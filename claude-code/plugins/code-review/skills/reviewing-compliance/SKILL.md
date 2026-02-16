@@ -5,21 +5,13 @@ description: Reviews adherence to project-specific coding standards, CLAUDE.md g
 
 # Compliance Code Review Skill
 
-Verify code adherence to AI Agent Instructions (CLAUDE.md, copilot-instructions, and similar files) and project-specific rules through targeted compliance-focused code review.
-
 ## Agent
 
-`code-review:compliance-agent` (Sonnet)
-
-Uses thorough mode with focus areas below.
-
----
+`code-review:compliance-agent` (Sonnet) in thorough mode.
 
 ## Rule Classification
 
-For rule classification (MUST/SHOULD/MAY keywords and severity mapping), see `references/compliance-patterns.md`.
-
----
+Rule classification (MUST/SHOULD/MAY keywords and severity mapping): `references/compliance-patterns.md`.
 
 ## Compliance Categories Checked
 
@@ -45,17 +37,13 @@ For rule classification (MUST/SHOULD/MAY keywords and severity mapping), see `re
 - Input validation gaps
 - Logging requirements for sensitive operations
 
----
-
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`.
-
----
+High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules" section.
+Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Compliance-specific additions** - do NOT flag:
 - Explicit override comments (`// claude-ignore: rule-name`)
@@ -63,23 +51,18 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`
 - Ambiguous rules (benefit of doubt to code)
 - Framework exemptions (framework provides required behavior)
 
----
-
 ## Rule Citation Guidelines
 
-Always include exact rule citation:
-
+Always include:
 - **Rule text**: Exact quoted text from instruction file
 - **Source**: File path and line number
 - **Keyword**: The strength keyword (MUST, SHOULD, MAY)
 
 Example: "The endpoint violates 'All API endpoints MUST have authentication' from CLAUDE.md:31"
 
----
-
 ## Compliance Score
 
-Include in output:
+Include:
 
 ```markdown
 ### Compliance Score
@@ -90,12 +73,7 @@ Include in output:
 - Compliance rate: 86%
 ```
 
----
-
 ## Example Output
 
-See `examples/example-output.md` for a sample showing:
-- Missing authentication violation with diff fix
-- Business logic in controller with prompt fix
-- Missing JSDoc violation with diff fix
+`examples/example-output.md`
 

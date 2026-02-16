@@ -10,31 +10,13 @@
 
 **If LSP is unavailable:** Skip this file entirely. Fall back to pattern-based detection — all agents function without LSP.
 
-**If LSP is available:** Use the diagnostic code mappings and agent usage guidelines below for your language. Prioritize LSP diagnostics for type-related and null-reference issues; combine LSP + patterns for security and cross-cutting concerns.
+**If LSP is available:** Use the diagnostic code mappings below. Prioritize LSP diagnostics for type-related and null-reference issues; combine LSP + patterns for security and cross-cutting concerns.
 
 ## Node.js/TypeScript LSP Integration
 
 When the `typescript-lsp` plugin is available, agents can leverage real TypeScript compiler diagnostics for enhanced accuracy.
 
-### LSP Plugin Detection
-
-Check for TypeScript LSP availability:
-- Plugin installed: `typescript-lsp` in enabled plugins
-- Server running: TypeScript Language Server process active
-
-### LSP-Enhanced Capabilities
-
-| Capability | LSP Method | Review Enhancement |
-|------------|------------|-------------------|
-| Type errors | `textDocument/diagnostic` | Precise null/undefined detection, missing properties |
-| Unused symbols | `textDocument/diagnostic` | Accurate dead code detection |
-| Go to definition | `textDocument/definition` | Track cross-file references, circular imports |
-| Find references | `textDocument/references` | Identify all usages, unused exports |
-| Type information | `textDocument/hover` | Get exact types for API contract validation |
-
 ### Diagnostic Code Mapping
-
-Map TypeScript diagnostics to review categories:
 
 | TS Code | Category | Description |
 |---------|----------|-------------|
@@ -68,46 +50,11 @@ When TypeScript LSP is available:
 3. **Use LSP for cross-file analysis** when tracking imports, exports, and circular dependencies
 4. **Fall back to patterns** when LSP unavailable or for runtime-specific issues (Promise handling, event loop)
 
-### Example: Enhanced Null Detection
-
-**Pattern-only approach:**
-```typescript
-// Pattern: (?<![\?!])\.(\w+) after nullable
-user.profile.name  // May miss context
-```
-
-**LSP-enhanced approach:**
-```
-Diagnostic: TS2532 at line 15, column 5
-Message: Object is possibly 'undefined'
-Context: user.profile is Optional<Profile>
-```
-
-LSP provides precise location and type context unavailable to pattern matching.
-
 ## .NET/C# LSP Integration
 
 When a C# LSP (OmniSharp or `csharp-lsp` plugin) is available, agents can leverage Roslyn analyzer diagnostics for enhanced accuracy.
 
-### LSP Plugin Detection
-
-Check for C# LSP availability:
-- Plugin installed: `csharp-lsp` or OmniSharp in enabled plugins
-- Server running: OmniSharp or Roslyn LSP server process active
-
-### LSP-Enhanced Capabilities
-
-| Capability | LSP Method | Review Enhancement |
-|------------|------------|-------------------|
-| Nullable analysis | `textDocument/diagnostic` | Precise null reference detection |
-| Async issues | `textDocument/diagnostic` | Detect missing awaits, async deadlocks |
-| IDisposable tracking | `textDocument/diagnostic` | Accurate disposal pattern violations |
-| Go to definition | `textDocument/definition` | Track inheritance chains, interface implementations |
-| Find references | `textDocument/references` | Identify all usages, missing attributes |
-
 ### Diagnostic Code Mapping
-
-Map Roslyn/analyzer diagnostics to review categories:
 
 | Code | Category | Description |
 |------|----------|-------------|
@@ -156,20 +103,3 @@ When C# LSP is available:
 3. **Combine LSP + patterns** for security - LSP validates types, patterns find SQL concatenation
 4. **Use LSP for IDisposable** - CA2000 tracks object lifetimes better than patterns
 5. **Fall back to patterns** when LSP unavailable or for framework-specific issues (EF queries, DI patterns)
-
-### Example: Enhanced Async Detection
-
-**Pattern-only approach:**
-```csharp
-// Pattern: async method call without await
-GetUserAsync(id);  // May miss context - could be intentional fire-and-forget
-```
-
-**LSP-enhanced approach:**
-```
-Diagnostic: CS4014 at line 25, column 9
-Message: Because this call is not awaited, execution continues before the call completes
-Context: Method returns Task<User>, not void
-```
-
-LSP distinguishes intentional fire-and-forget (Task-returning in void context) from bugs.

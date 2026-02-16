@@ -5,13 +5,9 @@ description: Detects injection attacks, authentication bypasses, hardcoded secre
 
 # Security Code Review Skill
 
-Identify vulnerabilities, insecure coding patterns, and security misconfigurations through targeted security-focused code review.
-
 ## Agent
 
-`code-review:security-agent` (Opus)
-
-Uses thorough mode with focus areas below.
+`code-review:security-agent` (Opus) in thorough mode.
 
 ## Security Categories Checked
 
@@ -44,44 +40,31 @@ Uses thorough mode with focus areas below.
 - Unsafe deserialization
 - Missing input sanitization
 
----
-
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`.
-
----
+High-confidence patterns skip validation. Full definitions with regex patterns: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ## Scope Prioritization
 
-When reviewing directories, automatically prioritize:
+Prioritize:
 - Files with "auth", "login", "password", "api", "db" in names
 - Configuration files (`config/*.ts`, `appsettings.json`)
 - Environment handling (`.env.example`, environment loading code)
 - Middleware and interceptor definitions
 
----
-
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules" section.
+Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Security-specific additions** - do NOT flag:
 - Placeholder values (`"changeme"`, `"TODO"`)
 - Vulnerabilities explicitly mitigated elsewhere (documented upstream protection)
 
----
-
 ## Security References
 
-For detailed vulnerability patterns with code examples, see `references/common-vulnerabilities.md`.
-
----
+`references/common-vulnerabilities.md`
 
 ## Example Output
 
-See `examples/example-output.md` for a sample showing:
-- SQL injection finding with diff fix
-- Hardcoded API key with prompt fix
-- Missing rate limiting with prompt fix
+`examples/example-output.md`
 

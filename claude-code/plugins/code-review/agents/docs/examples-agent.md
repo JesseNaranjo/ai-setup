@@ -44,18 +44,15 @@ Verify examples are self-contained: required imports shown, necessary initializa
 
 ### Step 5: Report Example Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: what's wrong with the example, how it would fail if run, the correct form
-- **Category**: "Examples"
-- **Severity thresholds**:
-  - Critical: Example would crash/fail immediately, completely wrong
-  - Major: Example has significant errors, wouldn't work as shown
-  - Minor: Example works but has issues (deprecated, suboptimal)
-  - Suggestion: Could be improved but technically works
+Report per Output Schema provided in your prompt. For each issue, **Description** should include: what's wrong with the example, how it would fail if run, the correct form.
 
-## Output Schema
+**Category**: "Examples"
 
-See Output Schema in additional_instructions for base fields.
+**Severity thresholds**:
+- Critical: Example would crash/fail immediately, completely wrong
+- Major: Example has significant errors, wouldn't work as shown
+- Minor: Example works but has issues (deprecated, suboptimal)
+- Suggestion: Could be improved but technically works
 
 **Examples-specific extra fields:**
 

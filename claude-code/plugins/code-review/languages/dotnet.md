@@ -1,9 +1,6 @@
 ## Test File Patterns
 
-- `*.Tests.cs`
-- `*Tests/` projects
-- `*.UnitTests/` projects
-- `*.IntegrationTests/` projects
+- `*.Tests.cs`, `*Tests/` projects, `*.UnitTests/` projects, `*.IntegrationTests/` projects
 - `tests/` directories
 
 ## Category-Specific Checks
@@ -24,8 +21,7 @@
 
 - SQL injection via string concatenation
 - Insecure deserialization — untrusted data without type validation
-- Hardcoded connection strings
-- Missing `[Authorize]` attributes
+- Hardcoded connection strings, missing `[Authorize]` attributes
 - Path traversal
 - Weak cryptography — MD5/SHA1 for security, weak encryption modes
 - CSRF vulnerabilities
@@ -36,16 +32,13 @@
 
 ### Performance {#performance}
 
-- Boxing/unboxing overhead
-- LINQ in hot loops
+- Boxing/unboxing overhead, LINQ in hot loops
 - Excessive allocations — object creation in loops, string concat in loops
 - Missing `ConfigureAwait(false)` in library code
-- N+1 EF queries
-- Missing async I/O
+- N+1 EF queries, missing async I/O
 - Large object heap — repeatedly allocating >85KB objects
 - Sync over async in middleware
-- Missing response compression
-- Missing AsNoTracking
+- Missing response compression, AsNoTracking
 - Include without filter
 - ToList() before filter — materializing query before Where()
 
@@ -54,9 +47,7 @@
 - DI anti-patterns — service locator, captive dependencies, improper scoping
 - Missing interfaces for testability
 - Controller bloat — business logic in controllers
-- Improper layering violations
-- Static abuse
-- Circular dependencies
+- Improper layering violations, static abuse, circular dependencies
 
 ### Error Handling {#errors}
 
@@ -81,10 +72,8 @@
 - Legacy serialization — `BinaryFormatter`, non-JSON serialization
 - Task.Result usage — sync-over-async blocking threads
 - Pre-nullable context — missing `#nullable enable`
-- TODO/FIXME debt
-- Commented code (10+ lines)
-- Static class abuse
-- Missing async suffix
+- TODO/FIXME debt, commented code (10+ lines)
+- Static class abuse, missing async suffix
 
 ## Entity Framework Core Patterns
 
@@ -116,6 +105,5 @@ Apply when ASP.NET Core is detected (Microsoft.AspNetCore in csproj).
 
 ### Minimal API Security
 
-- Missing RequireAuthorization
-- Missing validation
+- Missing RequireAuthorization, validation
 - Improper Results usage — returning raw data instead of Results.Ok/BadRequest

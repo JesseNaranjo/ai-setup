@@ -34,18 +34,15 @@ Use Grep to discover what should be documented: exported APIs, CLI commands, con
 
 ### Step 3: Report Completeness Issues
 
-Report per Output Schema provided in your prompt. For each gap:
-- **Description** should include: what is missing, why it's needed, what problems its absence causes
-- **Category**: "Completeness"
-- **Severity thresholds**:
-  - Critical: Missing info that blocks users from using the project
-  - Major: Missing important documentation, causes significant friction
-  - Minor: Would be helpful but users can figure it out
-  - Suggestion: Nice to have, enhances documentation
+Report per Output Schema provided in your prompt. For each gap, **Description** should include: what is missing, why it's needed, what problems its absence causes.
 
-## Output Schema
+**Category**: "Completeness"
 
-See Output Schema in additional_instructions for base fields.
+**Severity thresholds**:
+- Critical: Missing info that blocks users from using the project
+- Major: Missing important documentation, causes significant friction
+- Minor: Would be helpful but users can figure it out
+- Suggestion: Nice to have, enhances documentation
 
 **Completeness-specific extra fields:**
 

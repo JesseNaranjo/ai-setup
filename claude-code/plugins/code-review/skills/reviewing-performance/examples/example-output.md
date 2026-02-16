@@ -15,8 +15,6 @@ This is an example of the expected output format for a performance review.
 |----------|-------|
 | Critical | 1 |
 | Major | 2 |
-| Minor | 1 |
-| Suggestion | 1 |
 
 ### Critical Issues (Must Fix)
 
@@ -93,52 +91,10 @@ const allOrders = await db.query('SELECT * FROM orders');
 
 ---
 
-### Minor Issues
-
-**4. String Concatenation in Loop** `Minor` `Performance`
-`src/utils/export.ts:34-38`
-
-Building export string with += in a loop creates O(n²) string operations.
-
-```typescript
-let csv = '';
-for (const row of rows) {
-  csv += formatRow(row) + '\n';
-}
-```
-
-**Fix**:
-```diff
-- let csv = '';
-- for (const row of rows) {
--   csv += formatRow(row) + '\n';
-- }
-+ const csv = rows.map(row => formatRow(row)).join('\n');
-```
-
----
-
-### Suggestions
-
-**5. Consider Caching User Preferences** `Suggestion` `Performance`
-`src/api/orders.ts:26`
-
-User preferences are loaded on every request but rarely change.
-
-**Fix prompt** (copy to Claude Code):
-> Add caching for user preferences in the orders API:
-> 1. Create a simple in-memory cache with TTL (5 minutes suggested)
-> 2. Check cache before calling getPrefs()
-> 3. Invalidate cache when preferences are updated
-
----
-
 ### Summary
 
 - **1 Critical issue**: N+1 queries causing database overload
 - **2 Major issues**: Sequential operations and unbounded queries
-- **1 Minor issue**: Inefficient string building
-- **1 Suggestion**: Caching opportunity
 
 ---
 Review saved to: .reviewing-performance.md

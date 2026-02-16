@@ -1,17 +1,9 @@
 ## Test File Patterns
 
-- `*.test.ts`
-- `*.spec.ts`
-- `*.test.js`
-- `*.spec.js`
-- `*-test.js`
-- `*-spec.js`
-- `__tests__/` directories
-- `tests/` directories
+- `*.test.ts`, `*.spec.ts`, `*.test.js`, `*.spec.js`, `*-test.js`, `*-spec.js`
+- `__tests__/`, `tests/` directories
 
 ## Modern JavaScript/TypeScript Patterns
-
-### ES2022+ Features to Prefer
 
 | Modern Pattern | Legacy Pattern | Category |
 |----------------|----------------|----------|
@@ -53,21 +45,18 @@
 - Dynamic code execution (eval, dynamic require with user input)
 - JWT validation — missing signature verification, weak algorithms, improper storage
 - XSS via template literals — unescaped user input in HTML template strings
-- Command injection
-- Path traversal
+- Command injection, path traversal
 - SSRF — user input in fetch/axios URLs without allowlist
 - Mass assignment — spread/Object.assign with user input to model objects
 - Sensitive data in error messages
-- Express helmet missing
-- Rate limiting absent
+- Express helmet missing, rate limiting absent
 
 ### Performance {#performance}
 
 - Event loop blocking — CPU-intensive ops without worker threads, sync I/O in async context
 - Memory leaks — unclosed listeners, closures capturing large objects, unbounded caches
 - Inefficient array methods — `forEach` in hot paths, repeated `find()`/`filter()`
-- Missing stream usage
-- N+1 queries
+- Missing stream usage, N+1 queries
 
 ### Architecture {#architecture}
 
@@ -76,18 +65,14 @@
 - CommonJS/ESM mixing — `require()` and `import` in same project, wrong extensions
 - God modules
 - `any` abuse, incorrect type assertions, missing generics
-- Missing noImplicitAny
-- Missing noUncheckedIndexedAccess
-- Missing strictNullChecks
+- Missing noImplicitAny, noUncheckedIndexedAccess, strictNullChecks
 - Strict mode not enabled — tsconfig.json without `"strict": true`
 
 ### Error Handling {#errors}
 
-- Unhandled promise rejections
-- Missing `.catch()`
+- Unhandled promise rejections, missing `.catch()`
 - Swallowed errors — empty catch blocks, catch-only-log
-- Improper error propagation
-- Missing finally cleanup
+- Improper error propagation, missing finally cleanup
 
 ### Test Coverage {#tests}
 
@@ -102,8 +87,7 @@
 - CommonJS in ESM — `require()` in `"type": "module"` projects
 - Legacy bundler config — Webpack 4, Gulp/Grunt in modern projects
 - Outdated TypeScript — TS <4.0 patterns, pre-strict mode, excessive `any`
-- TODO/FIXME debt
-- Commented code (10+ lines)
+- TODO/FIXME debt, commented code (10+ lines)
 - Event emitter abuse
 - Monolithic modules — 1000+ lines or 50+ exports
 

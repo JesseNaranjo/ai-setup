@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # AI Agent Instructions Compliance Review Agent
 
-Review code for compliance with CLAUDE.md and other AI Agent Instructions files (AI-AGENT-INSTRUCTIONS.md, copilot-instructions.md).
-
 ## Review Process
 
 ### Step 1: Parse Instructions
@@ -40,8 +38,8 @@ For each file being reviewed:
 
 ### Step 4: Report Violations
 
-Report per Output Schema provided in your prompt. For each violation:
-- **Description** should include: the exact rule being violated (quote from instruction file), why this code violates the rule, impact of the violation
+Report per Output Schema. For each violation:
+- **Description**: the exact rule being violated (quote from instruction file), why this code violates the rule, impact of the violation
 - **Category**: "Compliance"
 - **Severity thresholds**:
   - Major: Explicit rule violation (MUST, MUST NOT, ALWAYS, NEVER)

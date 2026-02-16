@@ -54,18 +54,15 @@ See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruct
 
 ### Step 6: Report Structure Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: what's wrong structurally, how it affects navigation/usability, recommended fix
-- **Category**: "Structure"
-- **Severity thresholds**:
-  - Critical: Blocks access to content, major broken navigation
-  - Major: Significant structural problem affecting usability
-  - Minor: Could be better organized but still usable
-  - Suggestion: Enhancement for better structure
+Report per Output Schema provided in your prompt. For each issue, **Description** should include: what's wrong structurally, how it affects navigation/usability, recommended fix.
 
-## Output Schema
+**Category**: "Structure"
 
-See Output Schema in additional_instructions for base fields.
+**Severity thresholds**:
+- Critical: Blocks access to content, major broken navigation
+- Major: Significant structural problem affecting usability
+- Minor: Could be better organized but still usable
+- Suggestion: Enhancement for better structure
 
 **Structure-specific extra fields:**
 

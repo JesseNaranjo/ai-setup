@@ -5,13 +5,9 @@ description: Detects runtime errors, null references, off-by-one errors, boundar
 
 # Bug Detection Code Review Skill
 
-Identify logical errors, null reference issues, race conditions, off-by-one errors, and other potential bugs through targeted bug-focused code review.
-
 ## Agent
 
-`code-review:bug-detection-agent` (Opus)
-
-Uses thorough mode with focus areas below.
+`code-review:bug-detection-agent` (Opus) in thorough mode.
 
 ## Bug Categories Checked
 
@@ -51,27 +47,21 @@ Uses thorough mode with focus areas below.
 - Missing error propagation
 - Incomplete cleanup in finally
 
----
-
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`.
-
----
+High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ## Bug Investigation Mode
 
-When investigating a specific bug:
+When investigating specific bugs:
 - Ask for reproduction steps or stack trace
 - Focus on code paths mentioned in error
 - Include related error handling code
 - Read recent git commits touching affected files
 
----
-
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules" section.
+Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Bug-specific additions** - do NOT flag:
 - Guarded elsewhere (null check in caller)
@@ -79,12 +69,9 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`
 - Intentional behavior (documented as expected)
 - Unreachable conditions (requires impossible state)
 
----
-
 ## Reproduction Conditions
 
-For each bug, describe:
-
+For each bug:
 - **Preconditions**: What state must exist?
 - **Trigger**: What action causes the bug?
 - **Frequency**: How often can this occur?
@@ -92,18 +79,11 @@ For each bug, describe:
 
 Example: "When two users simultaneously withdraw from the same account (concurrent requests), and the balance check passes for both before either write completes, the second write overwrites the first, resulting in only one deduction being recorded."
 
----
-
 ## Detailed Bug Patterns
 
-For comprehensive code examples and detection patterns by category, see `references/common-bugs.md`.
-
----
+`references/common-bugs.md`
 
 ## Example Output
 
-See `examples/example-output.md` for a sample showing:
-- Race condition with transaction fix
-- Null reference with optional chaining fix
-- Unhandled promise with try/catch fix
+`examples/example-output.md`
 

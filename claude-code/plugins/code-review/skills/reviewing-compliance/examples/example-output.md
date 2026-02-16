@@ -16,7 +16,6 @@ From `CLAUDE.md`:
 - All API endpoints MUST have authentication
 - Controllers MUST NOT contain business logic
 - All public functions MUST have JSDoc comments
-- Error responses SHOULD include request ID
 
 ### Findings
 
@@ -24,7 +23,6 @@ From `CLAUDE.md`:
 |----------|-------|
 | Major | 2 |
 | Minor | 1 |
-| Suggestion | 1 |
 
 ### Major Issues (Rule Violations)
 
@@ -100,41 +98,16 @@ async processRefund(orderId: string, amount: number): Promise<RefundResult> {
 
 ---
 
-### Suggestions
-
-**4. Error Response Missing Request ID** `Suggestion` `Compliance`
-`src/api/orders.ts:92`
-
-**Rule:** "Error responses SHOULD include request ID" (CLAUDE.md:56)
-
-Error response doesn't include the request ID for debugging.
-
-```typescript
-return res.status(400).json({ error: 'Invalid order data' });
-```
-
-**Fix**:
-```diff
-- return res.status(400).json({ error: 'Invalid order data' });
-+ return res.status(400).json({
-+   error: 'Invalid order data',
-+   requestId: req.id
-+ });
-```
-
----
-
 ### Summary
 
 - **2 Major violations**: Missing auth and business logic in controller
 - **1 Minor violation**: Missing JSDoc documentation
-- **1 Suggestion**: Error response improvement
 
 ### Compliance Score
 
-- Rules checked: 4
+- Rules checked: 3
 - Rules passed: 0
-- Rules violated: 4
+- Rules violated: 3
 - Compliance rate: 0%
 
 ---

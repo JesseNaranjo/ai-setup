@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Security Review Agent
 
-Analyze code for security vulnerabilities and weaknesses.
-
 ## Review Process
 
 ### Step 1: Identify Security Categories (Based on MODE)
@@ -46,8 +44,8 @@ Identify all inputs from untrusted sources, trace data flow to sensitive operati
 
 ### Step 3: Report Vulnerabilities
 
-Report per Output Schema provided in your prompt. For each vulnerability:
-- **Description** should include: type of vulnerability, how it could be exploited, potential impact
+Report per Output Schema. For each vulnerability:
+- **Description**: type of vulnerability, how it could be exploited, potential impact
 - **Category**: "Security"
 - **Severity thresholds**:
   - Critical: Direct exploitation risk, data breach potential, RCE

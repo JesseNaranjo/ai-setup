@@ -2,79 +2,47 @@
 
 ## Input Validation
 
-Validate the input and check for changes:
+Parse arguments:
+- **File paths**: All non-flag arguments (required, space-separated)
+- **Output file path**: From `--output-file` flag
+- **Language override**: From `--language` flag (`nodejs`, `react`, `dotnet`)
 
-### 1. Parse Arguments
+Files must be validated for:
+- Git repository presence (fail if not git repo)
+- Existence (exclude non-existent files)
+- Change status (uncommitted changes vs no changes)
 
-Extract from the command arguments:
-- **File paths**: Everything except flags (required, space-separated)
-- **Output file path**: From `--output-file` flag (command provides default)
-- **Language override**: From `--language` flag (`nodejs` or `dotnet`, default: auto-detect per file)
+Fail if no valid files remain after validation.
 
-### 2. Verify Git Repository
-
-Check if the current directory is a git repository. If not, stop and inform the user: "Not a git repository."
-
-### 3. Verify File Existence
-
-For each specified file path:
-- Use `ls` or check file paths to verify existence
-- If a file doesn't exist, note it and exclude from review
-- Track which files are valid
-
-### 4. Check for Uncommitted Changes
-
-For each valid file, check if there are uncommitted changes. Create two lists:
-- **Files with changes**: Files that have uncommitted changes (review the changes)
-- **Files without changes**: Files that have no uncommitted changes (review entire file)
-
-### 5. Validate Scope
-
-If no valid files were specified, stop and inform the user: "No valid files specified for review."
-
-### Validation Output
-
-Pass to Content Gathering:
-- List of valid file paths
+**Validation output:**
+- Valid file paths
 - Files with changes vs files without changes
-- Parsed output file path
-- Parsed language override (if any)
+- Output file path
+- Language override (if any)
 
 ## Content Gathering
 
-Launch a Sonnet agent to gather the content to review:
+Launch Sonnet agent to gather:
 
-### 1. Get Current Branch
+**For files with uncommitted changes:**
+- Diff (uncommitted changes only)
+- Full file content (broader context)
 
-### 2. Gather Content for Files with Changes
+**For files without changes:**
+- Full file content
 
-For each file that has uncommitted changes:
-- Get the diff
-- Also read the full file content for broader context
+**Related test files:**
+- Read test files discovered in Context Discovery step
+- Test file patterns per `languages/nodejs.md` and `languages/dotnet.md`
 
-### 3. Gather Content for Files without Changes
-
-For each file that has no uncommitted changes:
-- Read the entire file content
-
-### 4. Read Related Test Files
-
-Read related test files (from Context Discovery step) for context:
-- **Node.js**: See `languages/nodejs.md` for test file patterns
-- **.NET**: See `languages/dotnet.md` for test file patterns
-
-### 5. Create Summary
-
-Summarize what will be reviewed:
+**Summary:**
 - Which files have changes being reviewed
-- Which files are being reviewed in their entirety (no changes)
+- Which files reviewed in entirety (no changes)
 - Detected project type(s)
 - Related test files found
 
-### Gathering Output
-
-Return to the review step:
+**Gathering output:**
 - Current branch name
-- For each file: diff (if has changes), full content, has_changes flag
+- For each file: diff (if has_changes), full content, has_changes flag
 - Related test file contents
-- Summary of what's being reviewed
+- Review summary

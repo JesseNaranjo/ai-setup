@@ -31,31 +31,7 @@ issues:
 
 ---
 
-## Example 2: TODO Without Issue Tracking (diff fix)
-
-```yaml
-issues:
-  - title: "TODO comment without issue tracking"
-    file: "src/services/payment.ts"
-    line: 45
-    category: "Technical Debt"
-    severity: "Minor"
-    description: |
-      TODO comment exists without reference to an issue tracker.
-      Untracked TODOs accumulate and are often forgotten.
-    debt_type: "documentation"
-    urgency: "low"
-    effort_estimate: "trivial"
-    fix_type: "diff"
-    fix_diff: |
-      - // TODO: Handle retry logic for failed payments
-      + // TODO(#142): Handle retry logic for failed payments
-      + // See: https://github.com/org/repo/issues/142
-```
-
----
-
-## Example 3: Outdated Pattern - Class Component (prompt fix)
+## Example 2: Outdated Pattern - Class Component (prompt fix)
 
 ```yaml
 issues:
@@ -86,40 +62,7 @@ issues:
 
 ---
 
-## Example 4: Dead Code - Commented Block (diff fix)
-
-```yaml
-issues:
-  - title: "Large block of commented-out code"
-    file: "src/utils/validation.ts"
-    line: 78
-    range: "78-95"
-    category: "Technical Debt"
-    severity: "Minor"
-    description: |
-      18 lines of commented-out code. Commented code should be removed
-      as it clutters the codebase and can be retrieved from version control
-      if needed later.
-    debt_type: "dead_code"
-    urgency: "low"
-    effort_estimate: "trivial"
-    fix_type: "diff"
-    fix_diff: |
-      - // Old validation logic - removed in v2.3
-      - // function validateOldFormat(input: string): boolean {
-      - //   const regex = /^[a-z]+$/;
-      - //   if (!regex.test(input)) {
-      - //     return false;
-      - //   }
-      - //   // Additional checks...
-      - //   return true;
-      - // }
-      + // Validation logic consolidated in validateInput() - see commit abc123
-```
-
----
-
-## Example 5: Workaround with HACK Comment (prompt fix)
+## Example 3: Workaround with HACK Comment (prompt fix)
 
 ```yaml
 issues:
@@ -143,35 +86,4 @@ issues:
       2. Remove the HACK block at lines 123-135
       3. Test the affected API calls to verify fix works
       4. Update any axios type imports if needed
-```
-
----
-
-## Example 6: Scalability Concern (prompt fix)
-
-```yaml
-issues:
-  - title: "Unbounded in-memory cache"
-    file: "src/services/cache.ts"
-    line: 5
-    category: "Technical Debt"
-    severity: "Major"
-    description: |
-      In-memory cache using Map with no size limit or TTL. In production,
-      this will grow unbounded and eventually cause memory issues.
-      Consider using a bounded LRU cache or external cache like Redis.
-    debt_type: "scalability"
-    urgency: "soon"
-    effort_estimate: "medium"
-    fix_type: "prompt"
-    fix_prompt: |
-      Replace unbounded Map cache with bounded solution:
-      1. Option A: Use lru-cache package for in-memory LRU
-         npm install lru-cache
-         const cache = new LRU({ max: 500, ttl: 1000 * 60 * 5 })
-      2. Option B: Use Redis for distributed caching
-         npm install ioredis
-         Configure Redis client with TTL on set operations
-      3. Add cache eviction metrics/logging
-      4. Update tests to account for cache limits
 ```

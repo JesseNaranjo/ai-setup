@@ -46,38 +46,25 @@ For each documented code reference:
    Grep(pattern: "function <name>|class <name>|def <name>", path: "src/")
    ```
 
-2. **Compare signatures**
-   - Parameter names and types
-   - Return type
-   - Optional vs required parameters
-   - Default values
+2. **Compare signatures** — parameter names/types, return type, optional vs required parameters, default values
 
-3. **Verify behavior claims**
-   - Check actual implementation logic
-   - Verify error handling matches documentation
-   - Confirm side effects are documented
+3. **Verify behavior claims** — check actual implementation logic, verify error handling matches documentation, confirm side effects are documented
 
 ### Step 3: Version Verification
 
-Check version consistency:
-- Package.json/csproj version vs documented version
-- Dependency versions in examples vs actual requirements
-- API version in docs vs implementation
+Check version consistency: package.json/csproj version vs documented version, dependency versions in examples vs actual requirements, API version in docs vs implementation.
 
 ### Step 4: Report Inaccuracies
 
-Report per Output Schema provided in your prompt. For each inaccuracy:
-- **Description** should include: what the documentation says, what the code actually does, impact of the discrepancy
-- **Category**: "Accuracy"
-- **Severity thresholds**:
-  - Critical: Would cause user code to fail or produce wrong results
-  - Major: Significant confusion or subtle bugs
-  - Minor: Cosmetic differences, unlikely to cause issues
-  - Suggestion: Could be clearer but technically correct
+Report per Output Schema provided in your prompt. For each inaccuracy, **Description** should include: what the documentation says, what the code actually does, impact of the discrepancy.
 
-## Output Schema
+**Category**: "Accuracy"
 
-See Output Schema in additional_instructions for base fields.
+**Severity thresholds**:
+- Critical: Would cause user code to fail or produce wrong results
+- Major: Significant confusion or subtle bugs
+- Minor: Cosmetic differences, unlikely to cause issues
+- Suggestion: Could be clearer but technically correct
 
 **Accuracy-specific extra fields:**
 

@@ -386,14 +386,12 @@ code-review/
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode, agent common instructions
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode, agent common instructions
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode, agent common instructions, validation
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode, agent common instructions, validation
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation, content gathering, and pre-existing issue detection for staged commands
-│   └── references/                  # Detailed reference content (progressive disclosure)
-│       ├── lsp-integration.md       # LSP integration details for Node.js and .NET
-│       ├── validation-rules-code.md # Code review validation rules, auto-validation patterns, false positive rules
-│       └── validation-rules-docs.md # Docs review validation rules, auto-validation patterns, false positive rules
+│   └── references/                  # LSP integration details (progressive disclosure)
+│       └── lsp-integration.md       # LSP integration details for Node.js and .NET
 └── README.md
 ```
 

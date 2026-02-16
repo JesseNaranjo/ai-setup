@@ -1,7 +1,5 @@
 # Compliance Patterns
 
-Patterns for checking compliance with AI Agent Instructions (CLAUDE.md, etc.).
-
 ## Instruction File Locations
 
 Search for instruction files in: current directory, parent directories, and `.github/` folders.

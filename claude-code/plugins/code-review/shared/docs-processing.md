@@ -1,45 +1,29 @@
 # Docs Processing: Validation and Content Gathering
 
-This document combines input validation and content gathering for documentation review commands (`/deep-docs-review`, `/quick-docs-review`).
-
-## Contents
-
-- [Input Validation](#input-validation)
-- [Content Gathering](#content-gathering)
-
----
-
 ## Input Validation
 
-Validate the input and discover documentation files:
+### Parse Arguments
 
-### 1. Parse Arguments
-
-Extract from the command arguments:
-- **File paths**: Optional specific files to review (space-separated)
-- **Output file path**: From `--output-file` flag (command provides default)
+Extract:
+- **File paths**: Optional specific files (space-separated)
+- **Output file path**: From `--output-file` flag
 - **Additional instructions**: From `--prompt` flag
 
-### 2. Verify Git Repository
+### Git Repository Check
 
-Check if the current directory is a git repository:
-```bash
-git rev-parse --git-dir
-```
+Verify git repository exists (`git rev-parse --git-dir`). If not, stop: "Not a git repository."
 
-If not a git repository, stop and inform the user: "Not a git repository."
+### Discover Documentation Files
 
-### 3. Discover Documentation Files
+If specific files provided, validate those. Otherwise, discover:
 
-If specific files provided, validate those. Otherwise, discover documentation:
-
-**Standard documentation files (check root):**
-- `README.md`
-- `CLAUDE.md`
+**Standard documentation (root):**
 - `CHANGELOG.md`
+- `CLAUDE.md`
+- `CODE_OF_CONDUCT.md`
 - `CONTRIBUTING.md`
 - `LICENSE.md`
-- `CODE_OF_CONDUCT.md`
+- `README.md`
 
 **Documentation directories:**
 - `docs/**/*.md`
@@ -47,95 +31,69 @@ If specific files provided, validate those. Otherwise, discover documentation:
 
 **AI Agent Instruction Files:**
 - `.ai/AI-AGENT-INSTRUCTIONS.md` (standard location)
-- `AI-AGENT-INSTRUCTIONS.md` (root - should be moved to .ai/)
 - `.github/copilot-instructions.md`
 - `.github/ISSUE_TEMPLATE/*.md`
 - `.github/PULL_REQUEST_TEMPLATE.md`
+- `AI-AGENT-INSTRUCTIONS.md` (root - should be in `.ai/`)
 
-### 4. Check for AI Instruction File Standardization
+### Track AI Instruction File Standardization
 
-Track standardization status for reporting:
+Track for reporting:
 
 **AI-AGENT-INSTRUCTIONS.md location:**
-- If exists in `.ai/`: ✅ Correct location
-- If exists in root but not `.ai/`: ⚠️ Should be moved to `.ai/`
-- If missing entirely: ⚠️ Should be created
+- `.ai/`: ✅ Correct
+- Root but not `.ai/`: ⚠️ Should move to `.ai/`
+- Missing: ⚠️ Should create
 
 **CLAUDE.md header:**
-- Check if references `.ai/AI-AGENT-INSTRUCTIONS.md`
+- Check references `.ai/AI-AGENT-INSTRUCTIONS.md`
 
 **copilot-instructions.md:**
-- If exists in `.github/`: ✅ Exists
-- If missing: ⚠️ Should be created
+- `.github/`: ✅ Exists
+- Missing: ⚠️ Should create
 
-### 5. Filter by Scope
+### Filter by Scope
 
-If specific files were provided:
-- Verify each file exists
-- Only review specified files
+**Specific files provided:** Verify each exists, review only those.
 
-If no files specified:
-- Include all discovered documentation files
-- Prioritize by importance: README > CLAUDE.md > CHANGELOG > docs/
+**No files specified:** Include all discovered, prioritize README > CLAUDE.md > CHANGELOG > docs/
 
-### 6. Validate Scope
+### Validate Scope
 
-If no documentation files found, stop and inform the user: "No documentation files found. Ensure your project has README.md, docs/, or other markdown documentation."
+If no files found, stop: "No documentation files found. Ensure your project has README.md, docs/, or other markdown documentation."
 
 ### Validation Output
 
 Pass to Content Gathering:
-- List of documentation files to review
+- Documentation files to review
 - AI instruction file standardization status
-- Parsed output file path
-- Parsed additional instructions (if any)
+- Output file path
+- Additional instructions
 
 ---
 
 ## Content Gathering
 
-Launch a Sonnet agent to gather documentation content and related code references:
+Launch Sonnet agent to gather documentation content and code references.
 
-### 1. Get Current Branch
+### Required Data
 
-```bash
-git branch --show-current
-```
+**Current branch:** `git branch --show-current`
 
-### 2. Read Documentation Files
+**Documentation files:** Read full content, classify type (README, API docs, tutorial, etc.)
 
-For each documentation file: read full content and classify its type (README, API docs, tutorial, etc.)
+**Code references:** Scan documentation for verifiable code references (function/class names, file paths, import statements, API endpoints, CLI commands). For referenced code files that exist, read relevant sections (signatures, definitions, exports) for accuracy verification.
 
-### 3. Extract and Gather Code References
+**Project metadata:** Read `package.json`, `*.csproj`, `pyproject.toml`/`setup.py`, `VERSION` file, git tags for version verification.
 
-Scan documentation for verifiable code references (function/class names, file paths, import statements, API endpoints, CLI commands). For each referenced code file that exists, read relevant sections to extract signatures, definitions, and exports for accuracy verification.
-
-### 4. Check Package/Project Metadata
-
-Read project metadata for version verification: `package.json`, `*.csproj`, `pyproject.toml`/`setup.py`, `VERSION` file, git tags.
-
-### 5. Gather AI Instruction File Context
-
-If reviewing AI instruction files, gather cross-reference context:
-
-- Read all three files if they exist:
-  - `.ai/AI-AGENT-INSTRUCTIONS.md`
-  - `CLAUDE.md`
-  - `.github/copilot-instructions.md`
-- Check for header consistency
+**AI instruction file context (if reviewing AI instruction files):**
+- Read `.ai/AI-AGENT-INSTRUCTIONS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` if they exist
+- Check header consistency
 - Verify cross-references are valid
-
-### 6. Create Summary
-
-Summarize what will be reviewed:
-- Documentation files and their types
-- Code files gathered for accuracy verification
-- Project metadata found
-- AI instruction file standardization status
 
 ### Gathering Output
 
-Return to the review step:
+Return:
 - Current branch name
 - For each doc file: full content, type classification
 - Referenced code snippets for verification

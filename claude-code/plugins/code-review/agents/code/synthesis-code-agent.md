@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Cross-Agent Synthesis Agent
 
-Analyze findings from multiple review categories to identify cross-cutting concerns and ripple effects.
-
 ## Input
 
 Receives `synthesis_input` with:

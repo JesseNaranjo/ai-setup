@@ -1,98 +1,61 @@
 # Pre-Review Setup
 
-## Section 1: Settings Loader
+## Settings
 
-Load and apply project-specific settings from `.claude/code-review.local.md`.
+Load from `.claude/code-review.local.md` in project root. If missing, use defaults.
 
-### Loading Process
+| Field | Type | Default | Application |
+|-------|------|---------|-------------|
+| `enabled` | boolean | true | If false, stop with error |
+| `output_dir` | string | "." | Prepend to output filename (unless --output-file) |
+| `skip_agents` | array | [] | Exclude agents from review |
+| `min_severity` | string | "suggestion" | Filter to issues at or above |
+| `language` | string | "" | Language override (empty = auto-detect) |
+| `additional_test_patterns` | array | [] | Merge with default test patterns |
 
-Before starting the review, check for settings:
+Markdown body → "Project-Specific Instructions" for all agents. `--prompt` appends.
+Override precedence: command-line flags > settings file > defaults.
 
-#### 1. Check for Settings File
+## Context Discovery
 
-Look for `.claude/code-review.local.md` in the project root.
+### AI Instructions
 
-If the file does not exist, use default settings and continue.
+Priority order (higher overrides lower):
+1. `CLAUDE.md` in directories of files being reviewed
+2. `CLAUDE.md` in repository root
+3. `.ai/AI-AGENT-INSTRUCTIONS.md`
+4. `.github/copilot-instructions.md`
 
-#### 2. Parse YAML Frontmatter
+For each file being reviewed, identify which instruction files apply (same directory or any parent up to repo root).
 
-If the file exists, parse the YAML frontmatter to extract settings.
+### Language Detection
 
-Fields: `enabled`, `output_dir`, `skip_agents`, `min_severity`, `language` (empty = auto-detect), `additional_test_patterns`.
+- **Node.js/TypeScript**: `package.json`
+- **.NET/C#**: `*.csproj`, `*.sln`, `*.slnx`
+- **Override**: `--language nodejs|dotnet|react` for ALL files
+- **Monorepo**: Per-file detection; group by language
 
-#### 3. Check Enabled Flag
+### Framework Detection
 
-If `enabled: false`, stop and inform the user: "Code review plugin is disabled for this project. Edit .claude/code-review.local.md to enable."
+Node.js files: check nearest `package.json` for `react`/`react-dom` in dependencies. `--language react` = Node.js + React checks.
 
-#### 4. Apply Settings
+### LSP
 
-Apply settings to the review process:
+Check for LSP plugins: `typescript-lsp` (Node.js), `csharp-lsp`/OmniSharp (.NET). If available: read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`, add `lsp_available` to discovery. If none: skip.
 
-| Setting | How to Apply |
-|---------|--------------|
-| `output_dir` | Prepend to default output filename (unless --output-file overrides) |
-| `skip_agents` | Exclude listed agents from the review phases |
-| `min_severity` | Filter output to only show issues at or above this severity |
-| `language` | Use as language override (unless --language flag overrides) |
-| `additional_test_patterns` | Merge with default test patterns when finding related tests |
+### Test Files
 
-#### 5. Read Project Instructions
+Find test files per detected language. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` and `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md` for patterns. Merge `additional_test_patterns` from settings.
 
-Read the markdown body (after the YAML frontmatter) and pass it to all review agents as additional context under "Project-Specific Instructions".
+### Discovery Output
 
-Command-line flags override corresponding settings; `--prompt` appends to project instructions.
-
-## Section 2: Context Discovery
-
-### Step 1: Find AI Agent Instructions Files
-
-Search for instruction files in priority order (higher priority files override lower):
-
+```yaml
+ai_instructions: [{path, applies_to}]
+detected_languages: {language: [file_list]}
+detected_frameworks: {framework: [file_list]}
+test_files: {source: [tests]}
+language_override: string | null
+lsp_available: [language_types] | null
 ```
-Priority 1 (highest): CLAUDE.md in directories of files being reviewed
-Priority 2: CLAUDE.md in repository root
-Priority 3: .ai/AI-AGENT-INSTRUCTIONS.md
-Priority 4: .github/copilot-instructions.md
-```
 
-For each file being reviewed, identify which instruction files apply (same directory or any parent directory up to repo root).
-
-### Step 2: Detect Language Per File
-
-Detect the programming language for EACH file being reviewed using file extension and nearest project file (`package.json` → Node.js, `*.csproj`/`*.sln`/`*.slnx` → .NET/C#).
-
-**Handling monorepos and mixed codebases:**
-
-- Apply language-specific checks PER FILE, not globally
-- Group files by detected language when building review context
-
-**Language override:** `--language nodejs|dotnet|react` overrides auto-detection for ALL files.
-
-### Step 2b: Detect Frameworks
-
-For Node.js/TypeScript files, check nearest `package.json` for `react` or `react-dom` in dependencies/devDependencies. `--language react` implies Node.js base checks + React-specific checks.
-
-### Step 2c: Detect LSP Availability
-
-Check for Language Server Protocol plugins that provide compiler-level diagnostics:
-
-- **Node.js/TypeScript**: Check if `typescript-lsp` plugin is available in enabled plugins
-- **.NET/C#**: Check if `csharp-lsp` or OmniSharp is available in enabled plugins
-
-If any LSP is available, read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md` once and store the content for orchestrator distribution. Add `lsp_available` with detected language types to discovery results.
-
-If no LSP is available, skip — all agents function without LSP via pattern-based detection.
-
-### Step 3: Find Related Test Files
-
-For each file being reviewed, find corresponding test files based on detected language. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` and `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md` for default test patterns.
-
-**Merge user-configured patterns:** If `additional_test_patterns` is provided in `.claude/code-review.local.md`, merge with default patterns. User patterns are checked in addition to the defaults.
-
-### Step 4: Return Discovery Results
-
-Return a structured `discovery_results` with fields: `ai_instructions` (path + applies_to), `detected_languages` (language → file list), `detected_frameworks` (framework → file list), `test_files` (source → tests), `language_override` (from --language flag or null), `lsp_available` (language types with LSP or null).
-
-**Note:** `detected_languages` enables lazy loading of language configs — only load `languages/nodejs.md` if `detected_languages.nodejs` has files. `detected_frameworks` tracks React detection that extends base language configs.
-
-If language cannot be detected for a file, log a warning and skip language-specific checks.
+Lazy loading: only load `languages/*.md` if files detected for that language. Unknown language: warn, skip language checks.

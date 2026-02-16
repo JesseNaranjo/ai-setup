@@ -1,16 +1,10 @@
 # Documentation Review Orchestration
 
-This document defines agent invocation patterns and execution sequences for documentation review pipelines.
-
-## Orchestrator Notes
-
-- Use git CLI (not GitHub CLI). Create a todo list before starting.
-- Cite issues with file path and line numbers (e.g., `src/utils.ts:42-48`). Quote exact AI instruction rules when violated.
-- Paths relative to repo root. Line numbers reference actual file lines (not diff lines).
+- Use git CLI (not GitHub CLI). Create todo list before starting.
+- Cite issues with `file:line` (e.g., `docs/api.md:42-48`). Quote exact AI instruction rules when violated.
+- Paths relative to repo root. Line numbers reference file lines (not diff lines).
 
 ## Agent Invocation
-
-Always pass the `model` parameter explicitly (see Documentation Review Model Selection section below).
 
 ### Prompt Schema
 
@@ -19,162 +13,207 @@ Always pass the `model` parameter explicitly (see Documentation Review Model Sel
 | `MODE` | string | Yes | `thorough`, `gaps`, or `quick` |
 | `project_type` | string | Yes | `nodejs`, `dotnet`, or both |
 | `files_to_review` | list | Yes | See File Entry Schema below |
-| `ai_instructions` | list | Optional | Summary of AI instruction files for context |
-| `previous_findings` | list | Gaps only | Prior findings for deduplication. Each entry: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
-| `skill_instructions` | object | Optional | From `--skills` argument. Fields: `focus_areas` (list), `checklist` (list of {category, severity, items}), `auto_validate` (list), `false_positive_rules` (list), `methodology` ({approach, steps, questions}) |
-| `additional_instructions` | string | Optional | Combined content from settings file body + `--prompt` argument + orchestrator-injected rules (gaps behavior, pre-existing detection) |
+| `ai_instructions` | list | Optional | Summary of AI instruction files |
+| `previous_findings` | list | Gaps only | Prior findings for dedup. Each: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
+| `skill_instructions` | object | Optional | From `--skills`. Fields: `focus_areas`, `checklist` [{category, severity, items}], `auto_validate`, `false_positive_rules`, `methodology` {approach, steps, questions} |
+| `additional_instructions` | string | Optional | Settings body + `--prompt` + orchestrator-injected rules |
 
 ### File Entry Schema
 
-**Critical files** (has_changes: true, tier: "critical"):
-`path` (string), `diff` (unified diff), `full_content` (complete file)
+**Critical files** (has_changes: true, tier: "critical"): `path`, `diff` (unified), `full_content`
 
-**Peripheral files** (staged reviews — unchanged context files, has_changes: false, tier: "peripheral"):
-`path` (string), `preview` (first ~50 lines), `line_count` (integer), `full_content_available`: true (agent uses Read tool)
+**Peripheral files** (staged — unchanged context, has_changes: false, tier: "peripheral"): `path`, `preview` (first ~50 lines), `line_count`, `full_content_available`: true (agent uses Read tool)
 
-End the prompt with: `Return findings as YAML per agent examples in your agent file.`
+End prompt with: `Return findings as YAML per agent examples in your agent file.`
 
-### Content Distribution Optimization
+### Content Distribution
 
-#### Agent Common Content Distribution
+Per agent, append to `additional_instructions`:
+1. Output schema, MODE definition, FP rules from Agent Common Instructions below
+2. Category-specific FP rules — agent's category only
 
-**Per agent** (append to `additional_instructions`):
-1. Output schema, MODE definition, and false positive rules from Agent Common Instructions below
-2. Category-specific FP rules — extract ONLY the agent's category
+Synthesis agents skip distribution.
 
-Synthesis agents are excluded from this distribution.
+### Agent Common Instructions
 
-### Agent Common Instructions (Distributed to All Agents)
+**MODE:** thorough (all issues), gaps (subtle issues missed; dedup against previous_findings), quick (critical/merge-blocking only). Deep reviews skip pre-existing and silenced issues. Quick: only blocking issues, skip theoretical edge cases.
 
-#### MODE Parameter
+**False Positive Rules — do NOT flag:**
+- Pre-existing issues not modified in current changes
+- General quality unless required in AI instructions; test code unless reviewing tests; theoretical edge cases extremely unlikely in practice
+- Code with lint-disable/suppress comments or documented suppressions
 
-MODE: thorough (all issues), gaps (subtle issues missed; dedup against previous_findings), quick (critical/merge-blocking only). Deep reviews skip pre-existing and silenced issues. Quick reviews: only blocking issues, skip theoretical edge cases.
+**Output Schema:** Each issue: `title`, `file`, `line`, `range` (string or null), `category`, `severity` (Critical/Major/Minor/Suggestion), `description`, `fix_type` (diff/prompt), `fix_diff` or `fix_prompt`. See agent file for category-specific extra fields.
 
-#### False Positive Rules
-
-Do NOT flag:
-- **Pre-existing Issues**: Issues existing before current changes, not modified
-- **Scope Limitations**: General quality unless required in AI instructions; test code unless reviewing tests; theoretical edge cases extremely unlikely in practice
-- **Silenced Issues**: Code with lint-disable/suppress comments or documented suppressions
-
-#### Output Schema
-
-Each issue requires: `title`, `file`, `line`, `range` (string or null), `category`, `severity` (Critical/Major/Minor/Suggestion), `description`, `fix_type` (diff/prompt), `fix_diff` or `fix_prompt`.
-
-See agent file for category-specific extra fields.
-
-### Category-Specific False Positive Rules (Documentation)
-
-Each category has specific exclusions in addition to the general false positive rules above.
+### Category-Specific False Positive Rules
 
 - **Accuracy**: Intentionally simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; documentation for planned features marked as such
-- **Clarity**: Jargon appropriate for stated expert audience; acronyms defined earlier in the same document; intentionally terse reference docs (vs tutorials)
+- **Clarity**: Jargon appropriate for stated expert audience; acronyms defined earlier in same document; intentionally terse reference docs (vs tutorials)
 - **Completeness**: Internal/private APIs not for external use; features marked experimental/unstable; sections that would duplicate linked content
 - **Consistency**: Code/API names that must match implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections that intentionally differ
 - **Examples**: Pseudocode marked as illustrative (not runnable); partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`
 - **Structure**: Intentionally orphaned archive/historical documents; heading hierarchy violations in code-generated documentation; AI instruction files in projects not using AI assistants (if explicitly stated)
 
-## Gaps Mode Behavior
+## Gaps Mode
 
-When MODE=gaps, agents receive `previous_findings` from thorough mode to avoid duplicates.
+When MODE=gaps, agents receive `previous_findings` from thorough mode.
 
-### Duplicate Detection (Common to All Gaps Agents)
+**Duplicate Detection:** Skip issues in same file within +/-5 lines of prior findings. Skip same issue type on same function/method. For range findings (lines A-B): skip zone = [A-5, B+5]. See Prompt Schema `previous_findings` field for schema.
 
-- Skip issues in same file within +/-5 lines of prior findings
-- Skip same issue type on same function/method
-- For range findings (lines A-B): skip zone = [A-5, B+5]
+**Constraints:** Only Major/Critical severity (skip Minor/Suggestion). Maximum 5 new findings per agent. Model: always Sonnet.
 
-See Prompt Schema table above (`previous_findings` field) for the schema.
+**Agents:** accuracy, completeness, consistency. See each agent file for category-specific gaps focus areas.
 
-### Constraints (Common to All Gaps Agents)
+## Deep Docs Review Sequence (13 invocations)
 
-- Only report Major or Critical severity (skip Minor/Suggestion)
-- Maximum 5 new findings per agent
-- Model: Always Sonnet (cost optimization)
+**Phase 1 — Thorough** (6 parallel): accuracy, clarity, completeness, consistency, examples, structure. MODE: thorough. Models: Opus for accuracy, completeness, examples; Sonnet for rest. Pass: doc contents, related code snippets, project metadata, AI instruction file status, additional prompt instructions.
+**CRITICAL: WAIT for ALL 6 before Phase 2.**
 
-### Gaps-Supporting Agents
+**Phase 2 — Gaps** (3 parallel Sonnet): accuracy, completeness, consistency. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Distribute Gaps Mode rules to each agent's `additional_instructions`.
+**CRITICAL: WAIT for ALL 3 before Synthesis.**
 
-**Documentation review:** accuracy, completeness, consistency.
+**Synthesis** (4 parallel): 4 instances of synthesis-docs-agent. Input: ALL Phase 1+2 findings.
+**CRITICAL: WAIT for Phase 1 AND Phase 2 fully complete before starting.**
+Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarity+Structure ("Does poor structure contribute to clarity issues?"), Completeness+Consistency ("Are missing sections causing terminology inconsistencies?"), Consistency+Structure ("Do formatting inconsistencies reflect structural problems?")
 
-See each agent file for category-specific focus areas (what subtle issues thorough mode misses).
+**Post-review:** Validate all issues → filter invalid → deduplicate → generate report.
 
-## Deep Docs Review Sequence (13 agent invocations)
+## Quick Docs Review Sequence (7 invocations)
 
-1. **Steps 1-3: Input, Context, Content**
-   - Discover and validate documentation files
-   - Gather doc content and related code references
-   - OUTPUT: Documentation files, related code snippets, AI instruction files
+**Review** (4 parallel): accuracy, clarity, examples, structure. MODE: quick. Models: accuracy, examples (Opus); clarity, structure (Sonnet).
+- Accuracy: Critical mismatches, wrong function names, broken examples
+- Clarity: Incomprehensible sections, undefined critical acronyms
+- Examples: Syntax errors, missing critical imports, wrong API calls
+- Structure: Broken links, major navigation issues, AI instruction file errors
 
-2. **Phase 1: Thorough Review** (6 agents in parallel)
-   - Launch: accuracy, clarity, completeness, consistency, examples, structure
-   - Models: accuracy, completeness, examples (Opus); clarity, consistency, structure (Sonnet)
-   - MODE: `thorough` for all agents
-   - Pass to all agents: documentation file contents, related code snippets for verification, project metadata, AI instruction file status, additional prompt instructions (if provided)
-   - **CRITICAL: WAIT** - DO NOT proceed to Phase 2 until ALL 6 agents complete
-   - OUTPUT: Phase 1 findings (grouped by category)
+**Synthesis** (3 parallel): Accuracy+Examples ("Do examples match documented behavior?"), Clarity+Structure ("Does structure contribute to clarity issues?"), Examples+Structure ("Are example placements structurally sound?")
 
-3. **Phase 2: Gaps Review** (3 Sonnet agents in parallel)
-   - Launch: accuracy, completeness, consistency
-   - MODE: `gaps`
-   - Model: Sonnet (cost-optimized for constrained task)
-   - INPUT: Phase 1 findings passed as `previous_findings`
-   - Distribute Gaps Mode Behavior rules from this document (duplicate detection skip zones, severity constraints, 5-finding cap) to each gaps agent's `additional_instructions`
-   - **CRITICAL: WAIT** - DO NOT proceed to Synthesis until ALL 3 agents complete
-   - OUTPUT: Phase 2 findings (subtle issues, edge cases)
+**Post-review:** Same as deep.
 
-4. **Synthesis** (4 agents in parallel)
-   - **CRITICAL: DO NOT START until Phase 1 AND Phase 2 are FULLY COMPLETE**
-   - Launch: 4 instances of synthesis-docs-agent with category pairs
-   - INPUT: ALL findings from Phase 1 AND Phase 2
-   - Pairs and questions:
-     - Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
-     - Clarity+Structure: "Does poor structure contribute to clarity issues, or vice versa?"
-     - Completeness+Consistency: "Are missing sections causing terminology inconsistencies elsewhere?"
-     - Consistency+Structure: "Do formatting inconsistencies reflect structural organization problems?"
-   - WAIT: All 4 must complete
-   - OUTPUT: `cross_cutting_insights` list
+## Model Selection (Authoritative)
 
-5. **Validation, Aggregation, Output**
-   - Validate all issues, filter invalid, deduplicate, generate report
-
-## Quick Docs Review Sequence (7 agent invocations)
-
-1. **Steps 1-3: Input, Context, Content** (same as deep)
-
-2. **Review** (4 agents in parallel)
-   - Launch: accuracy, clarity, examples, structure
-   - Models: accuracy (Opus), clarity (Sonnet), examples (Opus), structure (Sonnet)
-   - MODE: `quick` for all agents
-   - Accuracy: Critical mismatches, wrong function names, broken examples
-   - Clarity: Incomprehensible sections, undefined critical acronyms
-   - Examples: Syntax errors, missing critical imports, wrong API calls
-   - Structure: Broken links, major navigation issues, AI instruction file errors
-   - Pass to all agents: documentation file contents, related code snippets for verification, AI instruction file status, additional prompt instructions (if provided)
-   - OUTPUT: Quick review findings
-
-3. **Synthesis** (3 agents in parallel)
-   - Pairs and questions:
-     - Accuracy+Examples: "Do code examples match the documented behavior they claim to demonstrate?"
-     - Clarity+Structure: "Does poor structure contribute to clarity issues, or vice versa?"
-     - Examples+Structure: "Are example placements and references structurally sound?"
-   - OUTPUT: `cross_cutting_insights` list
-
-4. **Validation, Aggregation, Output** (same as deep)
-
-## Documentation Review Model Selection (Authoritative Source)
-
-Default model: **Sonnet** for all agents and modes.
-
+Default: **Sonnet** for all agents and modes.
 **Opus exceptions (thorough):** accuracy, completeness, examples
 **Opus exceptions (quick):** accuracy, examples
-**Gaps mode:** Always Sonnet (no exceptions)
+**Gaps:** Always Sonnet (no exceptions)
 
 ## Synthesis Invocation
 
-Invoke synthesis agents **multiple times in parallel** with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md` for agent definition.
+Invoke synthesis agents multiple times in parallel with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md`.
 
 ---
 
-# Documentation Review Validation Rules
+# Validation & Aggregation
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-docs.md` for validation rules and auto-validation patterns. Load at Steps 9-12 only.
+## Batch Validation
+
+Issues grouped by file, then by validator model. One validator per file. Quick reviews validate **Critical and Major only** (Minor/Suggestions skip).
+
+**Cross-cutting insights:** Validated AFTER synthesis, BEFORE main validation. Always **Opus**. Checks: (1) Both `related_findings` references exist and aren't false positives, (2) genuine interaction between the two, (3) not a duplicate of either original, (4) adds value beyond individual findings. Duplicates of originals → INVALID.
+
+**Skip validation for:** Issues in test files (unless testing production paths), style suggestions without functional impact, documentation suggestions.
+
+### Validator Prompt Schema
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `file_path` | string | File being validated |
+| `issues_to_validate[].id` | integer | Sequential issue ID |
+| `issues_to_validate[].title` | string | Issue title |
+| `issues_to_validate[].line` | integer | Line number |
+| `issues_to_validate[].category` | string | Issue category |
+| `issues_to_validate[].severity` | string | Issue severity |
+| `issues_to_validate[].description` | string | Issue description |
+
+Return format:
+```yaml
+validations:
+  - id: 1
+    verdict: VALID|INVALID|DOWNGRADE
+    new_severity: # only if DOWNGRADE
+    reason: "brief explanation"
+```
+
+### Auto-Validation
+
+Issues matching auto-validation patterns (below) skip validation, marked `auto_validated: true`.
+
+### Common FP Checks
+
+- Explicit ignore comments (lint-ignore, suppress)
+- Handled elsewhere in codebase
+- Test/dev-only code paths
+- Internal code with no external exposure
+
+### Verdicts
+
+**VALID** (confirmed, keep severity), **INVALID** (false positive, remove), **DOWNGRADE** (real but lower severity).
+
+## Validator Model Assignment
+
+| Category | Model |
+|----------|-------|
+| Accuracy | Opus |
+| Clarity | Sonnet |
+| Completeness | Opus |
+| Consistency | Sonnet |
+| Examples | Opus |
+| Structure | Sonnet |
+
+Cross-cutting insights always **Opus**.
+
+## Aggregation
+
+1. **Remove Invalid**: Filter INVALID issues
+2. **Apply Downgrades**: Update severity for DOWNGRADE verdicts
+3. **Deduplicate**: Merge same-file overlapping-range issues; keep most detailed description; use highest severity
+4. **Consensus Detection**: Group by file, detect overlapping issues (same file, intersecting ranges: NOT (L2 < M1 OR M2 < L1)). Build clusters transitively (A overlaps B, B overlaps C → {A,B,C}). Merge each: highest severity, longest description, combined categories, badge (`[2 agents]` or `[3+ agents]`)
+
+## Auto-Validation Patterns (Documentation)
+
+Issues matching these patterns skip validation entirely and are marked `auto_validated: true`:
+
+**Accuracy patterns:**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `api_signature_mismatch` | N/A (detected via code comparison) | Documented function signature differs from implementation |
+| `missing_parameter_doc` | N/A (detected via param comparison) | Parameter exists in code but not documented |
+| `outdated_version_reference` | N/A (detected via version comparison) | Documentation references older version than package.json/csproj |
+
+**Clarity patterns:**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `undefined_acronym` | `\b[A-Z]{2,}\b(?!.*\([^)]+\))` | Acronym used without expansion (first occurrence) |
+| `passive_voice_instruction` | N/A (detected via NLP analysis) | Instructions written in passive voice |
+
+**Completeness patterns:**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `missing_api_doc` | N/A (detected via export comparison) | Exported function/class has no documentation |
+| `empty_section` | `^#+\s+.+\n\s*\n(?=^#+)` | Section header with no content before next header |
+| `missing_error_handling_doc` | N/A (detected via throw analysis) | Function throws but no error documentation |
+
+**Consistency patterns:**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `inconsistent_terminology` | N/A (detected via term frequency analysis) | Same concept named differently across docs |
+| `inconsistent_heading_style` | N/A (detected via heading pattern analysis) | Mixed title case and sentence case headings |
+
+**Examples patterns:**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `example_syntax_error` | N/A (detected via parser) | Code example has syntax error |
+| `example_undefined_import` | N/A (detected via import analysis) | Example uses undefined import |
+
+**Structure patterns:**
+
+| Pattern Name | Regex | Description |
+|-------------|-------|-------------|
+| `broken_internal_link` | `\[([^\]]+)\]\((?!https?://)([^)]+)\)` | Internal markdown link (check target exists) |
+| `missing_ai_instruction_header` | N/A (detected via header check) | CLAUDE.md missing required header comment |
+| `ai_instruction_wrong_location` | N/A (detected via path check) | AI instruction file in wrong directory |

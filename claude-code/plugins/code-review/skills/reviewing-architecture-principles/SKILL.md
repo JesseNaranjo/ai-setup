@@ -5,13 +5,9 @@ description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-pat
 
 # Architecture Principles Review Skill
 
-Identify SOLID, DRY, YAGNI, and SoC violations through targeted design-principles-focused code review.
-
 ## Agent
 
-`code-review:architecture-agent` (Opus)
-
-Uses thorough mode with focus areas below.
+`code-review:architecture-agent` (Opus) in thorough mode.
 
 ## SOLID Principles Checked
 
@@ -112,23 +108,19 @@ Uses thorough mode with focus areas below.
 
 ## Scope Prioritization
 
-When reviewing directories, automatically prioritize:
+Prioritize:
 - Service/business logic files
 - Files with "Factory", "Service", "Manager", "Handler" in names
 - Files with high line counts (500+)
 - Files with many exports
 
----
-
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions, see `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`.
-
----
+High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules" section.
+Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Architecture-specific additions** - do NOT flag:
 - Intentional duplication for clarity (documented)
@@ -136,18 +128,10 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`
 - Pragmatic compromises with documented justification
 - Patterns appropriate for project scale
 
----
-
 ## Example Output
 
-See `examples/example-output.md` for a sample showing:
-- SOLID violation with prompt fix
-- DRY violation with diff fix
-- YAGNI violation with prompt fix
-- SoC violation with prompt fix
-
----
+`examples/example-output.md`
 
 ## References
 
-For detailed patterns and detection heuristics, see `references/solid-dry-yagni-patterns.md`.
+`references/solid-dry-yagni-patterns.md`

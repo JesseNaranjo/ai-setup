@@ -23,8 +23,7 @@ These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/langu
 
 ### Security {#security}
 
-- XSS via dangerouslySetInnerHTML
-- href javascript: injection
+- XSS via dangerouslySetInnerHTML, href javascript: injection
 - Sensitive data in client state
 - Insecure iframe embedding — missing sandbox on user-controlled iframes
 - localStorage/sessionStorage sensitive data
@@ -52,8 +51,7 @@ These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/langu
 ### Error Handling {#errors}
 
 - Error boundaries too high — single boundary catching all errors
-- Missing error boundaries / fallbacks
-- Missing loading/error states
+- Missing error boundaries / fallbacks, loading/error states
 - Suspense without error boundaries
 - Uncaught async errors in useEffect
 
@@ -61,21 +59,18 @@ These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/langu
 
 - Missing component tests
 - Testing implementation details — checking internal state instead of behavior
-- Missing user interaction tests
+- Missing user interaction tests, accessibility tests
 - Snapshot tests without behavior tests
 - Missing async operation tests — useEffect fetching without wait/findBy
-- Missing accessibility tests
 
 ### Technical Debt {#debt}
 
 - Class components — use functional components in React 18+
 - Deprecated React APIs — ReactDOM.render instead of createRoot (React 18+)
-- Excessive HOCs
-- findDOMNode usage
+- Excessive HOCs, findDOMNode usage
 - Legacy context API (childContextTypes)
 - Legacy lifecycle methods — componentWillMount, componentWillReceiveProps, componentWillUpdate
-- PropTypes in TypeScript projects
-- String refs
+- PropTypes in TypeScript projects, string refs
 
 ## State Management Checks
 
@@ -107,6 +102,5 @@ Apply when Next.js is detected by context-discovery (presence of `next` in deps)
 
 ### API Routes
 
-- Missing authentication
-- Missing rate limiting
+- Missing authentication, rate limiting
 - Improper error responses

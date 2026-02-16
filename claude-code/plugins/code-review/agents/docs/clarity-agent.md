@@ -37,18 +37,15 @@ Check sentence complexity (flag >40 words without structure, >3 nested clause le
 
 ### Step 4: Report Clarity Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: the specific clarity problem, why it's confusing, who would be confused (audience segment)
-- **Category**: "Clarity"
-- **Severity thresholds**:
-  - Critical: Completely incomprehensible, would block users
-  - Major: Significant confusion likely for target audience
-  - Minor: Could be clearer but understandable with effort
-  - Suggestion: Style improvement, already understandable
+Report per Output Schema provided in your prompt. For each issue, **Description** should include: the specific clarity problem, why it's confusing, who would be confused (audience segment).
 
-## Output Schema
+**Category**: "Clarity"
 
-See Output Schema in additional_instructions for base fields.
+**Severity thresholds**:
+- Critical: Completely incomprehensible, would block users
+- Major: Significant confusion likely for target audience
+- Minor: Could be clearer but understandable with effort
+- Suggestion: Style improvement, already understandable
 
 **Clarity-specific extra fields:**
 

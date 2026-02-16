@@ -5,13 +5,9 @@ description: Detects deprecated dependencies, outdated patterns, workarounds, de
 
 # Technical Debt Code Review Skill
 
-Identify accumulated technical debt including deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, and documentation debt.
-
 ## Agent
 
-`code-review:technical-debt-agent` (Opus)
-
-Uses thorough mode with focus areas below.
+`code-review:technical-debt-agent` (Opus) in thorough mode.
 
 ## Technical Debt Categories Checked
 
@@ -51,27 +47,21 @@ Uses thorough mode with focus areas below.
 - Stale comments describing wrong behavior
 - Missing API documentation
 
----
-
 ## Auto-Validated Patterns
 
-High-confidence patterns that skip validation. For full definitions with regex patterns, see `${CLAUDE_PLUGIN_ROOT}/shared/references/validation-rules-code.md`.
-
----
+High-confidence patterns skip validation. Full definitions with regex patterns: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ## Scope Prioritization
 
-When reviewing directories, automatically prioritize:
+Prioritize:
 - Package manifest files (`package.json`, `*.csproj`)
 - Configuration files (bundler configs, tsconfig)
 - Files with many TODO/FIXME comments
 - Old utility files not recently modified
 
----
-
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules" section.
+Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Technical Debt-specific additions** - do NOT flag:
 - Dependencies intentionally pinned with documented reason
@@ -79,19 +69,11 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`
 - TODOs that reference issue tracking (e.g., `TODO(#123)`)
 - Workarounds with documented upstream bug references
 
----
-
 ## Detailed Debt Patterns
 
-For comprehensive detection patterns and code examples, see `references/technical-debt-patterns.md`.
-
----
+`references/technical-debt-patterns.md`
 
 ## Example Output
 
-See `examples/example-output.md` for samples showing:
-- Deprecated dependency finding with prompt fix
-- TODO without issue tracking with diff fix
-- Outdated pattern with prompt fix
-- Dead code with diff fix
+`examples/example-output.md`
 

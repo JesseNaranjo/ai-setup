@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Performance Review Agent
 
-Analyze code for performance issues that will have measurable impact.
-
 ## Review Process
 
 ### Step 1: Identify Performance Categories (Based on MODE)
@@ -38,8 +36,8 @@ Identify code that runs frequently (loops, event handlers, API endpoints), check
 
 ### Step 3: Report Performance Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: what the performance issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem
+Report per Output Schema. For each issue:
+- **Description**: what the performance issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem
 - **Category**: "Performance"
 - **Severity thresholds**:
   - Critical: Will cause outages or system degradation at normal scale

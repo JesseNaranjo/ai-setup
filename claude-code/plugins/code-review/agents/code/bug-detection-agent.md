@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Bug Detection Review Agent
 
-Analyze code for bugs that will cause incorrect behavior at runtime.
-
 ## Review Process
 
 ### Step 1: Identify Bug Categories (Based on MODE)
@@ -41,8 +39,8 @@ For each file: identify all code paths, check each for potential bugs based on M
 
 ### Step 3: Report Bugs
 
-Report per Output Schema provided in your prompt. For each bug:
-- **Description** should include: what the bug is, how it manifests at runtime, conditions under which it occurs
+Report per Output Schema. For each bug:
+- **Description**: what the bug is, how it manifests at runtime, conditions under which it occurs
 - **Category**: "Bugs"
 - **Severity thresholds**:
   - Critical: Will cause crashes, data corruption, or security issues

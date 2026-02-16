@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Test Coverage Review Agent
 
-Analyze code for test coverage gaps and provide specific test recommendations.
-
 ## Review Process
 
 ### Step 1: Identify Coverage Categories (Based on MODE)
@@ -40,8 +38,8 @@ For each gap: what to test, expected behavior, suggested test file location, tes
 
 ### Step 4: Report Test Coverage Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: what code is not tested, why it should be tested, risk of not testing
+Report per Output Schema. For each issue:
+- **Description**: what code is not tested, why it should be tested, risk of not testing
 - **Category**: "Test Coverage"
 - **Severity thresholds**:
   - Major: Critical path without tests

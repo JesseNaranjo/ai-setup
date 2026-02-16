@@ -38,18 +38,15 @@ Use Grep to check for formatting consistency across headings (capitalization, pu
 
 ### Step 4: Report Consistency Issues
 
-Report per Output Schema provided in your prompt. For each inconsistency:
-- **Description** should include: what is inconsistent, the variant forms found, recommended canonical form
-- **Category**: "Consistency"
-- **Severity thresholds**:
-  - Critical: Inconsistency causes confusion or errors (rare)
-  - Major: Significant inconsistency affecting professionalism
-  - Minor: Noticeable but doesn't impede understanding
-  - Suggestion: Minor polish, very subtle
+Report per Output Schema provided in your prompt. For each inconsistency, **Description** should include: what is inconsistent, the variant forms found, recommended canonical form.
 
-## Output Schema
+**Category**: "Consistency"
 
-See Output Schema in additional_instructions for base fields.
+**Severity thresholds**:
+- Critical: Inconsistency causes confusion or errors (rare)
+- Major: Significant inconsistency affecting professionalism
+- Minor: Noticeable but doesn't impede understanding
+- Suggestion: Minor polish, very subtle
 
 **Consistency-specific extra fields:**
 

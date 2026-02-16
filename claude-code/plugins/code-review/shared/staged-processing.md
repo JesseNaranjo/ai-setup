@@ -2,83 +2,42 @@
 
 ## Input Validation
 
-Check if there are any staged changes:
+**Git Repository Check**: Verify current directory is a git repository. If not, stop: "Not a git repository."
 
-### 1. Verify Git Repository
+**Staged Changes Check**: Verify staged changes exist. If none, stop: "No staged changes to review."
 
-Check if the current directory is a git repository. If not, stop and inform the user: "Not a git repository."
-
-### 2. Check for Staged Changes
-
-Check for staged changes. If there are none, stop and inform the user: "No staged changes to review."
-
-### 3. Get Staged File List
-
-Get the list of staged files.
-
-### 4. Parse Arguments
-
-Extract from the command arguments:
+**Argument Parsing**: Extract from command arguments:
 - **Output file path**: From `--output-file` flag (command provides default)
 - **Language override**: From `--language` flag (`nodejs` or `dotnet`, default: auto-detect per file)
 
-### Validation Output
-
-Pass to Content Gathering:
-- List of staged file paths
-- Parsed output file path
-- Parsed language override (if any)
+**Validation Output**: Pass to Content Gathering: staged file paths, parsed output file path, parsed language override (if any)
 
 ## Content Gathering
 
-Launch a Sonnet agent to gather the content to review:
+Launch Sonnet agent to gather:
 
-### 1. Get Staged Diff
+**1. Staged Diff**: Get full staged diff with line markers
 
-### 2. Get Current Branch
+**2. Current Branch**: Get branch name
 
-### 3. Read Full File Content (Tiered)
-
-For each staged file:
+**3. Full File Content (Tiered)**:
 - **Changed files (has_changes=true)**: Read full file content (critical tier)
 - **Unchanged files referenced in imports/context (has_changes=false)**: Read preview only (peripheral tier)
 
-### 4. Read Related Test Files
+**4. Related Test Files**: Read test files from Context Discovery step (see `languages/nodejs.md` and `languages/dotnet.md` for patterns). Always critical tier.
 
-Read related test files (from Context Discovery step) for context:
-- **Node.js**: See `languages/nodejs.md` for test file patterns
-- **.NET**: See `languages/dotnet.md` for test file patterns
+**5. Summary**: Number of files modified, brief description of changes, detected project types, related test files found, tier classification summary
 
-Test files are always treated as critical tier.
-
-### 5. Create Summary
-
-Summarize what changes are being made:
-- Number of files modified
-- Brief description of the changes
-- Detected project type(s)
-- Related test files found
-- Tier classification summary
-
-### Gathering Output
-
-Return to the review step:
+**Gathering Output**: Return to review step:
 - Current branch name
 - For each file:
-  - path
-  - has_changes (true/false)
-  - **tier**: "critical" or "peripheral"
-  - For **critical** files (has_changes=true):
-    - diff: full diff content
-    - full_content: full file content
-  - For **peripheral** files (has_changes=false):
-    - preview: first 50 lines of file
-    - line_count: total lines in file
-    - full_content_available: true
+  - path, has_changes (true/false), **tier** ("critical" or "peripheral")
+  - **Critical files** (has_changes=true): diff (full diff content), full_content (full file content)
+  - **Peripheral files** (has_changes=false): preview (first 50 lines), line_count (total lines), full_content_available: true
 - Related test files (always critical tier)
 - Summary of what's being reviewed
 
-### Tier Classification
+**Tier Classification**:
 
 | File Type | Tier | Rationale |
 |-----------|------|-----------|
@@ -110,8 +69,6 @@ Return to the review step:
 ## Tiered Context Agent Guidance
 
 For staged reviews, inject the following into each agent's `additional_instructions`:
-
-When files include tier information (staged reviews):
 
 **For `tier: "critical"` files:**
 - Full content is provided - analyze thoroughly

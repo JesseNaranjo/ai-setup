@@ -2,24 +2,13 @@
 
 Authoritative output schema reference for all agents.
 
-## Output Generation Process
+## Output Process
 
-1. **Generate**: Header (review depth from command) → Summary Table (reviewed categories only) → Issues (by severity) → Cross-Cutting Insights (if any) → Test Recommendations (if applicable)
-2. **Display** in terminal
-3. **Write** to file using generated filename (or `--output-file <path>` if provided)
-4. Print: "Review saved to: [filepath]"
+Generate: Header → Summary Table (reviewed categories only) → Issues (by severity) → Cross-Cutting Insights (if any) → Test Recommendations (if applicable). Display in terminal. Write to file (generated filename or `--output-file`). Print: "Review saved to: [filepath]"
 
----
+## Filename
 
-## Filename Generation
-
-Pattern: `yyyy-mm-dd_few-words-summary_review-type.md`
-
-Summary: 2-4 lowercase-hyphenated words from file names (file-based) or "staged-changes" (staged). Review-type matches the command name. Keep total under 80 chars.
-
-Example: `2026-02-05_auth-middleware_deep-code-review.md`
-
----
+Pattern: `yyyy-mm-dd_few-words-summary_review-type.md` — 2-4 lowercase-hyphenated words from file names or "staged-changes". Review-type matches command name. Under 80 chars. Example: `2026-02-05_auth-middleware_deep-code-review.md`
 
 ## Review Header
 
@@ -30,28 +19,27 @@ Example: `2026-02-05_auth-middleware_deep-code-review.md`
 **Review Depth:** [review-depth-description]
 ```
 
-**No issues:** Standard header, then "No issues found. All checks passed:" with checked categories, then "Files reviewed:" with file list.
+**No issues:** Header → "No issues found. All checks passed:" → checked categories → "Files reviewed:" → file list.
 
 ## Issues Found
 
-When issues are found, output the standard header followed by:
-
-1. **Summary table**: Categories as rows, severity levels as columns (`Critical | Major | Minor | Suggestions`), with a `**Total**` row. Include only reviewed categories (9 for deep, 4 for quick).
-2. **Severity-grouped sections**: `### Critical Issues (Must Fix)`, `### Major Issues (Should Fix)`, `### Minor Issues`, `### Suggestions` — only include sections with issues.
-3. **Cross-Cutting Insights**: After severity sections, before Test Recommendations (see below).
-4. **Test Recommendations**: If applicable.
+Header followed by:
+1. **Summary table**: Categories × severity (`Critical | Major | Minor | Suggestions`) + `**Total**` row. Only reviewed categories (9 deep, 4 quick).
+2. **Severity sections**: `### Critical Issues (Must Fix)`, `### Major Issues (Should Fix)`, `### Minor Issues`, `### Suggestions` — only sections with issues.
+3. **Cross-Cutting Insights** (after severity, before Test Recommendations)
+4. **Test Recommendations** (if applicable)
 5. Footer: `Review saved to: [filepath]`
 
-## Cross-Cutting Insights Section
+## Cross-Cutting Insights
 
-After the regular severity-grouped issues, include cross-cutting insights from the synthesis phase. Format each insight as:
+Only if synthesis agents produced `cross_cutting_insights`; omit section entirely if none.
 
+```
 **[N]. [Insight title]** `[Severity]` `[Primary Category] + [Secondary Category]`
 `path/to/file.ts:line`
-[Description of the cross-cutting concern. Reference which findings from each category are related.]
-[Fix suggestion using diff or prompt format]
-
-**When to include:** Only if synthesis agents produced `cross_cutting_insights`. Appears AFTER severity-grouped issues, BEFORE Test Recommendations. If none, omit section entirely.
+[Description referencing related findings from each category.]
+[Fix using diff or prompt format]
+```
 
 ## Issue Entry Format
 
@@ -68,27 +56,15 @@ User input interpolated directly into SQL query, enabling injection attacks.
 ```
 ```
 
-Consensus badge: `[2 agents]` or `[3+ agents]`, appended after category. Omit if single agent.
+Consensus badge: `[2 agents]` or `[3+ agents]` after category. Omit if single agent.
 
 ## Actionable Fix Formats
 
-Fixes must be directly applicable. **Only report ONE entry per unique issue.**
+**One entry per unique issue.** Fixes must be directly applicable.
 
-### Inline Diffs (fix_type: diff)
+**Inline diffs** (fix_type: diff): Single-location, ≤10 lines, complete drop-in replacement (no `...` or partial code), no changes elsewhere. Format shown in Issue Entry above.
 
-For simple, single-location fixes. Must be complete drop-in replacements (no "..." or partial code), ≤10 lines, requiring no changes elsewhere.
-
-````markdown
-**Fix**:
-```diff
-- const user = db.query(`SELECT * FROM users WHERE id = ${id}`);
-+ const user = db.query('SELECT * FROM users WHERE id = ?', [id]);
-```
-````
-
-### Fix Prompts (fix_type: prompt)
-
-For complex fixes requiring multiple locations, structural changes, or context decisions. Use blockquote format (`>`) for easy copying. Start with action verb, list specific files and changes.
+**Fix prompts** (fix_type: prompt): Multi-location/structural fixes. Blockquote format (`>`), action verb, specific files and changes.
 
 ````markdown
 **Fix prompt** (copy to Claude Code):

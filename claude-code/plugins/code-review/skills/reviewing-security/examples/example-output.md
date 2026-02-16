@@ -15,7 +15,6 @@ This is an example of the expected output format for a security review.
 |----------|-------|
 | Critical | 2 |
 | Major | 1 |
-| Minor | 1 |
 
 ### Critical Issues (Must Fix)
 
@@ -72,26 +71,10 @@ Login endpoint has no rate limiting, enabling brute force attacks.
 
 ---
 
-### Minor Issues
-
-**4. Missing Security Headers** `Minor` `Security`
-`src/app.ts:1-20`
-
-Application does not set recommended security headers.
-
-**Fix prompt** (copy to Claude Code):
-> Add helmet middleware to src/app.ts for security headers:
-> 1. Install helmet: npm install helmet
-> 2. Add app.use(helmet()) after express() initialization
-> This adds CSP, X-Frame-Options, and other security headers.
-
----
-
 ### Summary
 
 - **2 Critical issues** require immediate attention before deployment
 - **1 Major issue** should be addressed to prevent abuse
-- **1 Minor issue** improves defense-in-depth
 
 ---
 Review saved to: .reviewing-security.md

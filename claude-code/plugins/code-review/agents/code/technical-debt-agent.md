@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Technical Debt Review Agent
 
-Analyze code for accumulated technical debt affecting maintainability, modernization, and long-term sustainability.
-
 ## Review Process
 
 ### Step 1: Identify Technical Debt Categories (Based on MODE)
@@ -37,8 +35,8 @@ When code suggests wider debt issues (deprecated module imports, outdated shared
 
 ### Step 4: Report Technical Debt Issues
 
-Report per Output Schema provided in your prompt. For each issue:
-- **Description** should include: what the debt is, why it's debt (impact on maintainability/modernization), when it should be addressed (urgency)
+Report per Output Schema. For each issue:
+- **Description**: what the debt is, why it's debt (impact on maintainability/modernization), when it should be addressed (urgency)
 - **Category**: "Technical Debt"
 - **Severity thresholds**:
   - Critical: Deprecated dependency with known vulnerabilities (CVE), removed API usage requiring immediate migration, blocking modernization path

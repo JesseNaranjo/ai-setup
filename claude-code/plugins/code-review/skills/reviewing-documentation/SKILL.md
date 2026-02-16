@@ -5,8 +5,6 @@ description: Reviews documentation for accuracy, completeness, clarity, consiste
 
 # Documentation Review Skill
 
-Identify documentation issues including accuracy, clarity, completeness, consistency, examples, and structure through targeted documentation-focused review.
-
 ## Documentation Categories Checked
 
 **Accuracy (Critical):**
@@ -65,22 +63,18 @@ This skill includes checks for AI agent instruction file compliance:
 
 See `references/ai-instruction-templates.md` for required headers.
 
----
-
 ## Scope Prioritization
 
-When reviewing directories, automatically prioritize:
+Prioritize:
 - README.md (project entry point)
 - CLAUDE.md (AI assistant instructions)
 - docs/getting-started.md or similar
 - API documentation
 - AI instruction files
 
----
-
 ## False Positives
 
-Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "False Positive Rules" section.
+Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "False Positive Rules".
 
 **Documentation-specific additions** - do NOT flag:
 - Intentionally simplified examples (marked as such)
@@ -88,20 +82,11 @@ Apply all rules from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`
 - Version-specific docs with version clearly noted
 - Pseudocode marked as illustrative
 
----
-
 ## References
 
-For detailed patterns and templates:
-- **`references/ai-instruction-templates.md`** - Templates for AI Agent Instructions files
-- **`references/documentation-best-practices.md`** - Documentation quality patterns
-
----
+- `references/ai-instruction-templates.md` - Templates for AI Agent Instructions files
+- `references/documentation-best-practices.md` - Documentation quality patterns
 
 ## Example Output
 
-See `examples/example-output.md` for samples showing:
-- Accuracy issue with diff fix
-- Broken link with diff fix
-- AI instruction standardization issue with prompt fix
-- Missing section with prompt fix
+`examples/example-output.md`
