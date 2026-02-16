@@ -84,3 +84,4 @@ temp/
 # Runtime files
 *.sock
 *.socket
+.worktrees/
