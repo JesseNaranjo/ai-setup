@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Clarity Review Agent
 
-Analyze documentation for readability and comprehension issues.
-
 ## Review Process
 
 ### Step 1: Identify Clarity Categories (Based on MODE)
@@ -37,7 +35,7 @@ Check sentence complexity (flag >40 words without structure, >3 nested clause le
 
 ### Step 4: Report Clarity Issues
 
-Report per Output Schema provided in your prompt. For each issue, **Description** should include: the specific clarity problem, why it's confusing, who would be confused (audience segment).
+Report per Output Schema. For each issue, **Description** should include: the specific clarity problem, why it's confusing, who would be confused (audience segment).
 
 **Category**: "Clarity"
 
@@ -46,6 +44,10 @@ Report per Output Schema provided in your prompt. For each issue, **Description*
 - Major: Significant confusion likely for target audience
 - Minor: Could be clearer but understandable with effort
 - Suggestion: Style improvement, already understandable
+
+## Output Schema
+
+See Output Schema in additional_instructions for base fields.
 
 **Clarity-specific extra fields:**
 

@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Consistency Review Agent
 
-Analyze documentation for uniformity in terminology, formatting, and style.
-
 ## Review Process
 
 ### Step 1: Identify Consistency Categories (Based on MODE)
@@ -38,7 +36,7 @@ Use Grep to check for formatting consistency across headings (capitalization, pu
 
 ### Step 4: Report Consistency Issues
 
-Report per Output Schema provided in your prompt. For each inconsistency, **Description** should include: what is inconsistent, the variant forms found, recommended canonical form.
+Report per Output Schema. For each inconsistency, **Description** should include: what is inconsistent, the variant forms found, recommended canonical form.
 
 **Category**: "Consistency"
 
@@ -47,6 +45,10 @@ Report per Output Schema provided in your prompt. For each inconsistency, **Desc
 - Major: Significant inconsistency affecting professionalism
 - Minor: Noticeable but doesn't impede understanding
 - Suggestion: Minor polish, very subtle
+
+## Output Schema
+
+See Output Schema in additional_instructions for base fields.
 
 **Consistency-specific extra fields:**
 

@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Examples Review Agent
 
-Analyze code examples in documentation for correctness and completeness.
-
 ## Review Process
 
 ### Step 1: Identify Example Categories (Based on MODE)
@@ -44,7 +42,7 @@ Verify examples are self-contained: required imports shown, necessary initializa
 
 ### Step 5: Report Example Issues
 
-Report per Output Schema provided in your prompt. For each issue, **Description** should include: what's wrong with the example, how it would fail if run, the correct form.
+Report per Output Schema. For each issue, **Description** should include: what's wrong with the example, how it would fail if run, the correct form.
 
 **Category**: "Examples"
 
@@ -53,6 +51,10 @@ Report per Output Schema provided in your prompt. For each issue, **Description*
 - Major: Example has significant errors, wouldn't work as shown
 - Minor: Example works but has issues (deprecated, suboptimal)
 - Suggestion: Could be improved but technically works
+
+## Output Schema
+
+See Output Schema in additional_instructions for base fields.
 
 **Examples-specific extra fields:**
 

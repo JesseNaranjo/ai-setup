@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Accuracy Review Agent
 
-Analyze documentation for factual correctness and code synchronization.
-
 ## Review Process
 
 ### Step 1: Identify Accuracy Categories (Based on MODE)
@@ -56,7 +54,7 @@ Check version consistency: package.json/csproj version vs documented version, de
 
 ### Step 4: Report Inaccuracies
 
-Report per Output Schema provided in your prompt. For each inaccuracy, **Description** should include: what the documentation says, what the code actually does, impact of the discrepancy.
+Report per Output Schema. For each inaccuracy, **Description** should include: what the documentation says, what the code actually does, impact of the discrepancy.
 
 **Category**: "Accuracy"
 
@@ -65,6 +63,10 @@ Report per Output Schema provided in your prompt. For each inaccuracy, **Descrip
 - Major: Significant confusion or subtle bugs
 - Minor: Cosmetic differences, unlikely to cause issues
 - Suggestion: Could be clearer but technically correct
+
+## Output Schema
+
+See Output Schema in additional_instructions for base fields.
 
 **Accuracy-specific extra fields:**
 

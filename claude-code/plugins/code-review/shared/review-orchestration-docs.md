@@ -80,7 +80,7 @@ Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarit
 
 ## Quick Docs Review Sequence (7 invocations)
 
-**Review** (4 parallel): accuracy, clarity, examples, structure. MODE: quick. Models: accuracy, examples (Opus); clarity, structure (Sonnet).
+**Review** (4 parallel): accuracy, clarity, examples, structure. MODE: quick. Models: accuracy, examples (Opus); clarity, structure (Sonnet). Pass: doc contents, related code snippets, AI instruction file status, additional prompt instructions.
 - Accuracy: Critical mismatches, wrong function names, broken examples
 - Clarity: Incomprehensible sections, undefined critical acronyms
 - Examples: Syntax errors, missing critical imports, wrong API calls
@@ -110,6 +110,8 @@ Invoke synthesis agents multiple times in parallel with different category pairs
 Issues grouped by file, then by validator model. One validator per file. Quick reviews validate **Critical and Major only** (Minor/Suggestions skip).
 
 **Cross-cutting insights:** Validated AFTER synthesis, BEFORE main validation. Always **Opus**. Checks: (1) Both `related_findings` references exist and aren't false positives, (2) genuine interaction between the two, (3) not a duplicate of either original, (4) adds value beyond individual findings. Duplicates of originals → INVALID.
+
+**Quick reviews:** Cross-cutting insights still use Opus (novel cross-category connections require nuanced judgment).
 
 **Skip validation for:** Issues in test files (unless testing production paths), style suggestions without functional impact, documentation suggestions.
 

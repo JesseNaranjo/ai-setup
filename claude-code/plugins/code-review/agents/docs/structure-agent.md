@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Structure Review Agent
 
-Analyze documentation for organization, navigation, and structural integrity.
-
 ## Review Process
 
 ### Step 1: Identify Structure Categories (Based on MODE)
@@ -54,7 +52,7 @@ See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruct
 
 ### Step 6: Report Structure Issues
 
-Report per Output Schema provided in your prompt. For each issue, **Description** should include: what's wrong structurally, how it affects navigation/usability, recommended fix.
+Report per Output Schema. For each issue, **Description** should include: what's wrong structurally, how it affects navigation/usability, recommended fix.
 
 **Category**: "Structure"
 
@@ -63,6 +61,10 @@ Report per Output Schema provided in your prompt. For each issue, **Description*
 - Major: Significant structural problem affecting usability
 - Minor: Could be better organized but still usable
 - Suggestion: Enhancement for better structure
+
+## Output Schema
+
+See Output Schema in additional_instructions for base fields.
 
 **Structure-specific extra fields:**
 

@@ -7,8 +7,6 @@ tools: ["Read", "Grep", "Glob"]
 
 # Completeness Review Agent
 
-Analyze documentation for coverage gaps and missing content.
-
 ## Review Process
 
 ### Step 1: Identify Completeness Categories (Based on MODE)
@@ -34,7 +32,7 @@ Use Grep to discover what should be documented: exported APIs, CLI commands, con
 
 ### Step 3: Report Completeness Issues
 
-Report per Output Schema provided in your prompt. For each gap, **Description** should include: what is missing, why it's needed, what problems its absence causes.
+Report per Output Schema. For each gap, **Description** should include: what is missing, why it's needed, what problems its absence causes.
 
 **Category**: "Completeness"
 
@@ -43,6 +41,10 @@ Report per Output Schema provided in your prompt. For each gap, **Description** 
 - Major: Missing important documentation, causes significant friction
 - Minor: Would be helpful but users can figure it out
 - Suggestion: Nice to have, enhances documentation
+
+## Output Schema
+
+See Output Schema in additional_instructions for base fields.
 
 **Completeness-specific extra fields:**
 
