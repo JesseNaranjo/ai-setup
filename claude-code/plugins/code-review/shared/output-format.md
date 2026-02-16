@@ -13,29 +13,15 @@ Authoritative output schema reference for all agents.
 
 ## Filename Generation
 
-Generate output filenames following this pattern:
-`yyyy-mm-dd_few-words-summary_review-type.md`
+Pattern: `yyyy-mm-dd_few-words-summary_review-type.md`
 
-### Components
+Summary: 2-4 lowercase-hyphenated words from file names (file-based) or "staged-changes" (staged). Review-type matches the command name. Keep total under 80 chars.
 
-- `yyyy-mm-dd`: Current date (e.g., `2026-02-05`)
-- `few-words-summary`: 2-4 words describing the review scope, derived from:
-  - File names being reviewed (for file-based commands)
-  - "staged-changes" (for staged commands)
-  - Main feature/component name when identifiable
-- `review-type`: The command type (`deep-code-review`, `quick-code-review`, etc.)
-
-### Rules
-
-- Use lowercase with hyphens. Keep summary to 2-4 words.
-- Truncate to keep total filename under 80 characters.
-- For staged commands, always use "staged-changes" as the summary.
+Example: `2026-02-05_auth-middleware_deep-code-review.md`
 
 ---
 
 ## Review Header
-
-All reviews start with this header:
 
 ```markdown
 ## Code Review
@@ -44,9 +30,7 @@ All reviews start with this header:
 **Review Depth:** [review-depth-description]
 ```
 
-## No Issues Found
-
-When no issues are found, use the standard header followed by "No issues found. All checks passed:" with only the categories that were actually checked, then "Files reviewed:" with the file list.
+**No issues:** Standard header, then "No issues found. All checks passed:" with checked categories, then "Files reviewed:" with file list.
 
 ## Issues Found
 
@@ -71,30 +55,24 @@ After the regular severity-grouped issues, include cross-cutting insights from t
 
 ## Issue Entry Format
 
-Each issue entry follows this format:
-
 ```markdown
-**[N]. [Issue title]** `[Severity]` `[Category]` [Consensus badge if applicable]
-`path/to/file.ts:line-range`
+**1. SQL injection in user query** `Critical` `Security` `[2 agents]`
+`src/api/users.ts:42-48`
 
-[Description of the issue - what it is and why it matters]
+User input interpolated directly into SQL query, enabling injection attacks.
 
-[For small fixes - suggestion block]
-[For larger fixes - prompt block]
+**Fix**:
+```diff
+- const user = db.query(`SELECT * FROM users WHERE id = ${id}`);
++ const user = db.query('SELECT * FROM users WHERE id = ?', [id]);
+```
 ```
 
-Badges: `` `Critical` `` / `` `Major` `` / `` `Minor` `` / `` `Suggestion` `` for severity. `[2 agents]` or `[3+ agents]` for consensus. File location: `` `src/utils/helper.ts:42-48` ``
+Consensus badge: `[2 agents]` or `[3+ agents]`, appended after category. Omit if single agent.
 
 ## Actionable Fix Formats
 
 Fixes must be directly applicable. **Only report ONE entry per unique issue.**
-
-### Fix Type Classification
-
-| Fix Type | When to Use | Format |
-|----------|-------------|--------|
-| `diff` | Single location, ≤10 lines, exact replacement known | Inline diff block |
-| `prompt` | Multi-location, structural changes, or requires context decisions | Claude Code prompt |
 
 ### Inline Diffs (fix_type: diff)
 

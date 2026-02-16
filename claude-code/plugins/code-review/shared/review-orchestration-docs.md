@@ -10,7 +10,7 @@ This document defines agent invocation patterns and execution sequences for docu
 
 ## Agent Invocation
 
-Always pass the `model` parameter explicitly (see Documentation Review Model Selection table below).
+Always pass the `model` parameter explicitly (see Documentation Review Model Selection section below).
 
 ### Prompt Schema
 
@@ -27,25 +27,10 @@ Always pass the `model` parameter explicitly (see Documentation Review Model Sel
 ### File Entry Schema
 
 **Critical files** (has_changes: true, tier: "critical"):
+`path` (string), `diff` (unified diff), `full_content` (complete file)
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `path` | string | Relative file path |
-| `has_changes` | boolean | `true` |
-| `tier` | string | `"critical"` |
-| `diff` | string | Unified diff content |
-| `full_content` | string | Complete file content |
-
-**Peripheral files** (staged reviews — unchanged context files):
-
-| Field | Type | Notes |
-|-------|------|-------|
-| `path` | string | Relative file path |
-| `has_changes` | boolean | `false` |
-| `tier` | string | `"peripheral"` |
-| `preview` | string | First ~50 lines |
-| `line_count` | integer | Total lines in file |
-| `full_content_available` | boolean | `true` (agent can use Read tool) |
+**Peripheral files** (staged reviews — unchanged context files, has_changes: false, tier: "peripheral"):
+`path` (string), `preview` (first ~50 lines), `line_count` (integer), `full_content_available`: true (agent uses Read tool)
 
 End the prompt with: `Return findings as YAML per agent examples in your agent file.`
 
@@ -53,42 +38,24 @@ End the prompt with: `Return findings as YAML per agent examples in your agent f
 
 #### Agent Common Content Distribution
 
-The orchestrator distributes relevant portions of the content below to each agent via `additional_instructions`, eliminating per-agent file reads.
-
-**Distribution per agent** (append to `additional_instructions`):
-1. **Output schema** from Agent Common Instructions below
-2. **MODE definition** matching the current mode from Agent Common Instructions below
-3. **General false positive rules** from Agent Common Instructions below
-4. **Category-specific false positive rules** — extract ONLY the agent's category from Category-Specific False Positive Rules below
+**Per agent** (append to `additional_instructions`):
+1. Output schema, MODE definition, and false positive rules from Agent Common Instructions below
+2. Category-specific FP rules — extract ONLY the agent's category
 
 Synthesis agents are excluded from this distribution.
 
 ### Agent Common Instructions (Distributed to All Agents)
 
-#### Standard Agent Input
-
-**Required:** files_to_review (diffs/content), project_type (nodejs/dotnet/both), MODE (thorough/gaps/quick)
-**Optional:** skill_instructions (skill-derived focus), previous_findings (gaps mode deduplication)
-**Tools:** Read, Grep, Glob
-
 #### MODE Parameter
 
-- **thorough**: Comprehensive review, all issues in agent's domain
-- **gaps**: Subtle issues missed by thorough; receives previous_findings to skip duplicates
-- **quick**: Critical issues only (highest-impact, merge-blocking)
+MODE: thorough (all issues), gaps (subtle issues missed; dedup against previous_findings), quick (critical/merge-blocking only). Deep reviews skip pre-existing and silenced issues. Quick reviews: only blocking issues, skip theoretical edge cases.
 
 #### False Positive Rules
 
-**Do NOT flag:**
-- **Correct Code**: Non-obvious but valid edge case handling or intentional patterns
-- **Linter Territory**: Formatting/import issues handled by linters (do NOT run linters to verify)
-- **Pedantic Concerns**: Minor style preferences a senior engineer would not flag
+Do NOT flag:
 - **Pre-existing Issues**: Issues existing before current changes, not modified
 - **Scope Limitations**: General quality unless required in AI instructions; test code unless reviewing tests; theoretical edge cases extremely unlikely in practice
 - **Silenced Issues**: Code with lint-disable/suppress comments or documented suppressions
-
-**Deep review** can flag more issues but still skip pre-existing, silenced, and pure style.
-**Quick review**: only blocking issues; ignore minor style, skip theoretical edge cases.
 
 #### Output Schema
 
@@ -196,15 +163,11 @@ See each agent file for category-specific focus areas (what subtle issues thorou
 
 ## Documentation Review Model Selection (Authoritative Source)
 
-| Agent | Model (thorough) | Model (gaps) | Model (quick) |
-|-------|------------------|--------------|---------------|
-| accuracy-agent | opus | sonnet | opus |
-| clarity-agent | sonnet | N/A | sonnet |
-| completeness-agent | opus | sonnet | N/A |
-| consistency-agent | sonnet | sonnet | N/A |
-| examples-agent | opus | N/A | opus |
-| structure-agent | sonnet | N/A | sonnet |
-| synthesis-docs-agent | sonnet | N/A | sonnet |
+Default model: **Sonnet** for all agents and modes.
+
+**Opus exceptions (thorough):** accuracy, completeness, examples
+**Opus exceptions (quick):** accuracy, examples
+**Gaps mode:** Always Sonnet (no exceptions)
 
 ## Synthesis Invocation
 

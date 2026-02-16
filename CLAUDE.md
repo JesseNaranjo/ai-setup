@@ -348,7 +348,7 @@ Each command file inlines its pre-review setup steps (Steps 1-6) directly rather
 
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
-| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~72 | Only one loaded per execution; extracting adds a file read |
+| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~49 | Only one loaded per execution; extracting adds a file read |
 | `validation-rules-code.md` / `validation-rules-docs.md` | Batch Validation Process, Aggregation Rules | ~90 | Only one loaded per execution; extracting adds a file read |
 
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.

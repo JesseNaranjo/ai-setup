@@ -11,7 +11,7 @@ This document defines agent invocation patterns and execution sequences for code
 
 ## Agent Invocation
 
-Always pass the `model` parameter explicitly (see Code Review Model Selection table below).
+Always pass the `model` parameter explicitly (see Code Review Model Selection section below).
 
 ### Prompt Schema
 
@@ -20,8 +20,8 @@ Always pass the `model` parameter explicitly (see Code Review Model Selection ta
 | `MODE` | string | Yes | `thorough`, `gaps`, or `quick` |
 | `project_type` | string | Yes | `nodejs`, `dotnet`, or both |
 | `files_to_review` | list | Yes | See File Entry Schema below |
-| `ai_instructions` | list | Conditional | Full content for architecture/compliance agents; summary-only for others (see AI Instructions Distribution) |
-| `related_tests` | list | Conditional | Only for bug-detection, technical-debt, test-coverage agents (see Test File Distribution) |
+| `ai_instructions` | list | Conditional | Full content for architecture/compliance agents; summary-only for others |
+| `related_tests` | list | Conditional | Only for bug-detection, technical-debt, test-coverage agents |
 | `previous_findings` | list | Gaps only | Prior findings for deduplication. Each entry: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
 | `skill_instructions` | object | Optional | From `--skills` argument. Fields: `focus_areas` (list), `checklist` (list of {category, severity, items}), `auto_validate` (list), `false_positive_rules` (list), `methodology` ({approach, steps, questions}) |
 | `additional_instructions` | string | Optional | Combined content from settings file body + `--prompt` argument + orchestrator-injected rules (gaps behavior, pre-existing detection) |
@@ -29,114 +29,43 @@ Always pass the `model` parameter explicitly (see Code Review Model Selection ta
 ### File Entry Schema
 
 **Critical files** (has_changes: true, tier: "critical"):
+`path` (string), `diff` (unified diff), `full_content` (complete file)
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `path` | string | Relative file path |
-| `has_changes` | boolean | `true` |
-| `tier` | string | `"critical"` |
-| `diff` | string | Unified diff content |
-| `full_content` | string | Complete file content |
-
-**Peripheral files** (staged reviews — unchanged context files):
-
-| Field | Type | Notes |
-|-------|------|-------|
-| `path` | string | Relative file path |
-| `has_changes` | boolean | `false` |
-| `tier` | string | `"peripheral"` |
-| `preview` | string | First ~50 lines |
-| `line_count` | integer | Total lines in file |
-| `full_content_available` | boolean | `true` (agent can use Read tool) |
+**Peripheral files** (staged reviews — unchanged context files, has_changes: false, tier: "peripheral"):
+`path` (string), `preview` (first ~50 lines), `line_count` (integer), `full_content_available`: true (agent uses Read tool)
 
 End the prompt with: `Return findings as YAML per agent examples in your agent file.`
 
 ### Content Distribution Optimization
 
-#### Test File Distribution
-
-Pass `related_tests` content ONLY to agents that analyze test relationships:
-
-| Agent | Receives `related_tests` | Rationale |
-|-------|--------------------------|-----------|
-| bug-detection-agent | Yes | Uses test files to understand expected behavior |
-| technical-debt-agent | Yes | Identifies untested deprecated code |
-| test-coverage-agent | Yes | Primary consumer - analyzes test coverage |
-| All other agents | No | Can use Grep/Glob if cross-file analysis warrants |
-
-#### AI Instructions Distribution
-
-Pass full `ai_instructions` content ONLY to agents that need project-specific rules:
-
-| Agent | Receives full `ai_instructions` | Rationale |
-|-------|--------------------------------|-----------|
-| architecture-agent | Yes | Checks documented architectural patterns and conventions |
-| compliance-agent | Yes | Primary consumer - verifies adherence to documented standards |
-| All other agents | Summary only | Receive: "AI instructions exist at [paths]. Use Grep to check specific rules if needed." |
-
 #### Agent Common Content Distribution
 
-The orchestrator distributes relevant portions of the content below to each agent via `additional_instructions`, eliminating per-agent file reads.
+**Per agent** (append to `additional_instructions`):
+1. Output schema, MODE definition, and false positive rules from Agent Common Instructions below
+2. Category-specific FP rules — extract ONLY the agent's category
+3. Language-specific checks — extract agent's anchor from detected language files
+4. LSP diagnostic codes — if available, extract agent's matching category rows plus Agent Usage Guidelines from lsp-integration.md
 
-**Additional source file (read by orchestrator, not by agents):**
-- `${CLAUDE_PLUGIN_ROOT}/languages/{detected}.md` per-category sections
+**Language anchors:** architecture→#architecture, bugs→#bugs, errors→#errors, performance→#performance, security→#security, debt→#debt, tests→#tests. Agents without anchors (api-contracts, compliance) skip step 3. Synthesis agents skip all distribution.
 
-**Distribution per agent** (append to `additional_instructions`):
-1. **Output schema** from Agent Common Instructions below
-2. **MODE definition** matching the current mode from Agent Common Instructions below
-3. **General false positive rules** from Agent Common Instructions below
-4. **Category-specific false positive rules** — extract ONLY the agent's category from Category-Specific False Positive Rules below
-5. **Language-specific checks** — extract ONLY the agent's category anchor from detected language files
+**LSP categories:** architecture→Architecture, bugs→Bugs, errors→Error Handling, performance→Performance, security→Security. If LSP unavailable, skip entirely.
 
-| Agent | Language anchor |
-|-------|----------------|
-| architecture-agent | `{#architecture}` |
-| bug-detection-agent | `{#bugs}` |
-| error-handling-agent | `{#errors}` |
-| performance-agent | `{#performance}` |
-| security-agent | `{#security}` |
-| technical-debt-agent | `{#debt}` |
-| test-coverage-agent | `{#tests}` |
-
-Agents without language anchors (api-contracts, compliance) skip step 5. Synthesis agents are excluded from this distribution.
-6. **LSP diagnostic codes** — if `lsp_available` in discovery results, extract ONLY the agent's category rows from the Diagnostic Code Mapping tables in `lsp-integration.md` (already read during context discovery), plus the Agent Usage Guidelines for detected languages
-
-| Agent | LSP Category filter |
-|-------|---------------------|
-| architecture-agent | Architecture |
-| bug-detection-agent | Bugs |
-| error-handling-agent | Error Handling |
-| performance-agent | Performance |
-| security-agent | Security |
-
-Agents not in this table skip step 6. If LSP unavailable, skip entirely (zero overhead).
+**Selective distribution:**
+- `related_tests` → bug-detection, technical-debt, test-coverage only (others use Grep/Glob on-demand)
+- Full `ai_instructions` → architecture, compliance only (others get path summary)
 
 ### Agent Common Instructions (Distributed to All Agents)
 
-#### Standard Agent Input
-
-**Required:** files_to_review (diffs/content), project_type (nodejs/dotnet/both), MODE (thorough/gaps/quick)
-**Optional:** skill_instructions (skill-derived focus), previous_findings (gaps mode deduplication)
-**Tools:** Read, Grep, Glob
-
 #### MODE Parameter
 
-- **thorough**: Comprehensive review, all issues in agent's domain
-- **gaps**: Subtle issues missed by thorough; receives previous_findings to skip duplicates
-- **quick**: Critical issues only (highest-impact, merge-blocking)
+MODE: thorough (all issues), gaps (subtle issues missed; dedup against previous_findings), quick (critical/merge-blocking only). Deep reviews skip pre-existing and silenced issues. Quick reviews: only blocking issues, skip theoretical edge cases.
 
 #### False Positive Rules
 
-**Do NOT flag:**
-- **Correct Code**: Non-obvious but valid edge case handling or intentional patterns
-- **Linter Territory**: Formatting/import issues handled by linters (do NOT run linters to verify)
-- **Pedantic Concerns**: Minor style preferences a senior engineer would not flag
+Do NOT flag:
 - **Pre-existing Issues**: Issues existing before current changes, not modified
 - **Scope Limitations**: General quality unless required in AI instructions; test code unless reviewing tests; theoretical edge cases extremely unlikely in practice
 - **Silenced Issues**: Code with lint-disable/suppress comments or documented suppressions
-
-**Deep review** can flag more issues but still skip pre-existing, silenced, and pure style.
-**Quick review**: only blocking issues; ignore minor style, skip theoretical edge cases.
 
 #### Output Schema
 
@@ -240,18 +169,11 @@ See each agent file for category-specific focus areas (what subtle issues thorou
 
 ## Code Review Model Selection (Authoritative Source)
 
-| Agent | Model (thorough) | Model (gaps) | Model (quick) |
-|-------|------------------|--------------|---------------|
-| api-contracts-agent | sonnet | N/A | N/A |
-| architecture-agent | opus | N/A | N/A |
-| bug-detection-agent | opus | sonnet | opus |
-| compliance-agent | sonnet | sonnet | N/A |
-| error-handling-agent | sonnet | N/A | sonnet |
-| performance-agent | opus | sonnet | N/A |
-| security-agent | opus | sonnet | opus |
-| synthesis-code-agent | sonnet | N/A | sonnet |
-| technical-debt-agent | opus | sonnet | N/A |
-| test-coverage-agent | sonnet | N/A | sonnet |
+Default model: **Sonnet** for all agents and modes.
+
+**Opus exceptions (thorough):** architecture, bug-detection, performance, security, technical-debt
+**Opus exceptions (quick):** bug-detection, security
+**Gaps mode:** Always Sonnet (no exceptions)
 
 ## Language-Specific Focus
 
