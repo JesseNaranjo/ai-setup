@@ -1,5 +1,14 @@
 # Performance Patterns
 
+## Contents
+- Algorithmic Complexity
+- Database Performance
+- Memory Issues
+- Async/Await Performance
+- String Concatenation in Loops
+- .NET Specific
+- Quick Reference
+
 ## Algorithmic Complexity
 
 ### O(n^2) Nested Loops

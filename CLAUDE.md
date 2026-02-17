@@ -19,24 +19,16 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 ## Plugin Commands
 
-### Code Review Commands
+### Review Commands
 
 | Command | Description |
 |---------|-------------|
-| `/deep-code-review <file1> [file2...] [--output-file <path>]` | Deep review: Phase 1 (9 agents) → Phase 2 (5 gaps agents) → Synthesis (5 agents) |
-| `/deep-code-review-staged [--output-file <path>]` | Deep review of staged git changes with full pipeline |
-| `/quick-code-review <file1> [file2...] [--output-file <path>]` | Quick review (4 agents + 3 synthesis agents) |
-| `/quick-code-review-staged [--output-file <path>]` | Quick review of staged git changes (7 agent invocations) |
-
-### Documentation Review Commands
-
-| Command | Description |
-|---------|-------------|
-| `/deep-docs-review [file1...] [--output-file <path>]` | Deep docs review: Phase 1 (6 agents) → Phase 2 (3 gaps agents) → Synthesis (4 agents) |
-| `/quick-docs-review [file1...] [--output-file <path>]` | Quick docs review (4 agents + 3 synthesis agents) |
+| `/code-review <file1> [file2...] [--depth deep\|quick] [--output-file <path>]` | Code review with configurable depth (deep: 19 agents, quick: 7) |
+| `/code-review-staged [--depth deep\|quick] [--output-file <path>]` | Code review of staged changes with configurable depth |
+| `/docs-review [file1...] [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: 13 agents, quick: 7) |
 
 **Note:** All review commands also accept:
-- `--language nodejs|react|dotnet` to force language detection
+- `--language nodejs|react|dotnet` to force language detection (code reviews only)
 - `--prompt "<instructions>"` to pass additional instructions to agents
 - `--skills <skill1,skill2,...>` to enable skill-informed orchestration (orchestrator interprets skills and generates tailored `skill_instructions` per agent)
 
@@ -60,12 +52,9 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata
 ├── commands/                        # Orchestration entry points (inline steps, reference shared/; see "Commands Directory" convention)
-│   ├── deep-code-review.md          # Deep file review (19 agent invocations)
-│   ├── deep-code-review-staged.md   # Deep staged review (19 agent invocations)
-│   ├── deep-docs-review.md          # Deep documentation review (13 invocations)
-│   ├── quick-code-review.md         # Quick file review (7 invocations)
-│   ├── quick-code-review-staged.md  # Quick staged review (7 invocations)
-│   └── quick-docs-review.md         # Quick documentation review (7 invocations)
+│   ├── code-review.md              # Code review (deep: 19, quick: 7 agent invocations)
+│   ├── code-review-staged.md       # Staged code review (deep: 19, quick: 7 agent invocations)
+│   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations)
 ├── agents/                          # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                        # Code review agents (10 agents)
 │   │   ├── api-contracts-agent.md   # API compatibility
@@ -103,7 +92,6 @@ claude-code/plugins/code-review/
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
 │   ├── docs-processing.md           # Docs input validation and content gathering
-│   ├── example-output.md            # Shared example output (development-time reference)
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
@@ -337,18 +325,18 @@ This applies to:
 
 ### Command Step Inlining
 
-Each command file inlines its pre-review setup steps (Steps 1-6) directly rather than referencing a shared common-steps file. Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline. The 4 code review commands share ~40 lines of identical inlined content; the 2 docs review commands use a different layout.
+Each command file inlines its pre-review setup steps (Steps 1-6) directly rather than referencing a shared common-steps file. Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline. The 2 code review commands share ~40 lines of identical inlined content; the 1 docs review command uses a different layout.
 
 **Rationale:** A shared `command-common-steps.md` was tried but created a second level of indirection (commands → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps commands self-contained with one-hop references to shared files.
 
-**Revisit if:** command count exceeds 6, shared steps diverge significantly, or a way is found to share steps without extra Opus context files.
+**Revisit if:** command count exceeds 4, shared steps diverge significantly, or a way is found to share steps without extra Opus context files.
 
 ### Intentional Cross-File Duplication
 
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
 | `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~70 | Only one loaded per execution; extracting adds a file read |
-| `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation, Output Format | ~145 | Same rationale: only one loaded per execution |
+| `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation, Output Format | ~110 | Same rationale: only one loaded per execution |
 
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.
 

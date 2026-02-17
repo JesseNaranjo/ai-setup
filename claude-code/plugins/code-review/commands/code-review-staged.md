@@ -1,14 +1,15 @@
 ---
-name: quick-code-review-staged
+name: code-review-staged
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Quick code review of staged changes with 7 agent invocations
-argument-hint: "[--output-file <path>] [--language dotnet|nodejs|react] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
+description: Code review of staged git changes with configurable depth (deep: 19 agent invocations, quick: 7)
+argument-hint: "[--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a fast code review using 4 agents (7 invocations total) for staged git changes, focusing on bugs, security, error handling, and test coverage.
+Perform a code review for staged git changes. Depth controls the review pipeline: deep uses all 9 agents (19 invocations total) with thorough + gaps modes for maximum coverage; quick uses 4 agents (7 invocations) focusing on bugs, security, error handling, and test coverage.
 
 Parse arguments from `$ARGUMENTS`:
+- Optional: `--depth deep|quick` (default: `deep`)
 - Optional: `--output-file <path>` to specify output location (default: see Filename Generation in review-orchestration-code.md)
 - Optional: `--language dotnet|nodejs|react` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
@@ -42,8 +43,17 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 
 ---
 
-## Step 7: Quick Review
+## Step 7: Review Execution
 
+**If depth == deep:**
+Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
+- Use the **Code Review Model Selection** table for model assignments
+- Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
+- Follow all CRITICAL WAIT barriers between phases
+
+Each agent receives staged diff and full file content per the tier classification in `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md`.
+
+**If depth == quick:**
 Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
 - Use the **Code Review Model Selection** table for model assignments
 - Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
@@ -63,7 +73,6 @@ Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_
 
 Validate, aggregate, and generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`. Write to file.
 
-**Output config:** Review Type: "Quick (7 invocations)", Categories: 4 only
-**Note:** Quick review should be extra conservative - skip theoretical edge cases.
-
-*For comprehensive review (compliance, performance, architecture, API), run `/deep-code-review-staged`*
+**Output config (deep):** Review Type: "Deep (19 invocations)", Categories: All 9
+**Output config (quick):** Review Type: "Quick (7 invocations)", Categories: 4 only
+**Note (quick only):** Quick review should be extra conservative - skip theoretical edge cases.

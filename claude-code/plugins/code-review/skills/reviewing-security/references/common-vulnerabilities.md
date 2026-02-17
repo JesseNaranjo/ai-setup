@@ -1,5 +1,15 @@
 # Common Security Vulnerabilities
 
+## Contents
+- Injection Vulnerabilities
+- Authentication & Authorization
+- Sensitive Data Exposure
+- Cryptographic Issues
+- Input Validation
+- Unsafe Deserialization
+- Security Headers
+- Quick Detection Patterns
+
 ## Injection Vulnerabilities
 
 ### SQL Injection

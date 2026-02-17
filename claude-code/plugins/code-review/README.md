@@ -20,56 +20,28 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ## Commands
 
-### `/deep-code-review`
+### `/code-review`
 
-Comprehensive code review using all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes for maximum coverage.
+Code review with configurable depth. Deep (default) uses all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/deep-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/code-review <file1> [file2...] [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
-### `/deep-code-review-staged`
+### `/code-review-staged`
 
-Comprehensive code review of staged git changes using all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes.
+Code review of staged git changes with configurable depth. Deep (default) uses all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes. Quick uses 4 agents (7 invocations) focusing on critical issues.
 
 ```bash
-/deep-code-review-staged [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/code-review-staged [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
-### `/quick-code-review`
+### `/docs-review`
 
-Fast review using 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
-
-```bash
-/quick-code-review <file1> [file2...] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
-```
-
-### `/quick-code-review-staged`
-
-Fast review of staged git changes using 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
+Documentation review with configurable depth. Deep (default) uses all 6 documentation agents (13 invocations) with thorough + gaps modes. Quick uses 4 agents (7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no files are specified, discovers and reviews all documentation files (README.md, CLAUDE.md, docs/*, etc.).
 
 ```bash
-/quick-code-review-staged [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
-```
-
-## Documentation Review Commands
-
-### `/deep-docs-review`
-
-Comprehensive documentation review using all 6 documentation agents (13 invocations) with thorough + gaps modes.
-
-```bash
-/deep-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
-```
-
-If no files are specified, discovers and reviews all documentation files (README.md, CLAUDE.md, docs/*, etc.).
-
-### `/quick-docs-review`
-
-Fast documentation review using 4 agents (7 invocations) focusing on critical issues (accuracy, clarity, examples, structure).
-
-```bash
-/quick-docs-review [file1...] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
+/docs-review [file1...] [--depth deep|quick] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 > **Note:** Documentation commands support the `reviewing-documentation` skill which provides focused documentation quality checks across all 6 documentation agents (accuracy, clarity, completeness, consistency, examples, structure).
@@ -201,25 +173,25 @@ Use `--prompt` to pass ad-hoc instructions to all review agents without editing 
 #### Example: Brainstorming-Style Deep Exploration
 
 ```bash
-/deep-code-review src/auth/*.ts --prompt "Before flagging issues, brainstorm multiple attack vectors and failure modes for each function. Consider: What assumptions does this code make? What happens if those assumptions are violated? What edge cases might the original developer have missed? Explore creatively before concluding."
+/code-review src/auth/*.ts --prompt "Before flagging issues, brainstorm multiple attack vectors and failure modes for each function. Consider: What assumptions does this code make? What happens if those assumptions are violated? What edge cases might the original developer have missed? Explore creatively before concluding."
 ```
 
 #### Example: Systematic Checklist Approach
 
 ```bash
-/quick-code-review-staged --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
+/code-review-staged --depth quick --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
 ```
 
 #### Example: Domain-Specific Focus
 
 ```bash
-/deep-code-review src/api/payments.ts --prompt "This is a payment processing module. Focus on: financial calculation precision, transaction atomicity, audit trail completeness, PCI compliance patterns. Flag anything that could lead to money loss or compliance violations."
+/code-review src/api/payments.ts --prompt "This is a payment processing module. Focus on: financial calculation precision, transaction atomicity, audit trail completeness, PCI compliance patterns. Flag anything that could lead to money loss or compliance violations."
 ```
 
 #### Example: Threat Model Guidance
 
 ```bash
-/deep-code-review src/api/*.ts --prompt "Assume an attacker has valid credentials but is trying to access other users' data. Focus on authorization checks, IDOR vulnerabilities, and data leakage in error messages."
+/code-review src/api/*.ts --prompt "Assume an attacker has valid credentials but is trying to access other users' data. Focus on authorization checks, IDOR vulnerabilities, and data leakage in error messages."
 ```
 
 #### Combining with Project Settings
@@ -241,7 +213,7 @@ Use systematic analysis: check each security category even when code appears saf
 Then use `--prompt` for one-off additions:
 
 ```bash
-/deep-code-review src/auth/*.ts --prompt "Additionally, this PR introduces OAuth. Verify token handling follows OWASP guidelines."
+/code-review src/auth/*.ts --prompt "Additionally, this PR introduces OAuth. Verify token handling follows OWASP guidelines."
 ```
 
 #### Effective Prompt Strategies
@@ -275,19 +247,19 @@ Use `--skills` to enhance reviews with skill-specific knowledge and methodologie
 
 **Embed brainstorming methodology:**
 ```bash
-/deep-code-review src/auth/*.ts --skills superpowers:brainstorming
+/code-review src/auth/*.ts --skills superpowers:brainstorming
 ```
 All agents will explore multiple interpretations and failure modes before flagging issues.
 
 **Combine multiple skills:**
 ```bash
-/deep-code-review src/api/*.ts --skills reviewing-security,superpowers:systematic-debugging
+/code-review src/api/*.ts --skills reviewing-security,superpowers:systematic-debugging
 ```
 Security agent receives targeted security checklists; all agents receive debugging methodology.
 
 **Use with --prompt:**
 ```bash
-/deep-code-review src/payments.ts --skills superpowers:brainstorming --prompt "Focus on financial calculation precision"
+/code-review src/payments.ts --skills superpowers:brainstorming --prompt "Focus on financial calculation precision"
 ```
 Combines skill methodology with specific instructions.
 
@@ -344,12 +316,9 @@ code-review/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata
 ├── commands/
-│   ├── deep-docs-review.md      # Deep documentation review (13 invocations)
-│   ├── deep-code-review.md      # Deep file review (19 invocations)
-│   ├── deep-code-review-staged.md    # Deep staged review (19 invocations)
-│   ├── quick-docs-review.md     # Quick documentation review (7 invocations)
-│   ├── quick-code-review.md          # Quick file review (7 invocations)
-│   └── quick-code-review-staged.md   # Quick staged review (7 invocations)
+│   ├── code-review.md              # Code review (deep: 19, quick: 7 invocations)
+│   ├── code-review-staged.md       # Staged code review (deep: 19, quick: 7 invocations)
+│   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations)
 ├── agents/                      # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                    # Code review agents (10 agents)
 │   │   ├── api-contracts-agent.md   # API compatibility
@@ -384,7 +353,6 @@ code-review/
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
-│   ├── example-output.md            # Shared example output (development-time reference)
 │   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode, agent common instructions
@@ -443,19 +411,19 @@ Each agent accepts a MODE parameter:
 
 **Code Reviews:**
 
-| Command | Agents | Mode Invocations | Total Invocations |
-|---------|--------|------------------|-------------------|
-| `/deep-code-review` | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/deep-code-review-staged` | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/quick-code-review` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
-| `/quick-code-review-staged` | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+| Command | Depth | Agents | Mode Invocations | Total Invocations |
+|---------|-------|--------|------------------|-------------------|
+| `/code-review` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/code-review` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+| `/code-review-staged` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/code-review-staged` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 
 **Documentation Reviews:**
 
-| Command | Agents | Mode Invocations | Total Invocations |
-|---------|--------|------------------|-------------------|
-| `/deep-docs-review` | All 6 docs | thorough (6) + gaps (3) + synthesis (4) | 13 |
-| `/quick-docs-review` | 4 (accuracy, clarity, examples, structure) | quick (4) + synthesis (3) | 7 |
+| Command | Depth | Agents | Mode Invocations | Total Invocations |
+|---------|-------|--------|------------------|-------------------|
+| `/docs-review` | deep | All 6 docs | thorough (6) + gaps (3) + synthesis (4) | 13 |
+| `/docs-review` | quick | 4 (accuracy, clarity, examples, structure) | quick (4) + synthesis (3) | 7 |
 
 ## Severity Levels
 
@@ -539,7 +507,7 @@ The query uses string concatenation with user input.
 
 ```bash
 git add src/feature.ts
-/quick-code-review-staged
+/code-review-staged --depth quick
 git commit -m "Add feature"
 ```
 
@@ -547,7 +515,7 @@ git commit -m "Add feature"
 
 ```bash
 git add .
-/deep-code-review-staged
+/code-review-staged
 ```
 
 ### Targeted Security Audit
@@ -557,7 +525,7 @@ Use the reviewing-security skill for focused security analysis.
 ### Legacy Code Audit
 
 ```bash
-/deep-code-review src/legacy/critical-module.ts
+/code-review src/legacy/critical-module.ts
 ```
 
 ## Customization
@@ -635,7 +603,7 @@ Create a new `.md` file in `commands/` with the appropriate frontmatter.
 - Restart Claude Code to reload plugins
 
 **Cross-cutting issues missed:**
-- Use `/deep-code-review` which includes synthesis phase
+- Use `/code-review` which includes synthesis phase
 - Explicitly ask: "Check if security fixes affect performance"
 - Review related files together, not in isolation
 

@@ -1,5 +1,15 @@
 # Common Bug Patterns
 
+## Contents
+- Null/Undefined Reference
+- Off-by-One Errors
+- Async/Promise Issues
+- Type Coercion Issues
+- State Management
+- Error Handling
+- .NET Specific
+- Quick Reference
+
 ## Null/Undefined Reference
 
 ```javascript

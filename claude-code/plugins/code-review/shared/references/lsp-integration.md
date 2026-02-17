@@ -1,5 +1,10 @@
 # Language Server Integration Reference
 
+## Contents
+- Quick Reference for Agents
+- Node.js/TypeScript LSP Integration
+- .NET/C# LSP Integration
+
 ## Quick Reference for Agents
 
 **When to use:** Read this file when reviewing code in a project with LSP available. LSP diagnostics provide compiler-level precision that supplements (does not replace) pattern-based detection.

@@ -1,5 +1,14 @@
 # SOLID/DRY/YAGNI Detection Patterns
 
+## Contents
+- SRP Detection
+- OCP Detection
+- LSP Detection
+- ISP Detection
+- DIP Detection
+- DRY Violations
+- YAGNI Violations
+
 ## SRP Detection
 
 | Indicator | Threshold | Severity |
