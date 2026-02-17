@@ -12,12 +12,12 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Technical Debt Categories (Based on MODE)
 
 **thorough mode - Check all 6 categories:**
-1. **Deprecated Dependencies**: Packages with deprecation warnings, major version 2+ behind, discontinued/unmaintained libraries, dependencies with known CVEs
-2. **Outdated Patterns**: Callbacks where async/await is standard, class components in React 18+, CommonJS `require()` in ESM projects, legacy bundlers (Webpack 4, Gulp, Grunt), pre-TypeScript 4.0 patterns, sync-over-async (.Result, .Wait() in .NET)
-3. **Workarounds and Hacks**: HACK/WORKAROUND/XXX comments, permanent temporary fixes, monkey patches, version-specific workarounds for fixed issues
-4. **Dead Code**: Unused exports never imported, commented-out code blocks (10+ lines), unreachable paths, feature flags for released/abandoned features
-5. **Scalability Concerns**: Hardcoded limits, in-memory solutions needing externalization, single-threaded bottlenecks, unbounded collections without pagination
-6. **Documentation Debt**: TODO/FIXME without issue tracking, stale comments, missing public API docs, outdated README sections
+1. **Deprecated Dependencies**: major version 2+ behind, discontinued libraries, dependencies with known CVEs
+2. **Outdated Patterns**: callbacks→async/await, class→functional components, CommonJS→ESM, legacy bundlers, sync-over-async
+3. **Workarounds and Hacks**: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues
+4. **Dead Code**: unused exports, commented-out blocks (10+ lines), unreachable paths, stale feature flags
+5. **Scalability Concerns**: hardcoded limits, in-memory needing externalization, unbounded collections without pagination
+6. **Documentation Debt**: TODO/FIXME without tracking, stale comments, missing public API docs
 
 **gaps mode - Focus on:**
 - Subtle debt not caught in thorough pass

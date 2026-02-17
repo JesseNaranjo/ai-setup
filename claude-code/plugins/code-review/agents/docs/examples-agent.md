@@ -12,12 +12,8 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Example Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Syntax errors in code blocks, missing import statements, missing language tags
-- Incorrect function/method signatures (wrong parameter types/order, missing required parameters)
-- Deprecated API usage, incomplete examples (partial code that can't run)
-- Missing error handling in examples that need it
-- Incorrect output/result comments, examples that contradict prose explanation
-- Examples using non-existent files or resources
+- All code example correctness: syntax, imports, language tags, signatures, deprecated APIs, completeness
+- Examples contradicting prose, incorrect output comments, references to non-existent resources
 
 **quick mode - Check for:**
 - Obvious syntax errors

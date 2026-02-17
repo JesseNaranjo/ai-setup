@@ -12,14 +12,7 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Performance Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- O(n^2) or worse algorithms where O(n) is possible
-- Memory leaks and excessive allocations
-- N+1 query patterns in database access
-- Blocking operations in async contexts
-- Inefficient data structure usage
-- Unnecessary object creation in loops
-- Missing caching for expensive operations
-- Inefficient string operations
+- Algorithmic complexity, memory leaks, N+1 queries, blocking in async, inefficient data structures, missing caching
 
 **gaps mode - Check for:**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)

@@ -5,6 +5,8 @@ description: Reviews adherence to project-specific coding standards, CLAUDE.md g
 
 # Compliance Code Review Skill
 
+Enhancement: Adds rule citation guidelines, compliance scoring format, and compliance-specific false positive adjustments.
+
 ## Agent
 
 `code-review:compliance-agent` (Sonnet) in thorough mode.
@@ -13,33 +15,9 @@ description: Reviews adherence to project-specific coding standards, CLAUDE.md g
 
 Rule classification (MUST/SHOULD/MAY keywords and severity mapping): `references/compliance-patterns.md`.
 
-## Compliance Categories Checked
-
-**Architecture Violations (Major):**
-- Layer violations (UI importing from data layer)
-- Business logic in wrong location (controller, view)
-- Direct database access bypassing repositories
-- Circular dependencies
-
-**Naming Convention Violations (Minor to Major):**
-- File naming patterns (kebab-case, PascalCase)
-- Class/function/variable naming
-- Constant naming (UPPER_SNAKE_CASE)
-- Interface prefixing (I prefix in C#)
-
-**Documentation Requirements (Minor):**
-- Missing JSDoc/XMLDoc on public APIs
-- Undocumented complex functions
-- README updates for new features
-
-**Security Requirements (Major):**
-- Missing authentication on endpoints
-- Input validation gaps
-- Logging requirements for sensitive operations
-
 ## Auto-Validated Patterns
 
-High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
+High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
 
 ## False Positives
 

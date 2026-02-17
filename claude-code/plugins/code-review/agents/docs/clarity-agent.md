@@ -12,11 +12,9 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Clarity Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Unexplained technical jargon, undefined acronyms/abbreviations
-- Ambiguous pronouns and references, missing context for concepts
-- Overly complex sentence structures, double negatives
-- Inconsistent explanation depth, assumed knowledge not stated
-- Passive voice overuse obscuring actors, wall-of-text paragraphs lacking structure
+- Unexplained jargon/acronyms, ambiguous references, missing context
+- Overly complex structures (>40 words without structure, >3 nested clauses), inconsistent explanation depth
+- Passive voice obscuring actors, wall-of-text paragraphs
 
 **quick mode - Check for:**
 - Completely undefined acronyms

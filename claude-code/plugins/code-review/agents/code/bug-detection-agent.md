@@ -12,11 +12,7 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Bug Categories (Based on MODE)
 
 **thorough mode - Focus on:**
-- Null/undefined reference errors, uninitialized variables
-- Off-by-one errors in loops and arrays
-- Incorrect conditionals (wrong operator, inverted logic)
-- Type mismatches causing runtime failures
-- Incorrect function return values, resource leaks
+- All runtime error categories: null refs, off-by-one, incorrect conditionals, type mismatches, resource leaks
 
 **gaps mode - Focus on:**
 - Boundary condition failures (empty arrays, zero values, max values)

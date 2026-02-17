@@ -12,15 +12,8 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Security Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Injection attacks (SQL, command, XSS, template injection)
-- Authentication and authorization bypasses
-- Hardcoded secrets, API keys, passwords
-- Insecure cryptographic practices
-- Path traversal vulnerabilities
-- Insecure deserialization
-- Missing input validation at security boundaries
-- CSRF vulnerabilities
-- Information disclosure
+- All OWASP Top 10 categories, path traversal, insecure deserialization, information disclosure
+- Hardcoded secrets/keys/passwords at all trust boundaries
 
 **gaps mode - Check for:**
 - Second-order injection (stored XSS, delayed command execution)

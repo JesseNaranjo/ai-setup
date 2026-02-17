@@ -5,52 +5,15 @@ description: Detects algorithmic complexity problems, memory leaks, N+1 queries,
 
 # Performance Code Review Skill
 
+Enhancement: Adds hot path identification, database code prioritization, complexity analysis format (Big O), performance-specific false positive adjustments, and detailed performance pattern references.
+
 ## Agent
 
 `code-review:performance-agent` (Opus) in thorough mode.
 
-## Performance Categories Checked
-
-**Algorithmic Complexity (Major to Critical):**
-- O(n^2) nested loops that could be O(n)
-- Repeated expensive operations inside loops
-- Unnecessary full collection iterations
-- Inefficient sorting or searching
-
-**Database Performance (Critical):**
-- N+1 query problems (query inside loop)
-- Missing indexes on filtered/joined columns
-- Unbounded SELECT queries
-- Inefficient joins or subqueries
-
-**Memory Issues (Critical):**
-- Memory leaks from unreleased resources
-- Growing caches without eviction
-- Event listeners not removed
-- Large object allocations in hot paths
-
-**Async/Await Patterns (Major):**
-- Sequential awaits for independent operations
-- Blocking event loop with sync operations
-- Missing Promise.all for parallel work
-- Floating promises (no await or catch)
-
-**Language-Specific Issues:**
-
-*Node.js/TypeScript:*
-- Blocking event loop with sync I/O
-- String concatenation in loops
-- Unnecessary array copies (spread in loops)
-
-*.NET/C#:*
-- Boxing/unboxing in hot loops
-- LINQ allocations in frequently called code
-- async void instead of async Task
-- Missing ConfigureAwait in libraries
-
 ## Auto-Validated Patterns
 
-High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
+High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
 
 ## Scope Prioritization
 

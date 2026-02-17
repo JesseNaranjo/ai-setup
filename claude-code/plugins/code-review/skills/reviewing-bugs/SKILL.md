@@ -5,51 +5,15 @@ description: Detects runtime errors, null references, off-by-one errors, boundar
 
 # Bug Detection Code Review Skill
 
+Enhancement: Adds bug investigation mode with reproduction conditions framework, bug-specific false positive adjustments, and detailed common bug pattern references.
+
 ## Agent
 
 `code-review:bug-detection-agent` (Opus) in thorough mode.
 
-## Bug Categories Checked
-
-**Null/Undefined References (Major to Critical):**
-- Accessing properties on potentially null objects
-- Missing null checks after database lookups
-- Optional chaining gaps
-- Nullable type misuse
-
-**Off-by-One Errors (Minor to Major):**
-- Array index bounds (`<=` vs `<`)
-- Fence post errors in counting
-- Pagination calculations
-- Loop termination conditions
-
-**Async/Promise Issues (Major to Critical):**
-- Unhandled promise rejections
-- Race conditions between async operations
-- Floating promises (missing await)
-- TOCTOU (time-of-check to time-of-use)
-
-**Type Coercion Bugs (Major):**
-- Loose equality (`==`) vs strict (`===`)
-- String/number confusion
-- Truthy/falsy misunderstandings
-- Type narrowing gaps
-
-**State Management (Major to Critical):**
-- Mutating shared objects
-- Stale closure captures
-- React state update issues
-- Redux action misuse
-
-**Error Handling (Major):**
-- Swallowed exceptions
-- Wrong error type caught
-- Missing error propagation
-- Incomplete cleanup in finally
-
 ## Auto-Validated Patterns
 
-High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
+High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
 
 ## Bug Investigation Mode
 

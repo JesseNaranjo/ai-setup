@@ -12,14 +12,9 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Error Handling Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Missing error handling on fail-prone operations (I/O, network, database, external services, parsing/deserialization)
-- Swallowed exceptions (empty catch blocks, catch blocks that only log)
-- Error messages that leak sensitive information
-- Missing cleanup/finally blocks (resources not released on error, state not reset on failure)
-- Incorrect error propagation (not re-throwing when appropriate, wrapping errors losing stack trace)
-- Missing retry logic for transient failures
-- Missing circuit breaker patterns
-- Error recovery that leaves inconsistent state
+- Missing error handling on fail-prone operations (I/O, network, database, external services, parsing)
+- Info leakage in error messages, error recovery leaving inconsistent state
+- Retry/circuit breaker pattern gaps for transient failures
 
 **quick mode - Check for:**
 - Empty catch blocks

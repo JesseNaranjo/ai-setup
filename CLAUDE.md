@@ -110,6 +110,8 @@ claude-code/plugins/code-review/
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
 │   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
+│   ├── review-validation-code.md    # Code validation: batch validation, aggregation, auto-validation patterns
+│   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   ├── staged-processing.md         # Staged input validation, content gathering, and pre-existing issue detection
 │   └── references/                  # LSP integration details (progressive disclosure)
@@ -146,6 +148,8 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 ### Agent Content Distribution
 
 The orchestration files (`review-orchestration-code.md`, `review-orchestration-docs.md`) contain inlined agent common instructions (MODE, false positives, output schema) and category-specific false positive rules. The orchestrator distributes relevant portions to each agent via `additional_instructions`, along with language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Agents do not read these shared files directly.
+
+Validation and auto-validation content is in separate files (`review-validation-code.md`, `review-validation-docs.md`), loaded on-demand at Steps 9-12 (post-review). This progressive disclosure keeps validation content out of the Opus context during the expensive Steps 7-8 phase.
 
 See `shared/review-orchestration-code.md` "Agent Common Content Distribution" and `shared/review-orchestration-docs.md` for implementation details.
 
@@ -200,7 +204,7 @@ See `shared/pre-review-setup.md` for loading logic and `README.md` for full docu
 
 ### Skill Structure (Progressive Disclosure)
 
-Each skill follows progressive disclosure: `SKILL.md` (~90-155 lines) is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures.
+Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only.
 
 **Description patterns:**
 - Skills: `"[What in third person]. Use when [specific triggers]."` — e.g., `"Detects injection attacks... Use when checking for security vulnerabilities during code review."`
@@ -232,8 +236,8 @@ When modifying the plugin:
 - **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category-specific FP rules)
 
 ### Validation & Output
-- **Validation rules (code)**: Edit `shared/review-orchestration-code.md` (validation process, aggregation, auto-validation patterns)
-- **Validation rules (docs)**: Edit `shared/review-orchestration-docs.md` (validation process, aggregation, auto-validation patterns)
+- **Validation rules (code)**: Edit `shared/review-validation-code.md` (validation process, aggregation, auto-validation patterns)
+- **Validation rules (docs)**: Edit `shared/review-validation-docs.md` (validation process, aggregation, auto-validation patterns)
 - **Output format/generation**: Edit `shared/output-format.md`
 - **Severity definitions**: Each agent defines calibrated thresholds in its own file under `agents/code/` or `agents/docs/`
 
@@ -262,11 +266,10 @@ When modifying the plugin:
 
 ### Agent Checklist Compression
 
-Agent thorough mode checklists compress standard knowledge into parenthetical lists (e.g., `"SOLID violations (SRP, OCP, LSP, ISP, DIP)"`) while preserving:
-- Specific thresholds and calibration numbers verbatim
-- Non-obvious heuristics and language-specific gotchas
-- All gaps and quick mode items verbatim (calibrated filters)
-- MODE differentiation (thorough/gaps/quick sections intact)
+Model-aware compression of thorough-mode checklists:
+- **Opus agents**: Compress to high-level triggers (1-3 lines). "Claude is already smart" — only add domain context Claude doesn't already have.
+- **Sonnet agents**: Moderate compression. Keep domain-specific guidance, items with calibrated thresholds, and unique methodology. Agents with only meta-rules (compliance) need no compression.
+- **All agents**: Preserve gaps/quick mode items, severity thresholds, output schema verbatim. MODE differentiation (thorough/gaps/quick sections) intact.
 
 ### Content Audience
 
@@ -346,7 +349,8 @@ Each command file inlines its pre-review setup steps (Steps 1-6) directly rather
 
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
-| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core, Batch Validation Process, Aggregation Rules | ~139 | Only one loaded per execution; extracting adds a file read |
+| `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~70 | Only one loaded per execution; extracting adds a file read |
+| `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation | ~70 | Same rationale: only one loaded per execution |
 
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.
 
@@ -384,10 +388,11 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 - **Reference integrity**: When moving content between files, `grep -r "section name"` before AND after to catch all references (commands, skills, shared files).
 - **Content category violations**: Before adding content to `shared/` or `shared/references/`, ask "who consumes this?" If the answer is "Claude Code when modifying the plugin," it belongs in CLAUDE.md, not runtime directories.
 - **Synthesis constraint**: Synthesis insights require findings in BOTH input categories. Single-category insights are rejected at validation.
+- **Validation progressive disclosure**: Orchestration files (`review-orchestration-*.md`) cross-reference validation files (`review-validation-*.md`). Do not re-merge them — the split reduces Opus context by ~53% during Steps 7-8.
 
 ### Auto-Validation Pattern Design Notes
 
-These notes apply when modifying patterns in `review-orchestration-{code|docs}.md`:
+These notes apply when modifying patterns in `review-validation-{code|docs}.md`:
 - Patterns are case-insensitive for SQL keywords
 - Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`
 - Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`

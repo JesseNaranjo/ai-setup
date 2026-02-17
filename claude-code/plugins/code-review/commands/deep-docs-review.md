@@ -90,7 +90,7 @@ Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_
 
 ## Steps 9-12: Validation, Aggregation, Output
 
-Validate per `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "Documentation Review Validation & Aggregation" section. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
+Validate per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-docs.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
 
 **Output config:** Review Type: "Deep Documentation Review (13 invocations)", Categories: All 6
 Include AI instruction file standardization section. Report summary: total issues by severity, issues by category, AI instruction standardization status, path to report.

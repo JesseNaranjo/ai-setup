@@ -12,12 +12,8 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Coverage Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- New code paths without corresponding tests
-- Uncovered edge cases (null/empty inputs, boundary values, error conditions)
-- Modified logic that invalidates existing tests
-- Missing integration tests for API changes
-- Test quality issues (no assertions, testing implementation details instead of behavior, tests that always pass)
-- Missing negative tests (error paths), missing async/concurrent scenario tests
+- Test quality (no assertions, testing implementation details, tests that always pass), integration test gaps
+- Modified logic invalidating existing tests, missing negative/async/concurrent tests
 
 **quick mode - Check for:**
 - New public functions/methods without any tests

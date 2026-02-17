@@ -17,7 +17,7 @@ Resolve `--skills` argument to SKILL.md files.
 
 | Field | Source |
 |-------|--------|
-| `focus_areas` | "Categories Checked" sections |
+| `focus_areas` | "Additional Focus Areas" sections (if present, otherwise empty) |
 | `auto_validated_patterns` | Pattern tables |
 | `false_positive_rules` | "False Positives" sections |
 | `priority_files` | "Scope Prioritization" sections |
@@ -78,7 +78,7 @@ resolved_skills:
 
 Per agent, initialize: focus_areas, checklist, auto_validate, false_positive_rules, methodology.
 
-- **Review skill:** Append focus_areas to primary agent; build checklist from focus_areas (category, severity, checks as items); append auto_validated_patterns[].id to auto_validate; append false_positive_rules
+- **Review skill:** If focus_areas non-empty: append focus_areas to primary agent; build checklist from focus_areas (category, severity, checks as items). If focus_areas empty: skip focus_areas and checklist (agent uses standard categories). Always: append auto_validated_patterns[].id to auto_validate; append false_positive_rules
 - **Methodology skill:** For ALL agents, set/append methodology (steps, questions)
 
 Include in agent prompt only if non-empty. Store combined data for validation:
@@ -102,7 +102,7 @@ Standard questions from orchestration file plus: reviewing-security → "Do find
 
 Inject into `additional_instructions` when `--skills` active:
 
-1. **focus_areas**: Prioritize FIRST before standard checks
+1. **focus_areas**: If provided, prioritize FIRST before standard checks. If empty, use standard agent categories
 2. **checklist**: Verify EVERY item; acknowledge clean items
 3. **auto_validate**: Matching issues include `auto_validated: true`
 4. **false_positive_rules**: Additional FP filters beyond standard

@@ -12,12 +12,7 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Accuracy Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Function/method signature accuracy (names, parameters, return types), class/type documentation correctness
-- CLI command/flag accuracy, configuration option validity
-- Version number and dependency version consistency
-- Code example correctness (syntax, imports, usage)
-- API endpoint accuracy (paths, methods, payloads)
-- Environment variable and error message accuracy
+- All code-doc sync: signatures, CLI commands, config options, API endpoints, env vars, version numbers, code examples
 
 **gaps mode - Check for:**
 - Parameter default value changes not reflected in docs

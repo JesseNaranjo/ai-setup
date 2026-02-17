@@ -12,11 +12,9 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Consistency Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Terminology variations (same concept, different words), naming inconsistencies (camelCase vs snake_case)
-- Heading style variations (capitalization, punctuation), code block language tag consistency
-- List formatting (bullets vs numbers, punctuation), link formatting (inline vs reference style)
-- Voice inconsistencies (you vs we vs passive), tense inconsistencies
-- Spelling variations (US vs UK English), abbreviation usage inconsistency
+- Terminology variations (same concept, different words), naming convention mismatches
+- Formatting inconsistencies: headings, code blocks, lists, links, spelling (US vs UK)
+- Voice/tense inconsistencies (you vs we vs passive)
 
 **gaps mode - Check for:**
 - Near-synonyms that cause subtle confusion

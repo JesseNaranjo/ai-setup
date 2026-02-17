@@ -60,7 +60,7 @@ Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_
 
 ## Steps 9-12: Validation, Aggregation, Output
 
-Validate per `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
+Validate per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`. Aggregate: filter invalid, apply severity downgrades, deduplicate by file+line range, add consensus badges. Generate output per `${CLAUDE_PLUGIN_ROOT}/shared/output-format.md`. Write to file.
 
 **Output config:** Review Type: "Quick (7 invocations)", Categories: 4 only
 **Note:** Quick review should be extra conservative - skip theoretical edge cases.

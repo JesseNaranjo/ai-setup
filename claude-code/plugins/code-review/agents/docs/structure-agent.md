@@ -12,11 +12,8 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Structure Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Heading hierarchy issues (skipped levels, inconsistent depth, single H1 rule)
-- Broken links (internal and external), anchor link validity
-- Missing cross-references between related docs, orphaned documents
-- Circular navigation paths, table of contents mismatches
-- File naming convention issues, directory structure problems
+- Heading hierarchy (skipped levels, single H1 rule), broken links (internal/external/anchors)
+- Navigation issues: missing cross-refs, orphaned docs, circular paths, ToC mismatches
 - **AI instruction file standardization** (see Step 5)
 
 **quick mode - Check for:**

@@ -5,44 +5,15 @@ description: Detects injection attacks, authentication bypasses, hardcoded secre
 
 # Security Code Review Skill
 
+Enhancement: Adds scope prioritization (auth/config/middleware files), security-specific false positive adjustments, and detailed vulnerability pattern references.
+
 ## Agent
 
 `code-review:security-agent` (Opus) in thorough mode.
 
-## Security Categories Checked
-
-**Injection Vulnerabilities (Critical):**
-- SQL injection via string concatenation
-- Command injection through shell execution
-- XSS via unescaped HTML output
-- Template injection, LDAP injection
-
-**Authentication & Authorization (Critical):**
-- Missing authentication on endpoints
-- Broken access control (IDOR)
-- Session management weaknesses
-- Missing CSRF protection
-
-**Sensitive Data Exposure (Critical):**
-- Hardcoded secrets, API keys, passwords
-- Sensitive data in logs
-- Unencrypted data transmission
-- Excessive data exposure in APIs
-
-**Cryptographic Issues (Major):**
-- Weak hashing (MD5, SHA1 for passwords)
-- Insecure random number generation
-- Missing encryption for sensitive data
-
-**Input Validation (Major):**
-- Path traversal vulnerabilities
-- ReDoS (regex denial of service)
-- Unsafe deserialization
-- Missing input sanitization
-
 ## Auto-Validated Patterns
 
-High-confidence patterns skip validation. Full definitions with regex patterns: `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
+High-confidence patterns skip validation. Full definitions with regex patterns: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
 
 ## Scope Prioritization
 

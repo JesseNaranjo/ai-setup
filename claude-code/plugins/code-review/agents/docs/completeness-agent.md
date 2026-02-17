@@ -12,11 +12,9 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Completeness Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Missing standard sections (README: overview, installation, quick start, configuration, contributing, license; API docs: overview, auth, endpoint reference, request/response examples, error codes, rate limiting; Library docs: installation, usage, API reference, config options, examples, troubleshooting)
-- Undocumented public APIs/exports, CLI commands/flags, configuration options, environment variables
-- Incomplete installation/setup instructions, missing prerequisites
-- Missing error/troubleshooting documentation, absent migration/upgrade guides
-- Missing examples for complex features
+- Missing standard sections per doc type (README, API docs, library docs)
+- Undocumented public APIs/exports, CLI commands, config options, env vars
+- Incomplete setup/prerequisites, missing error/troubleshooting docs, absent migration guides
 
 **gaps mode - Check for:**
 - Undocumented edge cases and limitations

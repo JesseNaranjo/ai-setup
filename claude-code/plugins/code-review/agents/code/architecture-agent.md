@@ -12,17 +12,9 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify Architecture Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- High coupling between unrelated components
-- SOLID violations (SRP, OCP, LSP, ISP, DIP)
-- Anti-patterns (god objects, feature envy, shotgun surgery)
-- Layer violations (presentation accessing data directly)
-- Missing abstractions that hurt maintainability
-- Inappropriate intimacy between classes
-- Dead code and unused dependencies
-- DRY violations (duplicated code blocks >10 lines />80% similarity, copy-pasted logic with minor variations, repeated config values, similar utility functions across modules)
-- YAGNI violations (unused abstractions with single implementation never extended, over-engineered patterns, speculative generality, premature optimization structures)
-- SoC violations (mixed concerns in single file, cross-cutting concerns not isolated, configuration mixed with implementation, test utilities in production code)
-- File organization issues (related code scattered across too many files, overly fragmented modules, single-use helpers not colocated, related types/interfaces scattered)
+- SOLID/DRY/YAGNI/SoC violations, coupling, anti-patterns, layer violations, missing abstractions
+- DRY: duplicated blocks >10 lines/>80% similarity, repeated config values, similar utilities across modules
+- File organization: fragmentation, scattered types, single-use helpers not colocated
 
 ### Step 2: Analyze Code Structure
 

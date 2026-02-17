@@ -386,8 +386,10 @@ code-review/
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode, agent common instructions, validation
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode, agent common instructions, validation
+│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode, agent common instructions
+│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode, agent common instructions
+│   ├── review-validation-code.md    # Code validation: batch validation, aggregation, auto-validation patterns
+│   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   ├── staged-processing.md         # Input validation, content gathering, and pre-existing issue detection for staged commands
 │   └── references/                  # LSP integration details (progressive disclosure)

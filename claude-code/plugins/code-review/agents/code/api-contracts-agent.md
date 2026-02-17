@@ -12,12 +12,9 @@ tools: ["Read", "Grep", "Glob"]
 ### Step 1: Identify API Categories (Based on MODE)
 
 **thorough mode - Check for:**
-- Breaking changes (removed methods/properties/fields, changed signatures/behavior)
-- Backward compatibility (new required parameters without defaults, changed response/error formats)
-- Interface contract violations (incorrect implementations, changed contracts in derived classes)
-- Inconsistent API patterns (naming, parameter ordering, error handling)
+- Breaking changes (removed methods/properties/fields, changed signatures/behavior), missing versioning
+- Backward compatibility (new required params without defaults, changed response/error formats)
 - Schema changes affecting consumers (database, API response, configuration)
-- Missing versioning on breaking changes
 
 ### Step 2: Analyze API Surface
 
