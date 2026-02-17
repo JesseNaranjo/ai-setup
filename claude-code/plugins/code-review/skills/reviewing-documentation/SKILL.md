@@ -5,63 +5,13 @@ description: Reviews documentation for accuracy, completeness, clarity, consiste
 
 # Documentation Review Skill
 
-## Documentation Categories Checked
+## Documentation Categories
 
-**Accuracy (Critical):**
-- Code-documentation synchronization
-- API signature correctness
-- Version number accuracy
-- CLI command validity
-- Example correctness
-
-**Clarity (Major):**
-- Unexplained jargon and acronyms
-- Ambiguous explanations
-- Audience appropriateness
-- Readability issues
-
-**Completeness (Major):**
-- Missing standard sections
-- Undocumented features/APIs
-- Incomplete setup instructions
-- Missing troubleshooting
-
-**Consistency (Minor):**
-- Terminology variations
-- Formatting inconsistencies
-- Voice and tone mismatches
-- Naming convention violations
-
-**Examples (Critical):**
-- Syntax errors in code blocks
-- Missing imports
-- Incorrect API usage
-- Outdated examples
-
-**Structure (Major):**
-- Broken links (internal and external)
-- Heading hierarchy issues
-- Navigation problems
-- **AI instruction file standardization**
-
----
+Covers 6 categories: Accuracy (Critical), Clarity (Major), Completeness (Major), Consistency (Minor), Examples (Critical), Structure (Major). See docs agent files for detailed checklists.
 
 ## AI Instruction File Standardization
 
-This skill includes checks for AI agent instruction file compliance:
-
-**Required Files:**
-- `/.ai/AI-AGENT-INSTRUCTIONS.md` - Comprehensive coding standards
-- `/CLAUDE.md` - Claude Code quick reference
-- `/.github/copilot-instructions.md` - GitHub Copilot quick reference
-
-**Standardization Rules:**
-1. AI-AGENT-INSTRUCTIONS.md must be in `/.ai/` (not root)
-2. CLAUDE.md must reference `.ai/AI-AGENT-INSTRUCTIONS.md` in header
-3. copilot-instructions.md must exist with correct header
-4. Cross-references between all three files must be valid
-
-See `references/ai-instruction-templates.md` for required headers.
+Checks placement and cross-references for `.ai/AI-AGENT-INSTRUCTIONS.md`, `CLAUDE.md`, `.github/copilot-instructions.md`. See `references/ai-instruction-templates.md`.
 
 ## Scope Prioritization
 
@@ -74,8 +24,6 @@ Prioritize:
 
 ## False Positives
 
-Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "False Positive Rules".
-
 **Documentation-specific additions** - do NOT flag:
 - Intentionally simplified examples (marked as such)
 - Placeholder values (`your-api-key`, `example.com`)
@@ -86,7 +34,3 @@ Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "False Positiv
 
 - `references/ai-instruction-templates.md` - Templates for AI Agent Instructions files
 - `references/documentation-best-practices.md` - Documentation quality patterns
-
-## Example Output
-
-`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`

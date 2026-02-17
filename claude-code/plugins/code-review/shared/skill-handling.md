@@ -57,10 +57,7 @@ resolved_skills:
     auto_validated_patterns: [{ id, pattern, description }]
     false_positive_rules: [...]
     priority_files: { patterns: [...] }
-  - name: "brainstorming"
-    source: "superpowers:brainstorming"
-    type: "methodology"
-    methodology: { approach, mindset, steps, questions }
+  - { name: "brainstorming", source: "superpowers:brainstorming", type: "methodology", methodology: { approach, mindset, steps, questions } }
 ```
 
 ## Skill-Informed Orchestration
@@ -84,9 +81,7 @@ Per agent, initialize: focus_areas, checklist, auto_validate, false_positive_rul
 Include in agent prompt only if non-empty. Store combined data for validation:
 
 ```yaml
-skill_validation_context:
-  auto_validate_patterns: [union from all skills]
-  false_positive_rules: [union from all skills]
+skill_validation_context: { auto_validate_patterns: [union], false_positive_rules: [union] }
 ```
 
 ### Validation Adjustments

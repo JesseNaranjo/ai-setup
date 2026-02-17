@@ -15,13 +15,7 @@ Enhancement: Adds rule citation guidelines, compliance scoring format, and compl
 
 Rule classification (MUST/SHOULD/MAY keywords and severity mapping): `references/compliance-patterns.md`.
 
-## Auto-Validated Patterns
-
-High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
-
 ## False Positives
-
-Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Compliance-specific additions** - do NOT flag:
 - Explicit override comments (`// claude-ignore: rule-name`)
@@ -50,8 +44,3 @@ Include:
 - Rules violated: 4
 - Compliance rate: 86%
 ```
-
-## Example Output
-
-`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`
-

@@ -11,10 +11,6 @@ Enhancement: Adds scope prioritization (dependency/config files), technical-debt
 
 `code-review:technical-debt-agent` (Opus) in thorough mode.
 
-## Auto-Validated Patterns
-
-High-confidence patterns skip validation. Full definitions with regex patterns: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
-
 ## Scope Prioritization
 
 Prioritize:
@@ -25,8 +21,6 @@ Prioritize:
 
 ## False Positives
 
-Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
-
 **Technical Debt-specific additions** - do NOT flag:
 - Dependencies intentionally pinned with documented reason
 - Legacy patterns in explicitly deprecated modules
@@ -36,8 +30,3 @@ Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positiv
 ## Detailed Debt Patterns
 
 `references/technical-debt-patterns.md`
-
-## Example Output
-
-`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`
-

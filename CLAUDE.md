@@ -93,7 +93,7 @@ claude-code/plugins/code-review/
 │   ├── reviewing-documentation/     # Has 2 reference files
 │   ├── reviewing-performance/
 │   ├── reviewing-security/          # Expanded example (all 7 skills follow this pattern):
-│   │   ├── SKILL.md                 # Core skill instructions (~90-155 lines)
+│   │   ├── SKILL.md                 # Core skill instructions (~30-50 lines)
 │   │   └── references/              # Detailed patterns (loaded on-demand)
 │   │       └── common-vulnerabilities.md
 │   └── reviewing-technical-debt/
@@ -103,9 +103,8 @@ claude-code/plugins/code-review/
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
 │   ├── docs-processing.md           # Docs input validation and content gathering
-│   ├── example-output.md            # Shared example output (referenced by all 7 skills)
+│   ├── example-output.md            # Shared example output (development-time reference)
 │   ├── file-processing.md           # File-based input validation and content gathering
-│   ├── output-format.md             # Output format specification (progressive disclosure, loaded at Steps 9-12)
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
 │   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
@@ -148,7 +147,7 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 The orchestration files (`review-orchestration-code.md`, `review-orchestration-docs.md`) contain inlined agent common instructions (MODE, false positives, output schema) and category-specific false positive rules. The orchestrator distributes relevant portions to each agent via `additional_instructions`, along with language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Agents do not read these shared files directly.
 
-Validation and auto-validation content is in separate files (`review-validation-code.md`, `review-validation-docs.md`), loaded on-demand at Steps 9-12 (post-review). This progressive disclosure keeps validation content out of the Opus context during the expensive Steps 7-8 phase.
+Validation, auto-validation, and output format content is in separate files (`review-validation-code.md`, `review-validation-docs.md`), loaded on-demand at Steps 9-12 (post-review). This progressive disclosure keeps validation and output format content out of the Opus context during the expensive Steps 7-8 phase.
 
 See `shared/review-orchestration-code.md` "Agent Common Content Distribution" and `shared/review-orchestration-docs.md` for implementation details.
 
@@ -203,7 +202,7 @@ See `shared/pre-review-setup.md` for loading logic and `README.md` for full docu
 
 ### Skill Structure (Progressive Disclosure)
 
-Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` subdirectories are loaded on-demand (one level deep from SKILL.md). All 7 skills share a single example output file at `shared/example-output.md` (referenced via `${CLAUDE_PLUGIN_ROOT}`). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only.
+Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only.
 
 **Description patterns:**
 - Skills: `"[What in third person]. Use when [specific triggers]."` — e.g., `"Detects injection attacks... Use when checking for security vulnerabilities during code review."`
@@ -237,11 +236,11 @@ When modifying the plugin:
 ### Validation & Output
 - **Validation rules (code)**: Edit `shared/review-validation-code.md` (validation process, aggregation, auto-validation patterns)
 - **Validation rules (docs)**: Edit `shared/review-validation-docs.md` (validation process, aggregation, auto-validation patterns)
-- **Output format/generation**: Edit `shared/output-format.md`
+- **Output format/generation**: Edit the "Output Format" section in `shared/review-validation-code.md` and `shared/review-validation-docs.md`
 - **Severity definitions**: Each agent defines calibrated thresholds in its own file under `agents/code/` or `agents/docs/`
 
 ### Skills & Language
-- **Skills**: Edit `skills/*/SKILL.md`; add patterns to `references/`; shared example at `shared/example-output.md`
+- **Skills**: Edit `skills/*/SKILL.md`; add patterns to `references/`
 - **Language-specific checks**: Edit files in `languages/`
 
 ### Commands & Settings
@@ -349,7 +348,7 @@ Each command file inlines its pre-review setup steps (Steps 1-6) directly rather
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
 | `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Agent Common Instructions, Gaps Mode core | ~70 | Only one loaded per execution; extracting adds a file read |
-| `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation | ~70 | Same rationale: only one loaded per execution |
+| `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation, Output Format | ~145 | Same rationale: only one loaded per execution |
 
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.
 
@@ -380,8 +379,6 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 **Rationale:** Follows Anthropic skill authoring best practices — relative paths enable progressive disclosure where Claude loads reference files only when needed.
 
 **Do NOT convert intra-skill relative paths to `${CLAUDE_PLUGIN_ROOT}` paths** — this would break the documented progressive disclosure pattern.
-
-**Exception:** The shared example output (`shared/example-output.md`) uses `${CLAUDE_PLUGIN_ROOT}` because it's shared infrastructure, not a skill-local file.
 
 ## Common Gotchas
 

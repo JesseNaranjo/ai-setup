@@ -19,23 +19,13 @@ Prioritize:
 - Files with high line counts (500+)
 - Files with many exports
 
-## Auto-Validated Patterns
-
-High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
-
 ## False Positives
-
-Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Architecture-specific additions** - do NOT flag:
 - Intentional duplication for clarity (documented)
 - Abstractions planned for imminent use (documented roadmap)
 - Pragmatic compromises with documented justification
 - Patterns appropriate for project scale
-
-## Example Output
-
-`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`
 
 ## References
 

@@ -384,7 +384,7 @@ code-review/
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
-│   ├── example-output.md            # Shared example output (referenced by all 7 skills)
+│   ├── example-output.md            # Shared example output (development-time reference)
 │   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode, agent common instructions
@@ -497,7 +497,7 @@ Detected by presence of `*.csproj` or `*.sln`. See `languages/dotnet.md` for:
 
 ## Output Format
 
-See `shared/output-format.md` for complete output templates.
+See `shared/review-validation-code.md` "Output Format" section for complete output templates.
 
 ### Summary Table
 

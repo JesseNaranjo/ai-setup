@@ -11,10 +11,6 @@ Enhancement: Adds bug investigation mode with reproduction conditions framework,
 
 `code-review:bug-detection-agent` (Opus) in thorough mode.
 
-## Auto-Validated Patterns
-
-High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
-
 ## Bug Investigation Mode
 
 When investigating specific bugs:
@@ -24,8 +20,6 @@ When investigating specific bugs:
 - Read recent git commits touching affected files
 
 ## False Positives
-
-Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Bug-specific additions** - do NOT flag:
 - Guarded elsewhere (null check in caller)
@@ -46,8 +40,3 @@ Example: "When two users simultaneously withdraw from the same account (concurre
 ## Detailed Bug Patterns
 
 `references/common-bugs.md`
-
-## Example Output
-
-`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`
-

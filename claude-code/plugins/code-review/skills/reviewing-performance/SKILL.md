@@ -11,10 +11,6 @@ Enhancement: Adds hot path identification, database code prioritization, complex
 
 `code-review:performance-agent` (Opus) in thorough mode.
 
-## Auto-Validated Patterns
-
-High-confidence patterns skip validation. Full definitions: `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`.
-
 ## Scope Prioritization
 
 ### Hot Path Identification
@@ -32,8 +28,6 @@ For N+1 and query performance, also read:
 - Migration files (to understand indexes)
 
 ## False Positives
-
-Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` "False Positive Rules".
 
 **Performance-specific additions** - do NOT flag:
 - O(n^2) on small bounded data (max 10 items)
@@ -53,8 +47,3 @@ Example: "Current O(n*m) where n=orders, m=items. With 100 orders and 1000 items
 ## Detailed Performance Patterns
 
 `references/performance-patterns.md`
-
-## Example Output
-
-`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`
-

@@ -17,17 +17,7 @@ Verify git repository exists (`git rev-parse --git-dir`). If not, stop: "Not a g
 
 If specific files provided, validate those. Otherwise, discover:
 
-**Standard documentation (root):**
-- `CHANGELOG.md`
-- `CLAUDE.md`
-- `CODE_OF_CONDUCT.md`
-- `CONTRIBUTING.md`
-- `LICENSE.md`
-- `README.md`
-
-**Documentation directories:**
-- `docs/**/*.md`
-- `documentation/**/*.md`
+**Standard documentation:** Root markdown (README.md, CHANGELOG.md, CLAUDE.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, LICENSE.md) + `docs/**/*.md`, `documentation/**/*.md`
 
 **AI Agent Instruction Files:**
 - `.ai/AI-AGENT-INSTRUCTIONS.md` (standard location)
@@ -54,21 +44,11 @@ Track for reporting:
 
 ### Filter by Scope
 
-**Specific files provided:** Verify each exists, review only those.
-
-**No files specified:** Include all discovered, prioritize README > CLAUDE.md > CHANGELOG > docs/
-
-### Validate Scope
+**Specific files provided:** Verify existence, review only those. **No files:** Include all discovered; prioritize README > CLAUDE.md > CHANGELOG > docs/
 
 If no files found, stop: "No documentation files found. Ensure your project has README.md, docs/, or other markdown documentation."
 
-### Validation Output
-
-Pass to Content Gathering:
-- Documentation files to review
-- AI instruction file standardization status
-- Output file path
-- Additional instructions
+**Validation Output:** Documentation files to review, AI instruction file standardization status, output file path, additional instructions
 
 ---
 
