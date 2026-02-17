@@ -94,10 +94,8 @@ claude-code/plugins/code-review/
 │   ├── reviewing-performance/
 │   ├── reviewing-security/          # Expanded example (all 7 skills follow this pattern):
 │   │   ├── SKILL.md                 # Core skill instructions (~90-155 lines)
-│   │   ├── references/              # Detailed patterns (loaded on-demand)
-│   │   │   └── common-vulnerabilities.md
-│   │   └── examples/                # Sample output format
-│   │       └── example-output.md
+│   │   └── references/              # Detailed patterns (loaded on-demand)
+│   │       └── common-vulnerabilities.md
 │   └── reviewing-technical-debt/
 ├── languages/                       # Language-specific configs
 │   ├── dotnet.md                    # .NET/C# checks
@@ -105,6 +103,7 @@ claude-code/plugins/code-review/
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
 │   ├── docs-processing.md           # Docs input validation and content gathering
+│   ├── example-output.md            # Shared example output (referenced by all 7 skills)
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── output-format.md             # Output format specification (progressive disclosure, loaded at Steps 9-12)
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
@@ -204,7 +203,7 @@ See `shared/pre-review-setup.md` for loading logic and `README.md` for full docu
 
 ### Skill Structure (Progressive Disclosure)
 
-Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` and `examples/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only.
+Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` subdirectories are loaded on-demand (one level deep from SKILL.md). All 7 skills share a single example output file at `shared/example-output.md` (referenced via `${CLAUDE_PLUGIN_ROOT}`). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only.
 
 **Description patterns:**
 - Skills: `"[What in third person]. Use when [specific triggers]."` — e.g., `"Detects injection attacks... Use when checking for security vulnerabilities during code review."`
@@ -242,7 +241,7 @@ When modifying the plugin:
 - **Severity definitions**: Each agent defines calibrated thresholds in its own file under `agents/code/` or `agents/docs/`
 
 ### Skills & Language
-- **Skills**: Edit `skills/*/SKILL.md`; add patterns to `references/`, examples to `examples/`
+- **Skills**: Edit `skills/*/SKILL.md`; add patterns to `references/`; shared example at `shared/example-output.md`
 - **Language-specific checks**: Edit files in `languages/`
 
 ### Commands & Settings
@@ -371,7 +370,7 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md` for validation r
 See `${CLAUDE_PLUGIN_ROOT}/agents/code/security-agent.md` for agent definition.
 ```
 
-**2. Intra-Skill References (local `references/` and `examples/`)** — use relative paths:
+**2. Intra-Skill References (local `references/`)** — use relative paths:
 
 ```markdown
 # In skills/reviewing-security/SKILL.md
@@ -381,6 +380,8 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 **Rationale:** Follows Anthropic skill authoring best practices — relative paths enable progressive disclosure where Claude loads reference files only when needed.
 
 **Do NOT convert intra-skill relative paths to `${CLAUDE_PLUGIN_ROOT}` paths** — this would break the documented progressive disclosure pattern.
+
+**Exception:** The shared example output (`shared/example-output.md`) uses `${CLAUDE_PLUGIN_ROOT}` because it's shared infrastructure, not a skill-local file.
 
 ## Common Gotchas
 

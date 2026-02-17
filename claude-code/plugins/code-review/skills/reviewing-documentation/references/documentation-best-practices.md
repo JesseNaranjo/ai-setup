@@ -15,18 +15,16 @@
 ## Code Examples
 
 ```javascript
-// GOOD: Complete, runnable example
+// GOOD: Complete, runnable with imports, realistic values, expected output
 import { createClient } from '@example/sdk';
 const client = createClient({ apiKey: process.env.API_KEY });
-const result = await client.doSomething('input');
-console.log(result);
 // Output: { success: true, data: "processed input" }
 
-// BAD: Missing imports, incomplete
+// BAD: Missing imports, incomplete context
 const result = await client.doSomething('input');
 ```
 
-**Rules**: show imports, use realistic values (not foo/bar), show expected output, handle errors, mark placeholders clearly (`YOUR_API_KEY`)
+**Rules**: show imports, use realistic values (not foo/bar), show expected output, handle errors, mark placeholders (`YOUR_API_KEY`)
 
 ## API Documentation
 
@@ -50,10 +48,8 @@ Required per endpoint: all parameters with types, all response codes, at least o
 
 ## Structure Guidelines
 
-- Single H1 per document
-- Table of contents for documents > 3 screens
-- Cross-links between related documents
-- Use relative links for internal docs
+- Single H1 per document; table of contents for documents > 3 screens
+- Cross-links between related documents; use relative links for internal docs
 - Provide context in links: "See [API Reference](./api.md) for endpoint details" (not "click here")
 
 ## Versioning Documentation

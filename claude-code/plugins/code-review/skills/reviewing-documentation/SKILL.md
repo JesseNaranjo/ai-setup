@@ -89,4 +89,4 @@ Apply `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md` "False Positiv
 
 ## Example Output
 
-`examples/example-output.md`
+`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`

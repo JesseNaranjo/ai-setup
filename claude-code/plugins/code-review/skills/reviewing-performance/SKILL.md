@@ -56,5 +56,5 @@ Example: "Current O(n*m) where n=orders, m=items. With 100 orders and 1000 items
 
 ## Example Output
 
-`examples/example-output.md`
+`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`
 

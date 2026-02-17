@@ -5,19 +5,13 @@
 ### O(n^2) Nested Loops
 
 ```javascript
-// SLOW - O(n^2)
+// SLOW — O(n^2)
 for (const user of users) {
   for (const order of orders) {
     if (order.userId === user.id) { /* process */ }
   }
 }
-
-// FAST - O(n)
-const ordersByUser = new Map();
-for (const order of orders) {
-  if (!ordersByUser.has(order.userId)) ordersByUser.set(order.userId, []);
-  ordersByUser.get(order.userId).push(order);
-}
+// FAST: build Map of orders by userId first — O(n)
 ```
 
 **Severity**: Major (large datasets), Minor (small fixed datasets)
@@ -25,13 +19,8 @@ for (const order of orders) {
 ### Repeated Expensive Operations
 
 ```javascript
-// SLOW
-function processItems(items) {
-  return items.map(item => {
-    const config = loadConfigFromDisk(); // Called for each item!
-    return transform(item, config);
-  });
-}
+// SLOW — loadConfigFromDisk() called for each item
+return items.map(item => transform(item, loadConfigFromDisk()));
 ```
 
 ## Database Performance
@@ -39,23 +28,15 @@ function processItems(items) {
 ### N+1 Query Problem
 
 ```javascript
-// SLOW - N+1 queries
-const users = await User.findAll();
+// SLOW — N+1 queries
 for (const user of users) {
-  user.orders = await Order.findByUserId(user.id); // N queries!
+  user.orders = await Order.findByUserId(user.id);
 }
-
-// FAST - 2 queries
-const users = await User.findAll();
-const orders = await Order.findByUserIds(users.map(u => u.id));
-const ordersByUser = groupBy(orders, 'userId');
+// FAST: fetch all orders in one query, groupBy userId
 ```
 
 ```csharp
-// SLOW
-foreach (var user in users) {
-  user.Orders = await _db.Orders.Where(o => o.UserId == user.Id).ToListAsync();
-}
+// SLOW: per-user query in loop
 // FAST
 var users = await _db.Users.Include(u => u.Orders).ToListAsync();
 ```
@@ -73,8 +54,7 @@ WHERE clauses on non-indexed columns, JOIN on non-indexed foreign keys, ORDER BY
 ```javascript
 // DANGEROUS
 const allUsers = await db.query('SELECT * FROM users');
-// SAFE
-const users = await db.query('SELECT * FROM users LIMIT 100 OFFSET 0');
+// SAFE: add LIMIT/OFFSET pagination
 ```
 
 ## Memory Issues
@@ -82,27 +62,20 @@ const users = await db.query('SELECT * FROM users LIMIT 100 OFFSET 0');
 ### Memory Leaks
 
 ```javascript
-// LEAK - listener never removed
-class Component {
-  constructor() {
-    window.addEventListener('resize', this.onResize);
-  }
-  // Missing: removeEventListener in cleanup
-}
+// LEAK — listener never removed
+window.addEventListener('resize', this.onResize);
+// Missing: removeEventListener in cleanup
 
-// LEAK - growing Map without eviction
+// LEAK — growing Map without eviction
 const cache = new Map();
-function getCached(key) {
-  if (!cache.has(key)) cache.set(key, expensiveComputation(key));
-  return cache.get(key);
-}
+function getCached(key) { if (!cache.has(key)) cache.set(key, expensiveComputation(key)); return cache.get(key); }
 ```
 
 **Severity**: Critical
 
 ### Large Object Allocation
 
-Functions that create large objects per call instead of reusing constants (`Object.freeze()`).
+Functions creating large objects per call instead of reusing constants (`Object.freeze()`).
 
 **Severity**: Minor to Major
 
@@ -111,33 +84,18 @@ Functions that create large objects per call instead of reusing constants (`Obje
 ### Sequential Awaits (Waterfall)
 
 ```javascript
-// SLOW - sequential (3 seconds)
-const users = await fetchUsers();     // 1s
-const orders = await fetchOrders();   // 1s
-const products = await fetchProducts(); // 1s
-
-// FAST - parallel (1 second)
-const [users, orders, products] = await Promise.all([
-  fetchUsers(), fetchOrders(), fetchProducts()
-]);
+// SLOW — sequential (3 seconds total)
+const users = await fetchUsers();
+const orders = await fetchOrders();
+// FAST: Promise.all([fetchUsers(), fetchOrders(), fetchProducts()])
 ```
 
 ### Blocking Event Loop (Node.js)
 
 ```javascript
-// BLOCKING
-function processLargeFile(data) {
-  for (let i = 0; i < data.length; i++) { /* CPU-intensive */ }
-}
-
-// NON-BLOCKING
-async function processLargeFile(data) {
-  const CHUNK_SIZE = 1000;
-  for (let i = 0; i < data.length; i += CHUNK_SIZE) {
-    processChunk(data.slice(i, i + CHUNK_SIZE));
-    await setImmediate();
-  }
-}
+// BLOCKING — CPU-intensive loop without yield
+for (let i = 0; i < data.length; i++) { /* process */ }
+// NON-BLOCKING: chunk with await setImmediate() between chunks
 ```
 
 **Severity**: Critical (servers), Major (scripts)
@@ -145,22 +103,17 @@ async function processLargeFile(data) {
 ## String Concatenation in Loops
 
 ```javascript
-// SLOW
+// SLOW — new string each iteration
 let result = '';
-for (const item of items) {
-  result += item.toString(); // Creates new string each time
-}
-// FAST
-const result = items.map(i => i.toString()).join('');
+for (const item of items) { result += item.toString(); }
+// FAST: items.map(i => i.toString()).join('')
 ```
 
 ```csharp
-// SLOW - O(n^2)
+// SLOW — O(n^2)
 string result = "";
 foreach (var item in items) { result += item.ToString(); }
-// FAST
-var sb = new StringBuilder();
-foreach (var item in items) { sb.Append(item); }
+// FAST: StringBuilder
 ```
 
 ## .NET Specific
@@ -169,12 +122,8 @@ foreach (var item in items) { sb.Append(item); }
 
 ```csharp
 // BOXING
-var list = new ArrayList();
-list.Add(42); // boxes int
-
-// NO BOXING
-var list = new List<int>();
-list.Add(42);
+var list = new ArrayList(); list.Add(42);
+// NO BOXING: List<int>
 ```
 
 **Severity**: Minor (isolated), Major (hot loops)
@@ -182,19 +131,16 @@ list.Add(42);
 ### LINQ in Hot Paths
 
 ```csharp
-// ALLOCATES
+// ALLOCATES — for hot paths use manual loop instead
 var first = items.FirstOrDefault(x => x.Id == id);
-// For hot paths, use manual loop instead
-foreach (var item in items) { if (item.Id == id) return item; }
 ```
 
 ### Async Void
 
 ```csharp
-// BAD - exceptions lost, can't await
+// BAD — exceptions lost, can't await
 async void ProcessAsync() { ... }
-// GOOD
-async Task ProcessAsync() { ... }
+// GOOD: async Task ProcessAsync()
 ```
 
 **Severity**: Major (also a correctness issue)

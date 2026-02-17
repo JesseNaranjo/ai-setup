@@ -7,17 +7,11 @@
 ```javascript
 // VULNERABLE
 const query = `SELECT * FROM users WHERE id = ${userId}`;
-db.query(query);
-
-// SAFE
-const query = 'SELECT * FROM users WHERE id = ?';
-db.query(query, [userId]);
 ```
 
 ```csharp
 // VULNERABLE
 var query = "SELECT * FROM Users WHERE Id = " + userId;
-cmd.CommandText = query;
 
 // SAFE
 var query = "SELECT * FROM Users WHERE Id = @id";
@@ -32,17 +26,11 @@ cmd.Parameters.AddWithValue("@id", userId);
 // VULNERABLE
 exec(`ls ${userInput}`);
 spawn('sh', ['-c', userInput]);
-
-// SAFE
-execFile('ls', [sanitizedPath]);
 ```
 
 ```csharp
 // VULNERABLE
 Process.Start("cmd", "/c " + userInput);
-
-// SAFE
-var psi = new ProcessStartInfo("myapp", escapedArgs);
 ```
 
 **Severity**: Critical
@@ -53,19 +41,11 @@ var psi = new ProcessStartInfo("myapp", escapedArgs);
 // VULNERABLE
 res.send(`<div>${userInput}</div>`);
 element.innerHTML = userInput;
-
-// SAFE
-res.send(`<div>${escapeHtml(userInput)}</div>`);
-element.textContent = userInput;
 ```
 
 ```csharp
-// VULNERABLE
+// VULNERABLE — use @Html.Encode(userInput) or Razor auto-encoding (@userInput)
 @Html.Raw(userInput)
-
-// SAFE
-@Html.Encode(userInput)
-@userInput  // Razor auto-encodes
 ```
 
 **Severity**: Major (stored XSS = Critical)
@@ -75,20 +55,12 @@ element.textContent = userInput;
 ### Missing Authentication
 
 ```javascript
-// VULNERABLE - no auth middleware
+// VULNERABLE — no auth middleware
 app.get('/api/admin/users', (req, res) => { ... });
-
-// SAFE
-app.get('/api/admin/users', requireAuth, requireAdmin, (req, res) => { ... });
 ```
 
 ```csharp
-// VULNERABLE - missing [Authorize]
-[HttpGet("admin/users")]
-public IActionResult GetUsers() { ... }
-
-// SAFE
-[Authorize(Roles = "Admin")]
+// VULNERABLE — missing [Authorize]
 [HttpGet("admin/users")]
 public IActionResult GetUsers() { ... }
 ```
@@ -98,18 +70,10 @@ public IActionResult GetUsers() { ... }
 ### Broken Access Control
 
 ```javascript
-// VULNERABLE - no ownership check
-app.get('/api/orders/:id', async (req, res) => {
-  const order = await Order.findById(req.params.id);
-  res.json(order);
-});
-
-// SAFE
-app.get('/api/orders/:id', async (req, res) => {
-  const order = await Order.findById(req.params.id);
-  if (order.userId !== req.user.id) return res.status(403).send();
-  res.json(order);
-});
+// VULNERABLE — no ownership check
+const order = await Order.findById(req.params.id);
+res.json(order);
+// SAFE: add if (order.userId !== req.user.id) return res.status(403).send();
 ```
 
 **Severity**: Critical
@@ -122,9 +86,6 @@ app.get('/api/orders/:id', async (req, res) => {
 // VULNERABLE
 const API_KEY = 'sk-1234567890abcdef';
 const password = 'admin123';
-
-// SAFE
-const API_KEY = process.env.API_KEY;
 ```
 
 **Detection regex:**
@@ -141,10 +102,6 @@ const API_KEY = process.env.API_KEY;
 // VULNERABLE
 console.log('User login:', { email, password });
 logger.info('Request:', req.body);
-
-// SAFE
-console.log('User login:', { email });
-logger.info('Request:', sanitizeForLogging(req.body));
 ```
 
 **Severity**: Major
@@ -152,15 +109,13 @@ logger.info('Request:', sanitizeForLogging(req.body));
 ## Cryptographic Issues
 
 ```javascript
-// VULNERABLE - weak hash
+// VULNERABLE — weak hash
 const hash = crypto.createHash('md5').update(password).digest('hex');
-// SAFE
-const hash = await bcrypt.hash(password, 12);
+// SAFE: bcrypt.hash(password, 12)
 
-// VULNERABLE - insecure random
+// VULNERABLE — insecure random
 const token = Math.random().toString(36);
-// SAFE
-const token = crypto.randomBytes(32).toString('hex');
+// SAFE: crypto.randomBytes(32).toString('hex')
 ```
 
 **Severity**: Critical (weak hash), Major (insecure random)
@@ -172,11 +127,7 @@ const token = crypto.randomBytes(32).toString('hex');
 ```javascript
 // VULNERABLE
 const filePath = path.join('/uploads', req.params.filename);
-fs.readFile(filePath);
-
-// SAFE
-const filename = path.basename(req.params.filename);
-const filePath = path.join('/uploads', filename);
+// SAFE: const filename = path.basename(req.params.filename);
 ```
 
 **Severity**: Critical
@@ -184,12 +135,8 @@ const filePath = path.join('/uploads', filename);
 ### Regex DoS (ReDoS)
 
 ```javascript
-// VULNERABLE - catastrophic backtracking
+// VULNERABLE — catastrophic backtracking
 const emailRegex = /^([a-zA-Z0-9]+)+@[a-zA-Z0-9]+$/;
-emailRegex.test(userInput);
-
-// SAFE - linear time
-const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+$/;
 ```
 
 **Severity**: Major
@@ -199,8 +146,6 @@ const emailRegex = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+$/;
 ```javascript
 // VULNERABLE
 const obj = eval('(' + userInput + ')');
-// SAFE
-const data = JSON.parse(userInput); // plain JSON.parse is safe
 ```
 
 ```csharp
@@ -208,16 +153,14 @@ const data = JSON.parse(userInput); // plain JSON.parse is safe
 var obj = JsonConvert.DeserializeObject(input, new JsonSerializerSettings {
     TypeNameHandling = TypeNameHandling.All
 });
-
-// SAFE
-var obj = JsonConvert.DeserializeObject<MyType>(input);
+// SAFE: JsonConvert.DeserializeObject<MyType>(input)
 ```
 
 **Severity**: Critical
 
 ## Security Headers
 
-Required headers: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY|SAMEORIGIN`, `Strict-Transport-Security`, `X-XSS-Protection: 1; mode=block`
+Required: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY|SAMEORIGIN`, `Strict-Transport-Security`, `X-XSS-Protection: 1; mode=block`
 
 **Severity**: Minor to Major depending on context
 

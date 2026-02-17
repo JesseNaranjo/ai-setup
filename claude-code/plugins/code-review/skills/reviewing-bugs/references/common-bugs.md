@@ -4,24 +4,14 @@
 
 ```javascript
 // BUG
-function getUserName(user) {
-  return user.profile.name; // Crashes if user or profile is null
-}
-// SAFE
-function getUserName(user) {
-  return user?.profile?.name ?? 'Unknown';
-}
+return user.profile.name; // Crashes if user or profile is null
+// SAFE: user?.profile?.name ?? 'Unknown'
 ```
 
 ```csharp
 // BUG
-public string GetUserName(User user) {
-  return user.Profile.Name; // NullReferenceException
-}
-// SAFE
-public string GetUserName(User user) {
-  return user?.Profile?.Name ?? "Unknown";
-}
+return user.Profile.Name; // NullReferenceException
+// SAFE: user?.Profile?.Name ?? "Unknown"
 ```
 
 **Severity**: Major (crashes), Minor (undefined behavior)
@@ -29,19 +19,12 @@ public string GetUserName(User user) {
 ## Off-by-One Errors
 
 ```javascript
-// BUG - includes non-existent index
-for (let i = 0; i <= arr.length; i++) {
-  console.log(arr[i]); // arr[arr.length] is undefined
-}
+// BUG — includes non-existent index
+for (let i = 0; i <= arr.length; i++) { ... }
 
-// BUG - counts spaces, not words
-function countWords(str) {
-  return str.split(' ').length - 1;
-}
-// CORRECT
-function countWords(str) {
-  return str.trim().split(/\s+/).length;
-}
+// BUG — counts spaces, not words
+return str.split(' ').length - 1;
+// CORRECT: str.trim().split(/\s+/).length
 ```
 
 **Severity**: Minor to Major
@@ -51,28 +34,18 @@ function countWords(str) {
 ### Unhandled Promise Rejection
 
 ```javascript
-// BUG - unhandled rejection
-async function loadData() {
-  const data = await fetch('/api/data');
-  return data.json();
-}
-loadData(); // No .catch()
+// BUG — no .catch()
+loadData(); // async function called without await or .catch()
 ```
 
 ### Race Conditions
 
 ```javascript
-// BUG - state changed between await calls
-async function updateUser(id, data) {
-  const user = await getUser(id);
-  user.count += 1;
-  await saveUser(user); // Another request may have updated count
-}
-
-// SAFE - atomic update
-async function updateUser(id, data) {
-  await db.query('UPDATE users SET count = count + 1 WHERE id = ?', [id]);
-}
+// BUG — state changed between awaits
+const user = await getUser(id);
+user.count += 1;
+await saveUser(user); // Another request may have updated count
+// SAFE: atomic db.query('UPDATE users SET count = count + 1 WHERE id = ?', [id])
 ```
 
 **Severity**: Major to Critical
@@ -80,11 +53,8 @@ async function updateUser(id, data) {
 ### Floating Promises
 
 ```javascript
-// BUG - doesn't wait for save
-function handleSubmit(data) {
-  saveData(data); // Forgot await!
-  showSuccess(); // Shows before save completes
-}
+// BUG — missing await
+saveData(data); // Shows success before save completes
 ```
 
 **Severity**: Major
@@ -97,13 +67,9 @@ function handleSubmit(data) {
 null == undefined  // true
 [] == false   // true
 
-// BUG - string concat instead of addition
+// BUG — string concat instead of addition
 const total = '10' + 5;  // '105'
 const sorted = [1, 10, 2].sort();  // [1, 10, 2] (string sort)
-
-// CORRECT
-const total = Number('10') + 5;  // 15
-const sorted = [1, 10, 2].sort((a, b) => a - b);  // [1, 2, 10]
 ```
 
 **Severity**: Minor to Major
@@ -113,29 +79,18 @@ const sorted = [1, 10, 2].sort((a, b) => a - b);  // [1, 2, 10]
 ### Mutating Shared State
 
 ```javascript
-// BUG
-function processItems(items) {
-  items.sort(); // Mutates original array!
-  return items.slice(0, 5);
-}
-// SAFE
-function processItems(items) {
-  return [...items].sort().slice(0, 5);
-}
+// BUG — mutates original array
+items.sort();
+// SAFE: [...items].sort().slice(0, 5)
 ```
 
 ### Stale Closure
 
 ```javascript
-// BUG - always logs initial count
-function Counter() {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    setInterval(() => {
-      console.log(count); // Always 0!
-    }, 1000);
-  }, []);
-}
+// BUG — always logs initial count (0)
+useEffect(() => {
+  setInterval(() => { console.log(count); }, 1000);
+}, []);
 ```
 
 **Severity**: Major
@@ -143,26 +98,11 @@ function Counter() {
 ## Error Handling
 
 ```javascript
-// BUG - error silently ignored
-try {
-  await saveData(data);
-} catch (e) {
-  // Empty catch
-}
+// BUG — error silently ignored
+try { await saveData(data); } catch (e) { /* Empty catch */ }
 
-// BUG - catches too broad
-try {
-  JSON.parse(input);
-} catch (e) {
-  return null; // Also catches programmer errors!
-}
-// BETTER
-try {
-  JSON.parse(input);
-} catch (e) {
-  if (e instanceof SyntaxError) return null;
-  throw e;
-}
+// BUG — catches too broad; re-throw non-SyntaxError
+try { JSON.parse(input); } catch (e) { return null; }
 ```
 
 **Severity**: Minor to Major
@@ -172,30 +112,18 @@ try {
 ### IDisposable Not Disposed
 
 ```csharp
-// BUG - connection may leak
+// BUG — connection may leak
 var connection = new SqlConnection(connString);
 connection.Open();
-// Missing: connection.Dispose()
-
-// CORRECT
-using var connection = new SqlConnection(connString);
-connection.Open();
+// CORRECT: using var connection = new SqlConnection(connString);
 ```
 
 ### Async Deadlock
 
 ```csharp
 // DEADLOCK in ASP.NET
-public ActionResult Index() {
-  var data = GetDataAsync().Result; // Deadlock!
-  return View(data);
-}
-
-// CORRECT
-public async Task<ActionResult> Index() {
-  var data = await GetDataAsync();
-  return View(data);
-}
+var data = GetDataAsync().Result;
+// CORRECT: async Task<ActionResult> with await GetDataAsync()
 ```
 
 **Severity**: Critical

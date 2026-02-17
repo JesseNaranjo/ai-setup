@@ -46,11 +46,8 @@
 ## Workarounds and Hacks
 
 **Detection regex:**
-```regex
-# Explicit markers
+```
 (?:\/\/|#|\/\*)\s*(?:HACK|WORKAROUND|XXX|TEMP(?:ORARY)?)\s*[:\-]?
-
-# Version-specific workaround
 (?:workaround|hack)\s+(?:for|due to)\s+.*(?:version|v\d|bug|issue)
 ```
 
@@ -69,11 +66,8 @@
 | Abandoned feature flags | Flags always true/false | Minor |
 
 **Detection regex:**
-```regex
-# Commented out code (10+ lines)
+```
 ^(?:\s*(?:\/\/|#).*\n){10,}
-
-# Unreachable after return
 return\s+[^;]+;\s*\n\s*(?![\}\)])[^\/\n]+
 ```
 
@@ -89,11 +83,8 @@ return\s+[^;]+;\s*\n\s*(?![\}\)])[^\/\n]+
 ## Documentation Debt
 
 **Detection regex:**
-```regex
-# TODO without issue reference
+```
 (?:\/\/|#)\s*TODO(?:\([^)]*\))?:?\s+(?!.*(?:#\d+|ISSUE-|JIRA-|TICKET-))
-
-# FIXME without tracking
 (?:\/\/|#)\s*FIXME:?\s+(?!.*(?:#\d+|ISSUE-))
 ```
 

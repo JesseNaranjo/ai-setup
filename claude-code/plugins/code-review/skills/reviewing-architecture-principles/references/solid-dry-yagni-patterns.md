@@ -13,12 +13,9 @@
 ```typescript
 // BAD: Class doing authentication AND user profile AND notifications
 class UserService {
-  login() { /* auth logic */ }
-  logout() { /* auth logic */ }
-  updateProfile() { /* profile logic */ }
-  getProfile() { /* profile logic */ }
-  sendEmail() { /* notification logic */ }
-  sendPush() { /* notification logic */ }
+  login() { ... } logout() { ... }      // auth
+  updateProfile() { ... }               // profile
+  sendEmail() { ... } sendPush() { ... } // notifications
 }
 ```
 
@@ -35,11 +32,7 @@ class UserService {
 ```typescript
 // BAD: Must modify to add new payment type
 function processPayment(type: string) {
-  switch (type) {
-    case 'credit': return processCreditCard();
-    case 'debit': return processDebitCard();
-    case 'paypal': return processPayPal();
-  }
+  switch (type) { case 'credit': ... case 'debit': ... case 'paypal': ... }
 }
 ```
 
@@ -56,16 +49,10 @@ function processPayment(type: string) {
 ```typescript
 // BAD: Square violates Rectangle's setWidth/setHeight contract
 class Square extends Rectangle {
-  setWidth(w: number) {
-    this.width = w;
-    this.height = w; // Violates base class contract
-  }
+  setWidth(w: number) { this.width = w; this.height = w; }
 }
-
 // BAD: Runtime type check on interface parameter
-function processShape(shape: IShape) {
-  if (shape instanceof Circle) { /* Special handling */ }
-}
+function processShape(shape: IShape) { if (shape instanceof Circle) { ... } }
 ```
 
 **Grep:** `throw new NotImplemented`; `override.*{[^}]*throw`; `instanceof.*\?.*:`
@@ -83,7 +70,6 @@ function processShape(shape: IShape) {
 class ReadOnlyRepo implements IRepository<User> {
   create(item: User) { throw new Error('Not supported'); }
   update(id: string, item: User) { throw new Error('Not supported'); }
-  delete(id: string) { throw new Error('Not supported'); }
 }
 ```
 
@@ -121,8 +107,7 @@ class OrderService {
 function createUser(data: UserDTO) {
   if (!data.email) throw new Error('Email required');
   if (!data.email.includes('@')) throw new Error('Invalid email');
-  if (!data.name) throw new Error('Name required');
-  // ... same validation in updateUser, importUser
+  // ... same validation repeated in updateUser, importUser
 }
 ```
 

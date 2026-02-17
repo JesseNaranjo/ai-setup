@@ -49,5 +49,5 @@ Example: "When two users simultaneously withdraw from the same account (concurre
 
 ## Example Output
 
-`examples/example-output.md`
+`${CLAUDE_PLUGIN_ROOT}/shared/example-output.md`
 
