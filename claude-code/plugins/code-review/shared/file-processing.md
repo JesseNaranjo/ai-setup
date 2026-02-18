@@ -7,42 +7,18 @@ Parse arguments:
 - **Output file path**: From `--output-file` flag
 - **Language override**: From `--language` flag (`nodejs`, `react`, `dotnet`)
 
-Files must be validated for:
-- Git repository presence (fail if not git repo)
-- Existence (exclude non-existent files)
-- Change status (uncommitted changes vs no changes)
+Validate files: git repo presence (fail if not), existence (exclude missing), change status (uncommitted vs none). Fail if no valid files remain.
 
-Fail if no valid files remain after validation.
-
-**Validation output:**
-- Valid file paths
-- Files with changes vs files without changes
-- Output file path
-- Language override (if any)
+**Output:** Valid file paths (split by has_changes / no changes), output file path, language override (if any).
 
 ## Content Gathering
 
 Launch Sonnet agent to gather:
 
-**For files with uncommitted changes:**
-- Diff (uncommitted changes only)
-- Full file content (broader context)
+**File content:** For files with uncommitted changes: diff + full content. For files without changes: full content only.
 
-**For files without changes:**
-- Full file content
+**Related test files:** Read test files from Context Discovery step (patterns per `languages/nodejs.md` and `languages/dotnet.md`).
 
-**Related test files:**
-- Read test files discovered in Context Discovery step
-- Test file patterns per `languages/nodejs.md` and `languages/dotnet.md`
+**Summary:** Files with changes vs reviewed in entirety, detected project type(s), related test files found.
 
-**Summary:**
-- Which files have changes being reviewed
-- Which files reviewed in entirety (no changes)
-- Detected project type(s)
-- Related test files found
-
-**Gathering output:**
-- Current branch name
-- For each file: diff (if has_changes), full content, has_changes flag
-- Related test file contents
-- Review summary
+**Output:** Current branch name. For each file: diff (if has_changes), full content, has_changes flag. Related test file contents. Review summary.

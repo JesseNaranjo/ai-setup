@@ -14,37 +14,16 @@ Resolve `--skills` argument to SKILL.md files.
 ## Structured Data Extraction
 
 **Review skills** (reviewing-{architecture-principles,bugs,compliance,performance,security,technical-debt}):
-
-| Field | Source |
-|-------|--------|
-| `focus_areas` | "Additional Focus Areas" sections (if present, otherwise empty) |
-| `auto_validated_patterns` | Pattern tables |
-| `false_positive_rules` | "False Positives" sections |
-| `priority_files` | "Scope Prioritization" sections |
-| `primary_agent` | Skill name mapping (see table below) |
+Fields: `focus_areas` ← "Additional Focus Areas" (empty if absent); `auto_validated_patterns` ← pattern tables; `false_positive_rules` ← "False Positives"; `priority_files` ← "Scope Prioritization"; `primary_agent` ← name mapping (see below).
 
 **Methodology skills** (superpowers:*, etc.):
-
-| Field | Source |
-|-------|--------|
-| `methodology` | Main content |
-| `steps` | Numbered lists/workflow sections |
-| `questions` | Question-based sections |
+Fields: `methodology` ← main content; `steps` ← numbered lists/workflow sections; `questions` ← question-based sections.
 
 **Parsing:** Ignore "When to Use"/"Process Overview". Preserve category hierarchy. Type: `reviewing-{architecture-principles|bugs|compliance|performance|security|technical-debt}` → review; `reviewing-documentation` → command (meta-skill); else → methodology.
 
 ## Primary Agent Mapping
 
-| Skill | Agent |
-|-------|-------|
-| reviewing-architecture-principles | architecture-agent |
-| reviewing-bugs | bug-detection-agent |
-| reviewing-compliance | compliance-agent |
-| reviewing-documentation | N/A (command meta-skill) |
-| reviewing-performance | performance-agent |
-| reviewing-security | security-agent |
-| reviewing-technical-debt | technical-debt-agent |
-| (methodology) | null |
+Convention: `reviewing-{X}` → `{X}-agent`. Exceptions: architecture-principles→architecture, bugs→bug-detection. Special: reviewing-documentation→N/A (command meta-skill), methodology skills→null.
 
 ## Resolved Structure
 
@@ -75,10 +54,10 @@ resolved_skills:
 
 Per agent, initialize: focus_areas, checklist, auto_validate, false_positive_rules, methodology.
 
-- **Review skill:** If focus_areas non-empty: append focus_areas to primary agent; build checklist from focus_areas (category, severity, checks as items). If focus_areas empty: skip focus_areas and checklist (agent uses standard categories). Always: append auto_validated_patterns[].id to auto_validate; append false_positive_rules
+- **Review skill:** If focus_areas non-empty: append to primary agent + build checklist (category, severity, checks as items). If empty: skip (agent uses standard categories). Always: append auto_validated_patterns[].id to auto_validate; append false_positive_rules
 - **Methodology skill:** For ALL agents, set/append methodology (steps, questions)
 
-Include in agent prompt only if non-empty. Store combined data for validation:
+Include in agent prompt only if non-empty. Store combined for validation:
 
 ```yaml
 skill_validation_context: { auto_validate_patterns: [union], false_positive_rules: [union] }
@@ -97,13 +76,13 @@ Standard questions from orchestration file plus: reviewing-security → "Do find
 
 Inject into `additional_instructions` when `--skills` active:
 
-1. **focus_areas**: If provided, prioritize FIRST before standard checks. If empty, use standard agent categories
+1. **focus_areas**: Prioritize FIRST before standard checks; if empty, use standard agent categories
 2. **checklist**: Verify EVERY item; acknowledge clean items
 3. **auto_validate**: Matching issues include `auto_validated: true`
 4. **false_positive_rules**: Additional FP filters beyond standard
 5. **methodology**: Adopt mindset, follow steps, consider questions
 
-Agents without primary skill receive methodology only. Without skill_instructions, standard process.
+Agents without primary skill: methodology only. Without skill_instructions: standard process.
 
 ## Notes
 

@@ -52,7 +52,7 @@ claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata
 ├── commands/                        # Orchestration entry points (inline steps, reference shared/; see "Commands Directory" convention)
 │   ├── code-review.md              # Code review for files or staged changes (deep: 19, quick: 7 agent invocations)
-│   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations)
+│   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations; inlines docs-processing)
 ├── agents/                          # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                        # Code review agents (10 agents)
 │   │   ├── api-contracts-agent.md   # API compatibility
@@ -89,7 +89,6 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
-│   ├── docs-processing.md           # Docs input validation and content gathering
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, invocation patterns, gaps mode behavior, agent common instructions

@@ -1,7 +1,6 @@
 # Documentation Review Orchestration
 
-- Use git CLI (not GitHub CLI). Create todo list before starting.
-- Cite issues with `file:line` (e.g., `docs/api.md:42-48`). Quote exact AI instruction rules when violated.
+- Use git CLI (not GitHub CLI). Cite issues with `file:line` (e.g., `docs/api.md:42-48`). Quote exact AI instruction rules when violated.
 - Paths relative to repo root. Line numbers reference file lines (not diff lines).
 
 ## Agent Invocation
@@ -12,7 +11,7 @@
 |-------|------|----------|-------|
 | `MODE` | string | Yes | `thorough`, `gaps`, or `quick` |
 | `project_type` | string | Yes | `nodejs`, `dotnet`, or both |
-| `files_to_review` | list | Yes | See File Entry Schema below |
+| `files_to_review` | list | Yes | Below |
 | `ai_instructions` | list | Optional | Summary of AI instruction files |
 | `previous_findings` | list | Gaps only | Prior findings for dedup. Each: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
 | `skill_instructions` | object | Optional | From `--skills`. Fields: `focus_areas`, `checklist` [{category, severity, items}], `auto_validate`, `false_positive_rules`, `methodology` {approach, steps, questions} |
@@ -28,10 +27,7 @@ End prompt with: `Return findings as YAML per agent examples in your agent file.
 
 ### Content Distribution
 
-Per agent, append to `additional_instructions`:
-1. Output schema, MODE definition, FP rules from Agent Common Instructions below
-
-Synthesis agents skip distribution.
+Per agent, append to `additional_instructions`: Output schema, MODE, FP rules from Agent Common Instructions below. Synthesis: skip distribution.
 
 ### Agent Common Instructions
 
@@ -46,20 +42,20 @@ Synthesis agents skip distribution.
 
 ## Gaps Mode
 
-When MODE=gaps, agents receive `previous_findings` from thorough mode.
+Agents receive `previous_findings` from thorough mode.
 
-**Duplicate Detection:** Skip issues in same file within +/-5 lines of prior findings. Skip same issue type on same function/method. For range findings (lines A-B): skip zone = [A-5, B+5]. See Prompt Schema `previous_findings` field for schema.
+**Duplicate Detection:** Skip issues in same file within +/-5 lines of prior findings. Skip same issue type on same function/method. Range findings (lines A-B): skip zone = [A-5, B+5].
 
-**Constraints:** Only Major/Critical severity (skip Minor/Suggestion). Maximum 5 new findings per agent. Model: always Sonnet.
+**Constraints:** Major/Critical only. Maximum 5 new findings per agent. Model: always Sonnet.
 
-**Agents:** accuracy, completeness, consistency. See each agent file for category-specific gaps focus areas.
+**Agents:** accuracy, completeness, consistency. See each agent file for gaps focus areas.
 
 ## Deep Docs Review Sequence (13 invocations)
 
 **Phase 1 — Thorough** (6 parallel): accuracy, clarity, completeness, consistency, examples, structure. MODE: thorough. Pass: doc contents, related code snippets, project metadata, AI instruction file status, additional prompt instructions.
 **CRITICAL: WAIT for ALL 6 before Phase 2.**
 
-**Phase 2 — Gaps** (3 parallel Sonnet): accuracy, completeness, consistency. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Distribute Gaps Mode rules to each agent's `additional_instructions`.
+**Phase 2 — Gaps** (3 parallel Sonnet): accuracy, completeness, consistency. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Distribute Gaps Mode rules via `additional_instructions`.
 **CRITICAL: WAIT for ALL 3 before Synthesis.**
 
 **Synthesis** (4 parallel): 4 instances of synthesis-docs-agent. Input: ALL Phase 1+2 findings.
@@ -86,7 +82,7 @@ Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick 
 
 ## Synthesis Invocation
 
-Invoke synthesis agents multiple times in parallel with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md`.
+Invoke synthesis agent multiple times in parallel with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md`.
 
 ---
 

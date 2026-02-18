@@ -2,49 +2,27 @@
 
 ## Input Validation
 
-**Git Repository Check**: Verify current directory is a git repository. If not, stop: "Not a git repository."
+Verify git repository (stop: "Not a git repository.") and staged changes exist (stop: "No staged changes to review.").
 
-**Staged Changes Check**: Verify staged changes exist. If none, stop: "No staged changes to review."
+Parse arguments: `--output-file` (command provides default), `--language` (`nodejs` or `dotnet`, default: auto-detect per file).
 
-**Argument Parsing**: Extract from command arguments:
-- **Output file path**: From `--output-file` flag (command provides default)
-- **Language override**: From `--language` flag (`nodejs` or `dotnet`, default: auto-detect per file)
-
-**Validation Output**: Pass to Content Gathering: staged file paths, parsed output file path, parsed language override (if any)
+**Output:** Staged file paths, parsed output file path, parsed language override (if any).
 
 ## Content Gathering
 
 Launch Sonnet agent to gather:
 
-**1. Staged Diff**: Get full staged diff with line markers
+**Staged diff:** Full staged diff with line markers.
 
-**2. Current Branch**: Get branch name
+**Current branch:** Branch name.
 
-**3. Full File Content (Tiered)**:
-- **Changed files (has_changes=true)**: Read full file content (critical tier)
-- **Unchanged files referenced in imports/context (has_changes=false)**: Read preview only (peripheral tier)
+**Full file content (tiered):** Changed files (has_changes=true) → full content (critical tier). Unchanged files in imports/context (has_changes=false) → first 50 lines preview only (peripheral tier).
 
-**4. Related Test Files**: Read test files from Context Discovery step (see `languages/nodejs.md` and `languages/dotnet.md` for patterns). Always critical tier.
+**Related test files:** From Context Discovery step (see `languages/nodejs.md` and `languages/dotnet.md`). Always critical tier.
 
-**5. Summary**: Number of files modified, brief description of changes, detected project types, related test files found, tier classification summary
+**Summary:** Files modified count, change description, detected project types, related test files, tier classification.
 
-**Gathering Output**: Return to review step:
-- Current branch name
-- For each file:
-  - path, has_changes (true/false), **tier** ("critical" or "peripheral")
-  - **Critical files** (has_changes=true): diff (full diff content), full_content (full file content)
-  - **Peripheral files** (has_changes=false): preview (first 50 lines), line_count (total lines), full_content_available: true
-- Related test files (always critical tier)
-- Summary of what's being reviewed
-
-**Tier Classification**:
-
-| File Type | Tier | Rationale |
-|-----------|------|-----------|
-| Files with staged changes | critical | Primary review focus |
-| Related test files | critical | Need full content for coverage analysis |
-| AI instruction files | critical | Always fully loaded |
-| Unchanged source files | peripheral | Context only - agents Read on-demand |
+**Output:** Current branch name. Per file: path, has_changes, tier ("critical"/"peripheral"). Critical files: diff + full_content. Peripheral files: preview (50 lines), line_count, full_content_available: true. Related test files (critical tier). Review summary.
 
 ## Pre-Existing Issue Detection (For Staged Reviews)
 
@@ -68,13 +46,8 @@ Launch Sonnet agent to gather:
 
 ## Tiered Context Agent Guidance
 
-For staged reviews, inject the following into each agent's `additional_instructions`:
+Inject into each agent's `additional_instructions` for staged reviews:
 
-**For `tier: "critical"` files:**
-- Full content is provided - analyze thoroughly
-- This is the primary review focus
+**`tier: "critical"`:** Full content provided — analyze thoroughly. Primary review focus.
 
-**For `tier: "peripheral"` files:**
-- Only a preview (first 50 lines) is provided
-- Use the preview to understand file purpose
-- If cross-file analysis discovers relevance, use Read tool to get full content
+**`tier: "peripheral"`:** Preview only (first 50 lines). Use to understand file purpose. If cross-file analysis discovers relevance, use Read tool for full content.

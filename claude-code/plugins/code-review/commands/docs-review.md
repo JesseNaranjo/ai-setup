@@ -19,11 +19,11 @@ Parse arguments from `$ARGUMENTS`:
 
 ## Step 1: Invoke Methodology Skills
 
-Invoke superpowers skills (using-superpowers, brainstorming, systematic-debugging, verification-before-completion, writing-plans, executing-plans, requesting-code-review, dispatching-parallel-agents, subagent-driven-development) and pass methodology to all subagents via `skill_instructions.methodology`. If superpowers plugin unavailable, proceed without.
+Invoke superpowers methodology skills; pass to agents via `skill_instructions.methodology`. If unavailable, proceed without.
 
 ## Step 2: Load Settings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. If `.claude/code-review.local.md` has `enabled: false`, stop. Apply: `output_dir`, `skip_agents`, `min_severity`.
+See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. Stop if `enabled: false`. Apply: `output_dir`, `skip_agents`, `min_severity`.
 
 ## Step 4: Context Discovery
 
@@ -33,8 +33,49 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
 
 ## Steps 3 & 5: Input Validation and Content Gathering
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the validation and content gathering process.
-If no files specified, discover all documentation files in the project.
+### Input Validation
+
+**Parse arguments:** File paths (optional, space-separated), `--output-file`, `--prompt`.
+
+**Git repository check:** Verify via `git rev-parse --git-dir`. If not, stop: "Not a git repository."
+
+**Discover documentation files:** If specific files provided, validate those. Otherwise discover:
+
+Standard documentation: Root markdown (README.md, CHANGELOG.md, CLAUDE.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, LICENSE.md) + `docs/**/*.md`, `documentation/**/*.md`
+
+AI Agent Instruction Files:
+- `.ai/AI-AGENT-INSTRUCTIONS.md` (standard location)
+- `.github/copilot-instructions.md`
+- `.github/ISSUE_TEMPLATE/*.md`
+- `.github/PULL_REQUEST_TEMPLATE.md`
+- `AI-AGENT-INSTRUCTIONS.md` (root - should be in `.ai/`)
+
+**AI instruction file standardization tracking:**
+- AI-AGENT-INSTRUCTIONS.md: `.ai/` = correct; root only = should move to `.ai/`; missing = should create
+- CLAUDE.md header: check references `.ai/AI-AGENT-INSTRUCTIONS.md`
+- copilot-instructions.md: `.github/` = exists; missing = should create
+
+**Filter by scope:** Specific files provided → verify existence, review only those. No files → include all discovered; prioritize README > CLAUDE.md > CHANGELOG > docs/
+
+If no files found, stop: "No documentation files found. Ensure your project has README.md, docs/, or other markdown documentation."
+
+**Validation output:** Documentation files to review, AI instruction file standardization status, output file path, additional instructions.
+
+### Content Gathering
+
+Launch Sonnet agent to gather documentation content and code references.
+
+**Current branch:** `git branch --show-current`
+
+**Documentation files:** Read full content, classify type (README, API docs, tutorial, etc.)
+
+**Code references:** Scan docs for verifiable code references (function/class names, file paths, imports, API endpoints, CLI commands). For referenced code files that exist, read relevant sections (signatures, definitions, exports) for accuracy verification.
+
+**Project metadata:** Read `package.json`, `*.csproj`, `pyproject.toml`/`setup.py`, `VERSION` file, git tags for version verification.
+
+**AI instruction file context (if reviewing AI instruction files):** Read `.ai/AI-AGENT-INSTRUCTIONS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` if they exist. Check header consistency. Verify cross-references are valid.
+
+**Output:** Current branch name. Per doc file: full content, type classification. Referenced code snippets for verification. Project metadata (versions, etc.). AI instruction file cross-reference status. Review summary.
 
 ---
 
@@ -47,16 +88,10 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 ## Step 7: Review Execution
 
 **If depth == deep:**
-Execute the **Deep Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`:
-- Use agent `model` frontmatter with mode overrides from Model Selection
-- Use the **Agent Common Content Distribution** rules
-- Follow all CRITICAL WAIT barriers between phases
+Execute the **Deep Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`. Follow all CRITICAL WAIT barriers between phases.
 
 **If depth == quick:**
-Execute the **Quick Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`:
-- Use agent `model` frontmatter with mode overrides from Model Selection
-- Use the **Agent Common Content Distribution** rules
-- Follow all CRITICAL WAIT barriers
+Execute the **Quick Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`. Follow all CRITICAL WAIT barriers.
 
 ---
 

@@ -22,11 +22,11 @@ Error if both file paths and `--staged` are provided.
 
 ## Step 1: Invoke Methodology Skills
 
-Invoke superpowers skills (using-superpowers, brainstorming, systematic-debugging, verification-before-completion, writing-plans, executing-plans, requesting-code-review, dispatching-parallel-agents, subagent-driven-development) and pass methodology to all subagents via `skill_instructions.methodology`. If superpowers plugin unavailable, proceed without.
+Invoke superpowers methodology skills; pass to agents via `skill_instructions.methodology`. If unavailable, proceed without.
 
 ## Step 2: Load Settings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. If `.claude/code-review.local.md` has `enabled: false`, stop. Apply: `output_dir`, `skip_agents`, `min_severity`, `language`.
+See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. Stop if `enabled: false`. Apply: `output_dir`, `skip_agents`, `min_severity`, `language`.
 
 ## Step 4: Context Discovery
 
@@ -53,18 +53,12 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 ## Step 7: Review Execution
 
 **If depth == deep:**
-Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
-- Use agent `model` frontmatter with mode overrides from Model Selection
-- Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
-- Follow all CRITICAL WAIT barriers between phases
+Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. Follow all CRITICAL WAIT barriers between phases.
 
 **If depth == quick:**
-Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
-- Use agent `model` frontmatter with mode overrides from Model Selection
-- Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
-- Follow all CRITICAL WAIT barriers
+Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. Follow all CRITICAL WAIT barriers.
 
-**If `--staged`:** Each agent receives staged diff and full file content per the tier classification in `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md`.
+**If `--staged`:** Agents receive staged diff and file content per tier classification in `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md`.
 
 ---
 

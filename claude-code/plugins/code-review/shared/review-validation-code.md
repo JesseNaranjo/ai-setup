@@ -54,8 +54,8 @@ Use agent `model` frontmatter for validation. Cross-cutting insights always **Op
 
 1. **Remove Invalid**: Filter INVALID issues
 2. **Apply Downgrades**: Update severity for DOWNGRADE verdicts
-3. **Deduplicate**: Merge same-file overlapping-range issues; keep most detailed description; use highest severity
-4. **Consensus Detection**: Group by file, detect overlapping issues (same file, intersecting ranges: NOT (L2 < M1 OR M2 < L1)). Build clusters transitively (A overlaps B, B overlaps C → {A,B,C}). Merge each: highest severity, longest description, combined categories, badge (`[2 agents]` or `[3+ agents]`)
+3. **Deduplicate**: Merge same-file overlapping-range issues; keep most detailed description, highest severity
+4. **Consensus Detection**: Group by file, detect overlapping issues (intersecting ranges: NOT (L2 < M1 OR M2 < L1)). Build clusters transitively (A↔B, B↔C → {A,B,C}). Merge: highest severity, longest description, combined categories, badge (`[2 agents]` or `[3+ agents]`)
 
 ## Auto-Validation Patterns (Code)
 
@@ -123,43 +123,16 @@ Issues matching these patterns skip validation entirely and are marked `auto_val
 
 ## Output Format
 
-Authoritative output schema reference for all agents.
+**Output Process:** Generate: Header → Summary Table (reviewed categories only) → Issues (by severity) → Cross-Cutting Insights (if any) → Test Recommendations (if applicable). Display in terminal. Write to file (generated filename or `--output-file`). Print: "Review saved to: [filepath]"
 
-### Output Process
+**Filename:** `yyyy-mm-dd_few-words-summary_review-type.md` — 2-4 lowercase-hyphenated words from file names or "staged-changes". Review-type matches command name and depth. Under 80 chars. Example: `2026-02-05_auth-middleware_code-review-deep.md`
 
-Generate: Header → Summary Table (reviewed categories only) → Issues (by severity) → Cross-Cutting Insights (if any) → Test Recommendations (if applicable). Display in terminal. Write to file (generated filename or `--output-file`). Print: "Review saved to: [filepath]"
+**Review Header:** `## Code Review` heading, then `**Reviewed:** [N] file(s) | **Branch:** [branch-name]` and `**Review Depth:** [review-depth-description]` on separate lines. **No issues:** Header → "No issues found. All checks passed:" → checked categories → "Files reviewed:" → file list.
 
-### Filename
+**Issues Found:** (1) Summary table: Categories × severity (`Critical | Major | Minor | Suggestions`) + `**Total**` row, reviewed categories only (9 deep, 4 quick). (2) Severity sections: `### Critical Issues (Must Fix)`, `### Major Issues (Should Fix)`, `### Minor Issues`, `### Suggestions` — only sections with issues. (3) Cross-Cutting Insights (after severity, before Test Recommendations). (4) Test Recommendations (if applicable). (5) Footer: `Review saved to: [filepath]`
 
-Pattern: `yyyy-mm-dd_few-words-summary_review-type.md` — 2-4 lowercase-hyphenated words from file names or "staged-changes". Review-type matches command name and depth. Under 80 chars. Example: `2026-02-05_auth-middleware_code-review-deep.md`
+**Cross-Cutting Insights:** Only if synthesis agents produced `cross_cutting_insights`; omit entirely if none. Format: `**[N]. [Insight title]** \`[Severity]\` \`[Primary Category] + [Secondary Category]\`` on first line, backtick `path/to/file.ts:line` on second, description referencing related findings from each category, then fix using diff or prompt format.
 
-### Review Header
+**Issue Entry Format:** `**[N]. [Title]** \`[Severity]\` \`[Category]\`` followed by optional consensus badge, then backtick `file:line` on next line, description paragraph, and `**Fix**:` with diff or prompt. Consensus badge: `[2 agents]` or `[3+ agents]` after category — omit if single agent.
 
-`## Code Review` heading, then `**Reviewed:** [N] file(s) | **Branch:** [branch-name]` and `**Review Depth:** [review-depth-description]` on separate lines.
-
-**No issues:** Header → "No issues found. All checks passed:" → checked categories → "Files reviewed:" → file list.
-
-### Issues Found
-
-Header followed by:
-1. **Summary table**: Categories × severity (`Critical | Major | Minor | Suggestions`) + `**Total**` row. Only reviewed categories (9 deep, 4 quick).
-2. **Severity sections**: `### Critical Issues (Must Fix)`, `### Major Issues (Should Fix)`, `### Minor Issues`, `### Suggestions` — only sections with issues.
-3. **Cross-Cutting Insights** (after severity, before Test Recommendations)
-4. **Test Recommendations** (if applicable)
-5. Footer: `Review saved to: [filepath]`
-
-### Cross-Cutting Insights
-
-Only if synthesis agents produced `cross_cutting_insights`; omit section entirely if none. Format: `**[N]. [Insight title]** \`[Severity]\` \`[Primary Category] + [Secondary Category]\`` on first line, backtick `path/to/file.ts:line` on second, description referencing related findings from each category, then fix using diff or prompt format.
-
-### Issue Entry Format
-
-Format: `**[N]. [Title]** \`[Severity]\` \`[Category]\`` followed by optional consensus badge, then backtick `file:line` on next line, description paragraph, and `**Fix**:` with diff or prompt. Consensus badge: `[2 agents]` or `[3+ agents]` after category — omit if single agent.
-
-### Actionable Fix Formats
-
-**One entry per unique issue.** Fixes must be directly applicable.
-
-**Inline diffs** (fix_type: diff): Single-location, ≤10 lines, complete drop-in replacement (no `...` or partial code), no changes elsewhere. Use standard diff code block with `-`/`+` lines.
-
-**Fix prompts** (fix_type: prompt): Multi-location/structural fixes. Label `**Fix prompt** (copy to Claude Code):` then blockquote (`>`) with action verb, specific files and numbered changes.
+**Actionable Fix Formats:** One entry per unique issue. Fixes must be directly applicable. **Inline diffs** (fix_type: diff): Single-location, ≤10 lines, complete drop-in replacement (no `...` or partial code), no changes elsewhere. Use standard diff code block with `-`/`+` lines. **Fix prompts** (fix_type: prompt): Multi-location/structural fixes. Label `**Fix prompt** (copy to Claude Code):` then blockquote (`>`) with action verb, specific files and numbered changes.
