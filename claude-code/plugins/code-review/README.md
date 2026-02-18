@@ -22,18 +22,11 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ### `/code-review`
 
-Code review with configurable depth. Deep (default) uses all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
+Code review for files or staged changes with configurable depth. Deep (default) uses all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
 /code-review <file1> [file2...] [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
-```
-
-### `/code-review-staged`
-
-Code review of staged git changes with configurable depth. Deep (default) uses all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes. Quick uses 4 agents (7 invocations) focusing on critical issues.
-
-```bash
-/code-review-staged [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/code-review --staged [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
 ```
 
 ### `/docs-review`
@@ -179,7 +172,7 @@ Use `--prompt` to pass ad-hoc instructions to all review agents without editing 
 #### Example: Systematic Checklist Approach
 
 ```bash
-/code-review-staged --depth quick --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
+/code-review --staged --depth quick --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
 ```
 
 #### Example: Domain-Specific Focus
@@ -316,8 +309,7 @@ code-review/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata
 ├── commands/
-│   ├── code-review.md              # Code review (deep: 19, quick: 7 invocations)
-│   ├── code-review-staged.md       # Staged code review (deep: 19, quick: 7 invocations)
+│   ├── code-review.md              # Code review for files or staged changes (deep: 19, quick: 7 invocations)
 │   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations)
 ├── agents/                      # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                    # Code review agents (10 agents)
@@ -355,8 +347,8 @@ code-review/
 │   ├── docs-processing.md           # Validation and content gathering for documentation commands
 │   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode, agent common instructions
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode, agent common instructions
+│   ├── review-orchestration-code.md # Code review: phases, invocation patterns, gaps mode behavior, agent common instructions
+│   ├── review-orchestration-docs.md # Docs review: phases, invocation patterns, gaps mode behavior, agent common instructions
 │   ├── review-validation-code.md    # Code validation: batch validation, aggregation, auto-validation patterns
 │   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
@@ -415,8 +407,8 @@ Each agent accepts a MODE parameter:
 |---------|-------|--------|------------------|-------------------|
 | `/code-review` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
 | `/code-review` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
-| `/code-review-staged` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/code-review-staged` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+| `/code-review --staged` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
+| `/code-review --staged` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
 
 **Documentation Reviews:**
 
@@ -507,7 +499,7 @@ The query uses string concatenation with user input.
 
 ```bash
 git add src/feature.ts
-/code-review-staged --depth quick
+/code-review --staged --depth quick
 git commit -m "Add feature"
 ```
 
@@ -515,7 +507,7 @@ git commit -m "Add feature"
 
 ```bash
 git add .
-/code-review-staged
+/code-review --staged
 ```
 
 ### Targeted Security Audit
@@ -561,7 +553,7 @@ Create a new `.md` file in `commands/` with the appropriate frontmatter.
 - Check file exists in project root
 
 **No staged changes found:**
-- Run `git add` before using staged commands
+- Run `git add` before using `/code-review --staged`
 - Verify changes are staged with `git status`
 
 **Wrong language detected:**

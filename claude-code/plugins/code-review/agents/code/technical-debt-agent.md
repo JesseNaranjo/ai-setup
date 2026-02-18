@@ -2,6 +2,7 @@
 name: technical-debt-agent
 description: "Technical debt specialist. Use for detecting deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, or documentation debt."
 color: brown
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -36,3 +37,7 @@ issues:
     urgency: "blocking|soon|low"
     effort_estimate: "trivial|small|medium|large"
 ```
+
+## False Positives
+
+Dependencies pinned for compatibility (documented); dead code conditionally compiled (build flags); TODO with issue tracking (TODO(#123)); workarounds with documented upstream bugs; class components in projects supporting older React

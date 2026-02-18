@@ -2,6 +2,7 @@
 name: compliance-agent
 description: "Coding standards compliance specialist. Use for checking adherence to CLAUDE.md guidelines, AI agent instructions, or project-specific coding standards."
 color: blue
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -48,3 +49,7 @@ issues:
     rule_violated: "Exact quote from instruction file"
     rule_source: "CLAUDE.md or AI-AGENT-INSTRUCTIONS.md path"
 ```
+
+## False Positives
+
+Explicit override comments; ambiguous rules with reasonable compliance; style preferences not stated as rules

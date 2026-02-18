@@ -2,6 +2,7 @@
 name: synthesis-docs-agent
 description: "Cross-cutting documentation analysis specialist. Use after other docs review agents complete to detect patterns spanning multiple documentation quality domains."
 color: white
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 

@@ -1,20 +1,22 @@
 ---
 name: code-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Code review with configurable depth (deep: 19 agent invocations, quick: 7)
-argument-hint: "<file1> [file2...] [--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
+description: Code review for files or staged changes with configurable depth (deep: 19 agent invocations, quick: 7)
+argument-hint: "[<file1> [file2...] | --staged] [--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a code review for the specified files. Depth controls the review pipeline: deep uses all 9 agents (19 invocations total) with thorough + gaps modes; quick uses 4 agents (7 invocations) focusing on bugs, security, error handling, and test coverage. For files with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a code review for specified files or staged git changes. Depth controls the review pipeline: deep uses all 9 agents (19 invocations total) with thorough + gaps modes; quick uses 4 agents (7 invocations) focusing on bugs, security, error handling, and test coverage. For file reviews with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
 Parse arguments from `$ARGUMENTS`:
-- Required: One or more file paths (space-separated)
+- Mutually exclusive: One or more file paths (space-separated) OR `--staged` flag
 - Optional: `--depth deep|quick` (default: `deep`)
 - Optional: `--output-file <path>` to specify output location (default: see Filename Generation in review-orchestration-code.md)
 - Optional: `--language dotnet|nodejs|react` to force language detection
 - Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
+
+Error if both file paths and `--staged` are provided.
 
 ---
 
@@ -34,6 +36,10 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
 
 ## Steps 3 & 5: Input Validation and Content Gathering
 
+**If `--staged`:**
+See `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md` for the validation, content gathering, and tiered context behavior. Include the Pre-Existing Issue Detection rules from `staged-processing.md` in each agent's `additional_instructions` prompt field.
+
+**If file paths provided:**
 See `${CLAUDE_PLUGIN_ROOT}/shared/file-processing.md` for the validation and content gathering process.
 
 ---
@@ -48,15 +54,17 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 
 **If depth == deep:**
 Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
-- Use the **Code Review Model Selection** table for model assignments
+- Use agent `model` frontmatter with mode overrides from Model Selection
 - Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
 - Follow all CRITICAL WAIT barriers between phases
 
 **If depth == quick:**
 Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`:
-- Use the **Code Review Model Selection** table for model assignments
+- Use agent `model` frontmatter with mode overrides from Model Selection
 - Use the **Agent Common Content Distribution** rules to build each agent's `additional_instructions`
 - Follow all CRITICAL WAIT barriers
+
+**If `--staged`:** Each agent receives staged diff and full file content per the tier classification in `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md`.
 
 ---
 

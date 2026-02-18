@@ -23,8 +23,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Command | Description |
 |---------|-------------|
-| `/code-review <file1> [file2...] [--depth deep\|quick] [--output-file <path>]` | Code review with configurable depth (deep: 19 agents, quick: 7) |
-| `/code-review-staged [--depth deep\|quick] [--output-file <path>]` | Code review of staged changes with configurable depth |
+| `/code-review [<file1> [file2...] \| --staged] [--depth deep\|quick] [--output-file <path>]` | Code review for files or staged changes with configurable depth (deep: 19 agents, quick: 7) |
 | `/docs-review [file1...] [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: 13 agents, quick: 7) |
 
 **Note:** All review commands also accept:
@@ -52,8 +51,7 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata
 ├── commands/                        # Orchestration entry points (inline steps, reference shared/; see "Commands Directory" convention)
-│   ├── code-review.md              # Code review (deep: 19, quick: 7 agent invocations)
-│   ├── code-review-staged.md       # Staged code review (deep: 19, quick: 7 agent invocations)
+│   ├── code-review.md              # Code review for files or staged changes (deep: 19, quick: 7 agent invocations)
 │   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations)
 ├── agents/                          # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                        # Code review agents (10 agents)
@@ -94,8 +92,8 @@ claude-code/plugins/code-review/
 │   ├── docs-processing.md           # Docs input validation and content gathering
 │   ├── file-processing.md           # File-based input validation and content gathering
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
-│   ├── review-orchestration-docs.md # Docs review: phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category FP rules
+│   ├── review-orchestration-code.md # Code review: phases, invocation patterns, gaps mode behavior, agent common instructions
+│   ├── review-orchestration-docs.md # Docs review: phases, invocation patterns, gaps mode behavior, agent common instructions
 │   ├── review-validation-code.md    # Code validation: batch validation, aggregation, auto-validation patterns
 │   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
@@ -116,6 +114,7 @@ All 17 agents use the same YAML frontmatter fields:
 name: <domain>-agent           # Required
 description: <role+trigger>    # Required. "[Role] specialist. Use [for/when] [triggers]."
 color: <color>                 # See color rules below
+model: <opus|sonnet>           # thorough-mode default; gaps always Sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 ```
@@ -143,7 +142,7 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 ### Agent Content Distribution
 
-The orchestration files (`review-orchestration-code.md`, `review-orchestration-docs.md`) contain inlined agent common instructions (MODE, false positives, output schema) and category-specific false positive rules. The orchestrator distributes relevant portions to each agent via `additional_instructions`, along with language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Agents do not read these shared files directly.
+The orchestration files (`review-orchestration-code.md`, `review-orchestration-docs.md`) contain inlined agent common instructions (MODE, false positives, output schema). The orchestrator distributes these to each agent via `additional_instructions`, along with language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Category-specific false positive rules are in each agent's `## False Positives` section. Agents do not read shared files directly.
 
 Validation, auto-validation, and output format content is in separate files (`review-validation-code.md`, `review-validation-docs.md`), loaded on-demand at Steps 9-12 (post-review). This progressive disclosure keeps validation and output format content out of the Opus context during the expensive Steps 7-8 phase.
 
@@ -228,8 +227,9 @@ When modifying the plugin:
 
 ### Agent & Orchestration
 - **Agent behavior**: Edit `agents/code/` or `agents/docs/`
-- **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, model selection, invocation patterns, language-specific focus, gaps mode behavior, agent common instructions, category-specific FP rules)
-- **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, model selection, invocation patterns, gaps mode behavior, agent common instructions, category-specific FP rules)
+- **Agent model assignments**: Edit agent YAML frontmatter (`model` field)
+- **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, invocation patterns, language-specific focus, gaps mode behavior, agent common instructions)
+- **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, invocation patterns, gaps mode behavior, agent common instructions)
 
 ### Validation & Output
 - **Validation rules (code)**: Edit `shared/review-validation-code.md` (validation process, aggregation, auto-validation patterns)
@@ -303,7 +303,7 @@ Model-aware compression:
 Apply alphabetical ordering to:
 - Agent listings in orchestration documents (e.g., `review-orchestration-code.md`)
 - Category pairs in synthesis configurations (order by first category)
-- Tables with agent/skill names (e.g., Model Selection table)
+- Tables with agent/skill names
 - Bullet lists of agents or categories
 - YAML keys within related_findings and similar structures
 - Directory structure listings in documentation
@@ -335,7 +335,7 @@ This applies to:
 
 ### Command Step Inlining
 
-Each command file inlines its pre-review setup steps (Steps 1-6) directly rather than referencing a shared common-steps file. Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline. The 2 code review commands share ~40 lines of identical inlined content; the 1 docs review command uses a different layout.
+Each command file inlines its pre-review setup steps (Steps 1-6) directly rather than referencing a shared common-steps file. Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline. The code review command handles both file and staged modes via `--staged` flag; the docs review command uses a different layout.
 
 **Rationale:** A shared `command-common-steps.md` was tried but created a second level of indirection (commands → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps commands self-contained with one-hop references to shared files.
 

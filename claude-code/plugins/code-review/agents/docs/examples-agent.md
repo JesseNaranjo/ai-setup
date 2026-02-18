@@ -2,6 +2,7 @@
 name: examples-agent
 description: "Code example specialist. Use for detecting broken examples, missing imports, incorrect syntax, outdated API usage, or example-documentation mismatches."
 color: yellow
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -32,3 +33,7 @@ issues:
     language: "javascript|typescript|python|bash|etc"
     error_message: "What error users would see (if applicable)"
 ```
+
+## False Positives
+
+Pseudocode marked as illustrative (not runnable); partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`

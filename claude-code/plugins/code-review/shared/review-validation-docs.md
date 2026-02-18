@@ -48,16 +48,7 @@ Issues matching auto-validation patterns (below) skip validation, marked `auto_v
 
 ## Validator Model Assignment
 
-| Category | Model |
-|----------|-------|
-| Accuracy | Opus |
-| Clarity | Sonnet |
-| Completeness | Opus |
-| Consistency | Sonnet |
-| Examples | Opus |
-| Structure | Sonnet |
-
-Cross-cutting insights always **Opus**.
+Use agent `model` frontmatter for validation. Cross-cutting insights always **Opus**.
 
 ## Aggregation
 

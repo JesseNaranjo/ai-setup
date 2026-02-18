@@ -30,7 +30,6 @@ End prompt with: `Return findings as YAML per agent examples in your agent file.
 
 Per agent, append to `additional_instructions`:
 1. Output schema, MODE definition, FP rules from Agent Common Instructions below
-2. Category-specific FP rules — agent's category only
 
 Synthesis agents skip distribution.
 
@@ -45,15 +44,6 @@ Synthesis agents skip distribution.
 
 **Output Schema:** Each issue: `title`, `file`, `line`, `range` (string or null), `category`, `severity` (Critical/Major/Minor/Suggestion), `description`, `fix_type` (diff/prompt), `fix_diff` or `fix_prompt`. See agent file for category-specific extra fields.
 
-### Category-Specific False Positive Rules
-
-- **Accuracy**: Intentionally simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; documentation for planned features marked as such
-- **Clarity**: Jargon appropriate for stated expert audience; acronyms defined earlier in same document; intentionally terse reference docs (vs tutorials)
-- **Completeness**: Internal/private APIs not for external use; features marked experimental/unstable; sections that would duplicate linked content
-- **Consistency**: Code/API names that must match implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections that intentionally differ
-- **Examples**: Pseudocode marked as illustrative (not runnable); partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`
-- **Structure**: Intentionally orphaned archive/historical documents; heading hierarchy violations in code-generated documentation; AI instruction files in projects not using AI assistants (if explicitly stated)
-
 ## Gaps Mode
 
 When MODE=gaps, agents receive `previous_findings` from thorough mode.
@@ -66,7 +56,7 @@ When MODE=gaps, agents receive `previous_findings` from thorough mode.
 
 ## Deep Docs Review Sequence (13 invocations)
 
-**Phase 1 — Thorough** (6 parallel): accuracy, clarity, completeness, consistency, examples, structure. MODE: thorough. Models: Opus for accuracy, completeness, examples; Sonnet for rest. Pass: doc contents, related code snippets, project metadata, AI instruction file status, additional prompt instructions.
+**Phase 1 — Thorough** (6 parallel): accuracy, clarity, completeness, consistency, examples, structure. MODE: thorough. Pass: doc contents, related code snippets, project metadata, AI instruction file status, additional prompt instructions.
 **CRITICAL: WAIT for ALL 6 before Phase 2.**
 
 **Phase 2 — Gaps** (3 parallel Sonnet): accuracy, completeness, consistency. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Distribute Gaps Mode rules to each agent's `additional_instructions`.
@@ -80,7 +70,7 @@ Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarit
 
 ## Quick Docs Review Sequence (7 invocations)
 
-**Review** (4 parallel): accuracy, clarity, examples, structure. MODE: quick. Models: accuracy, examples (Opus); clarity, structure (Sonnet). Pass: doc contents, related code snippets, AI instruction file status, additional prompt instructions.
+**Review** (4 parallel): accuracy, clarity, examples, structure. MODE: quick. Pass: doc contents, related code snippets, AI instruction file status, additional prompt instructions.
 - Accuracy: Critical mismatches, wrong function names, broken examples
 - Clarity: Incomprehensible sections, undefined critical acronyms
 - Examples: Syntax errors, missing critical imports, wrong API calls
@@ -90,12 +80,9 @@ Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarit
 
 **Post-review:** Same as deep.
 
-## Model Selection (Authoritative)
+## Model Selection
 
-Default: **Sonnet** for all agents and modes.
-**Opus exceptions (thorough):** accuracy, completeness, examples
-**Opus exceptions (quick):** accuracy, examples
-**Gaps:** Always Sonnet (no exceptions)
+Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick Opus exceptions: accuracy, examples.
 
 ## Synthesis Invocation
 

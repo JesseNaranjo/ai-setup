@@ -2,6 +2,7 @@
 name: accuracy-agent
 description: "Documentation accuracy specialist. Use for detecting code-documentation sync problems, factual errors, outdated version references, or incorrect API signatures."
 color: red
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -40,3 +41,7 @@ issues:
     actual_value: "What the code actually does"
     code_location: "Path to the actual implementation"
 ```
+
+## False Positives
+
+Intentionally simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; documentation for planned features marked as such

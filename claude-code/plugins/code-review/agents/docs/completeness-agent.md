@@ -2,6 +2,7 @@
 name: completeness-agent
 description: "Documentation completeness specialist. Use for detecting missing sections, undocumented features, incomplete setup instructions, or coverage gaps."
 color: green
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -34,3 +35,7 @@ issues:
     missing_type: "section|api|config|example|error_handling|prerequisite"
     related_code: "Path to code that should be documented (if applicable)"
 ```
+
+## False Positives
+
+Internal/private APIs not for external use; features marked experimental/unstable; sections that would duplicate linked content

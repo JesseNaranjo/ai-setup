@@ -2,6 +2,7 @@
 name: structure-agent
 description: "Documentation structure specialist. Use for detecting organization problems, broken links, navigation issues, heading hierarchy problems, or AI instruction file issues."
 color: purple
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -59,3 +60,7 @@ issues:
     structure_type: "links|headings|navigation|organization|ai_instructions"
     broken_target: "The target that doesn't exist (for broken links)"
 ```
+
+## False Positives
+
+Intentionally orphaned archive/historical documents; heading hierarchy violations in code-generated documentation; AI instruction files in projects not using AI assistants (if explicitly stated)

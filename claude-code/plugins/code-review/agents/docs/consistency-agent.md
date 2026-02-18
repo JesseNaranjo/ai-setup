@@ -2,6 +2,7 @@
 name: consistency-agent
 description: "Documentation consistency specialist. Use for detecting terminology variations, formatting inconsistencies, voice/tone mismatches, or naming convention violations."
 color: blue
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -47,3 +48,7 @@ issues:
     recommended: "Recommended canonical form"
     other_locations: ["file:line", "file:line"]  # Other occurrences
 ```
+
+## False Positives
+
+Code/API names that must match implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections that intentionally differ

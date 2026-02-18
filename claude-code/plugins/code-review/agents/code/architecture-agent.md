@@ -2,6 +2,7 @@
 name: architecture-agent
 description: "Architecture review specialist. Use for checking SOLID, DRY, YAGNI, SoC violations, coupling problems, anti-patterns, layer violations, or file organization issues."
 color: yellow
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -26,3 +27,7 @@ issues:
     principle: "Which architectural principle is violated"
     impact: "How this affects maintainability/testability"
 ```
+
+## False Positives
+
+Pragmatic compromises with clear justification; patterns overkill for project scale

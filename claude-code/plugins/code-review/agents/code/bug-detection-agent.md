@@ -2,6 +2,7 @@
 name: bug-detection-agent
 description: "Bug detection specialist. Use for finding runtime errors, null references, off-by-one errors, boundary conditions, race conditions, or state management issues."
 color: red
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -38,3 +39,7 @@ issues:
     conditions: "When this bug occurs"
     impact: "What happens when the bug triggers"
 ```
+
+## False Positives
+
+Code with explicit comments explaining why it's correct

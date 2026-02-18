@@ -108,5 +108,5 @@ Agents without primary skill receive methodology only. Without skill_instruction
 ## Notes
 
 - `skip_agents` precedence over skill primary_agent (warn but don't auto-override)
-- Skills don't change model selection (authoritative table in orchestration file)
+- Skills don't change model selection (agent `model` frontmatter with mode overrides)
 - Gaps/quick agents receive identical skill_instructions; validation applies to ALL findings

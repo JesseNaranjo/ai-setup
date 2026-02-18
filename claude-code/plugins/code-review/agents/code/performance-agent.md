@@ -2,6 +2,7 @@
 name: performance-agent
 description: "Performance review specialist. Use for detecting algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, or hot path inefficiencies."
 color: green
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -33,3 +34,7 @@ issues:
     scale: "At what data size this becomes a problem"
     impact: "Expected performance degradation"
 ```
+
+## False Positives
+
+Micro-optimizations without measurable impact; code that runs rarely

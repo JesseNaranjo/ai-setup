@@ -48,19 +48,7 @@ Issues matching auto-validation patterns (below) skip validation, marked `auto_v
 
 ## Validator Model Assignment
 
-| Category | Model |
-|----------|-------|
-| API Contracts | Sonnet |
-| Architecture | Opus |
-| Bugs | Opus |
-| Compliance | Sonnet |
-| Error Handling | Sonnet |
-| Performance | Opus |
-| Security | Opus |
-| Technical Debt | Sonnet |
-| Test Coverage | Sonnet |
-
-Cross-cutting insights always **Opus**.
+Use agent `model` frontmatter for validation. Cross-cutting insights always **Opus**.
 
 ## Aggregation
 

@@ -31,11 +31,10 @@ End prompt with: `Return findings as YAML per agent examples in your agent file.
 
 Per agent, append to `additional_instructions`:
 1. Output schema, MODE definition, FP rules from Agent Common Instructions below
-2. Category-specific FP rules — agent's category only
-3. Language-specific checks — agent's anchor from detected language files
-4. LSP diagnostic codes — agent's category rows + usage guidelines from lsp-integration.md
+2. Language-specific checks — agent's anchor from detected language files
+3. LSP diagnostic codes — agent's category rows + usage guidelines from lsp-integration.md
 
-**Language anchors:** architecture→#architecture, bugs→#bugs, errors→#errors, performance→#performance, security→#security, debt→#debt, tests→#tests. Agents without anchors (api-contracts, compliance) skip step 3. Synthesis agents skip all distribution.
+**Language anchors:** architecture→#architecture, bugs→#bugs, errors→#errors, performance→#performance, security→#security, debt→#debt, tests→#tests. Agents without anchors (api-contracts, compliance) skip step 2. Synthesis agents skip all distribution.
 
 **LSP categories:** architecture→Architecture, bugs→Bugs, errors→Error Handling, performance→Performance, security→Security. If unavailable, skip.
 
@@ -52,18 +51,6 @@ Per agent, append to `additional_instructions`:
 
 **Output Schema:** Each issue: `title`, `file`, `line`, `range` (string or null), `category`, `severity` (Critical/Major/Minor/Suggestion), `description`, `fix_type` (diff/prompt), `fix_diff` or `fix_prompt`. See agent file for category-specific extra fields.
 
-### Category-Specific False Positive Rules
-
-- **API Contracts**: Additive-only changes; beta/experimental APIs marked unstable; changes following established deprecation
-- **Architecture**: Pragmatic compromises with clear justification; patterns overkill for project scale
-- **Bug Detection**: Code with explicit comments explaining why it's correct
-- **Compliance**: Explicit override comments; ambiguous rules with reasonable compliance; style preferences not stated as rules
-- **Error Handling**: Errors intentionally ignored with explicit comments; logging-only catch blocks as intended
-- **Performance**: Micro-optimizations without measurable impact; code that runs rarely
-- **Security**: Internal-only code with no untrusted input; vulnerabilities mitigated elsewhere
-- **Technical Debt**: Dependencies pinned for compatibility (documented); dead code conditionally compiled (build flags); TODO with issue tracking (TODO(#123)); workarounds with documented upstream bugs; class components in projects supporting older React
-- **Test Coverage**: Code impractical to unit test (better for integration); code covered by higher-level tests; generated code/boilerplate; dead code to remove rather than test
-
 ## Gaps Mode
 
 When MODE=gaps, agents receive `previous_findings` from thorough mode.
@@ -76,7 +63,7 @@ When MODE=gaps, agents receive `previous_findings` from thorough mode.
 
 ## Deep Code Review Sequence (19 invocations)
 
-**Phase 1 — Thorough** (9 parallel): api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage. MODE: thorough. Models: Opus for architecture, bug-detection, performance, security, technical-debt; Sonnet for rest.
+**Phase 1 — Thorough** (9 parallel): api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage. MODE: thorough.
 **CRITICAL: WAIT for ALL 9 before Phase 2.**
 
 **Phase 2 — Gaps** (5 parallel Sonnet): bug-detection, compliance, performance, security, technical-debt. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Content: diff only (agents Read for deeper analysis). Distribute Gaps Mode rules to each agent's `additional_instructions`.
@@ -96,12 +83,9 @@ Pairs: Architecture+Test Coverage ("Are architectural changes covered by tests?"
 
 **Post-review:** Same as deep.
 
-## Model Selection (Authoritative)
+## Model Selection
 
-Default: **Sonnet** for all agents and modes.
-**Opus exceptions (thorough):** architecture, bug-detection, performance, security, technical-debt
-**Opus exceptions (quick):** bug-detection, security
-**Gaps:** Always Sonnet (no exceptions)
+Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick Opus exceptions: bug-detection, security.
 
 ## Language-Specific Focus
 

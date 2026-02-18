@@ -2,6 +2,7 @@
 name: security-agent
 description: "Security vulnerability specialist. Use for detecting injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, or OWASP top 10 issues."
 color: purple
+model: opus
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -41,3 +42,7 @@ issues:
     attack_vector: "How an attacker could exploit this"
     impact: "What damage could result"
 ```
+
+## False Positives
+
+Internal-only code with no untrusted input; vulnerabilities mitigated elsewhere

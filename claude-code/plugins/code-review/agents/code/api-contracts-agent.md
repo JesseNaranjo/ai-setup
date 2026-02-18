@@ -2,6 +2,7 @@
 name: api-contracts-agent
 description: "API contracts specialist. Use for detecting breaking changes, backward compatibility problems, interface contract violations, or inconsistent API patterns in code changes."
 color: cyan
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -37,3 +38,7 @@ issues:
     consumers_affected: "Who/what is affected"
     migration: "Required migration steps, if applicable"
 ```
+
+## False Positives
+
+Additive-only changes; beta/experimental APIs marked unstable; changes following established deprecation

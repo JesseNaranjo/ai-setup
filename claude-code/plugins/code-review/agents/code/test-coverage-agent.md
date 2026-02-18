@@ -2,6 +2,7 @@
 name: test-coverage-agent
 description: "Test coverage specialist. Use for identifying missing tests, test quality issues, edge cases not covered, and providing specific test recommendations."
 color: white
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -48,3 +49,7 @@ issues:
       location: "Suggested test file path"
     fix_type: "diff or prompt"  # Use diff for simple test additions, prompt for complex multi-file test suites
 ```
+
+## False Positives
+
+Code impractical to unit test (better for integration); code covered by higher-level tests; generated code/boilerplate; dead code to remove rather than test

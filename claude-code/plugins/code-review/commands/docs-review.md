@@ -48,13 +48,13 @@ Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/ski
 
 **If depth == deep:**
 Execute the **Deep Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`:
-- Use the **Documentation Review Model Selection** table for model assignments
+- Use agent `model` frontmatter with mode overrides from Model Selection
 - Use the **Agent Common Content Distribution** rules
 - Follow all CRITICAL WAIT barriers between phases
 
 **If depth == quick:**
 Execute the **Quick Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`:
-- Use the **Documentation Review Model Selection** table for model assignments
+- Use agent `model` frontmatter with mode overrides from Model Selection
 - Use the **Agent Common Content Distribution** rules
 - Follow all CRITICAL WAIT barriers
 

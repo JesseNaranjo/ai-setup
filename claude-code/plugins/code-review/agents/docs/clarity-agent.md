@@ -2,6 +2,7 @@
 name: clarity-agent
 description: "Documentation clarity specialist. Use for detecting readability problems, unexplained jargon, audience mismatches, or confusing explanations."
 color: cyan
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -43,3 +44,7 @@ issues:
     affected_audience: "Who would be confused (beginner/intermediate/expert)"
     clarity_type: "jargon|ambiguity|complexity|missing_context|structure"
 ```
+
+## False Positives
+
+Jargon appropriate for stated expert audience; acronyms defined earlier in same document; intentionally terse reference docs (vs tutorials)

@@ -2,6 +2,7 @@
 name: error-handling-agent
 description: "Error handling specialist. Use for detecting missing try/catch blocks, swallowed exceptions, improper error propagation, missing cleanup, or resilience gaps."
 color: orange
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 ---
 
@@ -38,3 +39,7 @@ issues:
     failure_scenario: "What could trigger this error path"
     impact: "What happens when the error occurs"
 ```
+
+## False Positives
+
+Errors intentionally ignored with explicit comments; logging-only catch blocks as intended
