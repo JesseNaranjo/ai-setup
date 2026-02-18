@@ -25,33 +25,23 @@ For each file being reviewed:
 
 ### Step 3: Check Compliance (Based on MODE)
 
-**thorough mode:**
+**thorough:**
 - Check every rule against every applicable file
 - Look for both explicit violations and spirit-of-the-rule violations
 - Check for consistency across files
 
-**gaps mode:**
+**gaps:**
 - Focus on rules that are easy to miss
 - Check for subtle violations (almost compliant but not quite)
 - Look for rules that might be misinterpreted
 - Check edge cases and boundary conditions
 
-### Step 4: Report Violations
+## Output
 
-Report per Output Schema. For each violation:
-- **Description**: the exact rule being violated (quote from instruction file), why this code violates the rule, impact of the violation
-- **Category**: "Compliance"
-- **Severity thresholds**:
-  - Major: Explicit rule violation (MUST, MUST NOT, ALWAYS, NEVER)
-  - Minor: Guideline violation (SHOULD, SHOULD NOT)
-  - Suggestion: Best practice not followed
+Category: "Compliance". Describe: the exact rule being violated (quote from instruction file), why this code violates it, impact.
+Thresholds: Major=explicit rule violation (MUST/MUST NOT/ALWAYS/NEVER); Minor=guideline violation (SHOULD/SHOULD NOT); Suggestion=best practice not followed.
 
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Compliance-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Compliance"

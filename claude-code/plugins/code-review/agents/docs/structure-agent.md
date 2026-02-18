@@ -11,12 +11,12 @@ tools: ["Read", "Grep", "Glob"]
 
 ### Step 1: Identify Structure Categories (Based on MODE)
 
-**thorough mode - Check for:**
+**thorough:**
 - Heading hierarchy (skipped levels, single H1 rule), broken links (internal/external/anchors)
 - Navigation issues: missing cross-refs, orphaned docs, circular paths, ToC mismatches
 - **AI instruction file standardization** (see Step 5)
 
-**quick mode - Check for:**
+**quick:**
 - Broken links (404s, missing files)
 - Major heading hierarchy violations
 - Missing navigation to critical content
@@ -47,24 +47,12 @@ Verify using Grep that both `CLAUDE.md` and `.github/copilot-instructions.md` re
 
 See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruction-templates.md` for required header templates.
 
-### Step 6: Report Structure Issues
+## Output
 
-Report per Output Schema. For each issue, **Description** should include: what's wrong structurally, how it affects navigation/usability, recommended fix.
+Category: "Structure". Describe: what's wrong structurally, how it affects navigation/usability, recommended fix.
+Thresholds: Critical=blocks access to content, major broken navigation; Major=significant structural problem affecting usability; Minor=could be better organized but still usable; Suggestion=enhancement for better structure.
 
-**Category**: "Structure"
-
-**Severity thresholds**:
-- Critical: Blocks access to content, major broken navigation
-- Major: Significant structural problem affecting usability
-- Minor: Could be better organized but still usable
-- Suggestion: Enhancement for better structure
-
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Structure-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Structure"

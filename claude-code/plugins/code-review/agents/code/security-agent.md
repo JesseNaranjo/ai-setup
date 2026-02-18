@@ -7,15 +7,13 @@ tools: ["Read", "Grep", "Glob"]
 
 # Security Review Agent
 
-## Review Process
+## MODE Checklists
 
-### Step 1: Identify Security Categories (Based on MODE)
-
-**thorough mode - Check for:**
+**thorough:**
 - All OWASP Top 10 categories, path traversal, insecure deserialization, information disclosure
 - Hardcoded secrets/keys/passwords at all trust boundaries
 
-**gaps mode - Check for:**
+**gaps:**
 - Second-order injection (stored XSS, delayed command execution)
 - Authorization edge cases (role escalation, missing checks on related resources)
 - Timing attacks and side channels
@@ -25,33 +23,18 @@ tools: ["Read", "Grep", "Glob"]
 - Missing security headers
 - Insecure defaults
 
-**quick mode - Check for:**
+**quick:**
 - Direct injection vulnerabilities
 - Obvious authentication bypasses
 - Hardcoded credentials and secrets
 - Missing authorization checks on sensitive operations
 
-### Step 2: Analyze Security Boundaries
+## Output
 
-Identify all inputs from untrusted sources, trace data flow to sensitive operations, check for validation/sanitization/encoding at each step, verify authorization checks.
+Category: "Security". Describe: type of vulnerability, how it could be exploited, potential impact.
+Thresholds: Critical=direct exploitation/data breach/RCE; Major=exploitable under specific conditions; Minor=defense-in-depth, requires exploit chain; Suggestion=best practice not followed.
 
-### Step 3: Report Vulnerabilities
-
-Report per Output Schema. For each vulnerability:
-- **Description**: type of vulnerability, how it could be exploited, potential impact
-- **Category**: "Security"
-- **Severity thresholds**:
-  - Critical: Direct exploitation risk, data breach potential, RCE
-  - Major: Exploitable under specific conditions
-  - Minor: Defense-in-depth issue, requires chain of exploits
-  - Suggestion: Security best practice not followed
-
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Security-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Security"

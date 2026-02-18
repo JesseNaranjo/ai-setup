@@ -11,11 +11,11 @@ tools: ["Read", "Grep", "Glob"]
 
 ### Step 1: Identify Coverage Categories (Based on MODE)
 
-**thorough mode - Check for:**
+**thorough:**
 - Test quality (no assertions, testing implementation details, tests that always pass), integration test gaps
 - Modified logic invalidating existing tests, missing negative/async/concurrent tests
 
-**quick mode - Check for:**
+**quick:**
 - New public functions/methods without any tests
 - Critical paths (auth, payment, data mutation) without tests
 - Modified functions with no updated tests
@@ -32,22 +32,12 @@ For each changed/reviewed file:
 
 For each gap: what to test, expected behavior, suggested test file location, test case outline.
 
-### Step 4: Report Test Coverage Issues
+## Output
 
-Report per Output Schema. For each issue:
-- **Description**: what code is not tested, why it should be tested, risk of not testing
-- **Category**: "Test Coverage"
-- **Severity thresholds**:
-  - Major: Critical path without tests
-  - Minor: Non-critical code lacking tests
-  - Suggestion: Additional edge case tests recommended
+Category: "Test Coverage". Describe: what code is not tested, why it should be tested, risk of not testing.
+Thresholds: Major=critical path without tests; Minor=non-critical code lacking tests; Suggestion=additional edge case tests recommended.
 
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Test Coverage-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Test Coverage"

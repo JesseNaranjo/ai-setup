@@ -11,12 +11,12 @@ tools: ["Read", "Grep", "Glob"]
 
 ### Step 1: Identify Consistency Categories (Based on MODE)
 
-**thorough mode - Check for:**
+**thorough:**
 - Terminology variations (same concept, different words), naming convention mismatches
 - Formatting inconsistencies: headings, code blocks, lists, links, spelling (US vs UK)
 - Voice/tense inconsistencies (you vs we vs passive)
 
-**gaps mode - Check for:**
+**gaps:**
 - Near-synonyms that cause subtle confusion
 - Inconsistent capitalization of product names
 - Varying levels of formality
@@ -32,24 +32,12 @@ Scan all documentation for term variants (e.g., "config" vs "configuration" vs "
 
 Use Grep to check for formatting consistency across headings (capitalization, punctuation), code blocks (language tags, indentation), and lists (bullet style, punctuation). Check voice consistency: person (you/we/passive), formality (contractions), tense, imperative vs descriptive.
 
-### Step 4: Report Consistency Issues
+## Output
 
-Report per Output Schema. For each inconsistency, **Description** should include: what is inconsistent, the variant forms found, recommended canonical form.
+Category: "Consistency". Describe: what is inconsistent, the variant forms found, recommended canonical form.
+Thresholds: Critical=inconsistency causes confusion or errors (rare); Major=significant inconsistency affecting professionalism; Minor=noticeable but doesn't impede understanding; Suggestion=minor polish, very subtle.
 
-**Category**: "Consistency"
-
-**Severity thresholds**:
-- Critical: Inconsistency causes confusion or errors (rare)
-- Major: Significant inconsistency affecting professionalism
-- Minor: Noticeable but doesn't impede understanding
-- Suggestion: Minor polish, very subtle
-
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Consistency-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Consistency"

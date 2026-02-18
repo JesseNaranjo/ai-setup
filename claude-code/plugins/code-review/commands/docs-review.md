@@ -21,56 +21,26 @@ Parse arguments from `$ARGUMENTS`:
 
 Invoke superpowers skills (using-superpowers, brainstorming, systematic-debugging, verification-before-completion, writing-plans, executing-plans, requesting-code-review, dispatching-parallel-agents, subagent-driven-development) and pass methodology to all subagents via `skill_instructions.methodology`. If superpowers plugin unavailable, proceed without.
 
----
+## Step 2: Load Settings
 
-## Step 2: Settings
-
-Load project-specific settings if `.claude/code-review.local.md` exists.
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1.
-
----
-
-## Step 3: Input Validation
-
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the validation process.
-
-Discover documentation files including:
-- Standard docs: README.md, CLAUDE.md, CHANGELOG.md, CONTRIBUTING.md
-- Documentation directories: docs/**/*.md
-- AI instruction files: .ai/AI-AGENT-INSTRUCTIONS.md, .github/copilot-instructions.md
-
-Track AI instruction file standardization status for reporting.
-
----
+See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. If `.claude/code-review.local.md` has `enabled: false`, stop. Apply: `output_dir`, `skip_agents`, `min_severity`.
 
 ## Step 4: Context Discovery
 
-Detect project type and gather context:
-- Read package.json, *.csproj, pyproject.toml for version info
-- Identify the primary programming language(s)
-- Note any style guides or contribution guidelines
+See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
 
 ---
 
-## Step 5: Skill Loading
+## Steps 3 & 5: Input Validation and Content Gathering
 
-**Skip this step entirely if `--skills` argument was not provided.**
-
-If `--skills` is provided:
-See `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md` for complete skill resolution and orchestration.
+See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the validation and content gathering process.
+If no files specified, discover all documentation files in the project.
 
 ---
 
-## Step 6: Content Gathering
+## Step 6: Skill Loading
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/docs-processing.md` for the content gathering process.
-
-Gather:
-- Full content of all documentation files
-- Code snippets referenced by documentation (for accuracy verification)
-- Project metadata (versions, dependencies)
-- AI instruction file cross-reference status
+Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md`.
 
 ---
 

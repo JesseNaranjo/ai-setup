@@ -7,14 +7,11 @@ tools: ["Read", "Grep", "Glob"]
 
 # Bug Detection Review Agent
 
-## Review Process
+## MODE Checklists
 
-### Step 1: Identify Bug Categories (Based on MODE)
+**thorough:** All runtime error categories: null refs, off-by-one, incorrect conditionals, type mismatches, resource leaks
 
-**thorough mode - Focus on:**
-- All runtime error categories: null refs, off-by-one, incorrect conditionals, type mismatches, resource leaks
-
-**gaps mode - Focus on:**
+**gaps:**
 - Boundary condition failures (empty arrays, zero values, max values)
 - Race conditions in concurrent code
 - State management issues (stale state, incorrect updates)
@@ -23,33 +20,18 @@ tools: ["Read", "Grep", "Glob"]
 - Time-of-check to time-of-use issues
 - Integer overflow/underflow
 
-**quick mode - Focus on:**
+**quick:**
 - Obvious null pointer dereferences
 - Clear logical errors (always-true/always-false conditions)
 - Obvious type errors
 - Missing return statements
 
-### Step 2: Analyze Code Paths
+## Output
 
-For each file: identify all code paths, check each for potential bugs based on MODE, consider interactions with surrounding context, check integration points.
+Category: "Bugs". Describe: what the bug is, how it manifests at runtime, conditions under which it occurs.
+Thresholds: Critical=crashes/data corruption/security; Major=incorrect behavior common scenarios; Minor=uncommon edge cases; Suggestion=may not manifest.
 
-### Step 3: Report Bugs
-
-Report per Output Schema. For each bug:
-- **Description**: what the bug is, how it manifests at runtime, conditions under which it occurs
-- **Category**: "Bugs"
-- **Severity thresholds**:
-  - Critical: Will cause crashes, data corruption, or security issues
-  - Major: Will cause incorrect behavior in common scenarios
-  - Minor: Edge case that affects uncommon scenarios
-  - Suggestion: Potential issue that may not manifest
-
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Bugs-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Bugs"

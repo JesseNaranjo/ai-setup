@@ -11,12 +11,12 @@ tools: ["Read", "Grep", "Glob"]
 
 ### Step 1: Identify Error Handling Categories (Based on MODE)
 
-**thorough mode - Check for:**
+**thorough:**
 - Missing error handling on fail-prone operations (I/O, network, database, external services, parsing)
 - Info leakage in error messages, error recovery leaving inconsistent state
 - Retry/circuit breaker pattern gaps for transient failures
 
-**quick mode - Check for:**
+**quick:**
 - Empty catch blocks
 - Missing error handling on I/O operations
 - Resources not cleaned up (no finally/using/defer)
@@ -26,23 +26,12 @@ tools: ["Read", "Grep", "Glob"]
 
 Identify all operations that can fail, trace error handling path for each, check for proper cleanup and recovery, verify errors propagated appropriately.
 
-### Step 3: Report Error Handling Issues
+## Output
 
-Report per Output Schema. For each issue:
-- **Description**: what the error handling issue is, what can go wrong, impact of the missing/incorrect handling
-- **Category**: "Error Handling"
-- **Severity thresholds**:
-  - Critical: Can cause data loss or security issues
-  - Major: Can cause application crashes or incorrect behavior
-  - Minor: Reduces resilience but doesn't cause immediate issues
-  - Suggestion: Could be more robust
+Category: "Error Handling". Describe: what the issue is, what can go wrong, impact.
+Thresholds: Critical=data loss/security; Major=crashes/incorrect behavior; Minor=reduced resilience; Suggestion=could be more robust.
 
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Error Handling-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Error Handling"

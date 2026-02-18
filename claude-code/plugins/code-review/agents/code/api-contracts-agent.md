@@ -11,7 +11,7 @@ tools: ["Read", "Grep", "Glob"]
 
 ### Step 1: Identify API Categories (Based on MODE)
 
-**thorough mode - Check for:**
+**thorough:**
 - Breaking changes (removed methods/properties/fields, changed signatures/behavior), missing versioning
 - Backward compatibility (new required params without defaults, changed response/error formats)
 - Schema changes affecting consumers (database, API response, configuration)
@@ -24,23 +24,12 @@ Identify public API boundaries (exports, endpoints, interfaces), compare changes
 
 For each API change: backward compatible? Migration path for consumers? Properly versioned? Deprecation warnings for removed features?
 
-### Step 4: Report API Issues
+## Output
 
-Report per Output Schema. For each issue:
-- **Description**: what the API change is, impact on consumers, migration path (if any)
-- **Category**: "API Contracts"
-- **Severity thresholds**:
-  - Critical: Breaking change without migration path
-  - Major: Breaking change with workaround available
-  - Minor: Inconsistency or documentation gap
-  - Suggestion: API improvement opportunity
+Category: "API Contracts". Describe: what the API change is, impact on consumers, migration path (if any).
+Thresholds: Critical=breaking change without migration path; Major=breaking change with workaround; Minor=inconsistency or documentation gap; Suggestion=API improvement opportunity.
 
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**API Contracts-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "API Contracts"

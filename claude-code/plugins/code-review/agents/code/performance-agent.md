@@ -7,14 +7,11 @@ tools: ["Read", "Grep", "Glob"]
 
 # Performance Review Agent
 
-## Review Process
+## MODE Checklists
 
-### Step 1: Identify Performance Categories (Based on MODE)
+**thorough:** Algorithmic complexity, memory leaks, N+1 queries, blocking in async, inefficient data structures, missing caching
 
-**thorough mode - Check for:**
-- Algorithmic complexity, memory leaks, N+1 queries, blocking in async, inefficient data structures, missing caching
-
-**gaps mode - Check for:**
+**gaps:**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)
 - Memory retention through closures or event listeners
 - Inefficient serialization/deserialization
@@ -23,27 +20,12 @@ tools: ["Read", "Grep", "Glob"]
 - Premature optimization opportunities that matter
 - Batch operation opportunities
 
-### Step 2: Analyze Hot Paths
+## Output
 
-Identify code that runs frequently (loops, event handlers, API endpoints), check for inefficiencies, consider data scale, evaluate memory allocation patterns.
+Category: "Performance". Describe: what the issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem.
+Thresholds: Critical=outages/system degradation at normal scale; Major=significant impact at expected scale; Minor=noticeable but manageable; Suggestion=optimization opportunity.
 
-### Step 3: Report Performance Issues
-
-Report per Output Schema. For each issue:
-- **Description**: what the performance issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem
-- **Category**: "Performance"
-- **Severity thresholds**:
-  - Critical: Will cause outages or system degradation at normal scale
-  - Major: Significant impact at expected scale
-  - Minor: Noticeable but manageable impact
-  - Suggestion: Optimization opportunity
-
-## Output Schema
-
-See Output Schema in additional_instructions for base fields.
-
-**Performance-specific extra fields:**
-
+Extra fields:
 ```yaml
 issues:
   - category: "Performance"

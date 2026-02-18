@@ -124,6 +124,16 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 **Color rules:** Minimize conflicts within each parallel phase; reuse across sequential phases is fine. Use `white` for overflow. Do not change existing colors without necessity.
 
+**Agent body structure (two formats):**
+
+- **Opus agents** (architecture, bug-detection, performance, security, technical-debt, accuracy, completeness, examples): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
+- **Sonnet agents** (api-contracts, compliance, error-handling, test-coverage, clarity, consistency, structure): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance.
+- **Synthesis agents** (synthesis-code, synthesis-docs): Own format with `## Input`, `## Review Process`, `## Output Schema`. Not compressed.
+
+**MODE labels:** `**thorough:**`, `**gaps:**`, `**quick:**` (no suffixes like "mode - Focus on:").
+
+**Output section:** All 15 non-synthesis agents use `## Output` with: category, description guidance, severity thresholds (compressed single-line `Thresholds: Critical=...; Major=...`), and category-specific YAML extra fields. No "See Output Schema in additional_instructions" — that content is injected by the orchestrator at runtime.
+
 ### Deep Review Pipeline
 
 1. **Phase 1** (9 agents parallel): Thorough mode review (5 Opus, 4 Sonnet)
@@ -252,10 +262,10 @@ When modifying the plugin:
 
 ### Agent Checklist Compression
 
-Model-aware compression of thorough-mode checklists:
-- **Opus agents**: Compress to high-level triggers (1-3 lines). "Claude is already smart" — only add domain context Claude doesn't already have.
-- **Sonnet agents**: Moderate compression. Keep domain-specific guidance, items with calibrated thresholds, and unique methodology. Agents with only meta-rules (compliance) need no compression.
-- **All agents**: Preserve gaps/quick mode items, severity thresholds, output schema verbatim. MODE differentiation (thorough/gaps/quick sections) intact.
+Model-aware compression:
+- **Opus agents**: No analysis steps (Step 2+). `## MODE Checklists` with high-level triggers (1-3 lines for thorough). `## Output` merges description + thresholds + YAML fields. "Claude is already smart" — only add domain context Claude doesn't already have.
+- **Sonnet agents**: Keep `## Review Process` with methodology steps. `## Output` merges description + thresholds + YAML fields (no separate Report step or Output Schema section).
+- **All agents**: Preserve gaps/quick mode items, severity thresholds, category-specific YAML fields verbatim. MODE differentiation (thorough/gaps/quick sections) intact. MODE labels: `**thorough:**` not `**thorough mode - Focus on:**`.
 
 ### Content Audience
 
@@ -312,10 +322,10 @@ Apply alphabetical ordering to:
 
 This applies to:
 - Command workflows in `commands/*.md`
-- Agent workflows in `agents/code/*.md` and `agents/docs/*.md`
+- Sonnet agent workflows in `agents/code/*.md` and `agents/docs/*.md` (Opus agents have no step headings)
 - Skill workflows in `skills/*/SKILL.md`
 
-**Rationale:** Consistency with agent workflows. All 17 agents already use Step 1 as their first step.
+**Rationale:** Consistency across command and Sonnet agent workflows.
 
 **Step layout in commands:**
 - Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills) - inlined in each command
