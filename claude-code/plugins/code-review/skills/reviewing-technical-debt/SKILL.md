@@ -5,7 +5,7 @@ description: Detects deprecated dependencies, outdated patterns, workarounds, de
 
 # Technical Debt Code Review Skill
 
-Enhancement: Adds scope prioritization (dependency/config files), technical-debt-specific false positive adjustments, and detailed debt pattern references.
+Adds scope prioritization (dependency/config files), debt-specific FP adjustments, debt pattern references.
 
 ## Agent
 
@@ -13,7 +13,6 @@ Enhancement: Adds scope prioritization (dependency/config files), technical-debt
 
 ## Scope Prioritization
 
-Prioritize:
 - Package manifest files (`package.json`, `*.csproj`)
 - Configuration files (bundler configs, tsconfig)
 - Files with many TODO/FIXME comments
@@ -21,10 +20,10 @@ Prioritize:
 
 ## False Positives
 
-**Technical Debt-specific additions** - do NOT flag:
+**Debt-specific** - do NOT flag:
 - Dependencies intentionally pinned with documented reason
 - Legacy patterns in explicitly deprecated modules
-- TODOs that reference issue tracking (e.g., `TODO(#123)`)
+- TODOs referencing issue tracking (e.g., `TODO(#123)`)
 - Workarounds with documented upstream bug references
 
 ## Detailed Debt Patterns

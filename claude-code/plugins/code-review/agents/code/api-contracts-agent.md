@@ -20,16 +20,16 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 2: Analyze API Surface
 
-Identify public API boundaries (exports, endpoints, interfaces), compare changes against existing contracts, check downstream impact, verify versioning strategy.
+Identify public API boundaries (exports, endpoints, interfaces), compare against existing contracts, check downstream impact, verify versioning.
 
 ### Step 3: Check Contract Consistency
 
-For each API change: backward compatible? Migration path for consumers? Properly versioned? Deprecation warnings for removed features?
+For each API change: backward compatible? Migration path? Properly versioned? Deprecation warnings for removed features?
 
 ## Output
 
-Category: "API Contracts". Describe: what the API change is, impact on consumers, migration path (if any).
-Thresholds: Critical=breaking change without migration path; Major=breaking change with workaround; Minor=inconsistency or documentation gap; Suggestion=API improvement opportunity.
+Category: "API Contracts". Describe: the API change, consumer impact, migration path (if any).
+Thresholds: Critical=breaking change without migration path; Major=breaking change with workaround; Minor=inconsistency or doc gap; Suggestion=API improvement opportunity.
 
 Extra fields:
 ```yaml
@@ -42,4 +42,4 @@ issues:
 
 ## False Positives
 
-Additive-only changes; beta/experimental APIs marked unstable; changes following established deprecation
+Additive-only changes; beta/experimental APIs marked unstable; changes following established deprecation policy

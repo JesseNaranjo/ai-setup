@@ -7,16 +7,9 @@
 
 ### Prompt Schema
 
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| `MODE` | string | Yes | `thorough`, `gaps`, or `quick` |
-| `project_type` | string | Yes | `nodejs`, `dotnet`, or both |
-| `files_to_review` | list | Yes | Below |
-| `ai_instructions` | list | Conditional | Full content for architecture/compliance; summary-only for others |
-| `related_tests` | list | Conditional | bug-detection, technical-debt, test-coverage only |
-| `previous_findings` | list | Gaps only | Prior findings for dedup. Each: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
-| `skill_instructions` | object | Optional | From `--skills`. Fields: `focus_areas`, `checklist` [{category, severity, items}], `auto_validate`, `false_positive_rules`, `methodology` {approach, steps, questions} |
-| `additional_instructions` | string | Optional | Settings body + `--prompt` + orchestrator-injected rules |
+Required: `MODE` (thorough/gaps/quick), `project_type` (nodejs/dotnet/both), `files_to_review` (see File Entry Schema).
+Conditional: `ai_instructions` (full content for architecture/compliance; summary-only for others), `related_tests` (bug-detection, technical-debt, test-coverage only), `previous_findings` (gaps only; each: `title`, `file`, `line`, `range`, `category`, `severity`).
+Optional: `skill_instructions` ({focus_areas, checklist [{category, severity, items}], auto_validate, false_positive_rules, methodology {approach, steps, questions}}), `additional_instructions` (settings body + `--prompt` + orchestrator-injected rules).
 
 ### File Entry Schema
 
@@ -28,23 +21,17 @@ End prompt with: `Return findings as YAML per agent examples in your agent file.
 
 ### Content Distribution
 
-Per agent, append to `additional_instructions`: (1) Language checks — agent's anchor from detected language files. (2) LSP codes — agent's category rows + guidelines from lsp-integration.md.
+Per agent, append to `additional_instructions`: (1) Language checks from detected language files using agent anchor. (2) LSP codes from lsp-integration.md using agent category.
 
-**Language anchors:** architecture→#architecture, bugs→#bugs, errors→#errors, performance→#performance, security→#security, debt→#debt, tests→#tests. No anchors: api-contracts, compliance (skip step 2). Synthesis: skip all distribution.
+**Anchors:** architecture→#architecture, bugs→#bugs, errors→#errors, performance→#performance, security→#security, debt→#debt, tests→#tests. No anchors: api-contracts, compliance. Synthesis: skip all.
 
-**LSP categories:** architecture→Architecture, bugs→Bugs, errors→Error Handling, performance→Performance, security→Security. If unavailable, skip.
+**LSP:** architecture→Architecture, bugs→Bugs, errors→Error Handling, performance→Performance, security→Security. Unavailable → skip.
 
 **Selective:** `related_tests` → bug-detection, technical-debt, test-coverage only. Full `ai_instructions` → architecture, compliance only (others: path summary).
 
 ## Gaps Mode
 
-Agents receive `previous_findings` from thorough mode.
-
-**Duplicate Detection:** Skip issues in same file within +/-5 lines of prior findings. Skip same issue type on same function/method. Range findings (lines A-B): skip zone = [A-5, B+5].
-
-**Constraints:** Major/Critical only. Maximum 5 new findings per agent. Model: always Sonnet.
-
-**Agents:** bug-detection, compliance, performance, security, technical-debt. See each agent file for gaps focus areas.
+Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within +/-5 lines of prior findings; skip same issue type on same function/method; range (A-B): skip zone [A-5, B+5]. **Constraints:** Major/Critical only. Max 5 new per agent. Always Sonnet. **Agents:** bug-detection, compliance, performance, security, technical-debt.
 
 ## Deep Code Review Sequence (19 invocations)
 
@@ -78,7 +65,7 @@ Load ONLY for detected languages: `detected_languages.dotnet` → `${CLAUDE_PLUG
 
 ## Synthesis Invocation
 
-Invoke synthesis agent multiple times in parallel with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md`.
+Parallel instances with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/code/synthesis-code-agent.md`.
 
 ---
 

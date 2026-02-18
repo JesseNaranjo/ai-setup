@@ -5,7 +5,7 @@ description: Detects injection attacks, authentication bypasses, hardcoded secre
 
 # Security Code Review Skill
 
-Enhancement: Adds scope prioritization (auth/config/middleware files), security-specific false positive adjustments, and detailed vulnerability pattern references.
+Adds scope prioritization (auth/config/middleware), security-specific FP adjustments, vulnerability pattern references.
 
 ## Agent
 
@@ -13,7 +13,6 @@ Enhancement: Adds scope prioritization (auth/config/middleware files), security-
 
 ## Scope Prioritization
 
-Prioritize:
 - Files with "auth", "login", "password", "api", "db" in names
 - Configuration files (`config/*.ts`, `appsettings.json`)
 - Environment handling (`.env.example`, environment loading code)
@@ -21,9 +20,9 @@ Prioritize:
 
 ## False Positives
 
-**Security-specific additions** - do NOT flag:
+**Security-specific** - do NOT flag:
 - Placeholder values (`"changeme"`, `"TODO"`)
-- Vulnerabilities explicitly mitigated elsewhere (documented upstream protection)
+- Vulnerabilities mitigated elsewhere (documented upstream protection)
 
 ## Security References
 

@@ -13,34 +13,34 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 1: Parse Instructions
 
-Read all provided AI Agent Instructions files and extract:
+Extract from AI Agent Instructions files:
 - Explicit rules (MUST, MUST NOT, ALWAYS, NEVER)
 - Guidelines (SHOULD, SHOULD NOT, prefer, avoid)
-- Patterns and conventions specified
-- File-specific or directory-specific rules
+- Patterns and conventions
+- File/directory-specific rules
 
 ### Step 2: Map Rules to Files
 
-For each file being reviewed:
-- Identify which instruction files apply (same directory or parent directories)
-- List the specific rules that apply to this file type
+For each file:
+- Identify applicable instruction files (same/parent directories)
+- List specific rules for this file type
 
 ### Step 3: Check Compliance (Based on MODE)
 
 **thorough:**
 - Check every rule against every applicable file
-- Look for both explicit violations and spirit-of-the-rule violations
-- Check for consistency across files
+- Both explicit violations and spirit-of-the-rule violations
+- Cross-file consistency
 
 **gaps:**
-- Focus on rules that are easy to miss
-- Check for subtle violations (almost compliant but not quite)
-- Look for rules that might be misinterpreted
-- Check edge cases and boundary conditions
+- Rules that are easy to miss
+- Subtle violations (almost compliant but not quite)
+- Rules that might be misinterpreted
+- Edge cases and boundary conditions
 
 ## Output
 
-Category: "Compliance". Describe: the exact rule being violated (quote from instruction file), why this code violates it, impact.
+Category: "Compliance". Describe: exact rule violated (quote from instruction file), how code violates it, impact.
 Thresholds: Major=explicit rule violation (MUST/MUST NOT/ALWAYS/NEVER); Minor=guideline violation (SHOULD/SHOULD NOT); Suggestion=best practice not followed.
 
 Extra fields:

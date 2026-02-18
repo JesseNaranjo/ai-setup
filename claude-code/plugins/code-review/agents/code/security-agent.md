@@ -29,7 +29,7 @@ skills: ["code-review:agent-review-instructions"]
 
 ## Output
 
-Category: "Security". Describe: type of vulnerability, how it could be exploited, potential impact.
+Category: "Security". Describe: vulnerability type, exploitation method, potential impact.
 Thresholds: Critical=direct exploitation/data breach/RCE; Major=exploitable under specific conditions; Minor=defense-in-depth, requires exploit chain; Suggestion=best practice not followed.
 
 Extra fields:

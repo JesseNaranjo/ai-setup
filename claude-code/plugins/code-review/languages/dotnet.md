@@ -1,17 +1,17 @@
 ## Test File Patterns
 
-- `*.Tests.cs`, `*Tests/`, `*.UnitTests/`, `*.IntegrationTests/` projects
+`*.Tests.cs`, `*Tests/`, `*.UnitTests/`, `*.IntegrationTests/` projects
 
 ## Category-Specific Checks
 
 ### Bugs {#bugs}
 
-- Lazy loading disconnected — navigation property accessed after context disposed
+- Lazy loading disconnected — navigation property after context disposed
 
 ### Security {#security}
 
 - Insecure deserialization — untrusted data without type validation
-- Hardcoded connection strings, missing `[Authorize]` attributes
+- Hardcoded connection strings, missing `[Authorize]`
 - XXE — XML parsing without disabling external entities
 - Model over-binding — [Bind]/[FromBody] allowing sensitive property binding
 - JWT without validation parameters
@@ -19,7 +19,7 @@
 ### Performance {#performance}
 
 - Missing AsNoTracking for read-only queries
-- ToList() before filter — materializing query before Where()
+- ToList() before filter — materializing before Where()
 
 ### Architecture {#architecture}
 
@@ -27,13 +27,13 @@
 
 ### Error Handling {#errors}
 
-- Improper `Task` handling — unawaited tasks, fire-and-forget without error handling
+- Unawaited tasks, fire-and-forget without error handling
 
 ### Technical Debt {#debt}
 
 - Pre-.NET 6 patterns — `WebClient`, sync-over-async, old configuration
 - Legacy serialization — `BinaryFormatter`, non-JSON serialization
-- Pre-nullable context — missing `#nullable enable`
+- Missing `#nullable enable`
 
 ## Entity Framework Core Patterns
 
@@ -42,9 +42,9 @@ Apply when EF Core detected (Microsoft.EntityFrameworkCore in csproj).
 ### Query Issues
 
 - N+1 via lazy loading — navigation properties in loops
-- Client-side evaluation — LINQ evaluated in memory instead of SQL
+- Client-side evaluation — LINQ in memory instead of SQL
 - FromSqlRaw with string interpolation — use FromSqlInterpolated
-- Missing AsSplitQuery — large Include graphs causing Cartesian explosion
+- Missing AsSplitQuery — large Include graphs, Cartesian explosion
 
 ### Context Issues
 
@@ -55,13 +55,13 @@ Apply when EF Core detected (Microsoft.EntityFrameworkCore in csproj).
 
 Apply when ASP.NET Core detected (Microsoft.AspNetCore in csproj).
 
-### Middleware Order Issues
+### Middleware Order
 
 - Auth after endpoints — UseAuthentication/Authorization after MapControllers
-- Exception handler position — UseExceptionHandler not at start of pipeline
-- CORS misconfigured — UseCors after UseRouting or before policy applied
+- UseExceptionHandler not at start of pipeline
+- CORS misconfigured — UseCors after UseRouting or before policy
 
 ### Minimal API Security
 
 - Missing RequireAuthorization, validation
-- Improper Results usage — returning raw data instead of Results.Ok/BadRequest
+- Raw data instead of Results.Ok/BadRequest

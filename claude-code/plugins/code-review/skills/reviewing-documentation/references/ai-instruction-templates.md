@@ -15,7 +15,7 @@ repository/
 
 ### .ai/AI-AGENT-INSTRUCTIONS.md
 
-Comprehensive coding standards document. Required header:
+Comprehensive coding standards. Required header:
 
 ```markdown
 # AI Agent Instructions
@@ -27,11 +27,11 @@ This file contains comprehensive coding standards, patterns, and conventions for
 > **Note:** You MUST keep the Quick Reference in sync with [CLAUDE.md](../CLAUDE.md) and [.github/copilot-instructions.md](../.github/copilot-instructions.md).
 ```
 
-Recommended sections: Quick Reference, Coding Standards, Architecture, Testing, Documentation, Common Patterns, Anti-Patterns
+Sections: Quick Reference, Coding Standards, Architecture, Testing, Documentation, Common Patterns, Anti-Patterns
 
 ### CLAUDE.md
 
-Quick reference for Claude Code in repository root:
+Quick reference for Claude Code:
 
 ```markdown
 # CLAUDE.md
@@ -68,7 +68,7 @@ This file provides guidance to GitHub Copilot when working with code in this rep
 | AI-AGENT-INSTRUCTIONS.md | CLAUDE.md | `[CLAUDE.md](../CLAUDE.md)` |
 | AI-AGENT-INSTRUCTIONS.md | copilot-instructions.md | `[.github/copilot-instructions.md](../.github/copilot-instructions.md)` |
 
-Quick Reference sections must contain the same essential information (critical rules, key commands, naming conventions, architecture summary) across all three files.
+Quick Reference sections must contain the same essential information across all three files.
 
 ## Validation Checklist
 

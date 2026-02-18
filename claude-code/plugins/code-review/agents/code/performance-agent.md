@@ -22,8 +22,8 @@ skills: ["code-review:agent-review-instructions"]
 
 ## Output
 
-Category: "Performance". Describe: what the issue is, expected impact (time complexity, memory usage), scale at which it becomes a problem.
-Thresholds: Critical=outages/system degradation at normal scale; Major=significant impact at expected scale; Minor=noticeable but manageable; Suggestion=optimization opportunity.
+Category: "Performance". Describe: the issue, expected impact (time complexity, memory), problem scale threshold.
+Thresholds: Critical=outages/degradation at normal scale; Major=significant impact at expected scale; Minor=noticeable but manageable; Suggestion=optimization opportunity.
 
 Extra fields:
 ```yaml

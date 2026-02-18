@@ -1,15 +1,5 @@
 # Common Bug Patterns
 
-## Contents
-- Null/Undefined Reference
-- Off-by-One Errors
-- Async/Promise Issues
-- Type Coercion Issues
-- State Management
-- Error Handling
-- .NET Specific
-- Quick Reference
-
 ## Null/Undefined Reference
 
 ```javascript
@@ -44,8 +34,8 @@ return str.split(' ').length - 1;
 ### Unhandled Promise Rejection
 
 ```javascript
-// BUG — no .catch()
-loadData(); // async function called without await or .catch()
+// BUG — async call without await or .catch()
+loadData();
 ```
 
 ### Race Conditions
@@ -63,8 +53,8 @@ await saveUser(user); // Another request may have updated count
 ### Floating Promises
 
 ```javascript
-// BUG — missing await
-saveData(data); // Shows success before save completes
+// BUG — missing await, shows success before save completes
+saveData(data);
 ```
 
 **Severity**: Major
@@ -77,7 +67,7 @@ saveData(data); // Shows success before save completes
 null == undefined  // true
 [] == false   // true
 
-// BUG — string concat instead of addition
+// BUG — string concat not addition
 const total = '10' + 5;  // '105'
 const sorted = [1, 10, 2].sort();  // [1, 10, 2] (string sort)
 ```
@@ -109,9 +99,9 @@ useEffect(() => {
 
 ```javascript
 // BUG — error silently ignored
-try { await saveData(data); } catch (e) { /* Empty catch */ }
+try { await saveData(data); } catch (e) { }
 
-// BUG — catches too broad; re-throw non-SyntaxError
+// BUG — catches too broad
 try { JSON.parse(input); } catch (e) { return null; }
 ```
 
@@ -122,18 +112,16 @@ try { JSON.parse(input); } catch (e) { return null; }
 ### IDisposable Not Disposed
 
 ```csharp
-// BUG — connection may leak
+// BUG — connection leak; CORRECT: using var connection = ...
 var connection = new SqlConnection(connString);
 connection.Open();
-// CORRECT: using var connection = new SqlConnection(connString);
 ```
 
 ### Async Deadlock
 
 ```csharp
-// DEADLOCK in ASP.NET
+// DEADLOCK in ASP.NET; CORRECT: await GetDataAsync()
 var data = GetDataAsync().Result;
-// CORRECT: async Task<ActionResult> with await GetDataAsync()
 ```
 
 **Severity**: Critical

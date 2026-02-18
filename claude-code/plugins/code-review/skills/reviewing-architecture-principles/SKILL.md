@@ -5,7 +5,7 @@ description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-pat
 
 # Architecture Principles Review Skill
 
-Enhancement: Adds scope prioritization (service/business logic files, high-line-count files), architecture-specific false positive adjustments, and detailed SOLID/DRY/YAGNI pattern references.
+Adds scope prioritization, architecture FP adjustments, SOLID/DRY/YAGNI pattern references.
 
 ## Agent
 
@@ -13,15 +13,14 @@ Enhancement: Adds scope prioritization (service/business logic files, high-line-
 
 ## Scope Prioritization
 
-Prioritize:
 - Service/business logic files
 - Files with "Factory", "Service", "Manager", "Handler" in names
-- Files with high line counts (500+)
+- Files with 500+ lines
 - Files with many exports
 
 ## False Positives
 
-**Architecture-specific additions** - do NOT flag:
+**Architecture-specific** - do NOT flag:
 - Intentional duplication for clarity (documented)
 - Abstractions planned for imminent use (documented roadmap)
 - Pragmatic compromises with documented justification

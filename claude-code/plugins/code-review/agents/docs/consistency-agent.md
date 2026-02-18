@@ -28,16 +28,16 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 2: Build Terminology Map
 
-Scan all documentation for term variants (e.g., "config" vs "configuration" vs "settings", product name variations, API capitalization). Track first usage to establish canonical form.
+Scan docs for term variants (e.g., "config" vs "configuration" vs "settings", product names, API capitalization). Track first usage as canonical form.
 
 ### Step 3: Formatting and Voice Analysis
 
-Use Grep to check for formatting consistency across headings (capitalization, punctuation), code blocks (language tags, indentation), and lists (bullet style, punctuation). Check voice consistency: person (you/we/passive), formality (contractions), tense, imperative vs descriptive.
+Use Grep to check formatting consistency: headings (capitalization, punctuation), code blocks (language tags, indentation), lists (bullet style, punctuation). Check voice: person (you/we/passive), formality (contractions), tense, imperative vs descriptive.
 
 ## Output
 
-Category: "Consistency". Describe: what is inconsistent, the variant forms found, recommended canonical form.
-Thresholds: Critical=inconsistency causes confusion or errors (rare); Major=significant inconsistency affecting professionalism; Minor=noticeable but doesn't impede understanding; Suggestion=minor polish, very subtle.
+Category: "Consistency". Describe: what is inconsistent, variant forms found, recommended canonical form.
+Thresholds: Critical=causes confusion or errors (rare); Major=significant inconsistency affecting professionalism; Minor=noticeable, doesn't impede understanding; Suggestion=minor polish.
 
 Extra fields:
 ```yaml
@@ -52,4 +52,4 @@ issues:
 
 ## False Positives
 
-Code/API names that must match implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections that intentionally differ
+Code/API names matching implementation (even if inconsistent with prose); quoted text preserving original formatting; version-specific sections intentionally differing

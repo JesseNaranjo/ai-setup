@@ -91,13 +91,11 @@ claude-code/plugins/code-review/
 │   ├── nodejs.md                    # Node.js/TypeScript checks
 │   └── react.md                     # React checks (extends Node.js)
 ├── shared/
-│   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, invocation patterns, gaps mode behavior
 │   ├── review-orchestration-docs.md # Docs review: phases, invocation patterns, gaps mode behavior
 │   ├── review-validation-code.md    # Code validation: batch validation, aggregation, auto-validation patterns
 │   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
-│   ├── staged-processing.md         # Staged input validation, content gathering, and pre-existing issue detection
 │   └── references/                  # LSP integration details (progressive disclosure)
 │       └── lsp-integration.md       # LSP integration details for Node.js and .NET
 ├── templates/
@@ -192,7 +190,7 @@ language: ""
 # Project-specific instructions for review agents
 ```
 
-See `shared/pre-review-setup.md` for loading logic and `README.md` for full documentation.
+Settings loading logic is inlined in each command file (Step 2). See `README.md` for full documentation.
 
 ### Language Detection
 
@@ -247,8 +245,8 @@ When modifying the plugin:
 
 ### Commands & Settings
 - **Command arguments**: Edit command YAML frontmatter in `commands/`
-- **Settings options**: Edit `shared/pre-review-setup.md` and `templates/code-review.local.md.example`
-- **Pre-existing issue detection**: Edit `shared/staged-processing.md` "Pre-Existing Issue Detection" section
+- **Settings options**: Edit Step 2 in `commands/code-review.md` and `commands/docs-review.md`, and `templates/code-review.local.md.example`
+- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `commands/code-review.md` (Steps 3 & 5, staged section)
 
 ## Coding Conventions
 
@@ -339,7 +337,7 @@ This applies to:
 
 ### Command Step Inlining
 
-Each command file inlines its pre-review setup steps (Steps 1-6) directly rather than referencing a shared common-steps file. Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline. The code review command handles both file and staged modes via `--staged` flag (file-processing logic is inlined; staged mode references `staged-processing.md`); the docs review command uses a different layout.
+Each command file inlines its pre-review setup steps (Steps 1-6) directly, including settings loading and context discovery (formerly `pre-review-setup.md`). The code review command also inlines staged processing (formerly `staged-processing.md`). Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline.
 
 **Rationale:** A shared `command-common-steps.md` was tried but created a second level of indirection (commands → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps commands self-contained with one-hop references to shared files.
 
@@ -349,6 +347,7 @@ Each command file inlines its pre-review setup steps (Steps 1-6) directly rather
 
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
+| `commands/code-review.md` / `commands/docs-review.md` | Settings loading, Context Discovery | ~35 | Only one command runs per execution; inlined from former `pre-review-setup.md` |
 | `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Gaps Mode core | ~50 | Only one loaded per execution; extracting adds a file read |
 | `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation, Output Format | ~110 | Same rationale: only one loaded per execution |
 

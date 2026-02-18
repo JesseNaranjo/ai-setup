@@ -14,7 +14,7 @@ skills: ["code-review:agent-review-instructions"]
 ### Step 1: Identify Coverage Categories (Based on MODE)
 
 **thorough:**
-- Test quality (no assertions, testing implementation details, tests that always pass), integration test gaps
+- Test quality (no assertions, testing implementation details, always-pass tests), integration gaps
 - Modified logic invalidating existing tests, missing negative/async/concurrent tests
 
 **quick:**
@@ -24,11 +24,11 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 2: Analyze Test Gaps
 
-For each changed/reviewed file:
-1. Identify all public functions/methods/exports
+For each changed file:
+1. Identify public functions/methods/exports
 2. Map to existing test coverage (use related_tests from orchestrator context)
 3. Identify untested code paths
-4. Note edge cases that should be tested
+4. Note edge cases needing tests
 
 ### Step 3: Generate Test Recommendations
 
@@ -36,8 +36,8 @@ For each gap: what to test, expected behavior, suggested test file location, tes
 
 ## Output
 
-Category: "Test Coverage". Describe: what code is not tested, why it should be tested, risk of not testing.
-Thresholds: Major=critical path without tests; Minor=non-critical code lacking tests; Suggestion=additional edge case tests recommended.
+Category: "Test Coverage". Describe: untested code, why it needs tests, risk of not testing.
+Thresholds: Major=critical path without tests; Minor=non-critical code lacking tests; Suggestion=additional edge case tests.
 
 Extra fields:
 ```yaml
@@ -53,4 +53,4 @@ issues:
 
 ## False Positives
 
-Code impractical to unit test (better for integration); code covered by higher-level tests; generated code/boilerplate; dead code to remove rather than test
+Code impractical to unit test (better for integration); code covered by higher-level tests; generated/boilerplate code; dead code to remove rather than test

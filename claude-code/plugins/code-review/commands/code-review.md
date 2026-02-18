@@ -26,18 +26,73 @@ Invoke superpowers methodology skills; pass to agents via `skill_instructions.me
 
 ## Step 2: Load Settings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. Stop if `enabled: false`. Apply: `output_dir`, `skip_agents`, `min_severity`, `language`.
+Load from `.claude/code-review.local.md` in project root. If missing, use defaults.
+
+Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend to output filename unless --output-file), `skip_agents` ([] ; exclude from review), `min_severity` ("suggestion" ; filter to issues at or above), `language` ("" ; empty = auto-detect), `additional_test_patterns` ([] ; merge with defaults).
+
+Markdown body → "Project-Specific Instructions" for all agents. `--prompt` appends. Precedence: CLI flags > settings file > defaults.
 
 ## Step 4: Context Discovery
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
+### AI Instructions
+
+Priority (higher overrides): (1) `CLAUDE.md` in reviewed file directories, (2) `CLAUDE.md` in repo root, (3) `.ai/AI-AGENT-INSTRUCTIONS.md`, (4) `.github/copilot-instructions.md`. Per file, resolve which apply (same directory or parent up to repo root).
+
+### Language Detection
+
+Detect: Node.js/TypeScript (`package.json`), .NET/C# (`*.csproj`/`*.sln`/`*.slnx`). Override: `--language nodejs|dotnet|react` for ALL files. Monorepo: per-file detection, group by language.
+
+**Framework:** Node.js files: check nearest `package.json` for `react`/`react-dom` in dependencies. `--language react` = Node.js + React checks.
+
+**LSP:** Check for `typescript-lsp` (Node.js), `csharp-lsp`/OmniSharp (.NET). If available: read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`, add `lsp_available` to discovery. If none: skip.
+
+**Test Files:** Per detected language from `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` and `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`. Merge `additional_test_patterns` from settings.
+
+**Discovery Output:**
+
+```yaml
+ai_instructions: [{path, applies_to}]
+detected_languages: {language: [files]}
+detected_frameworks: {framework: [files]}
+test_files: {source: [tests]}
+language_override: string | null
+lsp_available: [types] | null
+```
+
+Only load `languages/*.md` for detected languages. Unknown: warn, skip.
 
 ---
 
 ## Steps 3 & 5: Input Validation and Content Gathering
 
 **If `--staged`:**
-See `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md` for the validation, content gathering, and tiered context behavior. Include the Pre-Existing Issue Detection rules from `staged-processing.md` in each agent's `additional_instructions` prompt field.
+
+Verify git repository (stop: "Not a git repository.") and staged changes exist (stop: "No staged changes to review."). Parse `--output-file` (command provides default) and `--language` (default: auto-detect per file).
+
+Launch Sonnet agent to gather:
+
+- **Staged diff:** Full diff with line markers
+- **Current branch:** Branch name
+- **File content (tiered):** Changed files (has_changes=true) → full content (critical). Unchanged import/context files (has_changes=false) → first 50 lines preview (peripheral)
+- **Related test files:** From Context Discovery (see `languages/nodejs.md`, `languages/dotnet.md`). Always critical tier
+- **Summary:** Files modified count, change description, project types, test files, tier classification
+
+**Output:** Branch name. Per file: path, has_changes, tier. Critical: diff + full_content. Peripheral: preview (50 lines), line_count, full_content_available: true. Related tests (critical). Review summary.
+
+**Pre-Existing Issue Detection** — include in each agent's `additional_instructions`:
+
+**CRITICAL**: Only flag issues in CHANGED lines.
+
+**Context to agents:** (1) Diff with line markers (`+` = additions), (2) surrounding unchanged lines (context only), (3) full file content (reference only).
+
+**Flag:** Lines starting with `+` in diff. Changes that INTRODUCE issues (e.g., removes null check). Changes that WORSEN existing issues (e.g., increases vulnerability scope).
+
+**Do NOT flag:** Unchanged code (no `+` prefix). Pre-existing problems not worsened. Style in untouched code. Issues in "full file" context but not in diff.
+
+**Tiered Context** — inject into `additional_instructions` for staged reviews:
+
+**critical:** Full content provided — analyze thoroughly.
+**peripheral:** Preview only (50 lines). If cross-file analysis discovers relevance, use Read tool for full content.
 
 **If file paths provided:**
 
@@ -66,7 +121,7 @@ Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/rev
 **If depth == quick:**
 Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. Follow all CRITICAL WAIT barriers.
 
-**If `--staged`:** Agents receive staged diff and file content per tier classification in `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md`.
+**If `--staged`:** Agents receive staged diff and file content per tier classification above (Steps 3 & 5).
 
 ---
 

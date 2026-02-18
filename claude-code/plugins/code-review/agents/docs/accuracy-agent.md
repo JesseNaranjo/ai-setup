@@ -14,13 +14,13 @@ skills: ["code-review:agent-review-instructions"]
 **thorough:** All code-doc sync: signatures, CLI commands, config options, API endpoints, env vars, version numbers, code examples
 
 **gaps:**
-- Parameter default value changes not reflected in docs
+- Parameter defaults not reflected in docs
 - Subtle behavior differences (edge cases, error conditions)
-- Implicit assumptions that changed
+- Changed implicit assumptions
 - Order-dependent behavior changes
 - Deprecated but still documented features
 - New required parameters not documented
-- Duplicate detection: skip issues in same file within ±3 lines of prior findings; skip same issue type on same code reference
+- Duplicate detection: skip issues within ±3 lines of prior findings; skip same issue type on same code reference
 
 **quick:**
 - Incorrect function/method names
@@ -31,8 +31,8 @@ skills: ["code-review:agent-review-instructions"]
 
 ## Output
 
-Category: "Accuracy". Describe: what the documentation says, what the code actually does, impact of the discrepancy.
-Thresholds: Critical=would cause user code to fail/wrong results; Major=significant confusion/subtle bugs; Minor=cosmetic, unlikely to cause issues; Suggestion=could be clearer but technically correct.
+Category: "Accuracy". Describe: what docs say vs what code does, impact of discrepancy.
+Thresholds: Critical=would cause code to fail/wrong results; Major=significant confusion/subtle bugs; Minor=cosmetic, unlikely to cause issues; Suggestion=technically correct but could be clearer.
 
 Extra fields:
 ```yaml
@@ -45,4 +45,4 @@ issues:
 
 ## False Positives
 
-Intentionally simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; documentation for planned features marked as such
+Simplified examples (marked "simplified"/"basic example"); pseudocode marked as illustrative; planned features marked as such

@@ -5,7 +5,7 @@ description: Detects algorithmic complexity problems, memory leaks, N+1 queries,
 
 # Performance Code Review Skill
 
-Enhancement: Adds hot path identification, database code prioritization, complexity analysis format (Big O), performance-specific false positive adjustments, and detailed performance pattern references.
+Adds hot path identification, database code prioritization, Big O analysis format, performance-specific FP adjustments, performance pattern references.
 
 ## Agent
 
@@ -15,7 +15,6 @@ Enhancement: Adds hot path identification, database code prioritization, complex
 
 ### Hot Path Identification
 
-Prioritize:
 - Files with "api", "handler", "controller", "route" in name (entry points)
 - Files with "service", "repository", "dao", "query" in name (data access)
 - Files with "util", "helper", "common" in name (frequently called)
@@ -25,11 +24,11 @@ Prioritize:
 For N+1 and query performance, also read:
 - ORM model definitions (`models/*.ts`, `entities/*.cs`)
 - Repository implementations
-- Migration files (to understand indexes)
+- Migration files (index information)
 
 ## False Positives
 
-**Performance-specific additions** - do NOT flag:
+**Performance-specific** - do NOT flag:
 - O(n^2) on small bounded data (max 10 items)
 - Startup/initialization code (one-time cost)
 - Code with caching/memoization elsewhere
@@ -37,10 +36,7 @@ For N+1 and query performance, also read:
 
 ## Complexity Analysis
 
-Always include:
-- **Current**: What is the Big O now?
-- **Optimized**: What could it be?
-- **Data Scale**: At what data size does this matter?
+Always include: **Current** (Big O now), **Optimized** (achievable Big O), **Data Scale** (threshold where it matters).
 
 Example: "Current O(n*m) where n=orders, m=items. With 100 orders and 1000 items, this executes 100,000 comparisons. Optimized O(n+m) would be 1,100 operations."
 

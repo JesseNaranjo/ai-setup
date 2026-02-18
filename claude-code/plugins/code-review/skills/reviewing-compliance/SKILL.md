@@ -5,7 +5,7 @@ description: Reviews adherence to project-specific coding standards, CLAUDE.md g
 
 # Compliance Code Review Skill
 
-Enhancement: Adds rule citation guidelines, compliance scoring format, and compliance-specific false positive adjustments.
+Adds rule citation guidelines, compliance scoring, compliance-specific FP adjustments.
 
 ## Agent
 
@@ -13,13 +13,13 @@ Enhancement: Adds rule citation guidelines, compliance scoring format, and compl
 
 ## Rule Classification
 
-Rule classification (MUST/SHOULD/MAY keywords and severity mapping): `references/compliance-patterns.md`.
+MUST/SHOULD/MAY keywords and severity mapping: `references/compliance-patterns.md`.
 
 ## False Positives
 
-**Compliance-specific additions** - do NOT flag:
+**Compliance-specific** - do NOT flag:
 - Explicit override comments (`// claude-ignore: rule-name`)
-- Scope mismatch (rule doesn't apply to this file type)
+- Scope mismatch (rule doesn't apply to file type)
 - Ambiguous rules (benefit of doubt to code)
 - Framework exemptions (framework provides required behavior)
 
@@ -28,7 +28,7 @@ Rule classification (MUST/SHOULD/MAY keywords and severity mapping): `references
 Always include:
 - **Rule text**: Exact quoted text from instruction file
 - **Source**: File path and line number
-- **Keyword**: The strength keyword (MUST, SHOULD, MAY)
+- **Keyword**: MUST, SHOULD, or MAY
 
 Example: "The endpoint violates 'All API endpoints MUST have authentication' from CLAUDE.md:31"
 

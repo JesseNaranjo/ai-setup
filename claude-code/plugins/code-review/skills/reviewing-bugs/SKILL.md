@@ -5,7 +5,7 @@ description: Detects runtime errors, null references, off-by-one errors, boundar
 
 # Bug Detection Code Review Skill
 
-Enhancement: Adds bug investigation mode with reproduction conditions framework, bug-specific false positive adjustments, and detailed common bug pattern references.
+Adds bug investigation mode, reproduction conditions framework, bug-specific FP adjustments, common bug pattern references.
 
 ## Agent
 
@@ -21,19 +21,15 @@ When investigating specific bugs:
 
 ## False Positives
 
-**Bug-specific additions** - do NOT flag:
+**Bug-specific** - do NOT flag:
 - Guarded elsewhere (null check in caller)
-- Framework guarantee (framework ensures non-null)
-- Intentional behavior (documented as expected)
+- Framework guarantee (ensures non-null)
+- Intentional behavior (documented)
 - Unreachable conditions (requires impossible state)
 
 ## Reproduction Conditions
 
-For each bug:
-- **Preconditions**: What state must exist?
-- **Trigger**: What action causes the bug?
-- **Frequency**: How often can this occur?
-- **Impact**: What goes wrong?
+For each bug: **Preconditions** (required state), **Trigger** (causing action), **Frequency** (likelihood), **Impact** (consequence).
 
 Example: "When two users simultaneously withdraw from the same account (concurrent requests), and the balance check passes for both before either write completes, the second write overwrites the first, resulting in only one deduction being recorded."
 

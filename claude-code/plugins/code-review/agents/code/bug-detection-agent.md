@@ -28,8 +28,8 @@ skills: ["code-review:agent-review-instructions"]
 
 ## Output
 
-Category: "Bugs". Describe: what the bug is, how it manifests at runtime, conditions under which it occurs.
-Thresholds: Critical=crashes/data corruption/security; Major=incorrect behavior common scenarios; Minor=uncommon edge cases; Suggestion=may not manifest.
+Category: "Bugs". Describe: what the bug is, runtime manifestation, trigger conditions.
+Thresholds: Critical=crashes/data corruption/security; Major=incorrect behavior in common scenarios; Minor=uncommon edge cases; Suggestion=may not manifest.
 
 Extra fields:
 ```yaml

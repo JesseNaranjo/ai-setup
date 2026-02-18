@@ -7,15 +7,8 @@
 
 ### Prompt Schema
 
-| Field | Type | Required | Notes |
-|-------|------|----------|-------|
-| `MODE` | string | Yes | `thorough`, `gaps`, or `quick` |
-| `project_type` | string | Yes | `nodejs`, `dotnet`, or both |
-| `files_to_review` | list | Yes | Below |
-| `ai_instructions` | list | Optional | Summary of AI instruction files |
-| `previous_findings` | list | Gaps only | Prior findings for dedup. Each: `title`, `file`, `line`, `range` (string or null), `category`, `severity` |
-| `skill_instructions` | object | Optional | From `--skills`. Fields: `focus_areas`, `checklist` [{category, severity, items}], `auto_validate`, `false_positive_rules`, `methodology` {approach, steps, questions} |
-| `additional_instructions` | string | Optional | Settings body + `--prompt` + orchestrator-injected rules |
+Required: `MODE` (thorough/gaps/quick), `project_type` (nodejs/dotnet/both), `files_to_review` (see File Entry Schema).
+Optional: `ai_instructions` (summary of AI instruction files), `previous_findings` (gaps only; each: `title`, `file`, `line`, `range`, `category`, `severity`), `skill_instructions` ({focus_areas, checklist [{category, severity, items}], auto_validate, false_positive_rules, methodology {approach, steps, questions}}), `additional_instructions` (settings body + `--prompt` + orchestrator-injected rules).
 
 ### File Entry Schema
 
@@ -31,13 +24,7 @@ Synthesis: skip `additional_instructions` distribution.
 
 ## Gaps Mode
 
-Agents receive `previous_findings` from thorough mode.
-
-**Duplicate Detection:** Skip issues in same file within +/-5 lines of prior findings. Skip same issue type on same function/method. Range findings (lines A-B): skip zone = [A-5, B+5].
-
-**Constraints:** Major/Critical only. Maximum 5 new findings per agent. Model: always Sonnet.
-
-**Agents:** accuracy, completeness, consistency. See each agent file for gaps focus areas.
+Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within +/-5 lines of prior findings; skip same issue type on same function/method; range (A-B): skip zone [A-5, B+5]. **Constraints:** Major/Critical only. Max 5 new per agent. Always Sonnet. **Agents:** accuracy, completeness, consistency.
 
 ## Deep Docs Review Sequence (13 invocations)
 
@@ -71,7 +58,7 @@ Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick 
 
 ## Synthesis Invocation
 
-Invoke synthesis agent multiple times in parallel with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md`.
+Parallel instances with different category pairs. See `${CLAUDE_PLUGIN_ROOT}/agents/docs/synthesis-docs-agent.md`.
 
 ---
 

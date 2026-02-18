@@ -23,11 +23,40 @@ Invoke superpowers methodology skills; pass to agents via `skill_instructions.me
 
 ## Step 2: Load Settings
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 1. Stop if `enabled: false`. Apply: `output_dir`, `skip_agents`, `min_severity`.
+Load from `.claude/code-review.local.md` in project root. If missing, use defaults.
+
+Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend to output filename unless --output-file), `skip_agents` ([] ; exclude from review), `min_severity` ("suggestion" ; filter to issues at or above), `additional_test_patterns` ([] ; merge with defaults).
+
+Markdown body → "Project-Specific Instructions" for all agents. `--prompt` appends. Precedence: CLI flags > settings file > defaults.
 
 ## Step 4: Context Discovery
 
-See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
+### AI Instructions
+
+Priority (higher overrides): (1) `CLAUDE.md` in reviewed file directories, (2) `CLAUDE.md` in repo root, (3) `.ai/AI-AGENT-INSTRUCTIONS.md`, (4) `.github/copilot-instructions.md`. Per file, resolve which apply (same directory or parent up to repo root).
+
+### Language Detection
+
+Detect: Node.js/TypeScript (`package.json`), .NET/C# (`*.csproj`/`*.sln`/`*.slnx`). Override: `--language nodejs|dotnet|react` for ALL files. Monorepo: per-file detection, group by language.
+
+**Framework:** Node.js files: check nearest `package.json` for `react`/`react-dom` in dependencies. `--language react` = Node.js + React checks.
+
+**LSP:** Check for `typescript-lsp` (Node.js), `csharp-lsp`/OmniSharp (.NET). If available: read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`, add `lsp_available` to discovery. If none: skip.
+
+**Test Files:** Per detected language from `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` and `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`. Merge `additional_test_patterns` from settings.
+
+**Discovery Output:**
+
+```yaml
+ai_instructions: [{path, applies_to}]
+detected_languages: {language: [files]}
+detected_frameworks: {framework: [files]}
+test_files: {source: [tests]}
+language_override: string | null
+lsp_available: [types] | null
+```
+
+Only load `languages/*.md` for detected languages. Unknown: warn, skip.
 
 ---
 

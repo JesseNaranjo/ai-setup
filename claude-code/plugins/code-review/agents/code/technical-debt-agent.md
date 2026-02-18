@@ -12,10 +12,10 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-1. **Deprecated Dependencies**: major version 2+ behind, discontinued libraries, dependencies with known CVEs
-2. **Workarounds and Hacks**: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues
+1. **Deprecated Dependencies**: major version 2+ behind, discontinued libraries, known CVEs
+2. **Workarounds/Hacks**: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues
 3. **Dead Code**: unused exports, commented-out blocks (10+ lines), unreachable paths, stale feature flags
-4. **Scalability Concerns**: hardcoded limits, in-memory needing externalization, unbounded collections without pagination
+4. **Scalability**: hardcoded limits, in-memory needing externalization, unbounded collections without pagination
 5. **Documentation Debt**: TODO/FIXME without tracking, stale comments, missing public API docs
 
 **gaps:**
@@ -26,8 +26,8 @@ skills: ["code-review:agent-review-instructions"]
 
 ## Output
 
-Category: "Technical Debt". Describe: what the debt is, why it's debt (impact on maintainability/modernization), when it should be addressed (urgency).
-Thresholds: Critical=deprecated dependency with CVE/removed API requiring immediate migration/blocking modernization; Major=major version 2+ behind with breaking changes/scalability blocker/extensive workaround affecting multiple files; Minor=outdated patterns that still work/TODO without urgency/minor doc gaps; Suggestion=code modernization opportunity/style improvements/optional refactoring.
+Category: "Technical Debt". Describe: what the debt is, why it's debt, urgency.
+Thresholds: Critical=CVE/removed API requiring immediate migration; Major=version 2+ behind with breaking changes/scalability blocker/extensive multi-file workaround; Minor=outdated but functional patterns/TODO without urgency/minor doc gaps; Suggestion=modernization opportunity/style improvements.
 
 Extra fields:
 ```yaml
@@ -40,4 +40,4 @@ issues:
 
 ## False Positives
 
-Dependencies pinned for compatibility (documented); dead code conditionally compiled (build flags); TODO with issue tracking (TODO(#123)); workarounds with documented upstream bugs; class components in projects supporting older React
+Pinned dependencies (documented compatibility); conditionally compiled code (build flags); TODO with issue tracking (TODO(#123)); workarounds with documented upstream bugs; class components supporting older React

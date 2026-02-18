@@ -14,9 +14,9 @@ skills: ["code-review:agent-review-instructions"]
 ### Step 1: Identify Error Handling Categories (Based on MODE)
 
 **thorough:**
-- Missing error handling on fail-prone operations (I/O, network, database, external services, parsing)
-- Info leakage in error messages, error recovery leaving inconsistent state
-- Retry/circuit breaker pattern gaps for transient failures
+- Missing error handling on fail-prone operations (I/O, network, DB, external services, parsing)
+- Info leakage in error messages, recovery leaving inconsistent state
+- Retry/circuit breaker gaps for transient failures
 
 **quick:**
 - Empty catch blocks
@@ -26,11 +26,11 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 2: Analyze Error Flows
 
-Identify all operations that can fail, trace error handling path for each, check for proper cleanup and recovery, verify errors propagated appropriately.
+Identify all fail-prone operations, trace error handling paths, check cleanup and recovery, verify proper error propagation.
 
 ## Output
 
-Category: "Error Handling". Describe: what the issue is, what can go wrong, impact.
+Category: "Error Handling". Describe: the issue, what can go wrong, impact.
 Thresholds: Critical=data loss/security; Major=crashes/incorrect behavior; Minor=reduced resilience; Suggestion=could be more robust.
 
 Extra fields:

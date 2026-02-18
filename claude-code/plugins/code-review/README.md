@@ -345,13 +345,11 @@ code-review/
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
-│   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
 │   ├── review-orchestration-code.md # Code review: phases, invocation patterns, gaps mode behavior
 │   ├── review-orchestration-docs.md # Docs review: phases, invocation patterns, gaps mode behavior
 │   ├── review-validation-code.md    # Code validation: batch validation, aggregation, auto-validation patterns
 │   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
-│   ├── staged-processing.md         # Input validation, content gathering, and pre-existing issue detection for staged commands
 │   └── references/                  # LSP integration details (progressive disclosure)
 │       └── lsp-integration.md       # LSP integration details for Node.js and .NET
 └── README.md

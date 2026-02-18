@@ -12,8 +12,8 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-- All code example correctness: syntax, imports, language tags, signatures, deprecated APIs, completeness
-- Examples contradicting prose, incorrect output comments, references to non-existent resources
+- Code example correctness: syntax, imports, language tags, signatures, deprecated APIs, completeness
+- Examples contradicting prose, incorrect output comments, non-existent resource references
 
 **quick:**
 - Obvious syntax errors
@@ -23,8 +23,8 @@ skills: ["code-review:agent-review-instructions"]
 
 ## Output
 
-Category: "Examples". Describe: what's wrong with the example, how it would fail if run, the correct form.
-Thresholds: Critical=would crash/fail immediately, completely wrong; Major=significant errors, wouldn't work as shown; Minor=works but deprecated/suboptimal; Suggestion=could be improved but technically works.
+Category: "Examples". Describe: what's wrong, how it would fail if run, correct form.
+Thresholds: Critical=crashes/fails immediately, completely wrong; Major=significant errors, wouldn't work as shown; Minor=works but deprecated/suboptimal; Suggestion=technically works but could improve.
 
 Extra fields:
 ```yaml
@@ -37,4 +37,4 @@ issues:
 
 ## False Positives
 
-Pseudocode marked as illustrative (not runnable); partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`
+Pseudocode marked as illustrative; partial examples with "..." for omitted code; examples showing error cases (intentionally incorrect); shell examples with placeholder values like `<your-token>`

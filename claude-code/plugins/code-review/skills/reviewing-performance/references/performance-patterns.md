@@ -1,14 +1,5 @@
 # Performance Patterns
 
-## Contents
-- Algorithmic Complexity
-- Database Performance
-- Memory Issues
-- Async/Await Performance
-- String Concatenation in Loops
-- .NET Specific
-- Quick Reference
-
 ## Algorithmic Complexity
 
 ### O(n^2) Nested Loops
@@ -28,7 +19,7 @@ for (const user of users) {
 ### Repeated Expensive Operations
 
 ```javascript
-// SLOW — loadConfigFromDisk() called for each item
+// SLOW — called per item
 return items.map(item => transform(item, loadConfigFromDisk()));
 ```
 
@@ -54,7 +45,7 @@ var users = await _db.Users.Include(u => u.Orders).ToListAsync();
 
 ### Missing Indexes
 
-WHERE clauses on non-indexed columns, JOIN on non-indexed foreign keys, ORDER BY on non-indexed columns.
+WHERE/JOIN/ORDER BY on non-indexed columns.
 
 **Severity**: Major
 
@@ -71,11 +62,10 @@ const allUsers = await db.query('SELECT * FROM users');
 ### Memory Leaks
 
 ```javascript
-// LEAK — listener never removed
+// LEAK — no removeEventListener in cleanup
 window.addEventListener('resize', this.onResize);
-// Missing: removeEventListener in cleanup
 
-// LEAK — growing Map without eviction
+// LEAK — unbounded Map growth
 const cache = new Map();
 function getCached(key) { if (!cache.has(key)) cache.set(key, expensiveComputation(key)); return cache.get(key); }
 ```
@@ -84,9 +74,7 @@ function getCached(key) { if (!cache.has(key)) cache.set(key, expensiveComputati
 
 ### Large Object Allocation
 
-Functions creating large objects per call instead of reusing constants (`Object.freeze()`).
-
-**Severity**: Minor to Major
+Large objects created per call instead of reusing constants (`Object.freeze()`). **Severity**: Minor to Major
 
 ## Async/Await Performance
 
@@ -102,9 +90,8 @@ const orders = await fetchOrders();
 ### Blocking Event Loop (Node.js)
 
 ```javascript
-// BLOCKING — CPU-intensive loop without yield
+// BLOCKING — CPU loop without yield; chunk with setImmediate()
 for (let i = 0; i < data.length; i++) { /* process */ }
-// NON-BLOCKING: chunk with await setImmediate() between chunks
 ```
 
 **Severity**: Critical (servers), Major (scripts)
@@ -130,9 +117,8 @@ foreach (var item in items) { result += item.ToString(); }
 ### Boxing/Unboxing
 
 ```csharp
-// BOXING
+// BOXING; use List<int> instead
 var list = new ArrayList(); list.Add(42);
-// NO BOXING: List<int>
 ```
 
 **Severity**: Minor (isolated), Major (hot loops)
@@ -140,19 +126,18 @@ var list = new ArrayList(); list.Add(42);
 ### LINQ in Hot Paths
 
 ```csharp
-// ALLOCATES — for hot paths use manual loop instead
+// ALLOCATES — use manual loop in hot paths
 var first = items.FirstOrDefault(x => x.Id == id);
 ```
 
 ### Async Void
 
 ```csharp
-// BAD — exceptions lost, can't await
+// BAD — exceptions lost, can't await; use async Task
 async void ProcessAsync() { ... }
-// GOOD: async Task ProcessAsync()
 ```
 
-**Severity**: Major (also a correctness issue)
+**Severity**: Major (also correctness issue)
 
 ## Quick Reference
 

@@ -1,25 +1,14 @@
 # Language Server Integration Reference
 
-## Contents
-- Quick Reference for Agents
-- Node.js/TypeScript LSP Integration
-- .NET/C# LSP Integration
+## Quick Reference
 
-## Quick Reference for Agents
+LSP diagnostics supplement (not replace) pattern-based detection with compiler-level precision.
 
-**When to use:** Read this file when reviewing code in a project with LSP available. LSP diagnostics provide compiler-level precision that supplements (does not replace) pattern-based detection.
+**Availability:** Node.js/TypeScript → `typescript-lsp` plugin. .NET/C# → `csharp-lsp` or OmniSharp plugin. Unavailable → skip this file; all agents function without LSP.
 
-**How to check availability:**
-- **Node.js/TypeScript:** Check for `typescript-lsp` in enabled plugins
-- **.NET/C#:** Check for `csharp-lsp` or OmniSharp in enabled plugins
+**Usage:** Prioritize LSP for type-related and null-reference issues; combine LSP + patterns for security and cross-cutting concerns.
 
-**If LSP is unavailable:** Skip this file entirely. Fall back to pattern-based detection — all agents function without LSP.
-
-**If LSP is available:** Use the diagnostic code mappings below. Prioritize LSP diagnostics for type-related and null-reference issues; combine LSP + patterns for security and cross-cutting concerns.
-
-## Node.js/TypeScript LSP Integration
-
-When the `typescript-lsp` plugin is available, agents can leverage real TypeScript compiler diagnostics for enhanced accuracy.
+## Node.js/TypeScript LSP
 
 ### Diagnostic Code Mapping
 
@@ -46,18 +35,14 @@ When the `typescript-lsp` plugin is available, agents can leverage real TypeScri
 | TS18046 | Bugs | Value is 'unknown' |
 | TS18048 | Bugs | Value is possibly 'undefined' |
 
-### Agent Usage Guidelines
+### Agent Guidelines
 
-When TypeScript LSP is available:
+1. **Prioritize LSP** for type bugs (TS2322, TS2345, TS2531, TS2532)
+2. **LSP + patterns** for security (LSP: types, patterns: dangerous sinks)
+3. **LSP for cross-file** imports, exports, circular dependencies
+4. **Patterns only** for runtime-specific (Promise handling, event loop)
 
-1. **Prioritize LSP diagnostics** for type-related bugs (TS2322, TS2345, TS2531, TS2532)
-2. **Combine LSP + patterns** for security issues (LSP finds types, patterns find dangerous sinks)
-3. **Use LSP for cross-file analysis** when tracking imports, exports, and circular dependencies
-4. **Fall back to patterns** when LSP unavailable or for runtime-specific issues (Promise handling, event loop)
-
-## .NET/C# LSP Integration
-
-When a C# LSP (OmniSharp or `csharp-lsp` plugin) is available, agents can leverage Roslyn analyzer diagnostics for enhanced accuracy.
+## .NET/C# LSP
 
 ### Diagnostic Code Mapping
 
@@ -99,12 +84,10 @@ When a C# LSP (OmniSharp or `csharp-lsp` plugin) is available, agents can levera
 | CS8625 | Bugs | Cannot convert null literal to non-nullable |
 | CS8629 | Bugs | Nullable value type may be null |
 
-### Agent Usage Guidelines
+### Agent Guidelines
 
-When C# LSP is available:
-
-1. **Prioritize LSP diagnostics** for nullable reference issues (CS8600-CS8618)
-2. **Use LSP for async analysis** - CS4014 is more accurate than pattern matching for missing awaits
-3. **Combine LSP + patterns** for security - LSP validates types, patterns find SQL concatenation
-4. **Use LSP for IDisposable** - CA2000 tracks object lifetimes better than patterns
-5. **Fall back to patterns** when LSP unavailable or for framework-specific issues (EF queries, DI patterns)
+1. **Prioritize LSP** for nullable references (CS8600-CS8618)
+2. **LSP for async** — CS4014 more accurate than patterns for missing awaits
+3. **LSP + patterns** for security — LSP: types, patterns: SQL concatenation
+4. **LSP for IDisposable** — CA2000 tracks lifetimes better than patterns
+5. **Patterns only** for framework-specific (EF queries, DI patterns)

@@ -14,8 +14,8 @@ skills: ["code-review:agent-review-instructions"]
 ### Step 1: Identify Structure Categories (Based on MODE)
 
 **thorough:**
-- Heading hierarchy (skipped levels, single H1 rule), broken links (internal/external/anchors)
-- Navigation issues: missing cross-refs, orphaned docs, circular paths, ToC mismatches
+- Heading hierarchy (skipped levels, single H1), broken links (internal/external/anchors)
+- Navigation: missing cross-refs, orphaned docs, circular paths, ToC mismatches
 - **AI instruction file standardization** (see Step 5)
 
 **quick:**
@@ -26,15 +26,15 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 2: Heading Hierarchy Analysis
 
-Check heading structure: single H1 per document, no skipped levels (H1 → H2 → H3), logical parent-child semantics, consistent depth for similar sections.
+Check: single H1 per document, no skipped levels (H1 → H2 → H3), logical parent-child semantics, consistent depth for similar sections.
 
 ### Step 3: Link Verification
 
-Use Grep to find internal links. For each: verify target file exists, verify anchor exists (if `#section`), check path style consistency. In thorough mode, also flag obviously outdated external domains.
+Use Grep to find internal links. For each: verify target file exists, verify anchor (if `#section`), check path style consistency. In thorough mode, also flag outdated external domains.
 
 ### Step 4: Navigation Analysis
 
-Check discoverability: all content reachable from entry points, related documents cross-linked, clear learning path for sequential content.
+Check discoverability: all content reachable from entry points, related docs cross-linked, clear learning path for sequential content.
 
 ### Step 5: AI Instruction File Standardization
 
@@ -45,14 +45,14 @@ Check discoverability: all content reachable from entry points, related document
 2. `/CLAUDE.md` exists with header referencing `.ai/AI-AGENT-INSTRUCTIONS.md`
 3. `/.github/copilot-instructions.md` exists with header referencing `.ai/AI-AGENT-INSTRUCTIONS.md`
 
-Verify using Grep that both `CLAUDE.md` and `.github/copilot-instructions.md` reference `.ai/AI-AGENT-INSTRUCTIONS.md`. All three files should cross-reference with valid relative paths.
+Verify via Grep that both `CLAUDE.md` and `.github/copilot-instructions.md` reference `.ai/AI-AGENT-INSTRUCTIONS.md`. All three must cross-reference with valid relative paths.
 
 See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruction-templates.md` for required header templates.
 
 ## Output
 
-Category: "Structure". Describe: what's wrong structurally, how it affects navigation/usability, recommended fix.
-Thresholds: Critical=blocks access to content, major broken navigation; Major=significant structural problem affecting usability; Minor=could be better organized but still usable; Suggestion=enhancement for better structure.
+Category: "Structure". Describe: the structural problem, navigation/usability impact, recommended fix.
+Thresholds: Critical=blocks access to content, major broken navigation; Major=structural problem affecting usability; Minor=could be better organized but usable; Suggestion=enhancement for better structure.
 
 Extra fields:
 ```yaml
@@ -64,4 +64,4 @@ issues:
 
 ## False Positives
 
-Intentionally orphaned archive/historical documents; heading hierarchy violations in code-generated documentation; AI instruction files in projects not using AI assistants (if explicitly stated)
+Intentionally orphaned archive/historical docs; heading violations in code-generated docs; AI instruction files in projects not using AI assistants (if explicitly stated)

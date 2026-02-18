@@ -1,26 +1,17 @@
 # SOLID/DRY/YAGNI Detection Patterns
 
-## Contents
-- SRP Detection
-- OCP Detection
-- LSP Detection
-- ISP Detection
-- DIP Detection
-- DRY Violations
-- YAGNI Violations
-
 ## SRP Detection
 
 | Indicator | Threshold | Severity |
 |-----------|-----------|----------|
-| File line count | >500 lines | Major |
-| Class method count | >15 methods | Major |
-| Function parameter count | >10 parameters | Major |
-| Import count from different domains | >5 unrelated domains | Minor |
-| Mixed keywords (UI + DB + HTTP) | Present in same file | Major |
+| File lines | >500 | Major |
+| Class methods | >15 | Major |
+| Function params | >10 | Major |
+| Imports from different domains | >5 unrelated | Minor |
+| Mixed keywords (UI + DB + HTTP) | Same file | Major |
 
 ```typescript
-// BAD: Class doing authentication AND user profile AND notifications
+// BAD: Class doing auth AND profile AND notifications
 class UserService {
   login() { ... } logout() { ... }      // auth
   updateProfile() { ... }               // profile
@@ -36,10 +27,10 @@ class UserService {
 |-----------|----------|
 | Switch on type/kind string | Minor |
 | If-else chains checking instanceof | Minor |
-| Adding new case requires modifying existing code | Minor |
+| Adding new case requires modifying existing | Minor |
 
 ```typescript
-// BAD: Must modify to add new payment type
+// BAD: Must modify to add new type
 function processPayment(type: string) {
   switch (type) { case 'credit': ... case 'debit': ... case 'paypal': ... }
 }
@@ -51,12 +42,12 @@ function processPayment(type: string) {
 
 | Indicator | Severity |
 |-----------|----------|
-| `throw new NotImplementedError` in overridden methods | Major |
-| `instanceof` checks on function parameters | Major |
-| Type assertions after calling interface methods | Major |
+| `throw new NotImplementedError` in overrides | Major |
+| `instanceof` checks on function params | Major |
+| Type assertions after interface method calls | Major |
 
 ```typescript
-// BAD: Square violates Rectangle's setWidth/setHeight contract
+// BAD: Violates Rectangle's contract
 class Square extends Rectangle {
   setWidth(w: number) { this.width = w; this.height = w; }
 }
@@ -70,9 +61,9 @@ function processShape(shape: IShape) { if (shape instanceof Circle) { ... } }
 
 | Indicator | Threshold | Severity |
 |-----------|-----------|----------|
-| Interface method count | >10 methods | Minor |
+| Interface methods | >10 | Minor |
 | Empty method implementations | Any | Minor |
-| Methods returning `undefined` or throwing | Any | Minor |
+| Methods returning `undefined`/throwing | Any | Minor |
 
 ```typescript
 // BAD: Partial implementation of fat interface
@@ -90,10 +81,10 @@ class ReadOnlyRepo implements IRepository<User> {
 |-----------|----------|
 | `new ConcreteClass()` in business logic | Major |
 | Import of concrete implementations (not interfaces) | Minor |
-| Circular imports between modules | Major |
+| Circular imports | Major |
 
 ```typescript
-// BAD: Direct instantiation of dependency
+// BAD: Direct instantiation
 class OrderService {
   private emailService = new EmailService(); // Should be injected
 }
@@ -109,10 +100,10 @@ class OrderService {
 | Identical function bodies | >5 lines | Minor |
 | Copy-pasted validation | >3 occurrences | Minor |
 | Same literal value | >3 occurrences | Minor |
-| Magic numbers | Any unexplained number | Suggestion |
+| Magic numbers | Any unexplained | Suggestion |
 
 ```typescript
-// BAD: Duplicated validation in multiple handlers
+// BAD: Duplicated validation across handlers
 function createUser(data: UserDTO) {
   if (!data.email) throw new Error('Email required');
   if (!data.email.includes('@')) throw new Error('Invalid email');
@@ -126,9 +117,9 @@ function createUser(data: UserDTO) {
 |-----------|----------|
 | Interface with exactly 1 implementation | Suggestion |
 | Abstract class with exactly 1 subclass | Suggestion |
-| Factory creating exactly 1 product type | Suggestion |
-| Generic type parameter always same type | Suggestion |
-| Options parameter always empty/default | Suggestion |
+| Factory creating exactly 1 product | Suggestion |
+| Generic type always same concrete type | Suggestion |
+| Options param always empty/default | Suggestion |
 | Plugin/extension system with 0 plugins | Suggestion |
 | Parameters always same value | Suggestion |
 | Switch/if branches never executed | Suggestion |

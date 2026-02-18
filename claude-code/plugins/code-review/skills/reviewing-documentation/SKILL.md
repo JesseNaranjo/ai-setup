@@ -7,7 +7,7 @@ description: Reviews documentation for accuracy, completeness, clarity, consiste
 
 ## Documentation Categories
 
-Covers 6 categories: Accuracy (Critical), Clarity (Major), Completeness (Major), Consistency (Minor), Examples (Critical), Structure (Major). See docs agent files for detailed checklists.
+6 categories: Accuracy (Critical), Clarity (Major), Completeness (Major), Consistency (Minor), Examples (Critical), Structure (Major). See docs agent files for checklists.
 
 ## AI Instruction File Standardization
 
@@ -15,7 +15,6 @@ Checks placement and cross-references for `.ai/AI-AGENT-INSTRUCTIONS.md`, `CLAUD
 
 ## Scope Prioritization
 
-Prioritize:
 - README.md (project entry point)
 - CLAUDE.md (AI assistant instructions)
 - docs/getting-started.md or similar
@@ -24,7 +23,7 @@ Prioritize:
 
 ## False Positives
 
-**Documentation-specific additions** - do NOT flag:
+**Documentation-specific** - do NOT flag:
 - Intentionally simplified examples (marked as such)
 - Placeholder values (`your-api-key`, `example.com`)
 - Version-specific docs with version clearly noted
@@ -32,5 +31,5 @@ Prioritize:
 
 ## References
 
-- `references/ai-instruction-templates.md` - Templates for AI Agent Instructions files
+- `references/ai-instruction-templates.md` - AI instruction templates
 - `references/documentation-best-practices.md` - Documentation quality patterns

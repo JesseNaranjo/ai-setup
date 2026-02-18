@@ -1,15 +1,5 @@
 # Common Security Vulnerabilities
 
-## Contents
-- Injection Vulnerabilities
-- Authentication & Authorization
-- Sensitive Data Exposure
-- Cryptographic Issues
-- Input Validation
-- Unsafe Deserialization
-- Security Headers
-- Quick Detection Patterns
-
 ## Injection Vulnerabilities
 
 ### SQL Injection
@@ -45,7 +35,7 @@ Process.Start("cmd", "/c " + userInput);
 
 **Severity**: Critical
 
-### XSS (Cross-Site Scripting)
+### XSS
 
 ```javascript
 // VULNERABLE
@@ -54,7 +44,7 @@ element.innerHTML = userInput;
 ```
 
 ```csharp
-// VULNERABLE — use @Html.Encode(userInput) or Razor auto-encoding (@userInput)
+// VULNERABLE — use @Html.Encode() or Razor auto-encoding
 @Html.Raw(userInput)
 ```
 
@@ -62,7 +52,7 @@ element.innerHTML = userInput;
 
 ## Authentication & Authorization
 
-### Missing Authentication
+### Missing Auth
 
 ```javascript
 // VULNERABLE — no auth middleware
@@ -80,10 +70,9 @@ public IActionResult GetUsers() { ... }
 ### Broken Access Control
 
 ```javascript
-// VULNERABLE — no ownership check
+// VULNERABLE — no ownership check; add userId comparison
 const order = await Order.findById(req.params.id);
 res.json(order);
-// SAFE: add if (order.userId !== req.user.id) return res.status(403).send();
 ```
 
 **Severity**: Critical
@@ -119,13 +108,11 @@ logger.info('Request:', req.body);
 ## Cryptographic Issues
 
 ```javascript
-// VULNERABLE — weak hash
+// VULNERABLE — weak hash; use bcrypt.hash(password, 12)
 const hash = crypto.createHash('md5').update(password).digest('hex');
-// SAFE: bcrypt.hash(password, 12)
 
-// VULNERABLE — insecure random
+// VULNERABLE — insecure random; use crypto.randomBytes(32)
 const token = Math.random().toString(36);
-// SAFE: crypto.randomBytes(32).toString('hex')
 ```
 
 **Severity**: Critical (weak hash), Major (insecure random)
@@ -135,9 +122,8 @@ const token = Math.random().toString(36);
 ### Path Traversal
 
 ```javascript
-// VULNERABLE
+// VULNERABLE; SAFE: path.basename(req.params.filename)
 const filePath = path.join('/uploads', req.params.filename);
-// SAFE: const filename = path.basename(req.params.filename);
 ```
 
 **Severity**: Critical
@@ -172,7 +158,7 @@ var obj = JsonConvert.DeserializeObject(input, new JsonSerializerSettings {
 
 Required: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY|SAMEORIGIN`, `Strict-Transport-Security`, `X-XSS-Protection: 1; mode=block`
 
-**Severity**: Minor to Major depending on context
+**Severity**: Minor to Major
 
 ## Quick Detection Patterns
 
