@@ -22,7 +22,7 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ### `/code-review`
 
-Code review for files or staged changes with configurable depth. Deep (default) uses all 9 review agents plus synthesis (19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (7 invocations) focusing on critical issues (bugs, security, errors, tests).
+Code review for files or staged changes with configurable depth. Deep (default) uses all 9 review agents plus synthesis (up to 19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
 /code-review <file1> [file2...] [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
@@ -31,7 +31,7 @@ Code review for files or staged changes with configurable depth. Deep (default) 
 
 ### `/docs-review`
 
-Documentation review with configurable depth. Deep (default) uses all 6 documentation agents (13 invocations) with thorough + gaps modes. Quick uses 4 agents (7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no files are specified, discovers and reviews all documentation files (README.md, CLAUDE.md, docs/*, etc.).
+Documentation review with configurable depth. Deep (default) uses all 6 documentation agents (up to 13 invocations) with thorough + gaps modes. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no files are specified, discovers and reviews all documentation files (README.md, CLAUDE.md, docs/*, etc.).
 
 ```bash
 /docs-review [file1...] [--depth deep|quick] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
@@ -282,6 +282,7 @@ Combines skill methodology with specific instructions.
 | `reviewing-architecture-principles` | architecture-agent | SOLID, DRY, YAGNI violations |
 | `reviewing-bugs` | bug-detection-agent | Logical errors and edge cases |
 | `reviewing-compliance` | compliance-agent | CLAUDE.md and coding standards |
+| `reviewing-documentation` | all docs agents | Documentation quality, AI instructions |
 | `reviewing-performance` | performance-agent | Performance issues and optimization |
 | `reviewing-security` | security-agent | Security vulnerabilities and OWASP patterns |
 | `reviewing-technical-debt` | technical-debt-agent | Deprecated code, outdated patterns, dead code |
@@ -309,8 +310,8 @@ code-review/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata
 ├── commands/
-│   ├── code-review.md              # Code review for files or staged changes (deep: 19, quick: 7 invocations)
-│   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations; inlines docs-processing)
+│   ├── code-review.md              # Code review for files or staged changes (deep: up to 19, quick: up to 7 invocations)
+│   └── docs-review.md              # Documentation review (deep: up to 13, quick: up to 7 invocations; inlines docs-processing)
 ├── agents/                      # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                    # Code review agents (10 agents)
 │   │   ├── api-contracts-agent.md   # API compatibility
@@ -402,17 +403,19 @@ Each agent accepts a MODE parameter:
 
 | Command | Depth | Agents | Mode Invocations | Total Invocations |
 |---------|-------|--------|------------------|-------------------|
-| `/code-review` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/code-review` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
-| `/code-review --staged` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (5) | 19 |
-| `/code-review --staged` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (3) | 7 |
+| `/code-review` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (up to 5) | up to 19 |
+| `/code-review` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (up to 3) | up to 7 |
+| `/code-review --staged` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (up to 5) | up to 19 |
+| `/code-review --staged` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (up to 3) | up to 7 |
 
 **Documentation Reviews:**
 
 | Command | Depth | Agents | Mode Invocations | Total Invocations |
 |---------|-------|--------|------------------|-------------------|
-| `/docs-review` | deep | All 6 docs | thorough (6) + gaps (3) + synthesis (4) | 13 |
-| `/docs-review` | quick | 4 (accuracy, clarity, examples, structure) | quick (4) + synthesis (3) | 7 |
+| `/docs-review` | deep | All 6 docs | thorough (6) + gaps (3) + synthesis (up to 4) | up to 13 |
+| `/docs-review` | quick | 4 (accuracy, clarity, examples, structure) | quick (4) + synthesis (up to 3) | up to 7 |
+
+> Synthesis invocations = parallel instances of the synthesis agent, each analyzing a different cross-category pair. See Architecture section for pair definitions.
 
 ## Severity Levels
 
@@ -462,7 +465,7 @@ See `shared/review-validation-code.md` "Output Format" section for complete outp
 ## Code Review
 
 **Reviewed:** 5 file(s) | **Branch:** feature/new-auth
-**Review Depth:** Deep (19 invocations: 9 thorough + 5 gaps + 5 synthesis)
+**Review Depth:** Deep (up to 19 invocations: 9 thorough + 5 gaps + up to 5 synthesis)
 
 ### Summary
 

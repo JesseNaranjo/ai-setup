@@ -1,12 +1,12 @@
 ---
 name: docs-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Bash(find:*), Read, Write, Glob
-description: Documentation review with configurable depth (deep: 13 agent invocations, quick: 7)
+description: Documentation review with configurable depth (deep: up to 13 agent invocations, quick: up to 7)
 argument-hint: "[file1...] [--depth deep|quick] [--output-file <path>] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a documentation review. Depth controls the review pipeline: deep uses all 6 documentation agents (13 invocations total) with thorough + gaps modes; quick uses 4 agents (7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no files specified, discover and review all documentation files in the project.
+Perform a documentation review. Depth controls the review pipeline: deep uses all 6 documentation agents (up to 13 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no files specified, discover and review all documentation files in the project.
 
 Parse arguments from `$ARGUMENTS`:
 - Optional: One or more file paths (space-separated) - if omitted, discover all docs
@@ -35,28 +35,11 @@ Markdown body → "Project-Specific Instructions" for all agents. `--prompt` app
 
 Priority (higher overrides): (1) `CLAUDE.md` in reviewed file directories, (2) `CLAUDE.md` in repo root, (3) `.ai/AI-AGENT-INSTRUCTIONS.md`, (4) `.github/copilot-instructions.md`. Per file, resolve which apply (same directory or parent up to repo root).
 
-### Language Detection
-
-Detect: Node.js/TypeScript (`package.json`), .NET/C# (`*.csproj`/`*.sln`/`*.slnx`). Override: `--language nodejs|dotnet|react` for ALL files. Monorepo: per-file detection, group by language.
-
-**Framework:** Node.js files: check nearest `package.json` for `react`/`react-dom` in dependencies. `--language react` = Node.js + React checks.
-
-**LSP:** Check for `typescript-lsp` (Node.js), `csharp-lsp`/OmniSharp (.NET). If available: read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`, add `lsp_available` to discovery. If none: skip.
-
-**Test Files:** Per detected language from `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` and `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`. Merge `additional_test_patterns` from settings.
-
 **Discovery Output:**
 
 ```yaml
 ai_instructions: [{path, applies_to}]
-detected_languages: {language: [files]}
-detected_frameworks: {framework: [files]}
-test_files: {source: [tests]}
-language_override: string | null
-lsp_available: [types] | null
 ```
-
-Only load `languages/*.md` for detected languages. Unknown: warn, skip.
 
 ---
 
@@ -134,6 +117,6 @@ Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_
 
 Validate, aggregate, and generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-docs.md`. Write to file.
 
-**Output config (deep):** Review Type: "Deep Documentation Review (13 invocations)", Categories: All 6
-**Output config (quick):** Review Type: "Quick Documentation Review (7 invocations)", Categories: Accuracy, Clarity, Examples, Structure
+**Output config (deep):** Review Type: "Deep Documentation Review (up to 13 invocations)", Categories: All 6
+**Output config (quick):** Review Type: "Quick Documentation Review (up to 7 invocations)", Categories: Accuracy, Clarity, Examples, Structure
 Include AI instruction file standardization section. Report summary: total issues by severity, issues by category, AI instruction standardization status, path to report.

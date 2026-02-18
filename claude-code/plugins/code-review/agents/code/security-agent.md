@@ -11,6 +11,9 @@ skills: ["code-review:agent-review-instructions"]
 
 ## MODE Checklists
 
+**thorough:**
+- Supply chain: lockfile integrity (missing/outdated lockfile, lockfile-source mismatches), dependency confusion (internal package names in public registries), unpinned transitive dependencies in production
+
 **gaps:**
 - Second-order injection (stored XSS, delayed command execution)
 - Authorization edge cases (role escalation, missing checks on related resources)
@@ -42,4 +45,4 @@ issues:
 
 ## False Positives
 
-Internal-only code with no untrusted input; vulnerabilities mitigated elsewhere
+Internal-only code with no untrusted input; vulnerabilities mitigated elsewhere; devDependencies with unpinned transitives (not production risk)

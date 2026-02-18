@@ -17,6 +17,7 @@ skills: ["code-review:agent-review-instructions"]
 - Missing error handling on fail-prone operations (I/O, network, DB, external services, parsing)
 - Info leakage in error messages, recovery leaving inconsistent state
 - Retry/circuit breaker gaps for transient failures
+- Observability gaps: missing structured logging on error paths, missing correlation/request IDs in error context, catch blocks that log nothing or log unstructured strings
 
 **quick:**
 - Empty catch blocks

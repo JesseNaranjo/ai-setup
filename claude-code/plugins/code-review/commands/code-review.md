@@ -1,12 +1,12 @@
 ---
 name: code-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Code review for files or staged changes with configurable depth (deep: 19 agent invocations, quick: 7)
+description: Code review for files or staged changes with configurable depth (deep: up to 19 agent invocations, quick: up to 7)
 argument-hint: "[<file1> [file2...] | --staged] [--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a code review for specified files or staged git changes. Depth controls the review pipeline: deep uses all 9 agents (19 invocations total) with thorough + gaps modes; quick uses 4 agents (7 invocations) focusing on bugs, security, error handling, and test coverage. For file reviews with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a code review for specified files or staged git changes. Depth controls the review pipeline: deep uses all 9 agents (up to 19 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on bugs, security, error handling, and test coverage. For file reviews with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
 Parse arguments from `$ARGUMENTS`:
 - Mutually exclusive: One or more file paths (space-separated) OR `--staged` flag
@@ -135,6 +135,6 @@ Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_
 
 Validate, aggregate, and generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`. Write to file.
 
-**Output config (deep):** Review Type: "Deep (19 invocations)", Categories: All 9
-**Output config (quick):** Review Type: "Quick (7 invocations)", Categories: 4 only
+**Output config (deep):** Review Type: "Deep (up to 19 invocations)", Categories: All 9
+**Output config (quick):** Review Type: "Quick (up to 7 invocations)", Categories: 4 only
 **Note (quick only):** Quick review should be extra conservative - skip theoretical edge cases.

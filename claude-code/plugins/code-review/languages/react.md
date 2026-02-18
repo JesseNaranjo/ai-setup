@@ -25,6 +25,13 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 - Missing async tests — useEffect fetching without wait/findBy
 
+### Accessibility {#architecture}
+
+- Missing alt text on `<img>`, missing aria-label on icon-only buttons
+- Non-semantic interactive elements: `<div onClick>` without role="button" and keyboard handlers
+- Missing form labels: `<input>` without associated `<label>` or aria-label
+- Focus management: modal/dialog opens without focus trap, route changes without focus reset
+
 ## State Management Checks
 
 Apply when state management library detected.

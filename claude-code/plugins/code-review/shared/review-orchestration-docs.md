@@ -7,7 +7,7 @@
 
 ### Prompt Schema
 
-Required: `MODE` (thorough/gaps/quick), `project_type` (nodejs/dotnet/both), `files_to_review` (see File Entry Schema).
+Required: `MODE` (thorough/gaps/quick), `files_to_review` (see File Entry Schema).
 Optional: `ai_instructions` (summary of AI instruction files), `previous_findings` (gaps only; each: `title`, `file`, `line`, `range`, `category`, `severity`), `skill_instructions` ({focus_areas, checklist [{category, severity, items}], auto_validate, false_positive_rules, methodology {approach, steps, questions}}), `additional_instructions` (settings body + `--prompt` + orchestrator-injected rules).
 
 ### File Entry Schema
@@ -26,7 +26,7 @@ Synthesis: skip `additional_instructions` distribution.
 
 Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within +/-5 lines of prior findings; skip same issue type on same function/method; range (A-B): skip zone [A-5, B+5]. **Constraints:** Major/Critical only. Max 5 new per agent. Always Sonnet. **Agents:** accuracy, completeness, consistency.
 
-## Deep Docs Review Sequence (13 invocations)
+## Deep Docs Review Sequence (up to 13 invocations)
 
 **Phase 1 — Thorough** (6 parallel): accuracy, clarity, completeness, consistency, examples, structure. MODE: thorough. Pass: doc contents, related code snippets, project metadata, AI instruction file status, additional prompt instructions.
 **CRITICAL: WAIT for ALL 6 before Phase 2.**
@@ -34,13 +34,13 @@ Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within 
 **Phase 2 — Gaps** (3 parallel Sonnet): accuracy, completeness, consistency. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Distribute Gaps Mode rules via `additional_instructions`.
 **CRITICAL: WAIT for ALL 3 before Synthesis.**
 
-**Synthesis** (4 parallel): 4 instances of synthesis-docs-agent. Input: ALL Phase 1+2 findings.
+**Synthesis** (up to 4 parallel): 4 instances of synthesis-docs-agent. Input: ALL Phase 1+2 findings. **Skip pairs where either category has zero Phase 1+2 findings.**
 **CRITICAL: WAIT for Phase 1 AND Phase 2 fully complete before starting.**
 Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarity+Structure ("Does poor structure contribute to clarity issues?"), Completeness+Consistency ("Are missing sections causing terminology inconsistencies?"), Consistency+Structure ("Do formatting inconsistencies reflect structural problems?")
 
 **Post-review:** Validate all issues → filter invalid → deduplicate → generate report.
 
-## Quick Docs Review Sequence (7 invocations)
+## Quick Docs Review Sequence (up to 7 invocations)
 
 **Review** (4 parallel): accuracy, clarity, examples, structure. MODE: quick. Pass: doc contents, related code snippets, AI instruction file status, additional prompt instructions.
 - Accuracy: Critical mismatches, wrong function names, broken examples
@@ -48,7 +48,7 @@ Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarit
 - Examples: Syntax errors, missing critical imports, wrong API calls
 - Structure: Broken links, major navigation issues, AI instruction file errors
 
-**Synthesis** (3 parallel): Accuracy+Examples ("Do examples match documented behavior?"), Clarity+Structure ("Does structure contribute to clarity issues?"), Examples+Structure ("Are example placements structurally sound?")
+**Synthesis** (up to 3 parallel): Accuracy+Examples ("Do examples match documented behavior?"), Clarity+Structure ("Does structure contribute to clarity issues?"), Examples+Structure ("Are example placements structurally sound?"). **Skip pairs where either category has zero findings.**
 
 **Post-review:** Same as deep.
 

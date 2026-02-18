@@ -33,7 +33,7 @@ Per agent, append to `additional_instructions`: (1) Language checks from detecte
 
 Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within +/-5 lines of prior findings; skip same issue type on same function/method; range (A-B): skip zone [A-5, B+5]. **Constraints:** Major/Critical only. Max 5 new per agent. Always Sonnet. **Agents:** bug-detection, compliance, performance, security, technical-debt.
 
-## Deep Code Review Sequence (19 invocations)
+## Deep Code Review Sequence (up to 19 invocations)
 
 **Phase 1 — Thorough** (9 parallel): api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage. MODE: thorough.
 **CRITICAL: WAIT for ALL 9 before Phase 2.**
@@ -41,17 +41,17 @@ Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within 
 **Phase 2 — Gaps** (5 parallel Sonnet): bug-detection, compliance, performance, security, technical-debt. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Content: diff only (agents Read for deeper). Distribute Gaps Mode rules via `additional_instructions`.
 **CRITICAL: WAIT for ALL 5 before Synthesis.**
 
-**Synthesis** (5 parallel): 5 instances of synthesis-code-agent. Input: ALL Phase 1+2 findings. Content: file paths only (agents Read to cross-reference).
+**Synthesis** (up to 5 parallel): 5 instances of synthesis-code-agent. Input: ALL Phase 1+2 findings. Content: file paths only (agents Read to cross-reference). **Skip pairs where either category has zero Phase 1+2 findings.**
 **CRITICAL: WAIT for Phase 1 AND Phase 2 fully complete before starting.**
 Pairs: Architecture+Test Coverage ("Are architectural changes covered by tests?"), Bugs+Compliance ("Do compliance violations introduce or mask bugs?"), Bugs+Error Handling ("Do bugs have proper error handling in fix paths?"), Compliance+Technical Debt ("Do compliance violations indicate or worsen debt?"), Performance+Security ("Do security fixes introduce performance issues?")
 
 **Post-review:** Validate all issues → filter invalid → deduplicate → generate report.
 
-## Quick Code Review Sequence (7 invocations)
+## Quick Code Review Sequence (up to 7 invocations)
 
 **Review** (4 parallel): bug-detection, error-handling, security, test-coverage. MODE: quick.
 
-**Synthesis** (3 parallel): Bugs+Error Handling ("Do bugs have proper error handling?"), Bugs+Security ("Do security issues relate to bugs?"), Bugs+Test Coverage ("Are bugs covered by tests?")
+**Synthesis** (up to 3 parallel): Bugs+Error Handling ("Do bugs have proper error handling?"), Bugs+Security ("Do security issues relate to bugs?"), Bugs+Test Coverage ("Are bugs covered by tests?"). **Skip pairs where either category has zero findings.**
 
 **Post-review:** Same as deep.
 

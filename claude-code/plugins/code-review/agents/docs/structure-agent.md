@@ -32,6 +32,8 @@ Check: single H1 per document, no skipped levels (H1 → H2 → H3), logical par
 
 Use Grep to find internal links. For each: verify target file exists, verify anchor (if `#section`), check path style consistency. In thorough mode, also flag outdated external domains.
 
+Also verify image/media references: `![alt](path)`, `<img src="...">`. Check referenced files exist. Flag missing alt text as Minor.
+
 ### Step 4: Navigation Analysis
 
 Check discoverability: all content reachable from entry points, related docs cross-linked, clear learning path for sequential content.
@@ -58,7 +60,7 @@ Extra fields:
 ```yaml
 issues:
   - category: "Structure"
-    structure_type: "links|headings|navigation|organization|ai_instructions"
+    structure_type: "links|headings|navigation|organization|ai_instructions|media"
     broken_target: "The target that doesn't exist (for broken links)"
 ```
 

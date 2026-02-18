@@ -10,9 +10,10 @@ Group by file, then validator model. One validator per file. Quick: validate Cri
 
 ### Validator Prompt Schema
 
-`file_path` (string), `issues_to_validate[]`: `id` (int, sequential), `title`, `line` (int), `category`, `severity`, `description` (all strings).
+`file_path` (string), `issues_to_validate[]`: `id` (int, sequential), `title`, `line` (int), `category`, `severity`, `description`, `context` (string, 5 lines surrounding the issue line) (all strings).
 
 Return: `validations[]`: `id`, `verdict` (VALID/INVALID/DOWNGRADE), `new_severity` (DOWNGRADE only), `reason`.
+Use `context` to verify the issue: confirm the described problem is plausible at the cited line. INVALID if context clearly contradicts the description.
 
 ### Auto-Validation
 

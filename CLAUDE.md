@@ -23,8 +23,8 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Command | Description |
 |---------|-------------|
-| `/code-review [<file1> [file2...] \| --staged] [--depth deep\|quick] [--output-file <path>]` | Code review for files or staged changes with configurable depth (deep: 19 agents, quick: 7) |
-| `/docs-review [file1...] [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: 13 agents, quick: 7) |
+| `/code-review [<file1> [file2...] \| --staged] [--depth deep\|quick] [--output-file <path>]` | Code review for files or staged changes with configurable depth (deep: up to 19 agents, quick: up to 7) |
+| `/docs-review [file1...] [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: up to 13 agents, quick: up to 7) |
 
 **Note:** All review commands also accept:
 - `--language nodejs|react|dotnet` to force language detection (code reviews only)
@@ -51,8 +51,8 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata
 ├── commands/                        # Orchestration entry points (inline steps, reference shared/; see "Commands Directory" convention)
-│   ├── code-review.md              # Code review for files or staged changes (deep: 19, quick: 7 agent invocations)
-│   └── docs-review.md              # Documentation review (deep: 13, quick: 7 invocations; inlines docs-processing)
+│   ├── code-review.md              # Code review for files or staged changes (deep: up to 19, quick: up to 7 agent invocations)
+│   └── docs-review.md              # Documentation review (deep: up to 13, quick: up to 7 invocations; inlines docs-processing)
 ├── agents/                          # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                        # Code review agents (10 agents)
 │   │   ├── api-contracts-agent.md   # API compatibility
@@ -138,7 +138,7 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 1. **Phase 1** (9 agents parallel): Thorough mode review (5 Opus, 4 Sonnet)
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
-3. **Synthesis** (5 agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
+3. **Synthesis** (up to 5 agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
 4. **Validation**: All issues validated before output
 
 ### Agent Content Distribution
@@ -155,7 +155,7 @@ See `shared/review-orchestration-code.md` and `shared/review-orchestration-docs.
 
 **Rationale:**
 1. **High complexity domains**: Security, performance, and bugs have many subtle edge cases that benefit from a second pass with fresh perspective
-2. **Domain overlap potential**: Compliance and technical-debt often surface issues that other agents might frame differently
+2. **Domain overlap potential**: Compliance gaps catches subtle rule misinterpretations and edge cases the thorough pass accepted too readily. Technical-debt gaps catches context-dependent debt requiring cross-file analysis that single-pass thorough misses.
 3. **Cost-benefit analysis**: These 5 agents provide the best coverage-to-cost ratio for gaps analysis
 
 **Excluded agents:** api-contracts, architecture, error-handling, test-coverage
