@@ -40,7 +40,15 @@ See `${CLAUDE_PLUGIN_ROOT}/shared/pre-review-setup.md` Section 2.
 See `${CLAUDE_PLUGIN_ROOT}/shared/staged-processing.md` for the validation, content gathering, and tiered context behavior. Include the Pre-Existing Issue Detection rules from `staged-processing.md` in each agent's `additional_instructions` prompt field.
 
 **If file paths provided:**
-See `${CLAUDE_PLUGIN_ROOT}/shared/file-processing.md` for the validation and content gathering process.
+
+Parse arguments: file paths (all non-flag arguments, space-separated), `--output-file` path, `--language` override (`nodejs`, `react`, `dotnet`).
+
+Validate: git repo presence (fail if not), file existence (exclude missing), change status (uncommitted vs none). Fail if no valid files remain. Split files by has_changes / no changes.
+
+Launch Sonnet agent to gather content:
+- Files with uncommitted changes: diff + full content. Files without changes: full content only.
+- Related test files from Context Discovery step (patterns per `languages/nodejs.md` and `languages/dotnet.md`).
+- Output: current branch name, per-file diff/content/has_changes, related test contents, review summary (files with changes vs entirety, project type(s), test files found).
 
 ---
 

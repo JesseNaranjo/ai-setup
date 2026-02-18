@@ -4,6 +4,7 @@ description: "Documentation clarity specialist. Use for detecting readability pr
 color: cyan
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Clarity Review Agent

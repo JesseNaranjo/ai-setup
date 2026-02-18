@@ -4,6 +4,7 @@ description: "Test coverage specialist. Use for identifying missing tests, test 
 color: white
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Test Coverage Review Agent

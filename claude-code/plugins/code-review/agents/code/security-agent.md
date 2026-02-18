@@ -4,15 +4,12 @@ description: "Security vulnerability specialist. Use for detecting injection att
 color: purple
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Security Review Agent
 
 ## MODE Checklists
-
-**thorough:**
-- All OWASP Top 10 categories, path traversal, insecure deserialization, information disclosure
-- Hardcoded secrets/keys/passwords at all trust boundaries
 
 **gaps:**
 - Second-order injection (stored XSS, delayed command execution)

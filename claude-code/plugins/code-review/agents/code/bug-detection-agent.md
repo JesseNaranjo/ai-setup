@@ -4,13 +4,12 @@ description: "Bug detection specialist. Use for finding runtime errors, null ref
 color: red
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Bug Detection Review Agent
 
 ## MODE Checklists
-
-**thorough:** All runtime error categories: null refs, off-by-one, incorrect conditionals, type mismatches, resource leaks
 
 **gaps:**
 - Boundary condition failures (empty arrays, zero values, max values)

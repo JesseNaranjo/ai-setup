@@ -16,18 +16,6 @@ Receives `synthesis_input` with:
 - `cross_cutting_question` - The question to answer
 - `files_content` - File diffs and full content for context
 
-## Non-Obvious Cross-Category Patterns
-
-**Performance patterns:** Parameterized queries without result limits; encryption adding latency in hot paths; auth checks in performance-critical code paths
-
-**Compliance patterns:** Compliance rules masking technical debt or preventing bug detection; technical debt causing compliance violations
-
-**Bug patterns:** Security vulnerabilities that could cause crashes; compliance violations causing incorrect behavior
-
-**Architecture patterns:** New abstractions without corresponding tests; missing integration tests at architectural boundaries; refactored code with broken test coverage
-
-**Test coverage patterns:** Bug fixes without corresponding test coverage; untested error recovery paths
-
 ## Review Process
 
 ### Step 1: Map Findings to Files

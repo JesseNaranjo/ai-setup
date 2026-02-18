@@ -4,13 +4,12 @@ description: "Performance review specialist. Use for detecting algorithmic compl
 color: green
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Performance Review Agent
 
 ## MODE Checklists
-
-**thorough:** Algorithmic complexity, memory leaks, N+1 queries, blocking in async, inefficient data structures, missing caching
 
 **gaps:**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)

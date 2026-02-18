@@ -4,6 +4,7 @@ description: "Code example specialist. Use for detecting broken examples, missin
 color: yellow
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Examples Review Agent

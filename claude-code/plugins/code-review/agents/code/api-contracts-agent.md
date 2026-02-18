@@ -4,6 +4,7 @@ description: "API contracts specialist. Use for detecting breaking changes, back
 color: cyan
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # API & Contracts Review Agent

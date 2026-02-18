@@ -332,6 +332,7 @@ code-review/
 │       ├── structure-agent.md   # Organization, links, AI instructions
 │       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
 ├── skills/                      # Targeted review skills
+│   ├── agent-review-instructions/   # Static agent config (MODE, FP rules, output schema)
 │   ├── reviewing-architecture-principles/
 │   ├── reviewing-bugs/
 │   ├── reviewing-compliance/
@@ -344,10 +345,9 @@ code-review/
 │   ├── nodejs.md                # Node.js/TypeScript checks
 │   └── react.md                 # React checks (extends Node.js)
 ├── shared/
-│   ├── file-processing.md           # Input validation and content gathering for file commands
 │   ├── pre-review-setup.md          # Settings loading + context discovery (combined)
-│   ├── review-orchestration-code.md # Code review: phases, invocation patterns, gaps mode behavior, agent common instructions
-│   ├── review-orchestration-docs.md # Docs review: phases, invocation patterns, gaps mode behavior, agent common instructions
+│   ├── review-orchestration-code.md # Code review: phases, invocation patterns, gaps mode behavior
+│   ├── review-orchestration-docs.md # Docs review: phases, invocation patterns, gaps mode behavior
 │   ├── review-validation-code.md    # Code validation: batch validation, aggregation, auto-validation patterns
 │   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)

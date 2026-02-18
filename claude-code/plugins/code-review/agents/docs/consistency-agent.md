@@ -4,6 +4,7 @@ description: "Documentation consistency specialist. Use for detecting terminolog
 color: blue
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Consistency Review Agent

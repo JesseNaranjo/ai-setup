@@ -4,6 +4,7 @@ description: "Documentation structure specialist. Use for detecting organization
 color: purple
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Structure Review Agent

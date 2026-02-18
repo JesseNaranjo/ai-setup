@@ -18,20 +18,6 @@ Receives `synthesis_input` with:
 - `cross_cutting_question` - The question to answer
 - `files_content` - File diffs and full content for context
 
-## Non-Obvious Cross-Category Patterns
-
-**Accuracy patterns:** Code examples conflicting with documented behavior; API signatures not matching implementation; version references contradicting other sections
-
-**Completeness patterns:** Missing sections creating inconsistencies elsewhere; undocumented features referenced in examples; setup gaps that examples depend on
-
-**Consistency patterns:** Formatting inconsistencies reflecting structural problems; terminology variations causing accuracy confusion
-
-**Structure patterns:** Broken links to sections completeness identifies as missing; heading hierarchy problems causing consistency violations
-
-**Clarity patterns:** Poor readability caused by structural disorganization; jargon introduced without definitions referenced elsewhere; audience mismatches across related sections
-
-**Examples patterns:** Code examples not matching documented APIs; missing imports or context that completeness should have caught; examples using deprecated patterns flagged by accuracy
-
 ## Review Process
 
 ### Step 1: Map Findings to Files

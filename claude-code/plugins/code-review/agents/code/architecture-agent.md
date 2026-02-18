@@ -4,6 +4,7 @@ description: "Architecture review specialist. Use for checking SOLID, DRY, YAGNI
 color: yellow
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Architecture Review Agent
@@ -11,7 +12,6 @@ tools: ["Read", "Grep", "Glob"]
 ## MODE Checklists
 
 **thorough:**
-- SOLID/DRY/YAGNI/SoC violations, coupling, anti-patterns, layer violations, missing abstractions
 - DRY: duplicated blocks >10 lines/>80% similarity, repeated config values, similar utilities across modules
 - File organization: fragmentation, scattered types, single-use helpers not colocated
 

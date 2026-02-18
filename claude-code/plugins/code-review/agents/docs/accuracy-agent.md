@@ -4,6 +4,7 @@ description: "Documentation accuracy specialist. Use for detecting code-document
 color: red
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Accuracy Review Agent

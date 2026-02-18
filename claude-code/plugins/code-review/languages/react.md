@@ -6,15 +6,6 @@ In addition to Node.js patterns: `*.test.tsx`, files using `@testing-library/rea
 
 These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` for base Node.js/TypeScript checks.
 
-### Bugs {#bugs}
-
-- Stale closures in hooks — state captured at definition time, not updated in callbacks/intervals
-- Incorrect dependency arrays — infinite loops from object/array deps without memoization
-- useEffect async function — async defined inside useEffect (should be separate function)
-- Derived state anti-pattern — useState for values computable from props
-- Key prop issues — index as key for dynamic lists (unstable identity)
-- Context value object recreation — new object in Provider value each render
-
 ### Security {#security}
 
 - XSS via dangerouslySetInnerHTML, href javascript: injection
@@ -22,32 +13,17 @@ These checks are IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/langu
 
 ### Performance {#performance}
 
-- Context provider at top level — changes causing entire app re-render
-- Inline objects/arrays in props — new references every render causing child re-renders
 - Large lists without virtualization (1000+ items without windowing)
 - Object creation in useEffect dependency array without useMemo
 
 ### Architecture {#architecture}
 
-- Component does too much — mixing presentation, logic, and data fetching
 - Hooks doing too much — single hooks 100+ lines handling multiple concerns
 - Prop drilling (>3 levels) — signals need for context or composition
-- React hooks rules violations — conditional hooks, loops, missing useEffect deps
-
-### Error Handling {#errors}
-
-- Missing error boundaries / fallbacks for async operations
-- Suspense without error boundaries
 
 ### Test Coverage {#tests}
 
-- Testing implementation details — checking internal state instead of behavior
 - Missing async operation tests — useEffect fetching without wait/findBy
-
-### Technical Debt {#debt}
-
-- Class components — use functional components in React 18+
-- Deprecated React APIs — ReactDOM.render instead of createRoot (React 18+)
 
 ## State Management Checks
 

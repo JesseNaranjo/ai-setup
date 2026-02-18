@@ -6,9 +6,6 @@
 
 ### Bugs {#bugs}
 
-- `IDisposable` not disposed — missing using blocks
-- Async deadlocks — `.Result` or `.Wait()` on async tasks (blocks thread pool)
-- LINQ deferred execution — queries executed multiple times unintentionally
 - Lazy loading disconnected — navigation property accessed after context disposed
 
 ### Security {#security}
@@ -21,27 +18,16 @@
 
 ### Performance {#performance}
 
-- LINQ in hot loops, excessive allocations in hot paths
-- Missing `ConfigureAwait(false)` in library code
-- Large object heap — repeatedly allocating >85KB objects
 - Missing AsNoTracking for read-only queries
 - ToList() before filter — materializing query before Where()
 
 ### Architecture {#architecture}
 
 - DI anti-patterns — service locator, captive dependencies, improper scoping
-- Controller bloat — business logic in controllers
-- Improper layering violations, static abuse, circular dependencies
 
 ### Error Handling {#errors}
 
-- Swallowed exceptions — empty catch blocks, catch-only-log
 - Improper `Task` handling — unawaited tasks, fire-and-forget without error handling
-
-### Test Coverage {#tests}
-
-- Async test issues — async void test methods, missing await in assertions
-- Test isolation — shared state, database state not reset
 
 ### Technical Debt {#debt}
 

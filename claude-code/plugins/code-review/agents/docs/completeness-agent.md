@@ -4,6 +4,7 @@ description: "Documentation completeness specialist. Use for detecting missing s
 color: green
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Completeness Review Agent

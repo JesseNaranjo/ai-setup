@@ -4,6 +4,7 @@ description: "Coding standards compliance specialist. Use for checking adherence
 color: blue
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # AI Agent Instructions Compliance Review Agent

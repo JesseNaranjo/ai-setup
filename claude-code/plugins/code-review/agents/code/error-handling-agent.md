@@ -4,6 +4,7 @@ description: "Error handling specialist. Use for detecting missing try/catch blo
 color: orange
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Error Handling Review Agent

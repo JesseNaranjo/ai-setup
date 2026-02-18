@@ -4,6 +4,7 @@ description: "Technical debt specialist. Use for detecting deprecated dependenci
 color: brown
 model: opus
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:agent-review-instructions"]
 ---
 
 # Technical Debt Review Agent
@@ -12,11 +13,10 @@ tools: ["Read", "Grep", "Glob"]
 
 **thorough:**
 1. **Deprecated Dependencies**: major version 2+ behind, discontinued libraries, dependencies with known CVEs
-2. **Outdated Patterns**: callbacks→async/await, class→functional components, CommonJS→ESM, legacy bundlers, sync-over-async
-3. **Workarounds and Hacks**: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues
-4. **Dead Code**: unused exports, commented-out blocks (10+ lines), unreachable paths, stale feature flags
-5. **Scalability Concerns**: hardcoded limits, in-memory needing externalization, unbounded collections without pagination
-6. **Documentation Debt**: TODO/FIXME without tracking, stale comments, missing public API docs
+2. **Workarounds and Hacks**: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues
+3. **Dead Code**: unused exports, commented-out blocks (10+ lines), unreachable paths, stale feature flags
+4. **Scalability Concerns**: hardcoded limits, in-memory needing externalization, unbounded collections without pagination
+5. **Documentation Debt**: TODO/FIXME without tracking, stale comments, missing public API docs
 
 **gaps:**
 - Subtle debt not caught in thorough pass
