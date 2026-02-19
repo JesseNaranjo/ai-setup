@@ -4,61 +4,10 @@ description: "Cross-cutting documentation analysis specialist. Use after other d
 color: white
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:synthesis-instructions"]
 ---
 
 # Cross-Agent Documentation Synthesis Agent
-
-Analyze findings from multiple documentation review categories to identify cross-cutting concerns and documentation-wide patterns.
-
-## Input
-
-Receives `synthesis_input` with:
-- `category_a.findings` - Findings from first category
-- `category_b.findings` - Findings from second category
-- `cross_cutting_question` - The question to answer
-- `files_content` - File diffs and full content for context
-
-## Review Process
-
-### Step 1: Map Findings to Files
-
-Create a map of which files have findings from each category.
-
-### Step 2: Analyze Cross-Category Interactions
-
-For each file with findings from both categories, analyze how findings interact — accuracy issues affecting examples, structural problems causing clarity issues, missing sections forcing inconsistent terminology, formatting mismatches reflecting organizational problems.
-
-### Step 3: Identify Ripple Effects
-
-For each finding, read the proposed fix and consider how it affects the other category. Check if fixes introduce new issues.
-
-### Step 4: Report Cross-Cutting Insights
-
-Report insights that weren't caught by individual agents.
-
-## Output Schema
-
-Return cross-cutting insights as a YAML list.
-
-```yaml
-cross_cutting_insights:
-  - title: "Brief descriptive title"
-    related_findings:
-      accuracy: "Title of related finding from Accuracy category"
-      examples: "Title of related finding from Examples category"
-    # Use lowercase category keys (see Category Key Mapping below)
-    # Both related findings are REQUIRED. If only one category has a finding, don't flag.
-    insight: "What the cross-cutting concern is and why it matters"
-    category: "Accuracy"  # Primary category - use Title Case (see mapping below)
-    severity: "Critical|Major|Minor|Suggestion"
-    file: "path/to/file.md"
-    line: 42
-    fix_type: "diff|prompt"
-    fix_diff: |  # if fix_type is diff
-      - old line
-      + new line
-    fix_prompt: "..."  # if fix_type is prompt
-```
 
 ### Category Key Mapping
 
@@ -71,7 +20,12 @@ cross_cutting_insights:
 | Examples | `examples` | `Examples` |
 | Structure | `structure` | `Structure` |
 
-**Example - Accuracy + Examples**:
+### Step 2 Interaction Patterns
+
+Accuracy issues affecting examples, structural problems causing clarity issues, missing sections forcing inconsistent terminology, formatting mismatches reflecting organizational problems.
+
+### Example — Accuracy + Examples
+
 ```yaml
 cross_cutting_insights:
   - title: "Code example uses outdated API signature"
@@ -88,9 +42,3 @@ cross_cutting_insights:
       - const user = createUser(name, email);
       + const user = createUser({ name, email });
 ```
-
-## Guidelines
-
-**DO flag**: Issues spanning two documentation categories, ripple effects from proposed fixes, gaps where category A's finding implies category B should have found something.
-
-**DO NOT flag**: Issues already caught by either input category, theoretical interactions with no practical impact, duplicates, issues requiring information outside reviewed documentation, insights where only one category has a related finding.

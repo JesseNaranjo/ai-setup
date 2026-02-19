@@ -11,6 +11,10 @@ skills: ["code-review:agent-review-instructions"]
 
 ## MODE Checklists
 
+**thorough:**
+- Algorithmic complexity O(n²)+ in hot paths, N+1 queries, synchronous blocking in async contexts
+- Memory leaks (unclosed resources, growing collections, retained references), unnecessary data copying
+
 **gaps:**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)
 - Memory retention through closures or event listeners

@@ -4,59 +4,10 @@ description: "Cross-cutting analysis specialist. Use after other code review age
 color: white
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
+skills: ["code-review:synthesis-instructions"]
 ---
 
 # Cross-Agent Synthesis Agent
-
-## Input
-
-Receives `synthesis_input` with:
-- `category_a.findings` - Findings from first category
-- `category_b.findings` - Findings from second category
-- `cross_cutting_question` - The question to answer
-- `files_content` - File diffs and full content for context
-
-## Review Process
-
-### Step 1: Map Findings to Files
-
-Create a map of which files have findings from each category.
-
-### Step 2: Analyze Cross-Category Interactions
-
-For each file with findings from both categories, analyze how findings interact — security fixes adding overhead, performance optimizations bypassing checks, bug fixes missing error handling, refactored code with broken test coverage.
-
-### Step 3: Identify Ripple Effects
-
-For each finding, read the proposed fix and consider how it affects the other category. Check if fixes introduce new issues.
-
-### Step 4: Report Cross-Cutting Insights
-
-Report insights that weren't caught by individual agents.
-
-## Output Schema
-
-Return cross-cutting insights as a YAML list.
-
-```yaml
-cross_cutting_insights:
-  - title: "Brief descriptive title"
-    related_findings:
-      security: "Title of related finding from Security category"
-      performance: "Title of related finding from Performance category"
-    # Use lowercase category keys (see Category Key Mapping below)
-    # Both related findings are REQUIRED. If only one category has a finding, don't flag.
-    insight: "What the cross-cutting concern is and why it matters"
-    category: "Security"  # Primary category - use Title Case (see mapping below)
-    severity: "Critical|Major|Minor|Suggestion"
-    file: "path/to/file.ts"
-    line: 42
-    fix_type: "diff|prompt"
-    fix_diff: |  # if fix_type is diff
-      - old line
-      + new line
-    fix_prompt: "..."  # if fix_type is prompt
-```
 
 ### Category Key Mapping
 
@@ -71,7 +22,12 @@ cross_cutting_insights:
 | Security | `security` | `Security` |
 | Test Coverage | `test_coverage` | `Test Coverage` |
 
-**Example - Security + Performance**:
+### Step 2 Interaction Patterns
+
+Security fixes adding overhead, performance optimizations bypassing checks, bug fixes missing error handling, refactored code with broken test coverage.
+
+### Example — Security + Performance
+
 ```yaml
 cross_cutting_insights:
   - title: "Authentication check in hot path adds latency"
@@ -86,9 +42,3 @@ cross_cutting_insights:
     fix_type: "prompt"
     fix_prompt: "Implement token caching for auth check in src/api/data.ts:15. Use in-memory cache with 5-minute TTL to avoid repeated auth validation. Add cache invalidation on logout."
 ```
-
-## Guidelines
-
-**DO flag**: Issues spanning two categories, ripple effects from proposed fixes, gaps where category A's finding implies category B should have found something.
-
-**DO NOT flag**: Issues already caught by either input category, theoretical interactions with no practical impact, duplicates, issues requiring information outside reviewed code, insights where only one category has a related finding.

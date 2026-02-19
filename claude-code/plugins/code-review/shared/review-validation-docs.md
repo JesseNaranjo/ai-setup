@@ -42,50 +42,38 @@ Use agent `model` frontmatter. Cross-cutting insights always **Opus**.
 
 Issues matching these patterns skip validation entirely and are marked `auto_validated: true`:
 
-**Accuracy patterns:**
+### Accuracy
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `api_signature_mismatch` | N/A (detected via code comparison) | Documented function signature differs from implementation |
-| `missing_parameter_doc` | N/A (detected via param comparison) | Parameter exists in code but not documented |
-| `outdated_version_reference` | N/A (detected via version comparison) | Documentation references older version than package.json/csproj |
+- `api_signature_mismatch` [Accuracy/Major]: Documented function signature differs from implementation
+- `missing_parameter_doc` [Accuracy/Minor]: Parameter exists in code but not documented
+- `outdated_version_reference` [Accuracy/Minor]: Documentation references older version than package.json/csproj
 
-**Clarity patterns:**
+### Clarity
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `undefined_acronym` | `\b[A-Z]{2,}\b(?!.*\([^)]+\))` | Acronym used without expansion (first occurrence) |
-| `passive_voice_instruction` | N/A (detected via NLP analysis) | Instructions written in passive voice |
+- `undefined_acronym` [Clarity/Minor]: Acronym used without expansion (first occurrence) — `\b[A-Z]{2,}\b(?!.*\([^)]+\))`
+- `passive_voice_instruction` [Clarity/Suggestion]: Instructions written in passive voice
 
-**Completeness patterns:**
+### Completeness
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `missing_api_doc` | N/A (detected via export comparison) | Exported function/class has no documentation |
-| `empty_section` | `^#+\s+.+\n\s*\n(?=^#+)` | Section header with no content before next header |
-| `missing_error_handling_doc` | N/A (detected via throw analysis) | Function throws but no error documentation |
+- `missing_api_doc` [Completeness/Major]: Exported function/class has no documentation
+- `empty_section` [Completeness/Minor]: Section header with no content before next header — `^#+\s+.+\n\s*\n(?=^#+)`
+- `missing_error_handling_doc` [Completeness/Minor]: Function throws but no error documentation
 
-**Consistency patterns:**
+### Consistency
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `inconsistent_terminology` | N/A (detected via term frequency analysis) | Same concept named differently across docs |
-| `inconsistent_heading_style` | N/A (detected via heading pattern analysis) | Mixed title case and sentence case headings |
+- `inconsistent_terminology` [Consistency/Minor]: Same concept named differently across docs
+- `inconsistent_heading_style` [Consistency/Suggestion]: Mixed title case and sentence case headings
 
-**Examples patterns:**
+### Examples
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `example_syntax_error` | N/A (detected via parser) | Code example has syntax error |
-| `example_undefined_import` | N/A (detected via import analysis) | Example uses undefined import |
+- `example_syntax_error` [Examples/Major]: Code example has syntax error
+- `example_undefined_import` [Examples/Major]: Example uses undefined import
 
-**Structure patterns:**
+### Structure
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `broken_internal_link` | `\[([^\]]+)\]\((?!https?://)([^)]+)\)` | Internal markdown link (check target exists) |
-| `missing_ai_instruction_header` | N/A (detected via header check) | CLAUDE.md missing required header comment |
-| `ai_instruction_wrong_location` | N/A (detected via path check) | AI instruction file in wrong directory |
+- `broken_internal_link` [Structure/Major]: Internal markdown link (check target exists) — `\[([^\]]+)\]\((?!https?://)([^)]+)\)`
+- `missing_ai_instruction_header` [Structure/Minor]: CLAUDE.md missing required header comment
+- `ai_instruction_wrong_location` [Structure/Minor]: AI instruction file in wrong directory
 
 ---
 

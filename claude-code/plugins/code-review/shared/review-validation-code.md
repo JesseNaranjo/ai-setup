@@ -42,63 +42,51 @@ Use agent `model` frontmatter. Cross-cutting insights always **Opus**.
 
 Issues matching these patterns skip validation entirely and are marked `auto_validated: true`:
 
-**Architecture patterns:**
+### Architecture
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `circular_dependency` | N/A (detected via import graph analysis) | Circular import/dependency between modules |
-| `god_class_500_lines` | N/A (detected via line count) | Class/module exceeds 500 lines |
-| `function_10_params` | `function\s+\w+\s*\([^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*\)` | Function has 10+ parameters |
-| `direct_new_instantiation` | `(?:=\s*new\s+\w+Service\|=\s*new\s+\w+Repository)\s*\(` | Direct instantiation of service/repository dependency |
+- `circular_dependency` [Architecture/Major]: Circular import/dependency between modules
+- `god_class_500_lines` [Architecture/Major]: Class/module exceeds 500 lines
+- `function_10_params` [Architecture/Minor]: Function has 10+ parameters — `function\s+\w+\s*\([^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*\)`
+- `direct_new_instantiation` [Architecture/Minor]: Direct instantiation of service/repository dependency — `(?:=\s*new\s+\w+Service\|=\s*new\s+\w+Repository)\s*\(`
 
-**Bug patterns:**
+### Bugs
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `empty_catch_block` | `catch\s*\([^)]*\)\s*\{\s*(?:\/\/[^\n]*)?\s*\}` | Empty catch block (allows single comment) |
-| `missing_await` | `(?:const\|let\|var)\s+\w+\s*=\s*(?!await)[^;]*\basync\s+\w+\(` | Async function call without await |
-| `null_dereference` | `(?:\?\.\s*\w+\s*\(\)\s*\.)\|(?:\w+\s*&&\s*\w+\.\w+\s*\?\s*\w+\.\w+\.\w+)` | Null access after optional chain or guard |
+- `empty_catch_block` [Bugs/Major]: Empty catch block (allows single comment) — `catch\s*\([^)]*\)\s*\{\s*(?:\/\/[^\n]*)?\s*\}`
+- `missing_await` [Bugs/Major]: Async function call without await — `(?:const\|let\|var)\s+\w+\s*=\s*(?!await)[^;]*\basync\s+\w+\(`
+- `null_dereference` [Bugs/Major]: Null access after optional chain or guard — `(?:\?\.\s*\w+\s*\(\)\s*\.)\|(?:\w+\s*&&\s*\w+\.\w+\s*\?\s*\w+\.\w+\.\w+)`
 
-**Compliance patterns:**
+### Compliance
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `missing_authorize_attribute` | `\[(?:Http(?:Get\|Post\|Put\|Delete\|Patch)\|Route)\][^[]*(?<!\[Authorize\])\s*public\s+(?:async\s+)?(?:Task<)?(?:IActionResult\|ActionResult)` | ASP.NET endpoint without [Authorize] attribute |
-| `wrong_case_filename` | N/A (detected via filesystem comparison) | Filename violates project naming convention |
-| `explicit_must_violation` | N/A (detected via rule matching) | Code violates a MUST rule from AI instructions |
-| `missing_required_jsdoc` | `export\s+(?:async\s+)?function\s+\w+\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{(?!\s*/\*\*)` | Exported function without JSDoc comment |
+- `missing_authorize_attribute` [Compliance/Major]: ASP.NET endpoint without [Authorize] attribute — `\[(?:Http(?:Get\|Post\|Put\|Delete\|Patch)\|Route)\][^[]*(?<!\[Authorize\])\s*public\s+(?:async\s+)?(?:Task<)?(?:IActionResult\|ActionResult)`
+- `wrong_case_filename` [Compliance/Minor]: Filename violates project naming convention
+- `explicit_must_violation` [Compliance/Major]: Code violates a MUST rule from AI instructions
+- `missing_required_jsdoc` [Compliance/Minor]: Exported function without JSDoc comment — `export\s+(?:async\s+)?function\s+\w+\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{(?!\s*/\*\*)`
 
-**Performance patterns:**
+### Performance
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `nested_loop_includes` | `for\s*\([^)]*\)[\s\S]*?for\s*\([^)]*\)[\s\S]*?\.(?:includes\|indexOf)\s*\(` | O(n²) nested loop with includes/indexOf |
-| `select_star_in_loop` | `(?:for\|while\|forEach)[\s\S]*?SELECT\s+\*` | SELECT * inside a loop |
-| `n_plus_one_query` | `(?:for\|while\|forEach\|\.map\|\.forEach)[\s\S]{0,200}(?:findOne\|findById\|query\|execute\|fetch)` | Database query inside iteration (N+1) |
+- `nested_loop_includes` [Performance/Major]: O(n²) nested loop with includes/indexOf — `for\s*\([^)]*\)[\s\S]*?for\s*\([^)]*\)[\s\S]*?\.(?:includes\|indexOf)\s*\(`
+- `select_star_in_loop` [Performance/Major]: SELECT * inside a loop — `(?:for\|while\|forEach)[\s\S]*?SELECT\s+\*`
+- `n_plus_one_query` [Performance/Major]: Database query inside iteration (N+1) — `(?:for\|while\|forEach\|\.map\|\.forEach)[\s\S]{0,200}(?:findOne\|findById\|query\|execute\|fetch)`
 
-**Security patterns:**
+### Security
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `hardcoded_password` | `(?:password\|passwd\|pwd)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded password in assignment |
-| `hardcoded_api_key` | `(?:api[_-]?key\|apikey)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded API key |
-| `hardcoded_token` | `(?:token\|bearer\|auth[_-]?token\|access[_-]?token)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded auth token |
-| `hardcoded_secret` | `(?:secret\|client[_-]?secret\|private[_-]?key)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded secret/private key |
-| `hardcoded_credentials` | `(?:credentials\|connection[_-]?string)\s*[:=]\s*['"][^'"]+['"]` | Hardcoded credentials object |
-| `sql_injection_concat` | `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*[+]\s*(?:req\|request\|params\|query\|body\|input\|user)` | SQL with string concatenation of user input |
-| `sql_injection_template` | `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*\$\{.*(?:req\|request\|params\|query\|body\|input\|user)` | SQL with template literal interpolation of user input |
-| `eval_untrusted` | `eval\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)` | eval() with untrusted input |
-| `new_function_untrusted` | `new\s+Function\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)` | new Function() with untrusted input |
+- `hardcoded_password` [Security/Critical]: Hardcoded password in assignment — `(?:password\|passwd\|pwd)\s*[:=]\s*['"][^'"]+['"]`
+- `hardcoded_api_key` [Security/Critical]: Hardcoded API key — `(?:api[_-]?key\|apikey)\s*[:=]\s*['"][^'"]+['"]`
+- `hardcoded_token` [Security/Critical]: Hardcoded auth token — `(?:token\|bearer\|auth[_-]?token\|access[_-]?token)\s*[:=]\s*['"][^'"]+['"]`
+- `hardcoded_secret` [Security/Critical]: Hardcoded secret/private key — `(?:secret\|client[_-]?secret\|private[_-]?key)\s*[:=]\s*['"][^'"]+['"]`
+- `hardcoded_credentials` [Security/Critical]: Hardcoded credentials object — `(?:credentials\|connection[_-]?string)\s*[:=]\s*['"][^'"]+['"]`
+- `sql_injection_concat` [Security/Critical]: SQL with string concatenation of user input — `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*[+]\s*(?:req\|request\|params\|query\|body\|input\|user)`
+- `sql_injection_template` [Security/Critical]: SQL with template literal interpolation of user input — `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*\$\{.*(?:req\|request\|params\|query\|body\|input\|user)`
+- `eval_untrusted` [Security/Critical]: eval() with untrusted input — `eval\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)`
+- `new_function_untrusted` [Security/Critical]: new Function() with untrusted input — `new\s+Function\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)`
 
-**Technical Debt patterns:**
+### Technical Debt
 
-| Pattern Name | Regex | Description |
-|-------------|-------|-------------|
-| `deprecated_npm_package` | N/A (detected via `npm ls` output) | npm package with deprecation warning |
-| `todo_without_issue` | `(?:\/\/\|#)\s*TODO(?:\([^)]*\))?:?\s+(?!.*(?:#\d+\|ISSUE-\|JIRA-\|TICKET-))` | TODO/FIXME without issue reference |
-| `commented_out_code` | `^(?:\s*(?:\/\/\|#).*\n){10,}` | 10+ consecutive lines of commented code |
-| `hack_comment` | `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?` | Explicit HACK/WORKAROUND/XXX marker |
-| `outdated_callback` | `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)` | Callback pattern in async context |
+- `deprecated_npm_package` [Technical Debt/Minor]: npm package with deprecation warning
+- `todo_without_issue` [Technical Debt/Minor]: TODO/FIXME without issue reference — `(?:\/\/\|#)\s*TODO(?:\([^)]*\))?:?\s+(?!.*(?:#\d+\|ISSUE-\|JIRA-\|TICKET-))`
+- `commented_out_code` [Technical Debt/Minor]: 10+ consecutive lines of commented code — `^(?:\s*(?:\/\/\|#).*\n){10,}`
+- `hack_comment` [Technical Debt/Minor]: Explicit HACK/WORKAROUND/XXX marker — `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?`
+- `outdated_callback` [Technical Debt/Minor]: Callback pattern in async context — `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)`
 
 ---
 

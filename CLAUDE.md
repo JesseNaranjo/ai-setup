@@ -73,7 +73,7 @@ claude-code/plugins/code-review/
 │       ├── examples-agent.md        # Code example validity
 │       ├── structure-agent.md       # Organization, links, AI instructions
 │       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
-├── skills/                          # 8 skills (7 review + 1 internal)
+├── skills/                          # 9 skills (7 review + 2 internal)
 │   ├── agent-review-instructions/   # Internal: MODE, FP rules, output schema (loaded by agents via skills field)
 │   │   └── SKILL.md
 │   ├── reviewing-architecture-principles/
@@ -85,7 +85,9 @@ claude-code/plugins/code-review/
 │   │   ├── SKILL.md                 # Core skill instructions (~30-50 lines)
 │   │   └── references/              # Detailed patterns (loaded on-demand)
 │   │       └── common-vulnerabilities.md
-│   └── reviewing-technical-debt/
+│   ├── reviewing-technical-debt/
+│   └── synthesis-instructions/      # Internal: synthesis process, output schema (loaded by synthesis agents via skills field)
+│       └── SKILL.md
 ├── languages/                       # Language-specific configs
 │   ├── dotnet.md                    # .NET/C# checks
 │   ├── nodejs.md                    # Node.js/TypeScript checks
@@ -118,7 +120,7 @@ skills: ["code-review:agent-review-instructions"]  # All 15 non-synthesis agents
 ---
 ```
 
-The `skills` field loads static agent configuration (MODE definitions, false positive rules, output schema) at agent startup. This replaces orchestrator-side distribution of these instructions. Synthesis agents do not use the `skills` field (they have their own input/output format).
+The `skills` field loads static agent configuration at agent startup. Non-synthesis agents load `code-review:agent-review-instructions` (MODE definitions, false positive rules, output schema). Synthesis agents load `code-review:synthesis-instructions` (input format, review process, output schema, guidelines).
 
 Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, `mcpServers`, `hooks`, `memory`) are not used.
 
@@ -128,7 +130,7 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 - **Opus agents** (architecture, bug-detection, performance, security, technical-debt, accuracy, completeness, examples): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
 - **Sonnet agents** (api-contracts, compliance, error-handling, test-coverage, clarity, consistency, structure): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance.
-- **Synthesis agents** (synthesis-code, synthesis-docs): Own format with `## Input`, `## Review Process`, `## Output Schema`. Not compressed.
+- **Synthesis agents** (synthesis-code, synthesis-docs): Domain-specific body only (Category Key Mapping, Step 2 interaction patterns, example YAML). Shared process loaded via `code-review:synthesis-instructions` skill.
 
 **MODE labels:** `**thorough:**`, `**gaps:**`, `**quick:**` (no suffixes like "mode - Focus on:").
 
@@ -143,7 +145,7 @@ Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, 
 
 ### Agent Content Distribution
 
-Static agent instructions (MODE definitions, false positive rules, output schema) are self-loaded by each agent via the `skills` field (`code-review:agent-review-instructions`). The orchestrator distributes only dynamic content via `additional_instructions`: language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Category-specific false positive rules remain in each agent's `## False Positives` section.
+Static agent instructions are self-loaded via the `skills` field: non-synthesis agents load `code-review:agent-review-instructions` (MODE, false positive rules, output schema); synthesis agents load `code-review:synthesis-instructions` (input format, review process, output schema, guidelines). The orchestrator distributes only dynamic content via `additional_instructions`: language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Category-specific false positive rules remain in each agent's `## False Positives` section.
 
 Validation, auto-validation, and output format content is in separate files (`review-validation-code.md`, `review-validation-docs.md`), loaded on-demand at Steps 9-12 (post-review). This progressive disclosure keeps validation and output format content out of the Opus context during the expensive Steps 7-8 phase.
 
@@ -200,7 +202,7 @@ Settings loading logic is inlined in each command file (Step 2). See `README.md`
 
 ### Skill Structure (Progressive Disclosure)
 
-Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only. The `agent-review-instructions` skill is internal (not user-facing) — it provides static agent configuration loaded at startup via the `skills` frontmatter field.
+Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only. Two internal skills (not user-facing) provide static configuration loaded at startup via the `skills` frontmatter field: `agent-review-instructions` (MODE, FP rules, output schema for non-synthesis agents) and `synthesis-instructions` (input format, review process, output schema for synthesis agents).
 
 **Description patterns:**
 - Skills: `"[What in third person]. Use when [specific triggers]."` — e.g., `"Detects injection attacks... Use when checking for security vulnerabilities during code review."`
@@ -231,7 +233,8 @@ When modifying the plugin:
 - **Agent model assignments**: Edit agent YAML frontmatter (`model` field)
 - **Code review orchestration**: Edit `shared/review-orchestration-code.md` (phases, invocation patterns, language-specific focus, gaps mode behavior)
 - **Docs review orchestration**: Edit `shared/review-orchestration-docs.md` (phases, invocation patterns, gaps mode behavior)
-- **Agent common instructions**: Edit `skills/agent-review-instructions/SKILL.md` (MODE, FP rules, output schema — loaded by agents via `skills` field)
+- **Agent common instructions**: Edit `skills/agent-review-instructions/SKILL.md` (MODE, FP rules, output schema — loaded by non-synthesis agents via `skills` field)
+- **Synthesis common instructions**: Edit `skills/synthesis-instructions/SKILL.md` (input format, review process, output schema — loaded by synthesis agents via `skills` field)
 
 ### Validation & Output
 - **Validation rules (code)**: Edit `shared/review-validation-code.md` (validation process, aggregation, auto-validation patterns)
@@ -351,6 +354,8 @@ Each command file inlines its pre-review setup steps (Steps 1-6) directly, inclu
 | `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Gaps Mode core | ~50 | Only one loaded per execution; extracting adds a file read |
 | `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation, Output Format | ~110 | Same rationale: only one loaded per execution |
 
+Synthesis agents (`synthesis-code-agent.md` / `synthesis-docs-agent.md`) formerly duplicated ~50 lines of shared process content. Now extracted to `skills/synthesis-instructions/SKILL.md`; agents retain only domain-specific content (category mappings, interaction patterns, examples).
+
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.
 
 ### Commands Directory
@@ -392,6 +397,7 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 ### Auto-Validation Pattern Design Notes
 
 These notes apply when modifying patterns in `review-validation-{code|docs}.md`:
+- Patterns use hybrid list format: self-evident patterns (N/A regex or obvious behavior) omit regex; calibration-critical patterns (behavioral qualifiers, variable name lists, non-obvious matching rules) include inline regex after em dash
 - Patterns are case-insensitive for SQL keywords
 - Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`
 - Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`
