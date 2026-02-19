@@ -21,13 +21,6 @@ Search in: current directory, parent directories, `.github/` folders.
 - **Security**: unvalidated input, SQL concatenation, hardcoded credentials, missing auth middleware
 - **Error Handling**: empty catches, missing error handling, sensitive info in errors, stack traces in production
 
-## Checking Process
-
-1. **Parse**: Extract rules, identify keyword (MUST/SHOULD/MAY), note file patterns
-2. **Match**: Check rule applicability by file path and content/type
-3. **Check**: Analyze code, classify severity by keyword, include exact rule text
-4. **Report**: Include `rule_violated` and `rule_source` fields
-
 ## Ignoring Rules
 
 Rules silenced with comments (`claude-ignore:`, `eslint-disable`, `@ts-ignore`) should not be flagged.

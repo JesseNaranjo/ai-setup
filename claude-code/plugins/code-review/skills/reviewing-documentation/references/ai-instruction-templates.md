@@ -13,62 +13,13 @@ repository/
 
 ## Required Headers
 
-### .ai/AI-AGENT-INSTRUCTIONS.md
+- **AI-AGENT-INSTRUCTIONS.md**: Must start with `# AI Agent Instructions` and state "This file contains comprehensive coding standards..." with cross-ref note to CLAUDE.md and copilot-instructions.md. Sections: Quick Reference, Coding Standards, Architecture, Testing, Documentation, Common Patterns, Anti-Patterns.
+- **CLAUDE.md**: Must start with `# CLAUDE.md` and state "This file provides guidance to Claude Code..." with link to `.ai/AI-AGENT-INSTRUCTIONS.md` and sync note to copilot-instructions.md.
+- **copilot-instructions.md**: Must start with `# Copilot Instructions` and state "This file provides guidance to GitHub Copilot..." with link to `../.ai/AI-AGENT-INSTRUCTIONS.md` and sync note to CLAUDE.md.
 
-Comprehensive coding standards. Required header:
+## Cross-References
 
-```markdown
-# AI Agent Instructions
-
-This file contains comprehensive coding standards, patterns, and conventions for this repository. AI coding assistants (Claude Code, GitHub Copilot, etc.) MUST follow these guidelines.
-
-**This is the detailed reference document for this repository.**
-
-> **Note:** You MUST keep the Quick Reference in sync with [CLAUDE.md](../CLAUDE.md) and [.github/copilot-instructions.md](../.github/copilot-instructions.md).
-```
-
-Sections: Quick Reference, Coding Standards, Architecture, Testing, Documentation, Common Patterns, Anti-Patterns
-
-### CLAUDE.md
-
-Quick reference for Claude Code:
-
-```markdown
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-**For comprehensive coding standards, see [.ai/AI-AGENT-INSTRUCTIONS.md](.ai/AI-AGENT-INSTRUCTIONS.md).**
-
-> **Note:** You MUST keep this file in sync with [.github/copilot-instructions.md](.github/copilot-instructions.md).
-```
-
-### .github/copilot-instructions.md
-
-Quick reference for GitHub Copilot:
-
-```markdown
-# Copilot Instructions
-
-This file provides guidance to GitHub Copilot when working with code in this repository.
-
-**For comprehensive coding standards, see [.ai/AI-AGENT-INSTRUCTIONS.md](../.ai/AI-AGENT-INSTRUCTIONS.md).**
-
-> **Note:** You MUST keep this file in sync with [CLAUDE.md](../CLAUDE.md).
-```
-
-## Cross-Reference Requirements
-
-| From | To | Link |
-|------|-----|------|
-| CLAUDE.md | AI-AGENT-INSTRUCTIONS.md | `[.ai/AI-AGENT-INSTRUCTIONS.md](.ai/AI-AGENT-INSTRUCTIONS.md)` |
-| CLAUDE.md | copilot-instructions.md | `[.github/copilot-instructions.md](.github/copilot-instructions.md)` |
-| copilot-instructions.md | AI-AGENT-INSTRUCTIONS.md | `[.ai/AI-AGENT-INSTRUCTIONS.md](../.ai/AI-AGENT-INSTRUCTIONS.md)` |
-| copilot-instructions.md | CLAUDE.md | `[CLAUDE.md](../CLAUDE.md)` |
-| AI-AGENT-INSTRUCTIONS.md | CLAUDE.md | `[CLAUDE.md](../CLAUDE.md)` |
-| AI-AGENT-INSTRUCTIONS.md | copilot-instructions.md | `[.github/copilot-instructions.md](../.github/copilot-instructions.md)` |
-
-Quick Reference sections must contain the same essential information across all three files.
+All three files must cross-reference each other. Quick Reference sections must contain the same essential information across all three files.
 
 ## Validation Checklist
 

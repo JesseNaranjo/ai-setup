@@ -27,21 +27,21 @@
 
 ### Node.js/TypeScript
 
-| Pattern | Detection Regex | Modern Alternative |
-|---------|----------------|-------------------|
-| Callbacks | `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\)` | async/await |
-| Class components | `class\s+\w+\s+extends\s+(?:React\.)?Component` | Functional + hooks |
-| CommonJS in ESM | `(?:const\|let\|var)\s+\w+\s*=\s*require\s*\(` | ES imports |
-| var keyword | `var x =` | const/let |
+| Pattern | Detection Regex |
+|---------|----------------|
+| Callbacks | `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\)` |
+| Class components | `class\s+\w+\s+extends\s+(?:React\.)?Component` |
+| CommonJS in ESM | `(?:const\|let\|var)\s+\w+\s*=\s*require\s*\(` |
+| var keyword | `var x =` |
 
 ### .NET/C#
 
-| Pattern | Detection Regex | Modern Alternative |
-|---------|----------------|-------------------|
-| WebClient | `new\s+WebClient\s*\(` | HttpClient |
-| Sync-over-async | `\.Result\b\|\.Wait\(\)\|\.GetAwaiter\(\)\.GetResult\(\)` | await |
-| BinaryFormatter | `BinaryFormatter\|SoapFormatter` | System.Text.Json |
-| Old configuration | `ConfigurationManager` | IConfiguration |
+| Pattern | Detection Regex |
+|---------|----------------|
+| WebClient | `new\s+WebClient\s*\(` |
+| Sync-over-async | `\.Result\b\|\.Wait\(\)\|\.GetAwaiter\(\)\.GetResult\(\)` |
+| BinaryFormatter | `BinaryFormatter\|SoapFormatter` |
+| Old configuration | `ConfigurationManager` |
 
 ## Workarounds and Hacks
 
@@ -65,12 +65,7 @@
 
 ## Scalability Concerns
 
-| Pattern | Detection | Issue |
-|---------|-----------|-------|
-| Unbounded array | `items.push()` without limit | Memory growth |
-| In-memory cache | `const cache = {}`/`new Map()` | No persistence/sharing |
-| Sync file I/O | `fs.readFileSync`, `File.ReadAllText` | Blocks thread |
-| Sequential when parallel | `for await` on independent ops | Throughput |
+Unbounded array (`items.push()` without limit), in-memory cache (`const cache = {}`/`new Map()`), sync file I/O (`fs.readFileSync`, `File.ReadAllText`), sequential when parallel (`for await` on independent ops).
 
 ## Documentation Debt
 
