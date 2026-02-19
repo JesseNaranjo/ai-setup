@@ -1,164 +1,31 @@
 # Common Security Vulnerabilities
 
-## Injection Vulnerabilities
+## .NET-Specific Patterns
 
-### SQL Injection
+SQL: `cmd.Parameters.AddWithValue("@id", userId)` — never string-concat. Severity: Critical.
+XSS: `@Html.Raw(userInput)` vulnerable — use `@Html.Encode()` or Razor auto-encoding. Severity: Major (stored=Critical).
+Deserialization: `TypeNameHandling.All` allows RCE — use `DeserializeObject<MyType>(input)`. Severity: Critical.
 
-```javascript
-// VULNERABLE
-const query = `SELECT * FROM users WHERE id = ${userId}`;
-```
+## Detection Regexes — Hardcoded Secrets
 
-```csharp
-// VULNERABLE
-var query = "SELECT * FROM Users WHERE Id = " + userId;
-
-// SAFE
-var query = "SELECT * FROM Users WHERE Id = @id";
-cmd.Parameters.AddWithValue("@id", userId);
-```
-
-**Severity**: Critical
-
-### Command Injection
-
-```javascript
-// VULNERABLE
-exec(`ls ${userInput}`);
-spawn('sh', ['-c', userInput]);
-```
-
-```csharp
-// VULNERABLE
-Process.Start("cmd", "/c " + userInput);
-```
-
-**Severity**: Critical
-
-### XSS
-
-```javascript
-// VULNERABLE
-res.send(`<div>${userInput}</div>`);
-element.innerHTML = userInput;
-```
-
-```csharp
-// VULNERABLE — use @Html.Encode() or Razor auto-encoding
-@Html.Raw(userInput)
-```
-
-**Severity**: Major (stored XSS = Critical)
-
-## Authentication & Authorization
-
-### Missing Auth
-
-```javascript
-// VULNERABLE — no auth middleware
-app.get('/api/admin/users', (req, res) => { ... });
-```
-
-```csharp
-// VULNERABLE — missing [Authorize]
-[HttpGet("admin/users")]
-public IActionResult GetUsers() { ... }
-```
-
-**Severity**: Critical
-
-### Broken Access Control
-
-```javascript
-// VULNERABLE — no ownership check; add userId comparison
-const order = await Order.findById(req.params.id);
-res.json(order);
-```
-
-**Severity**: Critical
-
-## Sensitive Data Exposure
-
-### Hardcoded Secrets
-
-```javascript
-// VULNERABLE
-const API_KEY = 'sk-1234567890abcdef';
-const password = 'admin123';
-```
-
-**Detection regex:**
 - `password\s*=\s*["'][^"']+["']`
 - `api[_-]?key\s*=\s*["'][^"']+["']`
 - `secret\s*=\s*["'][^"']+["']`
 - `token\s*=\s*["'][^"']+["']`
 
-**Severity**: Critical
-
-### Sensitive Data in Logs
-
-```javascript
-// VULNERABLE
-console.log('User login:', { email, password });
-logger.info('Request:', req.body);
-```
-
-**Severity**: Major
+Severity: Critical.
 
 ## Cryptographic Issues
 
-```javascript
-// VULNERABLE — weak hash; use bcrypt.hash(password, 12)
-const hash = crypto.createHash('md5').update(password).digest('hex');
+MD5/SHA1 for passwords → bcrypt(12). `Math.random()` for tokens → `crypto.randomBytes(32)`. Severity: Critical/Major.
 
-// VULNERABLE — insecure random; use crypto.randomBytes(32)
-const token = Math.random().toString(36);
-```
+## ReDoS
 
-**Severity**: Critical (weak hash), Major (insecure random)
-
-## Input Validation
-
-### Path Traversal
-
-```javascript
-// VULNERABLE; SAFE: path.basename(req.params.filename)
-const filePath = path.join('/uploads', req.params.filename);
-```
-
-**Severity**: Critical
-
-### Regex DoS (ReDoS)
-
-```javascript
-// VULNERABLE — catastrophic backtracking
-const emailRegex = /^([a-zA-Z0-9]+)+@[a-zA-Z0-9]+$/;
-```
-
-**Severity**: Major
-
-## Unsafe Deserialization
-
-```javascript
-// VULNERABLE
-const obj = eval('(' + userInput + ')');
-```
-
-```csharp
-// VULNERABLE
-var obj = JsonConvert.DeserializeObject(input, new JsonSerializerSettings {
-    TypeNameHandling = TypeNameHandling.All
-});
-// SAFE: JsonConvert.DeserializeObject<MyType>(input)
-```
-
-**Severity**: Critical
+Nested quantifiers — `/^([a-zA-Z0-9]+)+@/` causes catastrophic backtracking. Severity: Major.
 
 ## Security Headers
 
-Required: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY|SAMEORIGIN`, `Strict-Transport-Security`, `X-XSS-Protection: 1; mode=block`
-
-**Severity**: Minor to Major
+Required: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY|SAMEORIGIN`, `Strict-Transport-Security`, `X-XSS-Protection: 1; mode=block`. Severity: Minor to Major.
 
 ## Quick Detection Patterns
 

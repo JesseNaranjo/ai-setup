@@ -10,15 +10,6 @@
 | Imports from different domains | >5 unrelated | Minor |
 | Mixed keywords (UI + DB + HTTP) | Same file | Major |
 
-```typescript
-// BAD: Class doing auth AND profile AND notifications
-class UserService {
-  login() { ... } logout() { ... }      // auth
-  updateProfile() { ... }               // profile
-  sendEmail() { ... } sendPush() { ... } // notifications
-}
-```
-
 **Grep:** `class.*Service.*{` with methods from multiple domains; files importing both `@nestjs/common` and direct DB drivers; files with both `fetch`/`axios` and DOM manipulation
 
 ## OCP Detection
@@ -28,13 +19,6 @@ class UserService {
 | Switch on type/kind string | Minor |
 | If-else chains checking instanceof | Minor |
 | Adding new case requires modifying existing | Minor |
-
-```typescript
-// BAD: Must modify to add new type
-function processPayment(type: string) {
-  switch (type) { case 'credit': ... case 'debit': ... case 'paypal': ... }
-}
-```
 
 **Grep:** `switch.*type|kind|variant` with string literals; `if.*instanceof.*else if.*instanceof`
 
@@ -46,15 +30,6 @@ function processPayment(type: string) {
 | `instanceof` checks on function params | Major |
 | Type assertions after interface method calls | Major |
 
-```typescript
-// BAD: Violates Rectangle's contract
-class Square extends Rectangle {
-  setWidth(w: number) { this.width = w; this.height = w; }
-}
-// BAD: Runtime type check on interface parameter
-function processShape(shape: IShape) { if (shape instanceof Circle) { ... } }
-```
-
 **Grep:** `throw new NotImplemented`; `override.*{[^}]*throw`; `instanceof.*\?.*:`
 
 ## ISP Detection
@@ -65,15 +40,7 @@ function processShape(shape: IShape) { if (shape instanceof Circle) { ... } }
 | Empty method implementations | Any | Minor |
 | Methods returning `undefined`/throwing | Any | Minor |
 
-```typescript
-// BAD: Partial implementation of fat interface
-class ReadOnlyRepo implements IRepository<User> {
-  create(item: User) { throw new Error('Not supported'); }
-  update(id: string, item: User) { throw new Error('Not supported'); }
-}
-```
-
-**Grep:** `interface.*{` with >10 method signatures; `implements.*{[^}]*throw new Error\(['"]Not`
+**Grep:** `interface.*{` with >10 method signatures; `implements.*{[^}]*throw new Error\['"]Not`
 
 ## DIP Detection
 
@@ -82,13 +49,6 @@ class ReadOnlyRepo implements IRepository<User> {
 | `new ConcreteClass()` in business logic | Major |
 | Import of concrete implementations (not interfaces) | Minor |
 | Circular imports | Major |
-
-```typescript
-// BAD: Direct instantiation
-class OrderService {
-  private emailService = new EmailService(); // Should be injected
-}
-```
 
 **Grep:** `private.*=.*new [A-Z].*Service`; `import.*Repository|Service.*from.*(?!interface)`
 
@@ -101,15 +61,6 @@ class OrderService {
 | Copy-pasted validation | >3 occurrences | Minor |
 | Same literal value | >3 occurrences | Minor |
 | Magic numbers | Any unexplained | Suggestion |
-
-```typescript
-// BAD: Duplicated validation across handlers
-function createUser(data: UserDTO) {
-  if (!data.email) throw new Error('Email required');
-  if (!data.email.includes('@')) throw new Error('Invalid email');
-  // ... same validation repeated in updateUser, importUser
-}
-```
 
 ## YAGNI Violations
 
