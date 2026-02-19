@@ -12,11 +12,11 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-1. **Deprecated Dependencies**: major version 2+ behind, discontinued libraries, known CVEs
-2. **Workarounds/Hacks**: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues
-3. **Dead Code**: unused exports, commented-out blocks (10+ lines), unreachable paths, stale feature flags
-4. **Scalability**: hardcoded limits, in-memory needing externalization, unbounded collections without pagination
-5. **Documentation Debt**: TODO/FIXME without tracking, stale comments, missing public API docs
+- Deprecated deps: major version 2+ behind, discontinued libraries, known CVEs
+- Workarounds/hacks: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues
+- Dead code: unused exports, commented-out blocks (10+ lines), unreachable paths, stale feature flags
+- Scalability: hardcoded limits, in-memory needing externalization, unbounded collections without pagination
+- Documentation debt: TODO/FIXME without tracking, stale comments, missing public API docs
 
 **gaps:**
 - Subtle debt not caught in thorough pass
@@ -31,11 +31,9 @@ Thresholds: Critical=CVE/removed API requiring immediate migration; Major=versio
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Technical Debt"
-    debt_type: "deprecated_dependency|outdated_pattern|workaround|dead_code|scalability|documentation"
-    urgency: "blocking|soon|low"
-    effort_estimate: "trivial|small|medium|large"
+debt_type: "deprecated_dependency|outdated_pattern|workaround|dead_code|scalability|documentation"
+urgency: "blocking|soon|low"
+effort_estimate: "trivial|small|medium|large"
 ```
 
 ## False Positives
