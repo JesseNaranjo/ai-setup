@@ -31,10 +31,8 @@ Thresholds: Critical=blocks users from using the project; Major=missing importan
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Completeness"
-    missing_type: "section|api|config|example|error_handling|prerequisite"
-    related_code: "Path to code that should be documented (if applicable)"
+missing_type: "section|api|config|example|error_handling|prerequisite"
+related_code: "Path to code that should be documented (if applicable)"
 ```
 
 ## False Positives

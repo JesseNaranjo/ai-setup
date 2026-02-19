@@ -28,11 +28,9 @@ Thresholds: Critical=crashes/fails immediately, completely wrong; Major=signific
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Examples"
-    example_type: "syntax|imports|api_usage|completeness|output|deprecation"
-    language: "javascript|typescript|python|bash|etc"
-    error_message: "What error users would see (if applicable)"
+example_type: "syntax|imports|api_usage|completeness|output|deprecation"
+language: "javascript|typescript|python|bash|etc"
+error_message: "What error users would see (if applicable)"
 ```
 
 ## False Positives

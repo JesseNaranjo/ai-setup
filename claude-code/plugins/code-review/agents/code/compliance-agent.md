@@ -45,10 +45,8 @@ Thresholds: Major=explicit rule violation (MUST/MUST NOT/ALWAYS/NEVER); Minor=gu
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Compliance"
-    rule_violated: "Exact quote from instruction file"
-    rule_source: "CLAUDE.md or AI-AGENT-INSTRUCTIONS.md path"
+rule_violated: "Exact quote from instruction file"
+rule_source: "CLAUDE.md or AI-AGENT-INSTRUCTIONS.md path"
 ```
 
 ## False Positives

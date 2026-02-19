@@ -41,13 +41,11 @@ Thresholds: Critical=causes confusion or errors (rare); Major=significant incons
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Consistency"
-    consistency_type: "terminology|formatting|voice|naming|style"
-    variant_a: "First variant found"
-    variant_b: "Second variant found"
-    recommended: "Recommended canonical form"
-    other_locations: ["file:line", "file:line"]  # Other occurrences
+consistency_type: "terminology|formatting|voice|naming|style"
+variant_a: "First variant found"
+variant_b: "Second variant found"
+recommended: "Recommended canonical form"
+other_locations: ["file:line", "file:line"]  # Other occurrences
 ```
 
 ## False Positives

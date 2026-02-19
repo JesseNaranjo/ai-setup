@@ -37,10 +37,8 @@ Thresholds: Critical=direct exploitation/data breach/RCE; Major=exploitable unde
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Security"
-    attack_vector: "How an attacker could exploit this"
-    impact: "What damage could result"
+attack_vector: "How an attacker could exploit this"
+impact: "What damage could result"
 ```
 
 ## False Positives

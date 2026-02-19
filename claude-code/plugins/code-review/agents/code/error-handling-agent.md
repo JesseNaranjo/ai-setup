@@ -36,10 +36,8 @@ Thresholds: Critical=data loss/security; Major=crashes/incorrect behavior; Minor
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Error Handling"
-    failure_scenario: "What could trigger this error path"
-    impact: "What happens when the error occurs"
+failure_scenario: "What could trigger this error path"
+impact: "What happens when the error occurs"
 ```
 
 ## False Positives

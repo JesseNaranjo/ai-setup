@@ -40,10 +40,8 @@ Thresholds: Critical=incomprehensible, blocks users; Major=significant confusion
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Clarity"
-    affected_audience: "Who would be confused (beginner/intermediate/expert)"
-    clarity_type: "jargon|ambiguity|complexity|missing_context|structure"
+affected_audience: "Who would be confused (beginner/intermediate/expert)"
+clarity_type: "jargon|ambiguity|complexity|missing_context|structure"
 ```
 
 ## False Positives

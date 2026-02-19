@@ -41,14 +41,12 @@ Thresholds: Major=critical path without tests; Minor=non-critical code lacking t
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Test Coverage"
-    risk: "What could break without tests"
-    test_recommendation:
-      what: "What to test"
-      behavior: "Expected behavior to verify"
-      location: "Suggested test file path"
-    fix_type: "diff or prompt"  # Use diff for simple test additions, prompt for complex multi-file test suites
+risk: "What could break without tests"
+test_recommendation:
+  what: "What to test"
+  behavior: "Expected behavior to verify"
+  location: "Suggested test file path"
+fix_type: "diff or prompt"  # Use diff for simple test additions, prompt for complex multi-file test suites
 ```
 
 ## False Positives

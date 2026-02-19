@@ -58,10 +58,8 @@ Thresholds: Critical=blocks access to content, major broken navigation; Major=st
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Structure"
-    structure_type: "links|headings|navigation|organization|ai_instructions|media"
-    broken_target: "The target that doesn't exist (for broken links)"
+structure_type: "links|headings|navigation|organization|ai_instructions|media"
+broken_target: "The target that doesn't exist (for broken links)"
 ```
 
 ## False Positives

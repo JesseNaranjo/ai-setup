@@ -33,10 +33,8 @@ Thresholds: Critical=crashes/data corruption/security; Major=incorrect behavior 
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Bugs"
-    conditions: "When this bug occurs"
-    impact: "What happens when the bug triggers"
+conditions: "When this bug occurs"
+impact: "What happens when the bug triggers"
 ```
 
 ## False Positives

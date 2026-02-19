@@ -22,10 +22,8 @@ Thresholds: Major=significant impact on maintainability/testability; Minor=could
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Architecture"
-    principle: "Which architectural principle is violated"
-    impact: "How this affects maintainability/testability"
+principle: "Which architectural principle is violated"
+impact: "How this affects maintainability/testability"
 ```
 
 ## False Positives

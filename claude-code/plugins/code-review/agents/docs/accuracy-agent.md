@@ -36,11 +36,9 @@ Thresholds: Critical=would cause code to fail/wrong results; Major=significant c
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Accuracy"
-    documented_value: "What the documentation claims"
-    actual_value: "What the code actually does"
-    code_location: "Path to the actual implementation"
+documented_value: "What the documentation claims"
+actual_value: "What the code actually does"
+code_location: "Path to the actual implementation"
 ```
 
 ## False Positives

@@ -33,11 +33,9 @@ Thresholds: Critical=breaking change without migration path; Major=breaking chan
 
 Extra fields:
 ```yaml
-issues:
-  - category: "API Contracts"
-    breaking: true  # or false
-    consumers_affected: "Who/what is affected"
-    migration: "Required migration steps, if applicable"
+breaking: true  # or false
+consumers_affected: "Who/what is affected"
+migration: "Required migration steps, if applicable"
 ```
 
 ## False Positives

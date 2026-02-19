@@ -27,11 +27,9 @@ Thresholds: Critical=outages/degradation at normal scale; Major=significant impa
 
 Extra fields:
 ```yaml
-issues:
-  - category: "Performance"
-    complexity: "Time/space complexity (e.g., O(n²))"
-    scale: "At what data size this becomes a problem"
-    impact: "Expected performance degradation"
+complexity: "Time/space complexity (e.g., O(n²))"
+scale: "At what data size this becomes a problem"
+impact: "Expected performance degradation"
 ```
 
 ## False Positives
