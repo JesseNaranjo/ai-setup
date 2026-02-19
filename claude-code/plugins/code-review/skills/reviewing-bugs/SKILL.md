@@ -13,11 +13,11 @@ Adds bug investigation mode, reproduction conditions framework, bug-specific FP 
 
 ## Bug Investigation Mode
 
-When investigating specific bugs:
-- Ask for reproduction steps or stack trace
-- Focus on code paths mentioned in error
-- Include related error handling code
+When reviewing code for bugs:
+- Check related error handling code
 - Read recent git commits touching affected files
+- Use Grep to trace data flow through suspicious paths
+- Verify boundary conditions in loops, array access, and arithmetic
 
 ## False Positives
 
