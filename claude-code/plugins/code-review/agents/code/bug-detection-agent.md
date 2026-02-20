@@ -12,8 +12,7 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-- Null dereference, type coercion errors, logical errors (always-true/false, off-by-one)
-- Missing input validation, unchecked return values, incorrect error path handling
+- Type coercion errors, unchecked return values
 
 **gaps:**
 - Boundary condition failures (empty arrays, zero values, max values)

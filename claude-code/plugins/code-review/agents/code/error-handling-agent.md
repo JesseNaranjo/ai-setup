@@ -25,10 +25,6 @@ skills: ["code-review:agent-review-instructions"]
 - Resources not cleaned up (no finally/using/defer)
 - Errors that would crash the application
 
-### Step 2: Analyze Error Flows
-
-Identify all fail-prone operations, trace error handling paths, check cleanup and recovery, verify proper error propagation.
-
 ## Output
 
 Category: "Error Handling". Describe: the issue, what can go wrong, impact.

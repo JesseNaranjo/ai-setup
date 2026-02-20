@@ -8,7 +8,7 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 ### Security {#security}
 
-- XSS via dangerouslySetInnerHTML, href javascript: injection
+- href javascript: injection
 - Insecure iframe — missing sandbox on user-controlled iframes
 
 ### Performance {#performance}

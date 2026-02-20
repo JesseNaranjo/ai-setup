@@ -268,7 +268,7 @@ When modifying the plugin:
 ### Agent Checklist Compression
 
 Model-aware compression:
-- **Opus agents**: No analysis steps (Step 2+). `## MODE Checklists` with high-level triggers (1-3 lines for thorough). `## Output` merges description + thresholds + YAML fields. "Claude is already smart" — only add domain context Claude doesn't already have.
+- **Opus agents**: No analysis steps (Step 2+). `## MODE Checklists` with high-level triggers (1-3 lines for thorough). `## Output` merges description + thresholds + YAML fields. "Claude is already smart" — only add domain context Claude doesn't already have. Thorough items must NOT repeat the agent's `description` field — the description defines the domain; thorough adds only calibration thresholds, specific scope steering, or scope the description doesn't cover. If thorough would merely restate the description, omit it.
 - **Sonnet agents**: Keep `## Review Process` with methodology steps. `## Output` merges description + thresholds + YAML fields (no separate Report step or Output Schema section).
 - **All agents**: Preserve gaps/quick mode items, severity thresholds, category-specific YAML fields verbatim. MODE differentiation (thorough/gaps/quick sections) intact. MODE labels: `**thorough:**` not `**thorough mode - Focus on:**`.
 

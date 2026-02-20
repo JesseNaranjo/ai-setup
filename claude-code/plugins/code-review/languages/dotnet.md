@@ -10,11 +10,9 @@
 
 ### Security {#security}
 
-- Insecure deserialization — untrusted data without type validation
 - Hardcoded connection strings, missing `[Authorize]`
 - XXE — XML parsing without disabling external entities
 - Model over-binding — [Bind]/[FromBody] allowing sensitive property binding
-- JWT without validation parameters
 
 ### Performance {#performance}
 

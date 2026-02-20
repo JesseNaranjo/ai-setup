@@ -18,14 +18,6 @@ skills: ["code-review:agent-review-instructions"]
 - Backward compatibility (new required params without defaults, changed response/error formats)
 - Schema changes affecting consumers (database, API response, configuration)
 
-### Step 2: Analyze API Surface
-
-Identify public API boundaries (exports, endpoints, interfaces), compare against existing contracts, check downstream impact, verify versioning.
-
-### Step 3: Check Contract Consistency
-
-For each API change: backward compatible? Migration path? Properly versioned? Deprecation warnings for removed features?
-
 ## Output
 
 Category: "API Contracts". Describe: the API change, consumer impact, migration path (if any).

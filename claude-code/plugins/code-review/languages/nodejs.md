@@ -11,9 +11,6 @@
 ### Security {#security}
 
 - Prototype pollution — Object.assign/recursive merge with user input
-- ReDoS — catastrophic backtracking regexes
-- JWT — missing signature verification, weak algorithms, improper storage
-- SSRF — user input in fetch/axios URLs without allowlist
 - Missing helmet, missing rate limiting
 
 ### Architecture {#architecture}

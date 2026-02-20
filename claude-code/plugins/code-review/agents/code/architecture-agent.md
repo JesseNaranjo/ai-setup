@@ -12,8 +12,7 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-- DRY: duplicated blocks >10 lines/>80% similarity, repeated config values, similar utilities across modules
-- File organization: fragmentation, scattered types, single-use helpers not colocated
+- DRY thresholds: >10 lines/>80% similarity
 
 ## Output
 

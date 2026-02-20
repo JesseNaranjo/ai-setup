@@ -16,7 +16,7 @@ skills: ["code-review:agent-review-instructions"]
 **thorough:**
 - Heading hierarchy (skipped levels, single H1), broken links (internal/external/anchors)
 - Navigation: missing cross-refs, orphaned docs, circular paths, ToC mismatches
-- **AI instruction file standardization** (see Step 5)
+- **AI instruction file standardization** (see Step 3)
 
 **quick:**
 - Broken links (404s, missing files)
@@ -24,21 +24,13 @@ skills: ["code-review:agent-review-instructions"]
 - Missing navigation to critical content
 - AI instruction file location errors
 
-### Step 2: Heading Hierarchy Analysis
-
-Check: single H1 per document, no skipped levels (H1 → H2 → H3), logical parent-child semantics, consistent depth for similar sections.
-
-### Step 3: Link Verification
+### Step 2: Link Verification
 
 Use Grep to find internal links. For each: verify target file exists, verify anchor (if `#section`), check path style consistency. In thorough mode, also flag outdated external domains.
 
 Also verify image/media references: `![alt](path)`, `<img src="...">`. Check referenced files exist. Flag missing alt text as Minor.
 
-### Step 4: Navigation Analysis
-
-Check discoverability: all content reachable from entry points, related docs cross-linked, clear learning path for sequential content.
-
-### Step 5: AI Instruction File Standardization
+### Step 3: AI Instruction File Standardization
 
 **CRITICAL**: Check for AI agent instruction file compliance.
 

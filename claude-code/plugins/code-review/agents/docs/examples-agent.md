@@ -12,8 +12,7 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-- Code example correctness: syntax, imports, language tags, signatures, deprecated APIs, completeness
-- Examples contradicting prose, incorrect output comments, non-existent resource references
+- Language tags, signatures, completeness, incorrect output comments, non-existent resource references
 
 **quick:**
 - Obvious syntax errors

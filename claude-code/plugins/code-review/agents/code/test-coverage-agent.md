@@ -30,10 +30,6 @@ For each changed file:
 3. Identify untested code paths
 4. Note edge cases needing tests
 
-### Step 3: Generate Test Recommendations
-
-For each gap: what to test, expected behavior, suggested test file location, test case outline.
-
 ## Output
 
 Category: "Test Coverage". Describe: untested code, why it needs tests, risk of not testing.
