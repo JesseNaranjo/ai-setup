@@ -26,9 +26,7 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 2: Link Verification
 
-Use Grep to find internal links. For each: verify target file exists, verify anchor (if `#section`), check path style consistency. In thorough mode, also flag outdated external domains.
-
-Also verify image/media references: `![alt](path)`, `<img src="...">`. Check referenced files exist. Flag missing alt text as Minor.
+Use Grep to find internal links; verify targets and anchors exist, check path consistency. Verify image/media references exist; flag missing alt text as Minor.
 
 ### Step 3: AI Instruction File Standardization
 

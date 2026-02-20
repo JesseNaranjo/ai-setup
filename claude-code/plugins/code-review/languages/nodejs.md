@@ -16,12 +16,10 @@
 ### Architecture {#architecture}
 
 - Barrel file abuse — re-exports causing bundle bloat
-- `any` abuse, incorrect type assertions, missing generics
 - Missing noImplicitAny, noUncheckedIndexedAccess, strictNullChecks in tsconfig
 
 ### Technical Debt {#debt}
 
-- Deprecated deps — npm deprecation warnings, major version 2+ behind
 - Legacy bundler — Webpack 4, Gulp/Grunt in modern projects
 - Monolithic modules — 1000+ lines or 50+ exports
 
@@ -34,7 +32,6 @@ Apply when framework detected by context-discovery.
 - Missing error middleware — no app.use((err, req, res, next)) handler
 - Route param injection — req.params in SQL/shell without validation
 - Trust proxy misconfiguration
-- Body parser limits — express.json() without size limits
 
 ### NestJS
 

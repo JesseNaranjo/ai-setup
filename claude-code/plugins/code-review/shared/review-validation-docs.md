@@ -87,8 +87,6 @@ Issues matching these patterns skip validation entirely and are marked `auto_val
 
 **Issues:** (1) Summary table: Categories x severity (Critical|Major|Minor|Suggestions) + Total row, reviewed categories only (6 deep, 4 quick). (2) Severity sections: `### Critical Issues (Must Fix)`, `### Major Issues (Should Fix)`, `### Minor Issues`, `### Suggestions` — only if issues exist. (3) Cross-Cutting Insights. (4) Test Recommendations. (5) Footer.
 
-**Cross-Cutting Insights:** Omit if none. Format: `**[N]. [Title]** \`[Severity]\` \`[Primary Category] + [Secondary Category]\``, backtick `file:line`, description referencing related findings, then fix (diff/prompt).
-
-**Issue Entry:** `**[N]. [Title]** \`[Severity]\` \`[Category]\`` + optional badge (`[2 agents]`/`[3+ agents]`), backtick `file:line`, description, `**Fix**:` with diff or prompt.
+**Issue Entry:** `**[N]. [Title]** \`[Severity]\` \`[Category]\`` + optional badge (`[2 agents]`/`[3+ agents]`), backtick `file:line`, description, `**Fix**:` with diff or prompt. **Cross-cutting insights:** same format but `\`[Primary Category] + [Secondary Category]\`` instead of single category; omit section if none.
 
 **Fix Formats:** One per unique issue. **Diff** (fix_type: diff): single-location, ≤10 lines, complete drop-in (no `...`), standard diff block with `-`/`+`. **Prompt** (fix_type: prompt): multi-location/structural. Label `**Fix prompt** (copy to Claude Code):` then blockquote with action verb, files, numbered changes.

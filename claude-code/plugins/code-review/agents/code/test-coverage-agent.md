@@ -22,14 +22,6 @@ skills: ["code-review:agent-review-instructions"]
 - Critical paths (auth, payment, data mutation) without tests
 - Modified functions with no updated tests
 
-### Step 2: Analyze Test Gaps
-
-For each changed file:
-1. Identify public functions/methods/exports
-2. Map to existing test coverage (use related_tests from orchestrator context)
-3. Identify untested code paths
-4. Note edge cases needing tests
-
 ## Output
 
 Category: "Test Coverage". Describe: untested code, why it needs tests, risk of not testing.

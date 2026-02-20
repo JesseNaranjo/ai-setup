@@ -26,13 +26,9 @@ skills: ["code-review:agent-review-instructions"]
 - Subtle punctuation differences, whitespace and indentation variations
 - Duplicate detection: skip terminology pairs already flagged; skip formatting categories already addressed
 
-### Step 2: Build Terminology Map
+### Step 2: Terminology, Formatting, and Voice Analysis
 
-Scan docs for term variants (e.g., "config" vs "configuration" vs "settings", product names, API capitalization). Track first usage as canonical form.
-
-### Step 3: Formatting and Voice Analysis
-
-Use Grep to check formatting consistency: headings (capitalization, punctuation), code blocks (language tags, indentation), lists (bullet style, punctuation). Check voice: person (you/we/passive), formality (contractions), tense, imperative vs descriptive.
+Scan for term variants (e.g., "config" vs "configuration" vs "settings"); track first usage as canonical. Use Grep to check formatting consistency (headings, code blocks, lists). Check voice: person (you/we/passive), formality, tense.
 
 ## Output
 

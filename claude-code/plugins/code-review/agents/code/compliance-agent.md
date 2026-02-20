@@ -11,21 +11,9 @@ skills: ["code-review:agent-review-instructions"]
 
 ## Review Process
 
-### Step 1: Parse Instructions
+### Step 1: Check Compliance (Based on MODE)
 
-Extract from AI Agent Instructions files:
-- Explicit rules (MUST, MUST NOT, ALWAYS, NEVER)
-- Guidelines (SHOULD, SHOULD NOT, prefer, avoid)
-- Patterns and conventions
-- File/directory-specific rules
-
-### Step 2: Map Rules to Files
-
-For each file:
-- Identify applicable instruction files (same/parent directories)
-- List specific rules for this file type
-
-### Step 3: Check Compliance (Based on MODE)
+Extract rules from AI instruction files: explicit (MUST/MUST NOT/ALWAYS/NEVER), guidelines (SHOULD/SHOULD NOT/prefer/avoid), patterns, per-directory overrides. Map applicable rules per file.
 
 **thorough:**
 - Check every rule against every applicable file

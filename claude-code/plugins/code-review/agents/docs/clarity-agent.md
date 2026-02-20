@@ -25,13 +25,9 @@ skills: ["code-review:agent-review-instructions"]
 - Obvious ambiguities that could cause errors
 - Missing prerequisites that would block users
 
-### Step 2: Audience Assessment
+### Step 2: Audience and Readability Analysis
 
-Determine target audience (beginner/intermediate/expert). Flag mismatches: beginner docs with unexplained advanced concepts, expert docs over-explaining fundamentals (less critical).
-
-### Step 3: Readability Analysis
-
-Check sentence complexity (>40 words without structure, >3 nested clauses), jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed, examples follow abstract explanations).
+Determine target audience (beginner/intermediate/expert); flag mismatches. Check sentence complexity (>40 words, >3 nested clauses), jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed).
 
 ## Output
 

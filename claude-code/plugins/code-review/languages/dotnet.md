@@ -19,14 +19,6 @@
 - Missing AsNoTracking for read-only queries
 - ToList() before filter — materializing before Where()
 
-### Architecture {#architecture}
-
-- DI anti-patterns — service locator, captive dependencies, improper scoping
-
-### Error Handling {#errors}
-
-- Unawaited tasks, fire-and-forget without error handling
-
 ### Technical Debt {#debt}
 
 - Pre-.NET 6 patterns — `WebClient`, sync-over-async, old configuration
