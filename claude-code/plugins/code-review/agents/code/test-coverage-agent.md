@@ -19,6 +19,7 @@ permissionMode: dontAsk
 - Test quality (no assertions, testing implementation details, always-pass tests), integration gaps
 - Modified logic invalidating existing tests, missing negative/async/concurrent tests
 - Happy-path-only: functions with branches/error paths but only positive test cases. Mock sprawl: tests mocking >5 deps indicate architecture smell
+- Truthy-only assertions: test assertions checking only `toBeTruthy()`/`Assert.NotNull()` without verifying actual behavior — passes on any non-null return
 
 **quick:**
 - New public functions/methods without any tests

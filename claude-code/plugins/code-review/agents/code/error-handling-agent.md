@@ -20,6 +20,7 @@ permissionMode: dontAsk
 - Info leakage in error messages, recovery leaving inconsistent state
 - Retry/circuit breaker gaps for transient failures. Retry candidates: external HTTP, DB connections, message queue publishes (not local file reads or in-memory ops)
 - Observability gaps: missing structured logging on error paths, missing correlation/request IDs in error context, catch blocks that log nothing or log unstructured strings
+- Defensive overkill: nested try-catch where inner re-throws same type caught by outer, or catch blocks that only log + re-throw identical error (double-logging)
 
 **quick:**
 - Empty catch blocks

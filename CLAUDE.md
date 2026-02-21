@@ -131,9 +131,9 @@ Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory
 
 **Agent body structure (two formats):**
 
-- **Opus agents** (architecture, bug-detection, performance, security, technical-debt, accuracy, completeness, examples): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
-- **Sonnet agents** (api-contracts, compliance, error-handling, test-coverage, clarity, consistency, structure): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance.
-- **Synthesis agents** (synthesis-code, synthesis-docs): Domain-specific body only (Category Key Mapping, Step 2 interaction patterns, example YAML). Shared process loaded via `code-review:synthesis-instructions` skill.
+- **Opus agents** (architecture, bug-detection, performance, security, accuracy, completeness, examples): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
+- **Sonnet agents** (api-contracts, compliance, error-handling, technical-debt, test-coverage, clarity, consistency, structure): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance.
+- **Synthesis agents** (synthesis-code, synthesis-docs): `model: opus`. Domain-specific body only (Category Key Mapping, Step 2 interaction patterns, example YAML). Shared process loaded via `code-review:synthesis-instructions` skill.
 
 **MODE labels:** `**thorough:**`, `**gaps:**`, `**quick:**` (no suffixes like "mode - Focus on:").
 
@@ -141,9 +141,9 @@ Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory
 
 ### Deep Review Pipeline
 
-1. **Phase 1** (9 agents parallel): Thorough mode review (5 Opus, 4 Sonnet)
+1. **Phase 1** (9 agents parallel): Thorough mode review (4 Opus, 5 Sonnet)
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
-3. **Synthesis** (up to 5 agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
+3. **Synthesis** (up to 5 Opus agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
 4. **Validation**: All issues validated before output
 
 ### Agent Content Distribution

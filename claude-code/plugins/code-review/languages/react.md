@@ -6,13 +6,6 @@ Node.js patterns plus: `*.test.tsx`, `@testing-library/react` files, `render()` 
 
 IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` for base checks.
 
-### Accessibility {#bugs}
-
-- Missing alt text on `<img>`, missing aria-label on icon-only buttons
-- Non-semantic interactive elements: `<div onClick>` without role="button" and keyboard handlers
-- Missing form labels: `<input>` without associated `<label>` or aria-label
-- Focus management: modal/dialog opens without focus trap, route changes without focus reset
-
 ### Architecture {#architecture}
 
 - Hooks doing too much — 100+ lines, multiple concerns
@@ -23,6 +16,10 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 - key={index} on lists that reorder/filter (stale state preservation)
 - useEffect cleanup missing for subscriptions/timers/event listeners
 - Incorrect dependency array — missing deps causing stale closure
+- Missing alt text on `<img>`, missing aria-label on icon-only buttons
+- Non-semantic interactive elements: `<div onClick>` without role="button" and keyboard handlers
+- Missing form labels: `<input>` without associated `<label>` or aria-label
+- Focus management: modal/dialog opens without focus trap, route changes without focus reset
 
 ### Performance {#performance}
 
@@ -61,6 +58,10 @@ Apply when `next` in dependencies.
 
 - Unnecessary 'use client' on component with no hooks/events
 - Missing Suspense for async server components (no loading.tsx)
+- Importing client-only libraries (useState, useEffect, browser APIs) in files without 'use client' — runtime error not caught at build
+- Non-serializable props (functions, class instances, Dates) from Server to Client components — silent serialization failure
+- fetch() in Server Components: cache default changed between Next 14 (force-cache) and 15 (no-store) — verify explicit revalidate option
+- Server Actions ('use server') returning sensitive data — return values serialized to client, visible in network tab
 
 ### API Routes
 

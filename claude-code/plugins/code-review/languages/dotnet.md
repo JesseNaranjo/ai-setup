@@ -13,6 +13,7 @@
 
 - Lazy loading disconnected — navigation property after context disposed
 - IAsyncDisposable for .NET 8+ async resources (not just IDisposable)
+- `[AsParameters]` (.NET 8) binds all public properties including unintended ones (Id, CreatedBy, IsAdmin) — same over-binding risk as `[FromBody]`
 
 ### Error Handling {#errors}
 
@@ -25,6 +26,9 @@
 - Missing AsNoTracking for read-only queries
 - ToList() before filter — materializing before Where()
 - Unbounded DbContext lifetime: use AddDbContextPool for high-throughput
+- `FrozenDictionary<K,V>`/`FrozenSet<T>` (.NET 8): static readonly `Dictionary`/`HashSet` fields should use Frozen variants (3-10x read perf)
+- `SearchValues<char>` (.NET 8): `IndexOfAny(new char[]{...})` with static char sets should use `SearchValues.Create()` for SIMD acceleration
+- `ConfigureAwaitOptions.SuppressThrowing` (.NET 8): replaces `try { await task; } catch { }` for fire-and-forget
 
 ### Security {#security}
 
@@ -32,12 +36,17 @@
 - XXE — XML parsing without disabling external entities
 - Model over-binding — [Bind]/[FromBody] allowing sensitive property binding
 - Missing [ValidateAntiForgeryToken] on POST/PUT/DELETE (or RequireAntiforgery() for Minimal API)
+- `[FromKeyedServices]` (.NET 8): keyed DI with string keys derived from user input allows service substitution
+- NuGet source confusion: `nuget.config` with both internal feed and nuget.org without `<packageSourceMapping>` (.NET 6+). Severity: Critical
 
 ### Technical Debt {#debt}
 
 - Pre-.NET 6 patterns — `WebClient`, sync-over-async, old configuration
 - Legacy serialization — `BinaryFormatter`, non-JSON serialization
 - Missing `#nullable enable`
+- Primary constructors (.NET 8/C# 12): classes with single constructor + field assignment should use primary constructor syntax
+- `TimeProvider` (.NET 8): direct `DateTime.Now`/`DateTimeOffset.Now` in injectable services — use `TimeProvider.System` for testability
+- `IExceptionHandler` (.NET 8): replaces `UseExceptionHandler` inline lambda pattern
 
 ### Test Coverage {#tests}
 

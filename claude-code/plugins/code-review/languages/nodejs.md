@@ -13,6 +13,8 @@
 
 - Timezone-naive Date operations in server code
 - require() in ESM without createRequire (Node 14+)
+- `structuredClone()` silently drops functions, Symbols, WeakMap/WeakRef entries — objects with callback properties lose them without error
+- `Date.parse()` format asymmetry: `new Date('2024-01-01')` = UTC, `new Date('01/01/2024')` = local time
 
 ### Error Handling {#errors}
 
@@ -23,12 +25,16 @@
 ### Performance {#performance}
 
 - Synchronous crypto (crypto.pbkdf2Sync) blocking event loop
+- `fetch()` without `AbortSignal.timeout(ms)` in server code — Node.js undici has no default timeout, waits indefinitely
 
 ### Security {#security}
 
 - Prototype pollution — Object.assign/recursive merge with user input
 - Missing helmet, missing rate limiting
 - eval()/Function()/vm.runInContext() with user input
+- `dotenv` loads first occurrence of duplicate keys — attacker prepending to `.env` overrides all values
+- postinstall scripts: new dependencies with `scripts.postinstall` execute arbitrary code at install. Flag unfamiliar packages with postinstall
+- Missing `ignore-scripts=true` in `.npmrc` for CI environments
 
 ### Technical Debt {#debt}
 
@@ -59,3 +65,9 @@ Apply when framework detected by context-discovery.
 - Circular module imports — ModuleRef required due to circular DI
 - Missing guards on controllers
 - Missing validation pipe on DTOs (no class-validator decorators)
+
+### Vite
+
+- `import.meta.env` variables: only `VITE_` prefixed vars exposed to client. Non-prefixed silently resolve to `undefined`
+- `import.meta.glob()` default eager:false returns `() => Promise<Module>`, not Module — accessing .default without await returns undefined
+- CJS dependencies without `optimizeDeps.include` cause runtime loading errors in dev (Vite pre-bundles on first access)

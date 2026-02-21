@@ -2,7 +2,7 @@
 name: synthesis-code-agent
 description: "Cross-cutting analysis specialist. Use after other code review agents complete to detect ripple effects, cross-category concerns, and issues spanning multiple domains."
 color: white
-model: sonnet
+model: opus
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:synthesis-instructions"]
 maxTurns: 5

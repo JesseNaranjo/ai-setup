@@ -16,6 +16,7 @@ permissionMode: dontAsk
 **thorough:**
 - DRY thresholds: >10 lines/>80% similarity
 - SRP thresholds: >500 lines or >15 methods per class, >5 unrelated domain imports. Coupling: fan-out >10 direct deps
+- AI over-abstraction: factory/strategy/observer wrapping single implementation with no extension plan. Flag when 3+ files/classes exist for behavior achievable in 1 (distinct from YAGNI — this flags structural complexity, not unused generics)
 
 ## Output
 

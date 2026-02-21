@@ -51,3 +51,19 @@ Required: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame
 | A08 | `deserialize(`, `pickle.loads(`, `unserialize(`, unsigned data |
 | A09 | Missing `log.`, sensitive data in logs, no audit trail |
 | A10 | `fetch(userInput)`, `request(url)`, `curl`, internal IPs |
+
+## Supply Chain: Typosquatting
+
+Known typosquat patterns in npm/NuGet:
+- Extra/missing character: `lodash` → `lodashs`/`loadash`
+- Scope confusion: `@types/react` (real) vs `types-react` (fake)
+- Homoglyph: `c0lors` vs `colors`
+
+Detection: Flag unfamiliar packages (<1000 weekly downloads) with names within edit distance 1 of popular packages.
+
+## CI/CD Pipeline Security
+
+- Unpinned GitHub Actions: `actions/checkout@v3` (mutable tag) → use SHA pinning `actions/checkout@SHA`
+- `${{ github.event.pull_request.title }}` or `${{ github.event.issue.body }}` in `run:` blocks — command injection via PR title/body. Severity: Critical
+- Secrets in workflow-level `env:` block — exposed to all steps including third-party actions (scope to job/step)
+- `pull_request_target` + `actions/checkout` of PR code — runs untrusted PR code with repo secrets. Severity: Critical
