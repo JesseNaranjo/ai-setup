@@ -5,6 +5,52 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0] - 2026-02-21
+
+### Breaking Changes
+
+- Replaced 6 command files with 2 orchestration skills; old commands no longer available
+  - `/deep-code-review [files]` → `/code-review [files] --depth deep`
+  - `/quick-code-review [files]` → `/code-review [files] --depth quick`
+  - `/deep-code-review-staged` → `/code-review --staged --depth deep`
+  - `/quick-code-review-staged` → `/code-review --staged --depth quick`
+  - `/deep-docs-review [files]` → `/docs-review [files] --depth deep`
+  - `/quick-docs-review [files]` → `/docs-review [files] --depth quick`
+- Reorganized agent directory: code agents moved to `agents/code/`, docs agents in `agents/docs/`
+
+### Added
+
+- Docs synthesis agent (`synthesis-docs-agent.md`) for domain-specific documentation review synthesis
+- Internal skills loaded via agent `skills` field: `agent-review-instructions` (MODE, FP rules, output schema) and `synthesis-instructions` (process, output schema)
+- `--depth deep|quick` flag for configuring review depth (replaces separate deep/quick commands)
+- Progressive disclosure: validation content loaded post-review, reducing Opus context ~53% during review phases
+- Auto-validation patterns with language-labeled filtering (`[Node.js]`, `[React]`, `[.NET]`)
+- Model-aware agent architecture: Opus agents (domain context only) vs Sonnet agents (methodology + domain)
+
+### Changed
+
+- Consolidated 6 commands into 2 orchestration skills with `--depth`, `--staged`, `--language`, `--skills`, `--prompt`, and `--output-file` flags
+- Compressed 17 agents ~70% average (e.g., security-agent 143→44 lines, architecture-agent 243→35 lines)
+- Split synthesis agent into `synthesis-code-agent.md` and `synthesis-docs-agent.md`
+- Split validation rules into `review-validation-code.md` and `review-validation-docs.md`
+- Reduced shared files from 25 to 10 with strategic consolidation
+- Streamlined language configs: Node.js -73%, .NET and React compressed
+- Inlined pre-review setup steps into orchestration skills
+- Updated plugin description (7 docs agents, 15 keywords)
+
+### Removed
+
+- `commands/` directory (6 files, 594 lines) — replaced by orchestration skills
+- 15 shared files consolidated into 5 strategic files
+- `pre-review-setup.md`, `staged-processing.md` — inlined into orchestration skills
+- Analysis methodology from Opus agent bodies (retained in Sonnet agents)
+
+### Fixed
+
+- 10 audit findings for code review plugin
+- React anchor collision in language configs
+- Orchestration contract alignment between skills and agents
+
 ## [3.4.2] - 2026-02-01
 
 ### Changed
