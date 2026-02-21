@@ -52,7 +52,9 @@ Required: `Content-Security-Policy`, `X-Content-Type-Options: nosniff`, `X-Frame
 | A09 | Missing `log.`, sensitive data in logs, no audit trail |
 | A10 | `fetch(userInput)`, `request(url)`, `curl`, internal IPs |
 
-## Supply Chain: Typosquatting
+## Supply Chain
+
+### Typosquatting
 
 Known typosquat patterns in npm/NuGet:
 - Extra/missing character: `lodash` → `lodashs`/`loadash`
@@ -60,6 +62,18 @@ Known typosquat patterns in npm/NuGet:
 - Homoglyph: `c0lors` vs `colors`
 
 Detection: Flag unfamiliar packages (<1000 weekly downloads) with names within edit distance 1 of popular packages.
+
+### Lockfile and Dependency Pinning
+
+- Missing lockfile: grep for `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml` — absence allows version drift across environments
+- Unpinned versions in package.json dependencies: `"*"`, `"latest"`, or git URLs without commit SHA — non-reproducible builds
+- .NET: floating NuGet version ranges (`*`, `1.*`) in .csproj; missing `packages.lock.json` with Central Package Management
+
+### Lifecycle Scripts
+
+- npm/yarn: grep for `preinstall`/`postinstall` in `package.json` `scripts` field — executes arbitrary code at install time
+- Flag new dependencies with lifecycle scripts, especially if package has <1000 weekly downloads
+- CI mitigation: `.npmrc` should contain `ignore-scripts=true`; run scripts explicitly after audit
 
 ## CI/CD Pipeline Security
 

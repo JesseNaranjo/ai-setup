@@ -131,8 +131,8 @@ Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory
 
 **Agent body structure (two formats):**
 
-- **Opus agents** (architecture, bug-detection, performance, security, accuracy, completeness, examples): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
-- **Sonnet agents** (api-contracts, compliance, error-handling, technical-debt, test-coverage, clarity, consistency, structure): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance.
+- **Opus agents** (architecture, bug-detection, performance, security, accuracy): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
+- **Sonnet agents** (api-contracts, clarity, completeness, compliance, consistency, error-handling, examples, structure, technical-debt, test-coverage): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance.
 - **Synthesis agents** (synthesis-code, synthesis-docs): `model: opus`. Domain-specific body only (Category Key Mapping, Step 2 interaction patterns, example YAML). Shared process loaded via `code-review:synthesis-instructions` skill.
 
 **MODE labels:** `**thorough:**`, `**gaps:**`, `**quick:**` (no suffixes like "mode - Focus on:").
@@ -150,7 +150,7 @@ Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory
 
 Static agent instructions are self-loaded via the `skills` field: non-synthesis agents load `code-review:agent-review-instructions` (MODE, false positive rules, output schema); synthesis agents load `code-review:synthesis-instructions` (input format, review process, output schema, guidelines). The orchestrator distributes only dynamic content via `additional_instructions`: language-specific checks from `languages/*.md` and LSP diagnostic codes (when LSP is available). Category-specific false positive rules remain in each agent's `## False Positives` section.
 
-Validation, auto-validation, and output format content is in separate files (`review-validation-code.md`, `review-validation-docs.md`), loaded on-demand at Steps 9-12 (post-review). This progressive disclosure keeps validation and output format content out of the Opus context during the expensive Steps 7-8 phase.
+Validation, auto-validation, and output format content is in separate files (`review-validation-code.md`, `review-validation-docs.md`), loaded on-demand at Steps 8-11 (post-review). This progressive disclosure keeps validation and output format content out of the Opus context during the expensive Steps 6-7 phase.
 
 See `shared/review-orchestration-code.md` and `shared/review-orchestration-docs.md` for orchestration details.
 
@@ -254,7 +254,7 @@ When modifying the plugin:
 ### Orchestration Skills & Settings
 - **Orchestration skill arguments**: Edit skill YAML frontmatter in `skills/code-review/SKILL.md` or `skills/docs-review/SKILL.md`
 - **Settings options**: Edit Step 2 in `skills/code-review/SKILL.md` and `skills/docs-review/SKILL.md`, and `templates/code-review.local.md.example`
-- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `skills/code-review/SKILL.md` (Steps 3 & 5, staged section)
+- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `skills/code-review/SKILL.md` (Step 4, staged section)
 
 ## Coding Conventions
 
@@ -338,14 +338,14 @@ This applies to:
 **Rationale:** Consistency across orchestration skill and Sonnet agent workflows.
 
 **Step layout in orchestration skills:**
-- Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills) - inlined in each skill
-- Steps 3, 5: Input validation, content gathering - skill-specific
-- Steps 7-8: Review execution, synthesis - references to orchestration files
-- Steps 9-12: Post-review (validation, aggregation, output, write) - compressed inline
+- Steps 1-3, 5: Pre-review setup (methodology, settings, context, skills) - inlined in each skill
+- Step 4: Input validation, content gathering - skill-specific
+- Steps 6-7: Review execution, synthesis - references to orchestration files
+- Steps 8-11: Post-review (validation, aggregation, output, write) - compressed inline
 
 ### Orchestration Skill Step Inlining
 
-Each orchestration skill inlines its pre-review setup steps (Steps 1-6) directly, including settings loading and context discovery (formerly `pre-review-setup.md`). The code review skill also inlines staged processing (formerly `staged-processing.md`). Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline.
+Each orchestration skill inlines its pre-review setup steps (Steps 1-5) directly, including settings loading and context discovery (formerly `pre-review-setup.md`). The code review skill also inlines staged processing (formerly `staged-processing.md`). Steps 6-7 reference orchestration files for review execution and synthesis. Steps 8-11 are compressed inline.
 
 **Rationale:** A shared `skill-common-steps.md` was tried but created a second level of indirection (skills → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps orchestration skills self-contained with one-hop references to shared files.
 
@@ -397,7 +397,7 @@ See `references/common-vulnerabilities.md` for vulnerability patterns.
 - **Reference integrity**: When moving content between files, `grep -r "section name"` before AND after to catch all references (commands, skills, shared files).
 - **Content category violations**: Before adding content to `shared/` or `shared/references/`, ask "who consumes this?" If the answer is "Claude Code when modifying the plugin," it belongs in CLAUDE.md, not runtime directories.
 - **Synthesis constraint**: Synthesis insights require findings in BOTH input categories. Single-category insights are rejected at validation.
-- **Validation progressive disclosure**: Orchestration files (`review-orchestration-*.md`) cross-reference validation files (`review-validation-*.md`). Do not re-merge them — the split reduces Opus context by ~53% during Steps 7-8.
+- **Validation progressive disclosure**: Orchestration files (`review-orchestration-*.md`) cross-reference validation files (`review-validation-*.md`). Do not re-merge them — the split reduces Opus context by ~53% during Steps 6-7.
 
 ### Auto-Validation Pattern Design Notes
 

@@ -58,6 +58,8 @@ Apply unlabeled patterns to all languages. Apply [Node.js]/[React] patterns only
 - `missing_await` [Bugs/Major]: Async function call without await — `(?:const\|let\|var)\s+\w+\s*=\s*(?!await)[^;]*\basync\s+\w+\(`
 - `null_dereference` [Bugs/Major]: Null access after optional chain or guard — `(?:\?\.\s*\w+\s*\(\)\s*\.)\|(?:\w+\s*&&\s*\w+\.\w+\s*\?\s*\w+\.\w+\.\w+)`
 - `stale_useeffect_closure` [Bugs/Major] [React]: useEffect referencing state/props not in dependency array — `useEffect\s*\(\s*\(\)\s*=>\s*\{[^}]*\b(?:set\w+|dispatch)\b[^}]*\},\s*\[\s*\]\s*\)`
+- `async_void_non_handler` [Bugs/Major] [.NET]: async void method outside event handler — `async\s+void\s+(?!.*EventHandler)(?!.*_Click)(?!.*_Load)`
+- `sync_over_async` [Bugs/Major] [.NET]: Task.Result or Task.Wait blocking in async context — `\.Result\b|\.Wait\(\)`
 
 ### Compliance
 

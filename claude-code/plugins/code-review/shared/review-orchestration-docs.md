@@ -54,7 +54,7 @@ Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarit
 
 ## Model Selection
 
-Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick Opus exceptions: accuracy, examples.
+Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick Opus exceptions: accuracy.
 
 ## Synthesis Invocation
 

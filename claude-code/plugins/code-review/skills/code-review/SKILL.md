@@ -32,7 +32,7 @@ Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend
 
 Markdown body → "Project-Specific Instructions" for all agents. `--prompt` appends. Precedence: CLI flags > settings file > defaults.
 
-## Step 4: Context Discovery
+## Step 3: Context Discovery
 
 ### AI Instructions
 
@@ -63,7 +63,7 @@ Only load `languages/*.md` for detected languages. Unknown: warn, skip.
 
 ---
 
-## Steps 3 & 5: Input Validation and Content Gathering
+## Step 4: Input Validation and Content Gathering
 
 **If `--staged`:**
 
@@ -107,13 +107,13 @@ Launch Sonnet agent to gather content:
 
 ---
 
-## Step 6: Skill Loading
+## Step 5: Skill Loading
 
 Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md`.
 
 ---
 
-## Step 7: Review Execution
+## Step 6: Review Execution
 
 **If depth == deep:**
 Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. Follow all CRITICAL WAIT barriers between phases.
@@ -121,17 +121,17 @@ Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/rev
 **If depth == quick:**
 Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. Follow all CRITICAL WAIT barriers.
 
-**If `--staged`:** Agents receive staged diff and file content per tier classification above (Steps 3 & 5).
+**If `--staged`:** Agents receive staged diff and file content per tier classification above (Step 4).
 
 ---
 
-## Step 8: Cross-Agent Synthesis
+## Step 7: Cross-Agent Synthesis
 
 Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`.
 
 ---
 
-## Steps 9-12: Validation, Aggregation, Output
+## Steps 8-11: Validation, Aggregation, Output
 
 Validate, aggregate, and generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`. Write to file.
 

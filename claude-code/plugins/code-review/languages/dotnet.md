@@ -14,6 +14,8 @@
 - Lazy loading disconnected — navigation property after context disposed
 - IAsyncDisposable for .NET 8+ async resources (not just IDisposable)
 - `[AsParameters]` (.NET 8) binds all public properties including unintended ones (Id, CreatedBy, IsAdmin) — same over-binding risk as `[FromBody]`
+- async void methods outside event handlers — exceptions crash the process unobserved
+- Task.Result or Task.Wait in async context — synchronous blocking causes thread pool starvation/deadlocks
 
 ### Error Handling {#errors}
 
@@ -29,6 +31,7 @@
 - `FrozenDictionary<K,V>`/`FrozenSet<T>` (.NET 8): static readonly `Dictionary`/`HashSet` fields should use Frozen variants (3-10x read perf)
 - `SearchValues<char>` (.NET 8): `IndexOfAny(new char[]{...})` with static char sets should use `SearchValues.Create()` for SIMD acceleration
 - `ConfigureAwaitOptions.SuppressThrowing` (.NET 8): replaces `try { await task; } catch { }` for fire-and-forget
+- Missing CancellationToken propagation through async call chains — operations continue after caller cancels, wasting resources
 
 ### Security {#security}
 
@@ -38,6 +41,8 @@
 - Missing [ValidateAntiForgeryToken] on POST/PUT/DELETE (or RequireAntiforgery() for Minimal API)
 - `[FromKeyedServices]` (.NET 8): keyed DI with string keys derived from user input allows service substitution
 - NuGet source confusion: `nuget.config` with both internal feed and nuget.org without `<packageSourceMapping>` (.NET 6+). Severity: Critical
+- Missing packages.lock.json when using Central Package Management — non-reproducible builds
+- Floating NuGet version ranges (`*`, `1.*`) in .csproj — allows unintended upgrades
 
 ### Technical Debt {#debt}
 

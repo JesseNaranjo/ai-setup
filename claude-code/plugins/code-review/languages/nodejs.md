@@ -15,6 +15,8 @@
 - require() in ESM without createRequire (Node 14+)
 - `structuredClone()` silently drops functions, Symbols, WeakMap/WeakRef entries — objects with callback properties lose them without error
 - `Date.parse()` format asymmetry: `new Date('2024-01-01')` = UTC, `new Date('01/01/2024')` = local time
+- Promise.all without error isolation — single rejection loses all other results (use Promise.allSettled when partial results are acceptable)
+- Async route handler without error forwarding — Express doesn't catch async rejections natively; missing next(err) call or express-async-errors wrapper causes unhandled rejection
 
 ### Error Handling {#errors}
 
@@ -26,6 +28,7 @@
 
 - Synchronous crypto (crypto.pbkdf2Sync) blocking event loop
 - `fetch()` without `AbortSignal.timeout(ms)` in server code — Node.js undici has no default timeout, waits indefinitely
+- Missing AbortController for cancellable fetch/stream operations — abandoned requests hold connections
 
 ### Security {#security}
 
@@ -33,8 +36,10 @@
 - Missing helmet, missing rate limiting
 - eval()/Function()/vm.runInContext() with user input
 - `dotenv` loads first occurrence of duplicate keys — attacker prepending to `.env` overrides all values
-- postinstall scripts: new dependencies with `scripts.postinstall` execute arbitrary code at install. Flag unfamiliar packages with postinstall
+- Lifecycle scripts (preinstall/postinstall): new dependencies with lifecycle scripts execute arbitrary code at install. Flag unfamiliar packages with preinstall or postinstall
 - Missing `ignore-scripts=true` in `.npmrc` for CI environments
+- Missing or uncommitted lockfile (package-lock.json/yarn.lock) — allows dependency version drift
+- Dependencies using `*`, `latest`, or unpinned git URLs — non-reproducible builds
 
 ### Technical Debt {#debt}
 

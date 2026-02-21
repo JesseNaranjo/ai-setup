@@ -21,6 +21,14 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 - Missing form labels: `<input>` without associated `<label>` or aria-label
 - Focus management: modal/dialog opens without focus trap, route changes without focus reset
 
+### Error Handling {#errors}
+
+- Missing Error Boundary wrapping for components with async data fetching or third-party integrations
+- useEffect cleanup missing — subscriptions, timers, event listeners, AbortController for fetch
+- Async errors in event handlers: `onClick={async () => {}}` without try/catch (unhandled rejection, no user feedback)
+- Missing Suspense fallback for React.lazy components — white screen on chunk load failure
+- Error state not reset on navigation — stale error UI persists across route changes
+
 ### Performance {#performance}
 
 - Large lists without virtualization (1000+ items)
@@ -31,6 +39,15 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 - href javascript: injection
 - Insecure iframe — missing sandbox on user-controlled iframes
+
+### Technical Debt {#debt}
+
+- Class components with no state or lifecycle justifying class form — convert to function
+- Deprecated lifecycle methods: componentWillMount, componentWillReceiveProps, componentWillUpdate (use alternatives since React 16.3)
+- Legacy context API (contextTypes/childContextTypes) — migrate to createContext/useContext
+- String refs (`ref="myRef"`) — migrate to useRef/createRef
+- defaultProps on function components (deprecated React 18.3+) — use default parameter values
+- PropTypes runtime validation in TypeScript projects — remove in favor of static types
 
 ### Test Coverage {#tests}
 

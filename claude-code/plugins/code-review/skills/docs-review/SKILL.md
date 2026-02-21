@@ -29,7 +29,7 @@ Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend
 
 Markdown body → "Project-Specific Instructions" for all agents. `--prompt` appends. Precedence: CLI flags > settings file > defaults.
 
-## Step 4: Context Discovery
+## Step 3: Context Discovery
 
 ### AI Instructions
 
@@ -43,7 +43,7 @@ ai_instructions: [{path, applies_to}]
 
 ---
 
-## Steps 3 & 5: Input Validation and Content Gathering
+## Step 4: Input Validation and Content Gathering
 
 ### Input Validation
 
@@ -91,13 +91,13 @@ Launch Sonnet agent to gather documentation content and code references.
 
 ---
 
-## Step 6: Skill Loading
+## Step 5: Skill Loading
 
 Skip if `--skills` not provided. Otherwise see `${CLAUDE_PLUGIN_ROOT}/shared/skill-handling.md`.
 
 ---
 
-## Step 7: Review Execution
+## Step 6: Review Execution
 
 **If depth == deep:**
 Execute the **Deep Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`. Follow all CRITICAL WAIT barriers between phases.
@@ -107,13 +107,13 @@ Execute the **Quick Docs Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/re
 
 ---
 
-## Step 8: Cross-Agent Synthesis
+## Step 7: Cross-Agent Synthesis
 
 Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-docs.md`.
 
 ---
 
-## Steps 9-12: Validation, Aggregation, Output
+## Steps 8-11: Validation, Aggregation, Output
 
 Validate, aggregate, and generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-docs.md`. Write to file.
 

@@ -2,7 +2,7 @@
 name: completeness-agent
 description: "Documentation completeness specialist. Use for detecting missing sections, undocumented features, incomplete setup instructions, or coverage gaps."
 color: green
-model: opus
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
 maxTurns: 5
@@ -11,13 +11,36 @@ permissionMode: dontAsk
 
 # Completeness Review Agent
 
-## MODE Checklists
+## Review Process
+
+### Step 1: Classify Documentation Type
+
+Determine doc type for each file: README, API reference, tutorial, library docs, changelog, contributing guide, AI instructions. This determines which sections are expected.
+
+### Step 2: Check Required Sections
 
 **thorough:**
-- Missing standard sections per doc type (README, API, library)
-- Undocumented public APIs/exports, CLI commands, config options, env vars
-- Incomplete setup/prerequisites, missing error/troubleshooting docs, missing migration guides
-- README required sections: Title, Install, Quick Start, Config, API/CLI, Contributing, License. API docs: all params with types, all response codes, at least one example
+
+Per doc type, grep for expected section headings and content:
+- **README**: Title, Install/Getting Started, Quick Start/Usage, Configuration, API/CLI Reference, Contributing, License. Missing any = Major.
+- **API docs**: All public endpoints/methods with parameters (types included), all response/return codes, at least one usage example per endpoint. Missing params/types = Major; missing examples = Minor.
+- **Library docs**: All exported functions/classes, constructor parameters, method signatures, configuration options.
+
+Use Grep to find public exports in code (`export`, `module.exports`, `public class/interface`) and cross-reference against documentation coverage.
+
+### Step 3: Check Undocumented Features
+
+**thorough:**
+
+- Grep for `process.env`, CLI flag parsing (`commander`, `yargs`, `minimist`, `System.CommandLine`), config file loading — cross-reference against documented options
+- Check for env vars, CLI commands, config keys mentioned in code but absent from docs
+- Verify setup prerequisites are complete: runtime versions, required services, env vars to set
+
+### Step 4: Check Coverage Gaps
+
+**thorough:**
+- Missing error/troubleshooting docs, missing migration guides for breaking changes
+- Incomplete setup/prerequisites — required tools, services, or configuration not listed
 
 **gaps:**
 - Undocumented edge cases and limitations

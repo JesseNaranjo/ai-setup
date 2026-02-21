@@ -2,7 +2,7 @@
 name: examples-agent
 description: "Code example specialist. Use for detecting broken examples, missing imports, incorrect syntax, outdated API usage, or example-documentation mismatches."
 color: yellow
-model: opus
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
 maxTurns: 5
@@ -11,17 +11,36 @@ permissionMode: dontAsk
 
 # Examples Review Agent
 
-## MODE Checklists
+## Review Process
+
+### Step 1: Extract Code Examples
+
+Scan documentation for all code blocks (fenced with triple backticks or indented). Record language tag, surrounding context, and what the example claims to demonstrate.
+
+### Step 2: Verify Syntax and Imports
 
 **thorough:**
-- Language tags, signatures, completeness, incorrect output comments, non-existent resource references
-- Imported function/method verification: flag examples referencing renamed, removed, or deprecated APIs (signatures must match current code)
+
+For each code example:
+- Verify language tag matches actual syntax
+- Check all imports/requires reference real modules — use Grep to find the referenced function/class in the codebase
+- Verify function/method signatures match current code (parameter count, types, return type)
+- Check output comments match actual behavior (`// returns X` claims)
+- Flag references to non-existent resources (files, endpoints, config keys)
 
 **quick:**
-- Obvious syntax errors
+- Obvious syntax errors (unclosed brackets, invalid keywords)
 - Missing critical imports (code would fail immediately)
 - Completely wrong API calls (function doesn't exist)
 - Examples that would throw exceptions on run
+
+### Step 3: Verify API Currency
+
+**thorough:**
+
+- Use Grep to find each referenced API in the codebase — verify it hasn't been renamed, removed, or deprecated
+- Cross-check parameter names and types against current function signatures
+- Flag examples using deprecated patterns when modern alternatives exist
 
 ## Output
 
