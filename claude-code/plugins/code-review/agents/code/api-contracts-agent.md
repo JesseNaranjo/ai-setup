@@ -5,6 +5,8 @@ color: cyan
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
+maxTurns: 5
+permissionMode: dontAsk
 ---
 
 # API & Contracts Review Agent

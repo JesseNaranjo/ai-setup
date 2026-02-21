@@ -6,14 +6,23 @@ Node.js patterns plus: `*.test.tsx`, `@testing-library/react` files, `render()` 
 
 IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` for base checks.
 
+### Accessibility {#bugs}
+
+- Missing alt text on `<img>`, missing aria-label on icon-only buttons
+- Non-semantic interactive elements: `<div onClick>` without role="button" and keyboard handlers
+- Missing form labels: `<input>` without associated `<label>` or aria-label
+- Focus management: modal/dialog opens without focus trap, route changes without focus reset
+
+### Architecture {#architecture}
+
+- Hooks doing too much — 100+ lines, multiple concerns
+- Prop drilling (>3 levels) — needs context or composition
+
 ### Bugs {#bugs}
 
 - key={index} on lists that reorder/filter (stale state preservation)
-
-### Security {#security}
-
-- href javascript: injection
-- Insecure iframe — missing sandbox on user-controlled iframes
+- useEffect cleanup missing for subscriptions/timers/event listeners
+- Incorrect dependency array — missing deps causing stale closure
 
 ### Performance {#performance}
 
@@ -21,21 +30,14 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 - Object creation in useEffect deps without useMemo
 - React.memo wrapping components that receive new object/function props every render (memo useless without stable props)
 
-### Architecture {#architecture}
+### Security {#security}
 
-- Hooks doing too much — 100+ lines, multiple concerns
-- Prop drilling (>3 levels) — needs context or composition
+- href javascript: injection
+- Insecure iframe — missing sandbox on user-controlled iframes
 
 ### Test Coverage {#tests}
 
 - Missing async tests — useEffect fetching without wait/findBy
-
-### Accessibility {#architecture}
-
-- Missing alt text on `<img>`, missing aria-label on icon-only buttons
-- Non-semantic interactive elements: `<div onClick>` without role="button" and keyboard handlers
-- Missing form labels: `<input>` without associated `<label>` or aria-label
-- Focus management: modal/dialog opens without focus trap, route changes without focus reset
 
 ## State Management Checks
 
@@ -63,3 +65,4 @@ Apply when `next` in dependencies.
 ### API Routes
 
 - Raw exceptions instead of NextResponse.json() with status codes
+- Server action without input validation (Zod/yup)

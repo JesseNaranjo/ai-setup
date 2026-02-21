@@ -118,12 +118,14 @@ color: <color>                 # See color rules below
 model: <opus|sonnet>           # thorough-mode default; gaps always Sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]  # All 15 non-synthesis agents
+maxTurns: 5                    # Limits agent execution turns
+permissionMode: dontAsk        # Auto-deny permissions (read-only agents)
 ---
 ```
 
 The `skills` field loads static agent configuration at agent startup. Non-synthesis agents load `code-review:agent-review-instructions` (MODE definitions, false positive rules, output schema). Synthesis agents load `code-review:synthesis-instructions` (input format, review process, output schema, guidelines).
 
-Other Plugin Reference fields (`disallowedTools`, `permissionMode`, `maxTurns`, `mcpServers`, `hooks`, `memory`) are not used.
+Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory`) are not used.
 
 **Color rules:** Minimize conflicts within each parallel phase; reuse across sequential phases is fine. Use `white` for overflow. Do not change existing colors without necessity.
 
@@ -200,6 +202,8 @@ Settings loading logic is inlined in each orchestration skill (Step 2). See `REA
 - **Node.js/TypeScript**: Detected by `package.json`
 - **React**: Detected by `react` or `react-dom` in package.json dependencies (extends Node.js checks)
 - **.NET/C#**: Detected by `*.csproj`, `*.sln`, or `*.slnx`
+
+All category anchors referenced in `review-orchestration-code.md` (`{#architecture}`, `{#bugs}`, `{#errors}`, `{#performance}`, `{#security}`, `{#debt}`, `{#tests}`) must have content in language files. React inherits Node.js anchors; add React-specific overrides only.
 
 ### Skill Structure (Progressive Disclosure)
 
@@ -403,6 +407,7 @@ These notes apply when modifying patterns in `review-validation-{code|docs}.md`:
 - Patterns require at least one character (`[^'"]+`) to avoid matching empty string placeholders like `password = ""`
 - Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`
 - Empty catch pattern allows a single comment line to avoid flagging intentional empty catches with explanation
+- Language-labeled patterns use `[Node.js]`, `[React]`, or `[.NET]` tags after the severity tag. Unlabeled patterns apply to all languages. The orchestrator filters language-labeled patterns by detected language at validation time.
 
 ### Content Strategy Rationale
 

@@ -5,6 +5,8 @@ color: white
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:synthesis-instructions"]
+maxTurns: 5
+permissionMode: dontAsk
 ---
 
 # Cross-Agent Documentation Synthesis Agent

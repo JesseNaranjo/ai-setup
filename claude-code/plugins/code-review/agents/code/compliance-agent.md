@@ -5,6 +5,8 @@ color: blue
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
+maxTurns: 5
+permissionMode: dontAsk
 ---
 
 # AI Agent Instructions Compliance Review Agent

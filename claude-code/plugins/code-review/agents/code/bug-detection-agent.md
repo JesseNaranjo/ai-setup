@@ -5,6 +5,8 @@ color: red
 model: opus
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
+maxTurns: 5
+permissionMode: dontAsk
 ---
 
 # Bug Detection Review Agent

@@ -5,6 +5,8 @@ color: white
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
+maxTurns: 5
+permissionMode: dontAsk
 ---
 
 # Test Coverage Review Agent

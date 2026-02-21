@@ -42,6 +42,8 @@ Use agent `model` frontmatter. Cross-cutting insights always **Opus**.
 
 Issues matching these patterns skip validation entirely and are marked `auto_validated: true`:
 
+Apply unlabeled patterns to all languages. Apply [Node.js]/[React] patterns only for Node.js/React projects; apply [.NET] patterns only for .NET projects. Detected language from Context Discovery step.
+
 ### Architecture
 
 - `circular_dependency` [Architecture/Major]: Circular import/dependency between modules
@@ -51,22 +53,31 @@ Issues matching these patterns skip validation entirely and are marked `auto_val
 
 ### Bugs
 
+- `blazor_improper_disposal` [Bugs/Major] [.NET]: Blazor component with IJSRuntime without IAsyncDisposable
 - `empty_catch_block` [Bugs/Major]: Empty catch block (allows single comment) — `catch\s*\([^)]*\)\s*\{\s*(?:\/\/[^\n]*)?\s*\}`
 - `missing_await` [Bugs/Major]: Async function call without await — `(?:const\|let\|var)\s+\w+\s*=\s*(?!await)[^;]*\basync\s+\w+\(`
 - `null_dereference` [Bugs/Major]: Null access after optional chain or guard — `(?:\?\.\s*\w+\s*\(\)\s*\.)\|(?:\w+\s*&&\s*\w+\.\w+\s*\?\s*\w+\.\w+\.\w+)`
+- `stale_useeffect_closure` [Bugs/Major] [React]: useEffect referencing state/props not in dependency array — `useEffect\s*\(\s*\(\)\s*=>\s*\{[^}]*\b(?:set\w+|dispatch)\b[^}]*\},\s*\[\s*\]\s*\)`
 
 ### Compliance
 
-- `missing_authorize_attribute` [Compliance/Major]: ASP.NET endpoint without [Authorize] attribute — `\[(?:Http(?:Get\|Post\|Put\|Delete\|Patch)\|Route)\][^[]*(?<!\[Authorize\])\s*public\s+(?:async\s+)?(?:Task<)?(?:IActionResult\|ActionResult)`
+- `missing_authorize_attribute` [Compliance/Major] [.NET]: ASP.NET endpoint without [Authorize] attribute — `\[(?:Http(?:Get\|Post\|Put\|Delete\|Patch)\|Route)\][^[]*(?<!\[Authorize\])\s*public\s+(?:async\s+)?(?:Task<)?(?:IActionResult\|ActionResult)`
 - `wrong_case_filename` [Compliance/Minor]: Filename violates project naming convention
 - `explicit_must_violation` [Compliance/Major]: Code violates a MUST rule from AI instructions
-- `missing_required_jsdoc` [Compliance/Minor]: Exported function without JSDoc comment — `export\s+(?:async\s+)?function\s+\w+\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{(?!\s*/\*\*)`
+- `missing_required_jsdoc` [Compliance/Minor] [Node.js]: Exported function without JSDoc comment — `export\s+(?:async\s+)?function\s+\w+\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{(?!\s*/\*\*)`
+
+### Error Handling
+
+- `express_error_middleware_missing` [Error Handling/Major] [Node.js]: Express app without 4-argument error middleware — no `(err, req, res, next)` handler
+- `unhandled_promise_rejection` [Error Handling/Major] [Node.js]: Promise chain without .catch() in request handler
 
 ### Performance
 
+- `ef_missing_asnotracking` [Performance/Minor] [.NET]: EF Core read-only query without AsNoTracking()
+- `missing_cancellation_token` [Performance/Minor] [.NET]: Async controller method without CancellationToken parameter
+- `n_plus_one_query` [Performance/Major]: Database query inside iteration (N+1) — `(?:for\|while\|forEach\|\.map\|\.forEach)[\s\S]{0,200}(?:findOne\|findById\|query\|execute\|fetch)`
 - `nested_loop_includes` [Performance/Major]: O(n²) nested loop with includes/indexOf — `for\s*\([^)]*\)[\s\S]*?for\s*\([^)]*\)[\s\S]*?\.(?:includes\|indexOf)\s*\(`
 - `select_star_in_loop` [Performance/Major]: SELECT * inside a loop — `(?:for\|while\|forEach)[\s\S]*?SELECT\s+\*`
-- `n_plus_one_query` [Performance/Major]: Database query inside iteration (N+1) — `(?:for\|while\|forEach\|\.map\|\.forEach)[\s\S]{0,200}(?:findOne\|findById\|query\|execute\|fetch)`
 
 ### Security
 
@@ -82,11 +93,11 @@ Issues matching these patterns skip validation entirely and are marked `auto_val
 
 ### Technical Debt
 
-- `deprecated_npm_package` [Technical Debt/Minor]: npm package with deprecation warning
+- `deprecated_npm_package` [Technical Debt/Minor] [Node.js]: npm package with deprecation warning
 - `todo_without_issue` [Technical Debt/Minor]: TODO/FIXME without issue reference — `(?:\/\/\|#)\s*TODO(?:\([^)]*\))?:?\s+(?!.*(?:#\d+\|ISSUE-\|JIRA-\|TICKET-))`
 - `commented_out_code` [Technical Debt/Minor]: 10+ consecutive lines of commented code — `^(?:\s*(?:\/\/\|#).*\n){10,}`
 - `hack_comment` [Technical Debt/Minor]: Explicit HACK/WORKAROUND/XXX marker — `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?`
-- `outdated_callback` [Technical Debt/Minor]: Callback pattern in async context — `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)`
+- `outdated_callback` [Technical Debt/Minor] [Node.js]: Callback pattern in async context — `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)`
 
 ---
 

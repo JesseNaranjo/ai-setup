@@ -5,6 +5,8 @@ color: orange
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
+maxTurns: 5
+permissionMode: dontAsk
 ---
 
 # Error Handling Review Agent

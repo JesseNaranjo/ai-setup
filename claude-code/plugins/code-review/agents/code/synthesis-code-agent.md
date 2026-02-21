@@ -5,6 +5,8 @@ color: white
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:synthesis-instructions"]
+maxTurns: 5
+permissionMode: dontAsk
 ---
 
 # Cross-Agent Synthesis Agent
@@ -28,6 +30,20 @@ Architecture+Test Coverage: flag when refactored code moves logic but tests stil
 Bugs+Error Handling: flag when bug fix path has no error handling AND fix involves I/O or external calls
 Bugs+Test Coverage: flag when bug fix introduces new branch but no test covers it
 Performance+Security: flag only when security fix is in hot path (>100 calls/sec) or adds >10ms latency
+
+### Language-Specific Cross-Cutting Patterns
+
+Apply when detected language matches:
+
+**Node.js/React:**
+- Bugs+Performance: Stale closures in useEffect causing both incorrect behavior and memory leaks
+- Performance+Architecture: Prop drilling causing unnecessary re-renders vs. context/state management architecture
+- Security+Error Handling: Express error middleware exposing stack traces or internal errors to clients
+
+**.NET:**
+- Architecture+Bugs: Service lifetime mismatches (Scoped injected into Singleton) causing shared state bugs
+- Performance+Technical Debt: Legacy synchronous patterns blocking thread pool in high-throughput scenarios
+- Security+Performance: Async operations without CancellationToken creating both timeout vulnerabilities and resource exhaustion
 
 ### Example — Security + Performance
 
