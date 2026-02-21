@@ -29,6 +29,7 @@ skills: ["code-review:agent-review-instructions"]
 ### Step 2: Terminology, Formatting, and Voice Analysis
 
 Scan for term variants (e.g., "config" vs "configuration" vs "settings"); track first usage as canonical. Use Grep to check formatting consistency (headings, code blocks, lists). Check voice: person (you/we/passive), formality, tense.
+Common variant pairs to check: config/configuration/settings, dir/directory/folder, repo/repository, env/environment
 
 ## Output
 

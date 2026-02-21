@@ -12,7 +12,7 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-- O(n²)+ threshold for hot paths, unnecessary data copying
+- O(n²)+ only when n is unbounded (user input, DB results, API responses) or >100 expected items. Sequential awaits: 3+ independent async ops awaited in sequence. Deep clone in loops: structuredClone/JSON.parse(JSON.stringify) in iterations
 
 **gaps:**
 - Hidden N+1 queries (lazy loading, nested loops with DB calls)

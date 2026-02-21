@@ -16,6 +16,7 @@ skills: ["code-review:agent-review-instructions"]
 **thorough:**
 - Test quality (no assertions, testing implementation details, always-pass tests), integration gaps
 - Modified logic invalidating existing tests, missing negative/async/concurrent tests
+- Happy-path-only: functions with branches/error paths but only positive test cases. Mock sprawl: tests mocking >5 deps indicate architecture smell
 
 **quick:**
 - New public functions/methods without any tests

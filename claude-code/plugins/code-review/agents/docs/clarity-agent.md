@@ -27,7 +27,7 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 2: Audience and Readability Analysis
 
-Determine target audience (beginner/intermediate/expert); flag mismatches. Check sentence complexity (>40 words, >3 nested clauses), jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed).
+Determine target audience (beginner/intermediate/expert); flag mismatches. Check jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed).
 
 ## Output
 

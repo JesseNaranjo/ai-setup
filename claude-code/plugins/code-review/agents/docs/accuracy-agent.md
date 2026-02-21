@@ -16,7 +16,7 @@ skills: ["code-review:agent-review-instructions"]
 **gaps:**
 - Parameter defaults not reflected in docs
 - Subtle behavior differences (edge cases, error conditions)
-- Changed implicit assumptions
+- Implicit assumption changes: documented 'returns null' but now throws, documented 'sync' but now async, documented default value changed
 - Order-dependent behavior changes
 - Deprecated but still documented features
 - New required parameters not documented

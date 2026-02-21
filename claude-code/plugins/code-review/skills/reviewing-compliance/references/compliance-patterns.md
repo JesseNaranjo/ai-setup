@@ -21,6 +21,10 @@ Search in: current directory, parent directories, `.github/` folders.
 - **Security**: unvalidated input, SQL concatenation, hardcoded credentials, missing auth middleware
 - **Error Handling**: empty catches, missing error handling, sensitive info in errors, stack traces in production
 
+## Rule Conflicts
+
+Per-directory overrides > root-level. Ambiguous rules: apply less restrictive, flag as Suggestion.
+
 ## Ignoring Rules
 
-Rules silenced with comments (`claude-ignore:`, `eslint-disable`, `@ts-ignore`) should not be flagged.
+Rules silenced with comments (`claude-ignore:`, `eslint-disable`, `@ts-ignore`, `# noinspection`, `@SuppressWarnings`, `[SuppressMessage]`) should not be flagged.

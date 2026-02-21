@@ -15,21 +15,11 @@ Receives `synthesis_input` with:
 
 ## Review Process
 
-### Step 1: Map Findings to Files
-
-Create a map of which files have findings from each category.
+Map findings to files. For each file with findings from both categories: analyze interactions per agent's Step 2 patterns. Check if proposed fixes introduce issues in the other category. Report only cross-cutting insights not caught by individual agents.
 
 ### Step 2: Analyze Cross-Category Interactions
 
 For each file with findings from both categories, analyze how findings interact. See agent file for domain-specific interaction patterns.
-
-### Step 3: Identify Ripple Effects
-
-For each finding, read the proposed fix and consider how it affects the other category. Check if fixes introduce new issues.
-
-### Step 4: Report Cross-Cutting Insights
-
-Report insights that weren't caught by individual agents.
 
 ## Output Schema
 

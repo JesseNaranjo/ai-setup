@@ -7,11 +7,17 @@
 ### Bugs {#bugs}
 
 - Timezone-naive Date operations in server code
+- require() in ESM without createRequire (Node 14+)
 
 ### Security {#security}
 
 - Prototype pollution — Object.assign/recursive merge with user input
 - Missing helmet, missing rate limiting
+- eval()/Function()/vm.runInContext() with user input
+
+### Performance {#performance}
+
+- Synchronous crypto (crypto.pbkdf2Sync) blocking event loop
 
 ### Architecture {#architecture}
 

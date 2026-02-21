@@ -19,10 +19,10 @@ skills: ["code-review:agent-review-instructions"]
 - Documentation debt: TODO/FIXME without tracking, stale comments, missing public API docs
 
 **gaps:**
-- Subtle debt not caught in thorough pass
-- Context-dependent debt (patterns fine in some contexts but debt in this project)
-- Debt that requires deeper cross-file analysis
-- Edge cases in deprecated pattern detection
+- Version-specific workarounds where upstream fix now exists
+- Abstractions that project evolved away from (interface with single diverged impl)
+- Config entries defined but never read
+- Stale feature flags past rollout date
 
 ## Output
 

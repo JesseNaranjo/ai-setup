@@ -12,7 +12,7 @@ skills: ["code-review:agent-review-instructions"]
 ## MODE Checklists
 
 **thorough:**
-- Type coercion errors, unchecked return values
+- Unchecked returns on I/O/DB/external API calls (skip pure functions). Floating promises: missing await on async calls affecting control flow. State mutation: .sort()/.reverse() modifying original, shared mutable refs across async boundaries
 
 **gaps:**
 - Boundary condition failures (empty arrays, zero values, max values)

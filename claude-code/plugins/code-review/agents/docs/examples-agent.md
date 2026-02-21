@@ -13,6 +13,7 @@ skills: ["code-review:agent-review-instructions"]
 
 **thorough:**
 - Language tags, signatures, completeness, incorrect output comments, non-existent resource references
+- Imported function/method verification: flag examples referencing renamed, removed, or deprecated APIs (signatures must match current code)
 
 **quick:**
 - Obvious syntax errors

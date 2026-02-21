@@ -21,6 +21,10 @@ repository/
 
 All three files must cross-reference each other. Quick Reference sections must contain the same essential information across all three files.
 
+## Detection Threshold
+
+Flag missing AI instruction files only when signals suggest AI tool usage (e.g., `.claude/` directory, `CLAUDE.md` exists, `.github/copilot-instructions.md` exists).
+
 ## Validation Checklist
 
 - `.ai/AI-AGENT-INSTRUCTIONS.md` exists (NOT in root)

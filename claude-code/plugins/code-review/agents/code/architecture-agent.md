@@ -13,6 +13,7 @@ skills: ["code-review:agent-review-instructions"]
 
 **thorough:**
 - DRY thresholds: >10 lines/>80% similarity
+- SRP thresholds: >500 lines or >15 methods per class, >5 unrelated domain imports. Coupling: fan-out >10 direct deps
 
 ## Output
 

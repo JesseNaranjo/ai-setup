@@ -27,6 +27,7 @@ skills: ["code-review:agent-review-instructions"]
 ### Step 2: Link Verification
 
 Use Grep to find internal links; verify targets and anchors exist, check path consistency. Verify image/media references exist; flag missing alt text as Minor.
+Internal links: verify in reviewed files. External: flag broken patterns (github.com paths to nonexistent files) but skip HTTP requests
 
 ### Step 3: AI Instruction File Standardization
 

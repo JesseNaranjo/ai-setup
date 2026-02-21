@@ -1,5 +1,7 @@
 # Common Security Vulnerabilities
 
+**Test file exclusion:** Skip matches in files matching `*.test.*`, `*.spec.*`, `__tests__/`, `test/`, `fixtures/`.
+
 ## .NET-Specific Patterns
 
 SQL: `cmd.Parameters.AddWithValue("@id", userId)` — never string-concat. Severity: Critical.
@@ -18,6 +20,14 @@ Severity: Critical.
 ## Cryptographic Issues
 
 MD5/SHA1 for passwords → bcrypt(12). `Math.random()` for tokens → `crypto.randomBytes(32)`. Severity: Critical/Major.
+
+## Prototype Pollution
+
+Object.assign/recursive merge with user-controlled keys (`__proto__`, `constructor`). Severity: Critical.
+
+## Path Traversal
+
+`path.join(baseDir, userInput)` without `path.resolve()` + `startsWith()` validation. Severity: Critical.
 
 ## ReDoS
 

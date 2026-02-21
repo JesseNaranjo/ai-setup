@@ -21,9 +21,10 @@ Large objects created per-call instead of reusing `Object.freeze()` constants. S
 Sequential awaits (waterfall) → `Promise.all()` for independent calls. Severity: Major.
 Blocking event loop (Node.js) — CPU loop without yield; chunk with `setImmediate()`. Severity: Critical (servers), Major (scripts).
 
-## String Concatenation in Loops
+## Cloning and Collection Patterns
 
-JS: `items.map(i => i.toString()).join('')` instead of `+=`. .NET: `StringBuilder` instead of `string +=`. Severity: Major.
+JSON.parse/stringify deep clone: O(n) with high constant, fails on circular refs, drops functions/symbols. Use structuredClone() in Node 17+. Severity: Minor to Major.
+Array.from() on large iterables more memory-efficient than spread. Severity: Minor.
 
 ## .NET Specific
 

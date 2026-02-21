@@ -24,7 +24,10 @@ skills: ["code-review:synthesis-instructions"]
 
 ### Step 2 Interaction Patterns
 
-Security fixes adding overhead, performance optimizations bypassing checks, bug fixes missing error handling, refactored code with broken test coverage.
+Architecture+Test Coverage: flag when refactored code moves logic but tests still reference old structure
+Bugs+Error Handling: flag when bug fix path has no error handling AND fix involves I/O or external calls
+Bugs+Test Coverage: flag when bug fix introduces new branch but no test covers it
+Performance+Security: flag only when security fix is in hot path (>100 calls/sec) or adds >10ms latency
 
 ### Example — Security + Performance
 

@@ -10,11 +10,11 @@
 6. **Contributing** - bug reports, PR process, code style
 7. **License**
 
-**Anti-patterns**: wall of text without headings, assuming global deps, non-working examples, missing prerequisites, outdated screenshots
+**Anti-patterns**: assuming global deps, non-working examples, missing prerequisites, outdated screenshots
 
-## Code Examples
+## Severity Calibration
 
-Show imports, realistic values (not foo/bar), expected output, error handling, mark placeholders (`YOUR_API_KEY`).
+Missing Install section: Critical (blocks users). Missing error responses in API docs: Major. Missing Contributing: Suggestion (not blocking).
 
 ## API Documentation
 

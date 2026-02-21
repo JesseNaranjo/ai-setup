@@ -13,6 +13,7 @@ skills: ["code-review:agent-review-instructions"]
 
 **thorough:**
 - Supply chain: lockfile integrity (missing/outdated lockfile, lockfile-source mismatches), dependency confusion (internal package names in public registries), unpinned transitive dependencies in production
+- SSRF: fetch/request/axios with user-controlled URLs without allowlist. Deserialization: TypeNameHandling, pickle.loads, unserialize with untrusted input
 
 **gaps:**
 - Second-order injection (stored XSS, delayed command execution)

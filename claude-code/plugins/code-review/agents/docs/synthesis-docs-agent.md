@@ -22,7 +22,10 @@ skills: ["code-review:synthesis-instructions"]
 
 ### Step 2 Interaction Patterns
 
-Accuracy issues affecting examples, structural problems causing clarity issues, missing sections forcing inconsistent terminology, formatting mismatches reflecting organizational problems.
+Accuracy+Examples: flag when API signature changed but example still uses old signature
+Clarity+Structure: flag when unclear section is also deeply nested (structural reorganization would fix both)
+Completeness+Consistency: flag when missing section causes terminology to be defined ad-hoc in multiple places
+Consistency+Structure: flag when formatting inconsistency correlates with structural boundary (different authors/sections)
 
 ### Example — Accuracy + Examples
 

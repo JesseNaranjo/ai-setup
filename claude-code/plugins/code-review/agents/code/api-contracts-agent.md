@@ -18,6 +18,10 @@ skills: ["code-review:agent-review-instructions"]
 - Backward compatibility (new required params without defaults, changed response/error formats)
 - Schema changes affecting consumers (database, API response, configuration)
 
+### Step 2: Verify Consumer Impact
+
+Grep for callers of changed APIs. Check changed signatures match all call sites. Verify default coverage for new required params. Breaking-change classification: REST (removed field = breaking, added optional = non-breaking), Library (changed public signature = breaking, added method = non-breaking).
+
 ## Output
 
 Category: "API Contracts". Describe: the API change, consumer impact, migration path (if any).

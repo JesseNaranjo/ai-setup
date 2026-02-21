@@ -13,7 +13,7 @@ skills: ["code-review:agent-review-instructions"]
 
 ### Step 1: Check Compliance (Based on MODE)
 
-Extract rules from AI instruction files: explicit (MUST/MUST NOT/ALWAYS/NEVER), guidelines (SHOULD/SHOULD NOT/prefer/avoid), patterns, per-directory overrides. Map applicable rules per file.
+Extract rules from AI instruction files: explicit (MUST/MUST NOT/ALWAYS/NEVER), guidelines (SHOULD/SHOULD NOT/prefer/avoid), patterns, per-directory overrides. Map applicable rules per file. Rule precedence: per-directory overrides > root CLAUDE.md > .ai/AI-AGENT-INSTRUCTIONS.md
 
 **thorough:**
 - Check every rule against every applicable file

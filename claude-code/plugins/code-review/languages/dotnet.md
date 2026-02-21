@@ -7,17 +7,20 @@
 ### Bugs {#bugs}
 
 - Lazy loading disconnected — navigation property after context disposed
+- IAsyncDisposable for .NET 8+ async resources (not just IDisposable)
 
 ### Security {#security}
 
 - Hardcoded connection strings, missing `[Authorize]`
 - XXE — XML parsing without disabling external entities
 - Model over-binding — [Bind]/[FromBody] allowing sensitive property binding
+- Missing [ValidateAntiForgeryToken] on POST/PUT/DELETE (or RequireAntiforgery() for Minimal API)
 
 ### Performance {#performance}
 
 - Missing AsNoTracking for read-only queries
 - ToList() before filter — materializing before Where()
+- Unbounded DbContext lifetime: use AddDbContextPool for high-throughput
 
 ### Technical Debt {#debt}
 

@@ -1,9 +1,5 @@
 # Common Bug Patterns
 
-## Null/Undefined Reference
-
-Missing optional chaining on nested access. Severity: Major (crashes), Minor (undefined behavior).
-
 ## Off-by-One Errors
 
 `i <= arr.length` (out of bounds), wrong split count. Severity: Minor to Major.
@@ -26,9 +22,10 @@ State changed between awaits — atomic fix: `db.query('UPDATE users SET count =
 Mutating shared state — `items.sort()` mutates original; use `[...items].sort()`. Severity: Major.
 Stale closure — React `useEffect` with empty deps captures initial value; add dependency or use ref. Severity: Major.
 
-## Error Handling
+## Array/Promise Pitfalls
 
-Empty catch blocks silently swallowing errors. Overly broad catch hiding real failures. Severity: Minor to Major.
+Promise.allSettled vs Promise.all: using Promise.all when partial failure is acceptable causes cascade failures. Severity: Major.
+Array.at(-1) vs arr[arr.length-1]: latter returns undefined from -1 index on empty arrays. Severity: Minor.
 
 ## .NET Specific
 

@@ -11,7 +11,7 @@
 | Unmaintained | No commits 2+ years, archived | Major |
 | Known CVE | `npm audit`, Snyk | Critical |
 
-**Common:** `request` (use node-fetch/axios), `moment` (use date-fns/luxon), `node-sass` (use sass), `tslint` (use eslint)
+**Common:** `request` (use node-fetch/axios), `moment` (use date-fns/luxon), `node-sass` (use sass), `tslint` (use eslint), `passport` < v0.7 (session fixation fix), `uuid` v3 (use v4+)
 
 ### .NET
 

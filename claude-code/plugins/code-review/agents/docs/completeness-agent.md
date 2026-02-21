@@ -15,6 +15,7 @@ skills: ["code-review:agent-review-instructions"]
 - Missing standard sections per doc type (README, API, library)
 - Undocumented public APIs/exports, CLI commands, config options, env vars
 - Incomplete setup/prerequisites, missing error/troubleshooting docs, missing migration guides
+- README required sections: Title, Install, Quick Start, Config, API/CLI, Contributing, License. API docs: all params with types, all response codes, at least one example
 
 **gaps:**
 - Undocumented edge cases and limitations

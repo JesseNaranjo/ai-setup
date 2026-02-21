@@ -77,3 +77,8 @@
 | Exported functions never imported | Suggestion |
 
 **Grep:** `implements I[A-Z].*` appearing exactly once; `extends Abstract` appearing exactly once; `export function` with 0 imports elsewhere
+
+## Additional Detection Heuristics
+
+Configuration sprawl: same config value in 3+ places instead of centralized constant. Severity: Minor.
+God function: single function >50 lines with >3 nesting levels. Severity: Major.

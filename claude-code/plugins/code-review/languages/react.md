@@ -6,6 +6,10 @@ Node.js patterns plus: `*.test.tsx`, `@testing-library/react` files, `render()` 
 
 IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` for base checks.
 
+### Bugs {#bugs}
+
+- key={index} on lists that reorder/filter (stale state preservation)
+
 ### Security {#security}
 
 - href javascript: injection
@@ -15,6 +19,7 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 - Large lists without virtualization (1000+ items)
 - Object creation in useEffect deps without useMemo
+- React.memo wrapping components that receive new object/function props every render (memo useless without stable props)
 
 ### Architecture {#architecture}
 
