@@ -7,10 +7,6 @@ description: Detects coupling problems, SOLID/DRY/YAGNI/SoC violations, anti-pat
 
 Adds scope prioritization, architecture FP adjustments, SOLID/DRY/YAGNI pattern references.
 
-## Agent
-
-`code-review:architecture-agent` (Opus) in thorough mode.
-
 ## Scope Prioritization
 
 - Service/business logic files

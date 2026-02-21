@@ -7,10 +7,6 @@ description: Detects algorithmic complexity problems, memory leaks, N+1 queries,
 
 Adds hot path identification, database code prioritization, Big O analysis format, performance-specific FP adjustments, performance pattern references.
 
-## Agent
-
-`code-review:performance-agent` (Opus) in thorough mode.
-
 ## Scope Prioritization
 
 ### Hot Path Identification

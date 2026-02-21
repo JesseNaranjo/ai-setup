@@ -7,10 +7,6 @@ description: Detects deprecated dependencies, outdated patterns, workarounds, de
 
 Adds scope prioritization (dependency/config files), debt-specific FP adjustments, debt pattern references.
 
-## Agent
-
-`code-review:technical-debt-agent` (Opus) in thorough mode.
-
 ## Scope Prioritization
 
 - Package manifest files (`package.json`, `*.csproj`)

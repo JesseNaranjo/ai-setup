@@ -7,10 +7,6 @@ description: Detects injection attacks, authentication bypasses, hardcoded secre
 
 Adds scope prioritization (auth/config/middleware), security-specific FP adjustments, vulnerability pattern references.
 
-## Agent
-
-`code-review:security-agent` (Opus) in thorough mode.
-
 ## Scope Prioritization
 
 - Files with "auth", "login", "password", "api", "db" in names

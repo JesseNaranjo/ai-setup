@@ -309,9 +309,6 @@ Targeted review skills for specific concerns:
 code-review/
 ├── .claude-plugin/
 │   └── plugin.json              # Plugin metadata
-├── commands/
-│   ├── code-review.md              # Code review for files or staged changes (deep: up to 19, quick: up to 7 invocations)
-│   └── docs-review.md              # Documentation review (deep: up to 13, quick: up to 7 invocations; inlines docs-processing)
 ├── agents/                      # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                    # Code review agents (10 agents)
 │   │   ├── api-contracts-agent.md   # API compatibility
@@ -332,8 +329,12 @@ code-review/
 │       ├── examples-agent.md    # Code example validity
 │       ├── structure-agent.md   # Organization, links, AI instructions
 │       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
-├── skills/                      # Targeted review skills
+├── skills/                      # Orchestration entry points and targeted review skills
 │   ├── agent-review-instructions/   # Static agent config (MODE, FP rules, output schema)
+│   ├── code-review/                # Orchestration: code review pipeline (deep: up to 19, quick: up to 7 invocations)
+│   │   └── SKILL.md
+│   ├── docs-review/                # Orchestration: docs review pipeline (deep: up to 13, quick: up to 7 invocations)
+│   │   └── SKILL.md
 │   ├── reviewing-architecture-principles/
 │   ├── reviewing-bugs/
 │   ├── reviewing-compliance/
@@ -533,9 +534,9 @@ Edit the agent file in `agents/code/` or `agents/docs/` to customize:
 - Severity classification
 - False positive rules
 
-### Creating Custom Commands
+### Creating Custom Skills
 
-Create a new `.md` file in `commands/` with the appropriate frontmatter.
+Create a new directory in `skills/` with a `SKILL.md` file containing the appropriate frontmatter.
 
 ## Requirements
 

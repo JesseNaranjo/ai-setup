@@ -1,6 +1,8 @@
 ---
 name: synthesis-instructions
-description: "Static synthesis agent configuration for cross-cutting analysis. Loaded by synthesis agents at startup via skills field."
+description: "Input format, review process, output schema, and guidelines for cross-cutting synthesis agents."
+user-invocable: false
+disable-model-invocation: true
 ---
 
 ## Input

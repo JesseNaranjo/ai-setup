@@ -19,6 +19,8 @@
 
 Convention: `reviewing-{X}` → `{X}-agent`. Exceptions: architecture-principles→architecture, bugs→bug-detection. Special: reviewing-documentation→N/A (command meta-skill), methodology skills→null.
 
+Command meta-skill: no primary agent. False positive rules and auto-validated patterns apply globally (added to validation context). Focus areas and priority files are not distributed to agents.
+
 ## Resolved Structure
 
 ```yaml

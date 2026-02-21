@@ -7,10 +7,6 @@ description: Reviews adherence to project-specific coding standards, CLAUDE.md g
 
 Adds rule citation guidelines, compliance scoring, compliance-specific FP adjustments.
 
-## Agent
-
-`code-review:compliance-agent` (Sonnet) in thorough mode.
-
 ## Rule Classification
 
 MUST/SHOULD/MAY keywords and severity mapping: `references/compliance-patterns.md`.

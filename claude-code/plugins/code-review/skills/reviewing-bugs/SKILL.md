@@ -7,10 +7,6 @@ description: Detects runtime errors, null references, off-by-one errors, boundar
 
 Adds bug investigation mode, reproduction conditions framework, bug-specific FP adjustments, common bug pattern references.
 
-## Agent
-
-`code-review:bug-detection-agent` (Opus) in thorough mode.
-
 ## Bug Investigation Mode
 
 When reviewing code for bugs:

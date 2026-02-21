@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file and nearly all content in this repository is written for LLM consumption, not humans. This file provides guidance to Claude Code when working with code in this repository. All other plugin files (`commands/`, `agents/`, `shared/`, `skills/`, `languages/`, `templates/`) are LLM prompts executed by the Opus orchestrator and review agents at runtime.
+This file and nearly all content in this repository is written for LLM consumption, not humans. This file provides guidance to Claude Code when working with code in this repository. All other plugin files (`agents/`, `shared/`, `skills/`, `languages/`, `templates/`) are LLM prompts executed by the Opus orchestrator and review agents at runtime.
 
 The only human-readable files are:
 - `README.md` and `CHANGELOG.md`
@@ -50,9 +50,6 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 ```
 claude-code/plugins/code-review/
 ├── .claude-plugin/plugin.json       # Plugin metadata
-├── commands/                        # Orchestration entry points (inline steps, reference shared/; see "Commands Directory" convention)
-│   ├── code-review.md              # Code review for files or staged changes (deep: up to 19, quick: up to 7 agent invocations)
-│   └── docs-review.md              # Documentation review (deep: up to 13, quick: up to 7 invocations; inlines docs-processing)
 ├── agents/                          # Modular agent definitions (10 code + 7 docs agents)
 │   ├── code/                        # Code review agents (10 agents)
 │   │   ├── api-contracts-agent.md   # API compatibility
@@ -73,8 +70,12 @@ claude-code/plugins/code-review/
 │       ├── examples-agent.md        # Code example validity
 │       ├── structure-agent.md       # Organization, links, AI instructions
 │       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
-├── skills/                          # 9 skills (7 review + 2 internal)
+├── skills/                          # 11 skills (2 orchestration + 7 review + 2 internal)
 │   ├── agent-review-instructions/   # Internal: MODE, FP rules, output schema (loaded by agents via skills field)
+│   │   └── SKILL.md
+│   ├── code-review/                 # Orchestration: code review pipeline (deep: up to 19, quick: up to 7 invocations)
+│   │   └── SKILL.md
+│   ├── docs-review/                 # Orchestration: docs review pipeline (deep: up to 13, quick: up to 7 invocations)
 │   │   └── SKILL.md
 │   ├── reviewing-architecture-principles/
 │   ├── reviewing-bugs/
@@ -192,7 +193,7 @@ language: ""
 # Project-specific instructions for review agents
 ```
 
-Settings loading logic is inlined in each command file (Step 2). See `README.md` for full documentation.
+Settings loading logic is inlined in each orchestration skill (Step 2). See `README.md` for full documentation.
 
 ### Language Detection
 
@@ -246,10 +247,10 @@ When modifying the plugin:
 - **Skills**: Edit `skills/*/SKILL.md`; add patterns to `references/`
 - **Language-specific checks**: Edit files in `languages/`
 
-### Commands & Settings
-- **Command arguments**: Edit command YAML frontmatter in `commands/`
-- **Settings options**: Edit Step 2 in `commands/code-review.md` and `commands/docs-review.md`, and `templates/code-review.local.md.example`
-- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `commands/code-review.md` (Steps 3 & 5, staged section)
+### Orchestration Skills & Settings
+- **Orchestration skill arguments**: Edit skill YAML frontmatter in `skills/code-review/SKILL.md` or `skills/docs-review/SKILL.md`
+- **Settings options**: Edit Step 2 in `skills/code-review/SKILL.md` and `skills/docs-review/SKILL.md`, and `templates/code-review.local.md.example`
+- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `skills/code-review/SKILL.md` (Steps 3 & 5, staged section)
 
 ## Coding Conventions
 
@@ -281,7 +282,7 @@ Model-aware compression:
 | Subcategory | Files | Consumer | When |
 |-------------|-------|----------|------|
 | Development-time | `CLAUDE.md` | Claude Code | When authoring/modifying the plugin |
-| Runtime | `commands/`, `agents/`, `shared/`, `skills/`, `languages/`, `templates/` | Opus orchestrator + agents | During every review execution |
+| Runtime | `agents/`, `shared/`, `skills/`, `languages/`, `templates/` | Opus orchestrator + agents | During every review execution |
 
 **Human-readable files** (exhaustive list):
 - `README.md` — plugin documentation for users
@@ -326,31 +327,31 @@ Apply alphabetical ordering to:
 **REQUIRED:** All workflow steps start at 1, not 0.
 
 This applies to:
-- Command workflows in `commands/*.md`
+- Orchestration skill workflows in `skills/code-review/SKILL.md` and `skills/docs-review/SKILL.md`
 - Sonnet agent workflows in `agents/code/*.md` and `agents/docs/*.md` (Opus agents have no step headings)
-- Skill workflows in `skills/*/SKILL.md`
+- Other skill workflows in `skills/*/SKILL.md`
 
-**Rationale:** Consistency across command and Sonnet agent workflows.
+**Rationale:** Consistency across orchestration skill and Sonnet agent workflows.
 
-**Step layout in commands:**
-- Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills) - inlined in each command
-- Steps 3, 5: Input validation, content gathering - command-specific
+**Step layout in orchestration skills:**
+- Steps 1, 2, 4, 6: Pre-review setup (methodology, settings, context, skills) - inlined in each skill
+- Steps 3, 5: Input validation, content gathering - skill-specific
 - Steps 7-8: Review execution, synthesis - references to orchestration files
 - Steps 9-12: Post-review (validation, aggregation, output, write) - compressed inline
 
-### Command Step Inlining
+### Orchestration Skill Step Inlining
 
-Each command file inlines its pre-review setup steps (Steps 1-6) directly, including settings loading and context discovery (formerly `pre-review-setup.md`). The code review command also inlines staged processing (formerly `staged-processing.md`). Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline.
+Each orchestration skill inlines its pre-review setup steps (Steps 1-6) directly, including settings loading and context discovery (formerly `pre-review-setup.md`). The code review skill also inlines staged processing (formerly `staged-processing.md`). Steps 7-8 reference orchestration files for review execution and synthesis. Steps 9-12 are compressed inline.
 
-**Rationale:** A shared `command-common-steps.md` was tried but created a second level of indirection (commands → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps commands self-contained with one-hop references to shared files.
+**Rationale:** A shared `skill-common-steps.md` was tried but created a second level of indirection (skills → common-steps → shared files), adding an extra file to the Opus context window. Inlining keeps orchestration skills self-contained with one-hop references to shared files.
 
-**Revisit if:** command count exceeds 4, shared steps diverge significantly, or a way is found to share steps without extra Opus context files.
+**Revisit if:** orchestration skill count exceeds 4, shared steps diverge significantly, or a way is found to share steps without extra Opus context files.
 
 ### Intentional Cross-File Duplication
 
 | File Pair | Shared Content | ~Lines | Rationale |
 |-----------|---------------|--------|-----------|
-| `commands/code-review.md` / `commands/docs-review.md` | Settings loading, Context Discovery | ~35 | Only one command runs per execution; inlined from former `pre-review-setup.md` |
+| `skills/code-review/SKILL.md` / `skills/docs-review/SKILL.md` | Settings loading, Context Discovery | ~35 | Only one skill runs per execution; inlined from former `pre-review-setup.md` |
 | `review-orchestration-code.md` / `review-orchestration-docs.md` | File Entry Schema, Gaps Mode core | ~50 | Only one loaded per execution; extracting adds a file read |
 | `review-validation-code.md` / `review-validation-docs.md` | Batch Validation, Validator Schema, Common FP, Verdicts, Aggregation, Output Format | ~110 | Same rationale: only one loaded per execution |
 
@@ -358,11 +359,11 @@ Synthesis agents (`synthesis-code-agent.md` / `synthesis-docs-agent.md`) formerl
 
 **Maintenance rule:** When modifying shared content in one file, `grep -r` for the same section heading in the paired file and update both.
 
-### Commands Directory
+### Orchestration Skills (code-review, docs-review)
 
-Commands remain in `commands/` despite Anthropic's Plugin Reference labeling it as "legacy; use `skills/` for new skills." The command YAML frontmatter uses fields (`allowed-tools`, `argument-hint`, `model`) that are command-specific and not part of the skill YAML schema (`name`, `description` only). These are complex orchestration entry points, not simple trigger-response commands. Migrating would break orchestrator invocation for zero context reduction.
+Review orchestration was migrated from `commands/` to `skills/` per Anthropic's Plugin Reference recommendation. The skill YAML schema supports all needed fields: `name`, `allowed-tools`, `description`, `argument-hint`, `model`. Both orchestration skills use `model: opus`. The `allowed-tools` list includes `Task` (agent invocation), git-scoped `Bash` patterns, `Read`, `Write`, `Glob`.
 
-**Command frontmatter fields:** `name`, `allowed-tools`, `description`, `argument-hint`, `model`. All commands use `model: opus`. The `allowed-tools` list includes `Task` (agent invocation), git-scoped `Bash` patterns, `Read`, `Write`, `Glob`.
+**CRITICAL:** These orchestration skills must NOT use `context: fork`. Forked skills run in a subagent that cannot spawn other subagents. The review orchestration dispatches agents via the `Task` tool, which requires running in the main thread.
 
 ### File Path References
 
@@ -411,7 +412,7 @@ Agents have access to Read, Grep, and Glob tools. For Phase 2 (gaps) and Synthes
 
 **Version bump rules:** Patch = fixes/docs. Minor = new features/agents/commands. Major = breaking changes.
 
-**Version locations** (all three must match): `plugin.json`, `marketplace.json` (repo root), `README.md` ("Current Version"). Per Anthropic guidance, only `plugin.json` is authoritative — individual agent/skill/command files must NOT have version fields.
+**Version locations** (all three must match): `plugin.json`, `marketplace.json` (repo root), `README.md` ("Current Version"). Per Anthropic guidance, only `plugin.json` is authoritative — individual agent/skill files must NOT have version fields.
 
 **Release steps:**
 1. Find previous tag and diff changes: `git tag -l --sort=-v:refname | head -5` then `git log <prev>..HEAD --oneline -- claude-code/plugins/code-review/`
