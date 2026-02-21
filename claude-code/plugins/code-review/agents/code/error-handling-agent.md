@@ -23,10 +23,7 @@ permissionMode: dontAsk
 - Defensive overkill: nested try-catch where inner re-throws same type caught by outer, or catch blocks that only log + re-throw identical error (double-logging)
 
 **quick:**
-- Empty catch blocks
-- Missing error handling on I/O operations
-- Resources not cleaned up (no finally/using/defer)
-- Errors that would crash the application
+Critical/Major only. Skip: edge cases, theoretical issues, style. + Empty catch blocks (allows single comment). Resources without cleanup (no finally/using/defer).
 
 ## Output
 

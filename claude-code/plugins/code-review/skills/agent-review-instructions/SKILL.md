@@ -5,7 +5,7 @@ user-invocable: false
 disable-model-invocation: true
 ---
 
-**MODE:** thorough (all issues), gaps (subtle issues missed; dedup against previous_findings), quick (critical/merge-blocking only). Deep reviews skip pre-existing and silenced issues. Quick: only blocking issues, skip theoretical edge cases.
+**MODE:** thorough (all issues), gaps (subtle issues missed; dedup against previous_findings), quick (Critical/Major only; skip edge cases, theoretical issues, style). Deep reviews skip pre-existing and silenced issues.
 
 **False Positive Rules — do NOT flag:**
 - Pre-existing issues not modified in current changes

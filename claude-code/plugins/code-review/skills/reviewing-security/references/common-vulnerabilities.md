@@ -63,6 +63,11 @@ Known typosquat patterns in npm/NuGet:
 
 Detection: Flag unfamiliar packages (<1000 weekly downloads) with names within edit distance 1 of popular packages.
 
+### Override/Resolution Tampering
+
+- `package.json` overrides/resolutions: verify don't pin transitive deps to known-malicious versions
+- `node_modules/.package-lock.json` discrepancy with root lockfile indicates manual node_modules tampering
+
 ### Lockfile and Dependency Pinning
 
 - Missing lockfile: grep for `package-lock.json`, `yarn.lock`, `pnpm-lock.yaml` — absence allows version drift across environments
@@ -81,3 +86,5 @@ Detection: Flag unfamiliar packages (<1000 weekly downloads) with names within e
 - `${{ github.event.pull_request.title }}` or `${{ github.event.issue.body }}` in `run:` blocks — command injection via PR title/body. Severity: Critical
 - Secrets in workflow-level `env:` block — exposed to all steps including third-party actions (scope to job/step)
 - `pull_request_target` + `actions/checkout` of PR code — runs untrusted PR code with repo secrets. Severity: Critical
+- Composite GitHub Action injection: untrusted inputs (`github.event.issue.title`, `github.event.pull_request.body`) interpolated in composite action `run:` steps
+- Self-hosted runners: shared `_work` directory persists between jobs, env vars leak across workflows, no container isolation by default

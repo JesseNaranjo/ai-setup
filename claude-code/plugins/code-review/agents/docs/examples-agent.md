@@ -29,10 +29,7 @@ For each code example:
 - Flag references to non-existent resources (files, endpoints, config keys)
 
 **quick:**
-- Obvious syntax errors (unclosed brackets, invalid keywords)
-- Missing critical imports (code would fail immediately)
-- Completely wrong API calls (function doesn't exist)
-- Examples that would throw exceptions on run
+Critical/Major only. Skip: edge cases, theoretical issues, style. + Missing critical imports. Examples that would throw at runtime.
 
 ### Step 3: Verify API Currency
 

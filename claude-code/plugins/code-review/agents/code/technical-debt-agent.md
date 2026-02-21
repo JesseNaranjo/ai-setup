@@ -24,10 +24,11 @@ For each file, check:
 - Documentation debt: TODO/FIXME without issue tracking, stale comments contradicting current code, missing public API docs
 
 **gaps:**
-- Version-specific workarounds where upstream fix now exists
-- Abstractions that project evolved away from (interface with single diverged impl)
-- Config entries defined but never read
-- Stale feature flags past rollout date
+1. **Identify overlooked debt accumulation**: deprecated APIs still in use with available replacements, compatibility shims for versions no longer supported, dead code paths behind always-true/false conditions, configuration complexity exceeding feature requirements
+2. **Assess migration urgency**: For each candidate, check if the deprecated API has a removal timeline, if the pattern blocks other modernization, or if it causes maintenance burden disproportionate to the code's importance
+3. **Verify debt impact**: Confirm the pattern causes ongoing cost (maintenance, confusion, blocked upgrades) beyond a one-time cleanup
+
+Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
 
 ## Output
 

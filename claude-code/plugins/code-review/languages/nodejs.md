@@ -8,6 +8,10 @@
 
 - Barrel file abuse — re-exports causing bundle bloat
 - Missing noImplicitAny, noUncheckedIndexedAccess, strictNullChecks in tsconfig
+- `as any` casts in production code (not `.d.ts` stubs or test files) — suppresses type checking
+- `@ts-ignore`/`@ts-expect-error` without justification comment on preceding line
+- `enum` usage in new code: runtime overhead, poor tree-shaking — prefer `as const` objects
+- Missing return type annotations on exported public functions
 
 ### Bugs {#bugs}
 
@@ -37,14 +41,15 @@
 - eval()/Function()/vm.runInContext() with user input
 - `dotenv` loads first occurrence of duplicate keys — attacker prepending to `.env` overrides all values
 - Lifecycle scripts (preinstall/postinstall): new dependencies with lifecycle scripts execute arbitrary code at install. Flag unfamiliar packages with preinstall or postinstall
-- Missing `ignore-scripts=true` in `.npmrc` for CI environments
-- Missing or uncommitted lockfile (package-lock.json/yarn.lock) — allows dependency version drift
+- Missing `ignore-scripts=true` in `.npmrc` for CI environments (pnpm: `pnpm.enable-pre-post-scripts=false` in package.json)
+- Missing or uncommitted lockfile (package-lock.json/yarn.lock/pnpm-lock.yaml) — allows dependency version drift
 - Dependencies using `*`, `latest`, or unpinned git URLs — non-reproducible builds
 
 ### Technical Debt {#debt}
 
-- Legacy bundler — Webpack 4, Gulp/Grunt in modern projects
+- Legacy bundler — Webpack 4 and below, Gulp, Grunt. Flag Webpack 5 projects without Vite/esbuild migration plan
 - Monolithic modules — 1000+ lines or 50+ exports
+- Bun/Deno runtime differences: flag Node.js-specific APIs (`child_process`, `cluster`, `node:*` prefixed) when project targets multiple runtimes
 
 ### Test Coverage {#tests}
 

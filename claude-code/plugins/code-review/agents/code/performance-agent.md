@@ -17,13 +17,11 @@ permissionMode: dontAsk
 - O(n²)+ only when n is unbounded (user input, DB results, API responses) or >100 expected items. Sequential awaits: 3+ independent async ops awaited in sequence. Deep clone in loops: structuredClone/JSON.parse(JSON.stringify) in iterations
 
 **gaps:**
-- Hidden N+1 queries (lazy loading, nested loops with DB calls)
-- Memory retention through closures or event listeners
-- Inefficient serialization/deserialization
-- Cache invalidation issues
-- Unnecessary data copying
-- Premature optimization opportunities that matter
-- Batch operation opportunities
+1. **Identify overlooked hot paths**: repeated allocations inside loops, synchronous I/O blocking event loop, unbounded cache/collection growth, missing pagination on data fetches, N+1 queries across relationship boundaries
+2. **Trace data volume scaling**: For each candidate, estimate data volume at production scale. Check if O(n) becomes O(n²) through nested iterations or repeated lookups
+3. **Verify measurable impact**: Confirm the pattern affects a hot path or handles data volumes where the inefficiency is observable
+
+Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
 
 ## Output
 

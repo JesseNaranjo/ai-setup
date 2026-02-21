@@ -57,7 +57,7 @@ Pairs: Architecture+Test Coverage ("Are architectural changes covered by tests?"
 
 ## Model Selection
 
-Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick Opus exceptions: bug-detection, security.
+Default: agent `model` frontmatter. **Override:** Gaps → always Sonnet. Quick Opus exceptions: security.
 
 ## Language-Specific Focus
 

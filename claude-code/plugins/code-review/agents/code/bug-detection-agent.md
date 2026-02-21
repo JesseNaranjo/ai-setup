@@ -18,19 +18,14 @@ permissionMode: dontAsk
 - AI-hallucinated APIs: method calls on standard library objects that don't exist in target runtime (e.g., Array.groupBy, fs.promises.exists)
 
 **gaps:**
-- Boundary condition failures (empty arrays, zero values, max values)
-- Race conditions in concurrent code
-- State management issues (stale state, incorrect updates)
-- Resource cleanup failures in error paths
-- Incorrect error recovery paths
-- Time-of-check to time-of-use issues
-- Integer overflow/underflow
+1. **Identify overlooked runtime failures**: unhandled promise rejections, implicit type coercions causing silent data loss, off-by-one in boundary conditions, state mutations during async iteration
+2. **Trace execution paths**: Follow data from input through branching/looping to output. Check error propagation through callback chains and async boundaries
+3. **Verify reachability**: Confirm failure conditions are reachable with valid inputs in production paths
+
+Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
 
 **quick:**
-- Obvious null pointer dereferences
-- Clear logical errors (always-true/always-false conditions)
-- Obvious type errors
-- Missing return statements
+Critical/Major only. Skip: edge cases, theoretical issues, style.
 
 ## Output
 

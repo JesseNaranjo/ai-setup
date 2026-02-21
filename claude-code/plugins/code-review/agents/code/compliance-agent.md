@@ -23,10 +23,11 @@ Extract rules from AI instruction files: explicit (MUST/MUST NOT/ALWAYS/NEVER), 
 - Cross-file consistency
 
 **gaps:**
-- Rules that are easy to miss
-- Subtle violations (almost compliant but not quite)
-- Rules that might be misinterpreted
-- Edge cases and boundary conditions
+1. **Identify overlooked rule violations**: naming conventions applied inconsistently across files, architectural boundaries crossed in edge cases, rules with implicit scope (e.g., "use X" not specifying where)
+2. **Cross-reference rules with implementation**: For each candidate, locate the specific rule text and compare against actual code. Check both positive requirements ("must use") and negative constraints ("must not")
+3. **Verify rule applicability**: Confirm the rule applies to this file type, context, and scope
+
+Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
 
 ## Output
 

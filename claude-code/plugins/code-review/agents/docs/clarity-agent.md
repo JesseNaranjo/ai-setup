@@ -21,11 +21,7 @@ permissionMode: dontAsk
 - Passive voice obscuring actors, wall-of-text paragraphs
 
 **quick:**
-- Completely undefined acronyms
-- Sentences that are genuinely incomprehensible
-- Critical concepts with no explanation
-- Obvious ambiguities that could cause errors
-- Missing prerequisites that would block users
+Critical/Major only. Skip: edge cases, theoretical issues, style. + Critical concepts with no explanation. Missing prerequisites that block users.
 
 ### Step 2: Audience and Readability Analysis
 

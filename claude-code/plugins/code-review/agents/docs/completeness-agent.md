@@ -43,12 +43,11 @@ Use Grep to find public exports in code (`export`, `module.exports`, `public cla
 - Incomplete setup/prerequisites — required tools, services, or configuration not listed
 
 **gaps:**
-- Undocumented edge cases and limitations
-- Missing error scenarios and recovery steps
-- Unstated implicit assumptions, undocumented defaults
-- Platform-specific variations not covered
-- Missing security considerations, undocumented breaking changes, version compatibility gaps
-- Duplicate detection: skip already-reported missing sections; skip already-flagged feature docs
+1. **Identify overlooked coverage gaps**: undocumented error codes/exceptions, missing migration guides between versions, setup steps that assume prior knowledge, configuration options without documentation, API endpoints without examples
+2. **Trace user workflows**: For each candidate, follow the documented workflow end-to-end. Check if a user could complete the task using only the documentation provided
+3. **Verify gap significance**: Confirm the missing content would block or significantly hinder users
+
+Skip: within ±5 lines of thorough findings, same issue type on same section. Major/Critical only. Max 5 new.
 
 ## Output
 

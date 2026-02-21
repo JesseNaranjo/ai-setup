@@ -20,6 +20,9 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 - Non-semantic interactive elements: `<div onClick>` without role="button" and keyboard handlers
 - Missing form labels: `<input>` without associated `<label>` or aria-label
 - Focus management: modal/dialog opens without focus trap, route changes without focus reset
+- Invalid ARIA: misspelled `aria-*` attributes, wrong `role` values, redundant roles on semantic elements (`role="button"` on `<button>`)
+- Hardcoded color values without CSS custom properties or theme tokens — breaks dark mode and theming
+- Missing skip navigation link in layout components
 
 ### Error Handling {#errors}
 
@@ -79,8 +82,23 @@ Apply when `next` in dependencies.
 - Non-serializable props (functions, class instances, Dates) from Server to Client components — silent serialization failure
 - fetch() in Server Components: cache default changed between Next 14 (force-cache) and 15 (no-store) — verify explicit revalidate option
 - Server Actions ('use server') returning sensitive data — return values serialized to client, visible in network tab
+- Layout vs page data fetching: layouts fetch data shared across child routes; page-specific data belongs in pages, not layouts
+- Missing `"use server"` directive on exported server-side functions (causes client bundle inclusion)
+
+### Performance
+
+- Route Handler missing `revalidate` export or cache-control headers — defaults to dynamic rendering on every request
+
+### Middleware
+
+- Auth bypass via route ordering: middleware.ts matcher must cover all protected routes, not just a subset
+- Overly permissive matchers: `/((?!api|_next|static).*)` may miss dynamically registered routes
+- Missing CSP headers in middleware response
 
 ### API Routes
 
 - Raw exceptions instead of NextResponse.json() with status codes
 - Server action without input validation (Zod/yup)
+- Route Handler missing CORS headers when accessed cross-origin
+- Route Handler missing auth checks (unlike pages, Route Handlers have no layout-level auth inheritance)
+- GET Route Handler with mutation side effects: GET responses may be cached by CDN/browser, causing stale mutations

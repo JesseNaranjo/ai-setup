@@ -16,22 +16,17 @@ permissionMode: dontAsk
 **thorough:**
 - Supply chain: lockfile integrity (missing/outdated lockfile, lockfile-source mismatches), dependency confusion (internal package names in public registries), unpinned transitive dependencies in production
 - SSRF: fetch/request/axios with user-controlled URLs without allowlist. Deserialization: TypeNameHandling, pickle.loads, unserialize with untrusted input
+- AI-generated crypto: MD5/SHA1 for password hashing, hardcoded IV/nonce, `Math.random()` for tokens/secrets, `crypto.createCipher` (deprecated)
 
 **gaps:**
-- Second-order injection (stored XSS, delayed command execution)
-- Authorization edge cases (role escalation, missing checks on related resources)
-- Timing attacks and side channels
-- Race conditions that affect security
-- Error messages leaking sensitive information
-- Weak randomness in security-critical code
-- Missing security headers
-- Insecure defaults
+1. **Identify overlooked vulnerability patterns**: second-order injection, auth edge cases, timing attacks, security-affecting race conditions, info leakage in errors, weak randomness, missing headers, insecure defaults
+2. **Trace attack surface**: For each candidate, trace user input from source through storage to output context. Check sanitization at read boundaries, not just write
+3. **Verify exploitability**: Confirm attack path is reachable without requiring other vulnerabilities
+
+Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
 
 **quick:**
-- Direct injection vulnerabilities
-- Obvious authentication bypasses
-- Hardcoded credentials and secrets
-- Missing authorization checks on sensitive operations
+Critical/Major only. Skip: edge cases, theoretical issues, style. + Injection paths (user input to sink without sanitization). Hardcoded credentials in source. Missing authorization on sensitive endpoints.
 
 ## Output
 

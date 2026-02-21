@@ -21,10 +21,7 @@ permissionMode: dontAsk
 - **AI instruction file standardization** (see Step 3)
 
 **quick:**
-- Broken links (404s, missing files)
-- Major heading hierarchy violations
-- Missing navigation to critical content
-- AI instruction file location errors
+Critical/Major only. Skip: edge cases, theoretical issues, style. + Broken links (404s, missing files). Missing navigation to critical content. AI instruction file location errors.
 
 ### Step 2: Link Verification
 

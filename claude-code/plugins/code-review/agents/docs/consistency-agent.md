@@ -21,12 +21,11 @@ permissionMode: dontAsk
 - Voice/tense inconsistencies (you vs we vs passive)
 
 **gaps:**
-- Near-synonyms that cause subtle confusion
-- Inconsistent capitalization of product names
-- Varying levels of formality
-- Inconsistent example naming patterns
-- Subtle punctuation differences, whitespace and indentation variations
-- Duplicate detection: skip terminology pairs already flagged; skip formatting categories already addressed
+1. **Identify overlooked consistency issues**: same concept named differently across sections, formatting patterns that shift mid-document, code style conventions that vary between examples, terminology that conflicts with glossary or industry standard
+2. **Cross-reference across document scope**: For each candidate, search for all occurrences of the term/pattern and verify consistent usage. Check headings, code comments, and inline references
+3. **Verify reader confusion risk**: Confirm the inconsistency would cause ambiguity or misunderstanding, not just stylistic variation
+
+Skip: within ±5 lines of thorough findings, same issue type on same section. Major/Critical only. Max 5 new.
 
 ### Step 2: Terminology, Formatting, and Voice Analysis
 

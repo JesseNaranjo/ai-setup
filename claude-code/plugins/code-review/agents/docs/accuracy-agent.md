@@ -16,20 +16,14 @@ permissionMode: dontAsk
 **thorough:** All code-doc sync: signatures, CLI commands, config options, API endpoints, env vars, version numbers, code examples
 
 **gaps:**
-- Parameter defaults not reflected in docs
-- Subtle behavior differences (edge cases, error conditions)
-- Implicit assumption changes: documented 'returns null' but now throws, documented 'sync' but now async, documented default value changed
-- Order-dependent behavior changes
-- Deprecated but still documented features
-- New required parameters not documented
-- Duplicate detection: skip issues within ±3 lines of prior findings; skip same issue type on same code reference
+1. **Identify overlooked accuracy issues**: implicit behavior changes not reflected in docs, version-specific differences documented as universal, parameter constraints documented incorrectly, return value documentation that omits error cases, order-dependent behavior changes, deprecated but still documented features, new required parameters not documented
+2. **Cross-verify claims against code**: For each candidate, read the actual source code and compare documented behavior with implementation. Check default values, error conditions, and edge case handling
+3. **Verify practical impact**: Confirm the inaccuracy would cause incorrect usage or failed implementations
+
+Skip: within ±5 lines of thorough findings, same issue type on same section. Major/Critical only. Max 5 new.
 
 **quick:**
-- Incorrect function/method names
-- Wrong parameter types or counts
-- Broken code examples (syntax errors, missing imports)
-- Incorrect CLI commands that would fail
-- Version mismatches (major version differences)
+Critical/Major only. Skip: edge cases, theoretical issues, style. + Incorrect function/method names. Wrong parameter types/counts. Broken code examples (syntax errors, missing imports). Incorrect CLI commands. Major version mismatches.
 
 ## Output
 
