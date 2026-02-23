@@ -23,12 +23,11 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Command | Description |
 |---------|-------------|
-| `/code-review [<file1> [file2...] \| --staged] [--depth deep\|quick] [--output-file <path>]` | Code review for files or staged changes with configurable depth (deep: up to 19 agents, quick: up to 7) |
-| `/docs-review [file1...] [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: up to 13 agents, quick: up to 7) |
+| `/code-review "<review prompt>" [--depth deep\|quick] [--output-file <path>]` | Code review with configurable depth (deep: up to 19 agents, quick: up to 7). Describe what to review in the prompt. |
+| `/docs-review "<review prompt>" [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: up to 13 agents, quick: up to 7). Describe what to review in the prompt, or omit for auto-discovery. |
 
 **Note:** All review commands also accept:
 - `--language nodejs|react|dotnet` to force language detection (code reviews only)
-- `--prompt "<instructions>"` to pass additional instructions to agents
 - `--skills <skill1,skill2,...>` to enable skill-informed orchestration (orchestrator interprets skills and generates tailored `skill_instructions` per agent)
 
 ## Plugin Skills
@@ -254,7 +253,7 @@ When modifying the plugin:
 ### Orchestration Skills & Settings
 - **Orchestration skill arguments**: Edit skill YAML frontmatter in `skills/code-review/SKILL.md` or `skills/docs-review/SKILL.md`
 - **Settings options**: Edit Step 2 in `skills/code-review/SKILL.md` and `skills/docs-review/SKILL.md`, and `templates/code-review.local.md.example`
-- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `skills/code-review/SKILL.md` (Step 4, staged section)
+- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `skills/code-review/SKILL.md` (Step 4, staged scope section)
 
 ## Coding Conventions
 
@@ -365,7 +364,7 @@ Synthesis agents (`synthesis-code-agent.md` / `synthesis-docs-agent.md`) formerl
 
 ### Orchestration Skills (code-review, docs-review)
 
-Review orchestration was migrated from `commands/` to `skills/` per Anthropic's Plugin Reference recommendation. The skill YAML schema supports all needed fields: `name`, `allowed-tools`, `description`, `argument-hint`, `model`. Both orchestration skills use `model: opus`. The `allowed-tools` list includes `Task` (agent invocation), git-scoped `Bash` patterns, `Read`, `Write`, `Glob`.
+Review orchestration was migrated from `commands/` to `skills/` per Anthropic's Plugin Reference recommendation. The skill YAML schema supports all needed fields: `name`, `allowed-tools`, `description`, `argument-hint`, `model`. Both orchestration skills use `model: opus`. The `allowed-tools` list includes `Task` (agent invocation), git-scoped `Bash` patterns, `Read`, `Write`, `Glob`, `Grep`.
 
 **CRITICAL:** These orchestration skills must NOT use `context: fork`. Forked skills run in a subagent that cannot spawn other subagents. The review orchestration dispatches agents via the `Task` tool, which requires running in the main thread.
 

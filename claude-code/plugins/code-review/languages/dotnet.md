@@ -6,7 +6,7 @@
 
 ### Architecture {#architecture}
 
-- Service registration order — dependent services registered before dependencies
+- HttpClient injected directly instead of IHttpClientFactory — prevents named client configuration and mock injection in tests
 - Missing interface abstraction for external service calls (testability)
 
 ### Bugs {#bugs}

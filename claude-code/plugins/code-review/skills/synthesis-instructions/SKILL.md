@@ -15,6 +15,8 @@ Receives `synthesis_input` with:
 
 ## Review Process
 
+### Step 1: Map Findings to Files
+
 Map findings to files. For each file with findings from both categories: analyze interactions per agent's Step 2 patterns. Check if proposed fixes introduce issues in the other category. Report only cross-cutting insights not caught by individual agents.
 
 ### Step 2: Analyze Cross-Category Interactions

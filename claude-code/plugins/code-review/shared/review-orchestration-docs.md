@@ -8,7 +8,7 @@
 ### Prompt Schema
 
 Required: `MODE` (thorough/gaps/quick), `files_to_review` (see File Entry Schema).
-Optional: `ai_instructions` (summary of AI instruction files), `previous_findings` (gaps only; each: `title`, `file`, `line`, `range`, `category`, `severity`), `skill_instructions` ({focus_areas, checklist [{category, severity, items}], auto_validate, false_positive_rules, methodology {approach, steps, questions}}), `additional_instructions` (settings body + `--prompt` + orchestrator-injected rules).
+Optional: `ai_instructions` (summary of AI instruction files), `previous_findings` (gaps only; each: `title`, `file`, `line`, `range`, `category`, `severity`), `skill_instructions` ({focus_areas, checklist [{category, severity, items}], auto_validate, false_positive_rules, methodology {approach, steps, questions}}), `additional_instructions` (settings body + review prompt + orchestrator-injected rules).
 
 ### File Entry Schema
 

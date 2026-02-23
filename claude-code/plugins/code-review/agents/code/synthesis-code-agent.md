@@ -39,14 +39,14 @@ Apply when detected language matches:
 
 **Node.js/React:**
 - Bugs+Performance: Stale closures in useEffect causing both incorrect behavior and memory leaks
-- Performance+Architecture: Prop drilling causing unnecessary re-renders vs. context/state management architecture
 - Compliance+Technical Debt: Legacy patterns (var, require()) violating modern code standards with straightforward migration paths
+- Performance+Architecture: Prop drilling causing unnecessary re-renders vs. context/state management architecture
 - Security+Error Handling: Express error middleware exposing stack traces or internal errors to clients
 
 **.NET:**
 - Architecture+Bugs: Service lifetime mismatches (Scoped injected into Singleton) causing shared state bugs
-- Performance+Technical Debt: Legacy synchronous patterns blocking thread pool in high-throughput scenarios
 - Compliance+Technical Debt: Obsolete API usage (WebClient→HttpClient, BinaryFormatter→System.Text.Json) violating current .NET security/coding standards
+- Performance+Technical Debt: Legacy synchronous patterns blocking thread pool in high-throughput scenarios
 - Security+Performance: Async operations without CancellationToken creating both timeout vulnerabilities and resource exhaustion
 
 ### Example — Security + Performance

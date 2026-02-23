@@ -22,19 +22,18 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ### `/code-review`
 
-Code review for files or staged changes with configurable depth. Deep (default) uses all 9 review agents plus synthesis (up to 19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (bugs, security, errors, tests).
+Code review with configurable depth. Describe what to review in the prompt: file paths, "staged changes", specific commits, or a description of the code area. Deep (default) uses all 9 review agents plus synthesis (up to 19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
-/code-review <file1> [file2...] [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
-/code-review --staged [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--prompt "<instructions>"] [--skills <skills>]
+/code-review "<review prompt>" [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--skills <skills>]
 ```
 
 ### `/docs-review`
 
-Documentation review with configurable depth. Deep (default) uses all 6 documentation agents (up to 13 invocations) with thorough + gaps modes. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no files are specified, discovers and reviews all documentation files (README.md, CLAUDE.md, docs/*, etc.).
+Documentation review with configurable depth. Describe what to review in the prompt, or omit for auto-discovery of all project documentation (README.md, CLAUDE.md, docs/*, etc.). Deep (default) uses all 6 documentation agents (up to 13 invocations) with thorough + gaps modes. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure).
 
 ```bash
-/docs-review [file1...] [--depth deep|quick] [--output-file <path>] [--prompt "<instructions>"] [--skills <skills>]
+/docs-review ["<review prompt>"] [--depth deep|quick] [--output-file <path>] [--skills <skills>]
 ```
 
 > **Note:** Documentation commands support the `reviewing-documentation` skill which provides focused documentation quality checks across all 6 documentation agents (accuracy, clarity, completeness, consistency, examples, structure).
@@ -154,11 +153,11 @@ This is a financial application. Pay extra attention to:
 Command-line flags extend or override settings file:
 1. `--output-file` overrides `output_dir`
 2. `--language` overrides `language`
-3. `--prompt` appends to project instructions (does not replace)
+3. Review prompt appends to project instructions (does not replace)
 
-### Additional Prompt Instructions
+### Review Prompt Strategies
 
-Use `--prompt` to pass ad-hoc instructions to all review agents without editing your settings file. This is useful for:
+The review prompt is your natural language interface to all review agents. Include both what to review and any special instructions directly in the prompt. This is useful for:
 - Focusing reviews on specific concerns
 - Providing one-off context for a particular review
 - Experimenting with different review approaches
@@ -166,25 +165,25 @@ Use `--prompt` to pass ad-hoc instructions to all review agents without editing 
 #### Example: Brainstorming-Style Deep Exploration
 
 ```bash
-/code-review src/auth/*.ts --prompt "Before flagging issues, brainstorm multiple attack vectors and failure modes for each function. Consider: What assumptions does this code make? What happens if those assumptions are violated? What edge cases might the original developer have missed? Explore creatively before concluding."
+/code-review src/auth/*.ts - before flagging issues, brainstorm multiple attack vectors and failure modes for each function. What assumptions does this code make? What happens if those assumptions are violated? What edge cases might the original developer have missed? Explore creatively before concluding.
 ```
 
 #### Example: Systematic Checklist Approach
 
 ```bash
-/code-review --staged --depth quick --prompt "For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. Don't skip any category even if it seems unlikely."
+/code-review review staged changes. For each file, systematically check: 1) Input validation gaps, 2) Error handling completeness, 3) Resource cleanup, 4) Concurrency issues, 5) Security boundaries. --depth quick
 ```
 
 #### Example: Domain-Specific Focus
 
 ```bash
-/code-review src/api/payments.ts --prompt "This is a payment processing module. Focus on: financial calculation precision, transaction atomicity, audit trail completeness, PCI compliance patterns. Flag anything that could lead to money loss or compliance violations."
+/code-review src/api/payments.ts - this is a payment processing module. Focus on: financial calculation precision, transaction atomicity, audit trail completeness, PCI compliance patterns. Flag anything that could lead to money loss or compliance violations.
 ```
 
 #### Example: Threat Model Guidance
 
 ```bash
-/code-review src/api/*.ts --prompt "Assume an attacker has valid credentials but is trying to access other users' data. Focus on authorization checks, IDOR vulnerabilities, and data leakage in error messages."
+/code-review src/api/*.ts - assume an attacker has valid credentials but is trying to access other users' data. Focus on authorization checks, IDOR vulnerabilities, and data leakage in error messages.
 ```
 
 #### Combining with Project Settings
@@ -203,10 +202,10 @@ Apply brainstorming principles: explore multiple interpretations of each code pa
 Use systematic analysis: check each security category even when code appears safe.
 ```
 
-Then use `--prompt` for one-off additions:
+Then add one-off instructions directly in the review prompt:
 
 ```bash
-/code-review src/auth/*.ts --prompt "Additionally, this PR introduces OAuth. Verify token handling follows OWASP guidelines."
+/code-review src/auth/*.ts - additionally, this PR introduces OAuth. Verify token handling follows OWASP guidelines.
 ```
 
 #### Effective Prompt Strategies
@@ -250,9 +249,9 @@ All agents will explore multiple interpretations and failure modes before flaggi
 ```
 Security agent receives targeted security checklists; all agents receive debugging methodology.
 
-**Use with --prompt:**
+**Combine skills with review prompt:**
 ```bash
-/code-review src/payments.ts --skills superpowers:brainstorming --prompt "Focus on financial calculation precision"
+/code-review src/payments.ts - focus on financial calculation precision --skills superpowers:brainstorming
 ```
 Combines skill methodology with specific instructions.
 
@@ -370,8 +369,8 @@ code-review/
 | error-handling-agent | Sonnet | thorough, quick | orange |
 | performance-agent | Opus | thorough, gaps | green |
 | security-agent | Opus | thorough, gaps, quick | purple |
-| synthesis-code-agent | Sonnet | (cross-category) | white |
-| technical-debt-agent | Opus | thorough, gaps | brown |
+| synthesis-code-agent | Opus | (cross-category) | white |
+| technical-debt-agent | Sonnet | thorough, gaps | brown |
 | test-coverage-agent | Sonnet | thorough, quick | white |
 
 **Documentation Review Agents:**
@@ -380,11 +379,11 @@ code-review/
 |-------|-------|-----------------|-------|
 | accuracy-agent | Opus | thorough, gaps, quick | red |
 | clarity-agent | Sonnet | thorough, quick | cyan |
-| completeness-agent | Opus | thorough, gaps | green |
+| completeness-agent | Sonnet | thorough, gaps | green |
 | consistency-agent | Sonnet | thorough, gaps | blue |
-| examples-agent | Opus | thorough, quick | yellow |
+| examples-agent | Sonnet | thorough, quick | yellow |
 | structure-agent | Sonnet | thorough, quick | purple |
-| synthesis-docs-agent | Sonnet | (cross-category) | white |
+| synthesis-docs-agent | Opus | (cross-category) | white |
 
 > **Note:** The `model` field in agent frontmatter is the default for standalone agent invocation (e.g., when Claude auto-selects an agent based on context). Commands may override this when invoking agents for specific modes—for example, using Sonnet for "gaps" mode to optimize cost while maintaining quality.
 
@@ -406,8 +405,8 @@ Each agent accepts a MODE parameter:
 |---------|-------|--------|------------------|-------------------|
 | `/code-review` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (up to 5) | up to 19 |
 | `/code-review` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (up to 3) | up to 7 |
-| `/code-review --staged` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (up to 5) | up to 19 |
-| `/code-review --staged` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (up to 3) | up to 7 |
+
+> The review pipeline is the same regardless of scope type (file paths, staged changes, or descriptive scope).
 
 **Documentation Reviews:**
 
@@ -500,7 +499,7 @@ The query uses string concatenation with user input.
 
 ```bash
 git add src/feature.ts
-/code-review --staged --depth quick
+/code-review review staged changes --depth quick
 git commit -m "Add feature"
 ```
 
@@ -508,7 +507,19 @@ git commit -m "Add feature"
 
 ```bash
 git add .
-/code-review --staged
+/code-review review staged changes
+```
+
+### Post-Commit Review
+
+```bash
+/code-review review the last commit --depth quick
+```
+
+### Review a Commit Range
+
+```bash
+/code-review review changes since main
 ```
 
 ### Targeted Security Audit
@@ -554,7 +565,7 @@ Create a new directory in `skills/` with a `SKILL.md` file containing the approp
 - Check file exists in project root
 
 **No staged changes found:**
-- Run `git add` before using `/code-review --staged`
+- Run `git add` before reviewing staged changes
 - Verify changes are staged with `git status`
 
 **Wrong language detected:**

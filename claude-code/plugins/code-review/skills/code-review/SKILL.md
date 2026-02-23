@@ -1,22 +1,18 @@
 ---
 name: code-review
-allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob
-description: Code review for files or staged changes with configurable depth (deep: up to 19 agent invocations, quick: up to 7)
-argument-hint: "[<file1> [file2...] | --staged] [--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
+allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob, Grep
+description: Code review with configurable depth (deep: up to 19 agent invocations, quick: up to 7). Describe what to review in the prompt.
+argument-hint: "\"<review prompt>\" [--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a code review for specified files or staged git changes. Depth controls the review pipeline: deep uses all 9 agents (up to 19 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on bugs, security, error handling, and test coverage. For file reviews with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a code review. Depth controls the review pipeline: deep uses all 9 agents (up to 19 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on bugs, security, error handling, and test coverage. For file reviews with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
-Parse arguments from `$ARGUMENTS`:
-- Mutually exclusive: One or more file paths (space-separated) OR `--staged` flag
+Parse `$ARGUMENTS`: extract structural flags (--depth, --output-file, --language, --skills); remaining text = review prompt.
 - Optional: `--depth deep|quick` (default: `deep`)
 - Optional: `--output-file <path>` to specify output location (default: see Filename Generation in review-orchestration-code.md)
 - Optional: `--language dotnet|nodejs|react` to force language detection
-- Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
-
-Error if both file paths and `--staged` are provided.
 
 ---
 
@@ -30,7 +26,7 @@ Load from `.claude/code-review.local.md` in project root. If missing, use defaul
 
 Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend to output filename unless --output-file), `skip_agents` ([] ; exclude from review), `min_severity` ("suggestion" ; filter to issues at or above), `language` ("" ; empty = auto-detect), `additional_test_patterns` ([] ; merge with defaults).
 
-Markdown body → "Project-Specific Instructions" for all agents. `--prompt` appends. Precedence: CLI flags > settings file > defaults.
+Markdown body → "Project-Specific Instructions" for all agents. Review prompt appended. Precedence: CLI flags > settings file > defaults.
 
 ## Step 3: Context Discovery
 
@@ -63,11 +59,26 @@ Only load `languages/*.md` for detected languages. Unknown: warn, skip.
 
 ---
 
-## Step 4: Input Validation and Content Gathering
+## Step 4: Scope Inference and Content Gathering
 
-**If `--staged`:**
+### Scope Inference
 
-Verify git repository (stop: "Not a git repository.") and staged changes exist (stop: "No staged changes to review."). Parse `--output-file` (command provides default) and `--language` (default: auto-detect per file).
+Analyze the review prompt to determine review scope:
+
+1. **Staged scope**: Prompt mentions "staged" or "staged changes" → staged review flow
+2. **Commit scope**: Prompt contains git references (SHAs, ranges like `abc..def` or `HEAD~3..HEAD`,
+   or keywords like "commit", "last N commits", "changes since/between <ref>") → commit review flow.
+   Resolve references: single SHA = review that commit (`SHA~1..SHA`); range = use as-is;
+   "last N commits" = `HEAD~N..HEAD`; branch name like "since main" = `main..HEAD`.
+3. **File path scope**: Prompt contains file paths (paths ending in known extensions like `.ts`, `.js`, `.tsx`, `.jsx`, `.cs`, `.py`, `.md`, `.json`, or matching existing repo files via Glob) → specific file review
+4. **Descriptive scope**: Prompt describes a module, feature, or code area → use Glob/Grep to discover relevant files. Validate discovered files exist and are non-empty. Fail if no files match the description.
+5. **No scope**: Empty prompt or no inferrable scope → error: "Cannot infer what to review. Specify files, 'staged changes', commits, or describe the code area to review."
+
+### Content Gathering
+
+**If staged scope:**
+
+Verify git repository (stop: "Not a git repository.") and staged changes exist (stop: "No staged changes to review.").
 
 Launch Sonnet agent to gather:
 
@@ -79,6 +90,22 @@ Launch Sonnet agent to gather:
 
 **Output:** Branch name. Per file: path, has_changes, tier. Critical: diff + full_content. Peripheral: preview (50 lines), line_count, full_content_available: true. Related tests (critical). Review summary.
 
+**If commit scope:**
+
+Verify git repository (stop: "Not a git repository."). Resolve commit references — validate SHAs exist
+via `git rev-parse`, resolve branch names, compute range. Stop if invalid: "Invalid commit reference: <ref>."
+
+Launch Sonnet agent to gather:
+
+- **Commit diff:** `git diff <base>..<head>` with full diff and line markers
+- **Current branch:** Branch name
+- **File content (tiered):** Changed files (has_changes=true) → full content (critical). Unchanged
+  import/context files (has_changes=false) → first 50 lines preview (peripheral)
+- **Related test files:** From Context Discovery. Always critical tier
+- **Summary:** Commit range, files modified count, change description, project types, test files, tier classification
+
+**Output:** Branch name. Per file: path, has_changes, tier. Critical: diff + full_content. Peripheral: preview (50 lines), line_count, full_content_available: true. Related tests (critical). Commit range. Review summary.
+
 **Pre-Existing Issue Detection** — include in each agent's `additional_instructions`:
 
 **CRITICAL**: Only flag issues in CHANGED lines.
@@ -89,14 +116,14 @@ Launch Sonnet agent to gather:
 
 **Do NOT flag:** Unchanged code (no `+` prefix). Pre-existing problems not worsened. Style in untouched code. Issues in "full file" context but not in diff.
 
-**Tiered Context** — inject into `additional_instructions` for staged reviews:
+**Tiered Context** — inject into `additional_instructions` for staged and commit scope reviews:
 
 **critical:** Full content provided — analyze thoroughly.
 **peripheral:** Preview only (50 lines). If cross-file analysis discovers relevance, use Read tool for full content.
 
-**If file paths provided:**
+**If file path or descriptive scope:**
 
-Parse arguments: file paths (all non-flag arguments, space-separated), `--output-file` path, `--language` override (`nodejs`, `react`, `dotnet`).
+For descriptive scope: use Glob and Grep to discover files matching the described module, feature, or code area.
 
 Validate: git repo presence (fail if not), file existence (exclude missing), change status (uncommitted vs none). Fail if no valid files remain. Split files by has_changes / no changes.
 
@@ -121,7 +148,7 @@ Execute the **Deep Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/rev
 **If depth == quick:**
 Execute the **Quick Code Review Sequence** from `${CLAUDE_PLUGIN_ROOT}/shared/review-orchestration-code.md`. Follow all CRITICAL WAIT barriers.
 
-**If `--staged`:** Agents receive staged diff and file content per tier classification above (Step 4).
+**If staged or commit scope detected:** Agents receive diff and file content per tier classification above (Step 4).
 
 ---
 

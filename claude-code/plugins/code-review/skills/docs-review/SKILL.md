@@ -1,18 +1,16 @@
 ---
 name: docs-review
-allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Bash(find:*), Read, Write, Glob
-description: Documentation review with configurable depth (deep: up to 13 agent invocations, quick: up to 7)
-argument-hint: "[file1...] [--depth deep|quick] [--output-file <path>] [--prompt \"<instructions>\"] [--skills <skill1,skill2,...>]"
+allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Bash(find:*), Read, Write, Glob, Grep
+description: Documentation review with configurable depth (deep: up to 13 agent invocations, quick: up to 7). Describe what to review in the prompt, or omit for auto-discovery.
+argument-hint: "\"<review prompt>\" [--depth deep|quick] [--output-file <path>] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a documentation review. Depth controls the review pipeline: deep uses all 6 documentation agents (up to 13 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no files specified, discover and review all documentation files in the project.
+Perform a documentation review. Depth controls the review pipeline: deep uses all 6 documentation agents (up to 13 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no reviewable scope inferred from prompt, discover and review all documentation files in the project.
 
-Parse arguments from `$ARGUMENTS`:
-- Optional: One or more file paths (space-separated) - if omitted, discover all docs
+Parse `$ARGUMENTS`: extract structural flags (--depth, --output-file, --skills); remaining text = review prompt.
 - Optional: `--depth deep|quick` (default: `deep`)
 - Optional: `--output-file <path>` to specify output location (default: see Filename Generation in review-orchestration-docs.md)
-- Optional: `--prompt "<instructions>"` to add instructions passed to all agents
 - Optional: `--skills <skill1,skill2,...>` to embed skill methodologies in agent prompts
 
 ---
@@ -27,7 +25,7 @@ Load from `.claude/code-review.local.md` in project root. If missing, use defaul
 
 Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend to output filename unless --output-file), `skip_agents` ([] ; exclude from review), `min_severity` ("suggestion" ; filter to issues at or above), `additional_test_patterns` ([] ; merge with defaults).
 
-Markdown body → "Project-Specific Instructions" for all agents. `--prompt` appends. Precedence: CLI flags > settings file > defaults.
+Markdown body → "Project-Specific Instructions" for all agents. Review prompt appended. Precedence: CLI flags > settings file > defaults.
 
 ## Step 3: Context Discovery
 
@@ -43,15 +41,27 @@ ai_instructions: [{path, applies_to}]
 
 ---
 
-## Step 4: Input Validation and Content Gathering
+## Step 4: Scope Inference and Content Gathering
+
+### Scope Inference
+
+Analyze the review prompt to determine review scope:
+
+1. **File path scope**: Prompt contains file paths (paths ending in `.md`, `.txt`, `.rst`, or matching existing repo files via Glob) → specific file review
+2. **Commit scope**: Prompt contains git references (SHAs, ranges, or keywords like "commit",
+   "last N commits", "changes since <ref>") → review documentation files changed in those commits.
+   Resolve references same as code-review. Filter changed files to documentation files only
+   (*.md, *.txt, *.rst). If no documentation files changed, fall through to auto-discovery with
+   warning: "No documentation files changed in specified commits. Reviewing all project documentation."
+3. **Descriptive scope**: Prompt describes specific documentation (e.g., "check README accuracy", "review the API docs") → discover those files using Glob/Grep
+4. **Auto-discovery scope**: Prompt provides general instructions or is empty → auto-discover all project documentation
+5. **No docs found**: Auto-discovery finds zero docs → error: "No documentation files found. Ensure your project has README.md, docs/, or other markdown documentation."
 
 ### Input Validation
 
-**Parse arguments:** File paths (optional, space-separated), `--output-file`, `--prompt`.
-
 **Git repository check:** Verify via `git rev-parse --git-dir`. If not, stop: "Not a git repository."
 
-**Discover documentation files:** If specific files provided, validate those. Otherwise discover:
+**Discover documentation files:** If specific files determined from scope inference (file path or commit scope), validate those. Otherwise discover:
 
 Standard documentation: Root markdown (README.md, CHANGELOG.md, CLAUDE.md, CODE_OF_CONDUCT.md, CONTRIBUTING.md, LICENSE.md) + `docs/**/*.md`, `documentation/**/*.md`
 
@@ -67,11 +77,9 @@ AI Agent Instruction Files:
 - CLAUDE.md header: check references `.ai/AI-AGENT-INSTRUCTIONS.md`
 - copilot-instructions.md: `.github/` = exists; missing = should create
 
-**Filter by scope:** Specific files provided → verify existence, review only those. No files → include all discovered; prioritize README > CLAUDE.md > CHANGELOG > docs/
+**Filter by scope:** Specific files determined → verify existence, review only those. Auto-discovery → include all discovered; prioritize README > CLAUDE.md > CHANGELOG > docs/
 
-If no files found, stop: "No documentation files found. Ensure your project has README.md, docs/, or other markdown documentation."
-
-**Validation output:** Documentation files to review, AI instruction file standardization status, output file path, additional instructions.
+**Validation output:** Documentation files to review, AI instruction file standardization status, output file path.
 
 ### Content Gathering
 

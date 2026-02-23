@@ -37,7 +37,8 @@
 ### Security {#security}
 
 - Prototype pollution — Object.assign/recursive merge with user input
-- Missing helmet, missing rate limiting
+- Missing helmet (HTTP security headers)
+- Missing rate limiting on public endpoints
 - eval()/Function()/vm.runInContext() with user input
 - `dotenv` loads first occurrence of duplicate keys — attacker prepending to `.env` overrides all values
 - Lifecycle scripts (preinstall/postinstall): new dependencies with lifecycle scripts execute arbitrary code at install. Flag unfamiliar packages with preinstall or postinstall

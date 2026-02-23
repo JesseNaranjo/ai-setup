@@ -9,7 +9,7 @@
 
 Required: `MODE` (thorough/gaps/quick), `project_type` (nodejs/dotnet/both), `files_to_review` (see File Entry Schema).
 Conditional: `ai_instructions` (full content for architecture/compliance; summary-only for others), `related_tests` (bug-detection, technical-debt, test-coverage only), `previous_findings` (gaps only; each: `title`, `file`, `line`, `range`, `category`, `severity`).
-Optional: `skill_instructions` ({focus_areas, checklist [{category, severity, items}], auto_validate, false_positive_rules, methodology {approach, steps, questions}}), `additional_instructions` (settings body + `--prompt` + orchestrator-injected rules).
+Optional: `skill_instructions` ({focus_areas, checklist [{category, severity, items}], auto_validate, false_positive_rules, methodology {approach, steps, questions}}), `additional_instructions` (settings body + review prompt + orchestrator-injected rules).
 
 ### File Entry Schema
 

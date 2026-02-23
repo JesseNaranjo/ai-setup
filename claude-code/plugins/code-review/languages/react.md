@@ -14,7 +14,6 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 ### Bugs {#bugs}
 
 - key={index} on lists that reorder/filter (stale state preservation)
-- useEffect cleanup missing for subscriptions/timers/event listeners
 - Incorrect dependency array — missing deps causing stale closure
 - Missing alt text on `<img>`, missing aria-label on icon-only buttons
 - Non-semantic interactive elements: `<div onClick>` without role="button" and keyboard handlers
@@ -40,6 +39,7 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 ### Security {#security}
 
+- dangerouslySetInnerHTML with unsanitized user input — bypasses React XSS protection; require DOMPurify or equivalent
 - href javascript: injection
 - Insecure iframe — missing sandbox on user-controlled iframes
 
