@@ -615,7 +615,7 @@ Create a new directory in `skills/` with a `SKILL.md` file containing the approp
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history and release notes.
 
-**Current Version:** 4.0.0
+**Current Version:** 4.0.1
 
 ## Author
 

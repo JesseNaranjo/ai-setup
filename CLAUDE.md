@@ -11,7 +11,7 @@ Do not optimize any other file for human readability. Do not add prose softeners
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v4.0.0) - a modular 17-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v4.0.1) - a modular 17-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -416,11 +416,11 @@ Agents have access to Read, Grep, and Glob tools. For Phase 2 (gaps) and Synthes
 
 **Version bump rules:** Patch = fixes/docs. Minor = new features/agents/commands. Major = breaking changes.
 
-**Version locations** (all three must match): `plugin.json`, `marketplace.json` (repo root), `README.md` ("Current Version"). Per Anthropic guidance, only `plugin.json` is authoritative — individual agent/skill files must NOT have version fields.
+**Version locations** (all four must match): `plugin.json`, `marketplace.json` (repo root), `README.md` ("Current Version"), `CLAUDE.md` ("Repository Overview"). Per Anthropic guidance, only `plugin.json` is authoritative — individual agent/skill files must NOT have version fields.
 
 **Release steps:**
 1. Find previous tag and diff changes: `git tag -l --sort=-v:refname | head -5` then `git log <prev>..HEAD --oneline -- claude-code/plugins/code-review/`
 2. Update CHANGELOG.md first (Keep a Changelog format, base on `git diff` not commit messages)
-3. Update version in all 3 locations
-4. Verify: `grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG` (expect 0) and `grep -r "<new>" ... | wc -l` (expect 3)
+3. Update version in all 4 locations
+4. Verify: `grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG` (expect 0) and `grep -r "<new>" ... | wc -l` (expect 4)
 5. Commit, tag, push: `git tag v<new> && git push origin main && git push origin v<new>`

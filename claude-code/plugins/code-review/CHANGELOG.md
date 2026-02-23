@@ -5,6 +5,34 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1] - 2026-02-23
+
+### Breaking Changes
+
+- Command syntax migrated to prompt-based scope inference — review prompt replaces positional file arguments and `--staged` flag
+  - Before: `/code-review file1.ts file2.ts`, `/code-review --staged`
+  - After: `/code-review "review auth module for security"`, `/code-review review staged changes`
+- Removed `--prompt` flag — instructions now included directly in the review prompt
+
+### Added
+
+- Commit scope: review specific commits (`review the last commit`) or ranges (`review changes since main`)
+- Descriptive scope inference: natural language prompts discover files via Glob/Grep
+- React: `dangerouslySetInnerHTML` XSS check with DOMPurify requirement
+- `Grep` added to orchestration skills' `allowed-tools`
+
+### Changed
+
+- Scope inference replaces explicit argument parsing in both orchestration skills (Step 4 rewritten)
+- Model reassignments: synthesis-code-agent Sonnet → Opus, technical-debt-agent Opus → Sonnet, completeness-agent Opus → Sonnet, examples-agent Opus → Sonnet, synthesis-docs-agent Sonnet → Opus
+- Node.js security: split "missing helmet, missing rate limiting" into specific items
+- .NET architecture: replaced service registration order check with HttpClient/IHttpClientFactory pattern
+- React: recategorized useEffect cleanup check from bugs to errors checklist
+- Template: language override description updated to code reviews only
+- Synthesis-instructions: added Step 1 heading
+- Orchestration schema docs: `--prompt` → "review prompt"
+- Synthesis-code-agent: alphabetized language-specific interaction patterns
+
 ## [4.0.0] - 2026-02-21
 
 ### Breaking Changes
@@ -385,6 +413,7 @@ When releasing a new version, update:
 - `.claude-plugin/plugin.json` - Plugin manifest (authoritative version)
 - Repository root `.claude-plugin/marketplace.json` (if applicable)
 - `README.md` - Current Version line
+- `CLAUDE.md` - Repository Overview version reference
 
 > **Note:** Per Anthropic's plugin guidance, only `plugin.json` should contain the version. Individual agent, skill, and command files should NOT have version fields.
 
@@ -393,6 +422,6 @@ When releasing a new version, update:
 # Verify no old version remains (exclude CHANGELOG history)
 grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG
 
-# Verify new version count (3 expected: plugin.json, marketplace.json, README.md)
+# Verify new version count (4 expected: plugin.json, marketplace.json, README.md, CLAUDE.md)
 grep -r "<new>" --include="*.md" --include="*.json" | grep -v CHANGELOG | wc -l
 ```
