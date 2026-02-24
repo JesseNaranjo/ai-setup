@@ -22,6 +22,6 @@ Adds scope prioritization (dependency/config files), debt-specific FP adjustment
 - TODOs referencing issue tracking (e.g., `TODO(#123)`)
 - Workarounds with documented upstream bug references
 
-## Detailed Debt Patterns
+## Pattern References
 
 `references/technical-debt-patterns.md`

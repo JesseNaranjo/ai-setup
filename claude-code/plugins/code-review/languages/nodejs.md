@@ -11,7 +11,7 @@
 - `as any` casts in production code (not `.d.ts` stubs or test files) — suppresses type checking
 - `@ts-ignore`/`@ts-expect-error` without justification comment on preceding line
 - `enum` usage in new code: runtime overhead, poor tree-shaking — prefer `as const` objects
-- Missing return type annotations on exported public functions
+- Node.js 22 `--experimental-strip-types`: no enums, no namespaces, no `const enum` — type stripping silently drops these without error
 
 ### Bugs {#bugs}
 
@@ -24,9 +24,7 @@
 
 ### Error Handling {#errors}
 
-- Missing .catch() on Promise chains in request handlers
 - Express route without try/catch wrapping async operations
-- Swallowed errors — catch block with no logging or re-throw
 
 ### Performance {#performance}
 
@@ -37,9 +35,6 @@
 ### Security {#security}
 
 - Prototype pollution — Object.assign/recursive merge with user input
-- Missing helmet (HTTP security headers)
-- Missing rate limiting on public endpoints
-- eval()/Function()/vm.runInContext() with user input
 - `dotenv` loads first occurrence of duplicate keys — attacker prepending to `.env` overrides all values
 - Lifecycle scripts (preinstall/postinstall): new dependencies with lifecycle scripts execute arbitrary code at install. Flag unfamiliar packages with preinstall or postinstall
 - Missing `ignore-scripts=true` in `.npmrc` for CI environments (pnpm: `pnpm.enable-pre-post-scripts=false` in package.json)

@@ -10,6 +10,8 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 - Hooks doing too much — 100+ lines, multiple concerns
 - Prop drilling (>3 levels) — needs context or composition
+- Barrel file re-exports blocking tree shaking — named re-exports force bundler to include entire module graph
+- Missing dynamic imports for heavy components — `React.lazy()` or `next/dynamic` for client-only/large components
 
 ### Bugs {#bugs}
 
@@ -51,6 +53,8 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 - String refs (`ref="myRef"`) — migrate to useRef/createRef
 - defaultProps on function components (deprecated React 18.3+) — use default parameter values
 - PropTypes runtime validation in TypeScript projects — remove in favor of static types
+- React 19: `forwardRef` deprecated — ref is now a regular prop, remove forwardRef wrappers
+- React 19: `use()` hook replaces useEffect-for-data-fetching and useContext — flag patterns `use()` directly replaces
 
 ### Test Coverage {#tests}
 
@@ -80,10 +84,11 @@ Apply when `next` in dependencies.
 - Missing Suspense for async server components (no loading.tsx)
 - Importing client-only libraries (useState, useEffect, browser APIs) in files without 'use client' — runtime error not caught at build
 - Non-serializable props (functions, class instances, Dates) from Server to Client components — silent serialization failure
-- fetch() in Server Components: cache default changed between Next 14 (force-cache) and 15 (no-store) — verify explicit revalidate option
 - Server Actions ('use server') returning sensitive data — return values serialized to client, visible in network tab
 - Layout vs page data fetching: layouts fetch data shared across child routes; page-specific data belongs in pages, not layouts
 - Missing `"use server"` directive on exported server-side functions (causes client bundle inclusion)
+- Next.js 15: `cookies()`, `headers()`, `params`, `searchParams` are now async — synchronous access throws runtime error. Must `await cookies()` etc.
+- Next.js 15: `fetch` no longer cached by default (was force-cache in 14) — add explicit `{ cache: 'force-cache' }` or `revalidate` if caching intended
 
 ### Performance
 

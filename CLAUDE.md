@@ -78,8 +78,8 @@ claude-code/plugins/code-review/
 │   │   └── SKILL.md
 │   ├── reviewing-architecture-principles/
 │   ├── reviewing-bugs/
-│   ├── reviewing-compliance/
-│   ├── reviewing-documentation/     # Has 2 reference files
+│   ├── reviewing-compliance/        # Reference file inlined into SKILL.md
+│   ├── reviewing-documentation/     # Has 1 reference file (ai-instruction-templates.md)
 │   ├── reviewing-performance/
 │   ├── reviewing-security/          # Expanded example (all 7 review skills follow this pattern):
 │   │   ├── SKILL.md                 # Core skill instructions (~30-50 lines)
@@ -131,7 +131,7 @@ Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory
 **Agent body structure (two formats):**
 
 - **Opus agents** (architecture, bug-detection, performance, security, accuracy): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
-- **Sonnet agents** (api-contracts, clarity, completeness, compliance, consistency, error-handling, examples, structure, technical-debt, test-coverage): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance.
+- **Sonnet agents** (api-contracts, clarity, completeness, compliance, consistency, error-handling, examples, structure, technical-debt, test-coverage): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance. All Sonnet agents use `### Step N: [Domain] (Based on MODE)` header pattern where MODE-specific content appears.
 - **Synthesis agents** (synthesis-code, synthesis-docs): `model: opus`. Domain-specific body only (Category Key Mapping, Step 2 interaction patterns, example YAML). Shared process loaded via `code-review:synthesis-instructions` skill.
 
 **MODE labels:** `**thorough:**`, `**gaps:**`, `**quick:**` (no suffixes like "mode - Focus on:").
@@ -407,6 +407,8 @@ These notes apply when modifying patterns in `review-validation-{code|docs}.md`:
 - Patterns check for common variable names indicating user input: `req`, `request`, `params`, `query`, `body`, `input`, `user`
 - Empty catch pattern allows a single comment line to avoid flagging intentional empty catches with explanation
 - Language-labeled patterns use `[Node.js]`, `[React]`, or `[.NET]` tags after the severity tag. Unlabeled patterns apply to all languages. The orchestrator filters language-labeled patterns by detected language at validation time.
+- Code auto-validation categories: Bugs, Compliance, Performance, Security, Technical Debt. (Architecture and Error Handling removed — self-validating categories where finding text inherently proves the issue)
+- Docs auto-validation categories: Clarity, Completeness, Consistency, Examples, Structure. (Accuracy removed — evidence-based category where finding text proves correctness)
 
 ### Content Strategy Rationale
 

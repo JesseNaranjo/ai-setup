@@ -22,6 +22,6 @@ Adds scope prioritization, architecture FP adjustments, SOLID/DRY/YAGNI pattern 
 - Pragmatic compromises with documented justification
 - Patterns appropriate for project scale
 
-## References
+## Pattern References
 
 `references/solid-dry-yagni-patterns.md`

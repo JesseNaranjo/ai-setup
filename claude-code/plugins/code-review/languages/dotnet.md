@@ -7,7 +7,6 @@
 ### Architecture {#architecture}
 
 - HttpClient injected directly instead of IHttpClientFactory — prevents named client configuration and mock injection in tests
-- Missing interface abstraction for external service calls (testability)
 
 ### Bugs {#bugs}
 
@@ -19,9 +18,7 @@
 
 ### Error Handling {#errors}
 
-- Missing try/catch around async Task operations in controllers
 - AggregateException not unwrapped — InnerException ignored
-- Using `catch (Exception)` without filtering (CA1031)
 
 ### Performance {#performance}
 
@@ -32,10 +29,10 @@
 - `SearchValues<char>` (.NET 8): `IndexOfAny(new char[]{...})` with static char sets should use `SearchValues.Create()` for SIMD acceleration
 - `ConfigureAwaitOptions.SuppressThrowing` (.NET 8): replaces `try { await task; } catch { }` for fire-and-forget
 - Missing CancellationToken propagation through async call chains — operations continue after caller cancels, wasting resources
+- `HybridCache` (.NET 9): replaces manual IDistributedCache + IMemoryCache layering — single API with stampede protection and tag-based invalidation
 
 ### Security {#security}
 
-- Hardcoded connection strings, missing `[Authorize]`
 - XXE — XML parsing without disabling external entities
 - Model over-binding — [Bind]/[FromBody] allowing sensitive property binding
 - Missing [ValidateAntiForgeryToken] on POST/PUT/DELETE (or RequireAntiforgery() for Minimal API)
@@ -52,6 +49,9 @@
 - Primary constructors (.NET 8/C# 12): classes with single constructor + field assignment should use primary constructor syntax
 - `TimeProvider` (.NET 8): direct `DateTime.Now`/`DateTimeOffset.Now` in injectable services — use `TimeProvider.System` for testability
 - `IExceptionHandler` (.NET 8): replaces `UseExceptionHandler` inline lambda pattern
+- `System.Threading.Lock` (.NET 9): replaces `lock(object)` — dedicated lock type with scoped `EnterScope()`, avoids accidental lock on non-lock objects
+- `params` collections (.NET 9/C# 13): `params` now accepts `Span<T>`, `ReadOnlySpan<T>`, `IEnumerable<T>` — not just arrays. Flag `params T[]` when span variant reduces allocations
+- LINQ `CountBy`/`AggregateBy` (.NET 9): replaces `GroupBy(k).Select(g => ...)` pattern — single-pass, no intermediate grouping allocations
 
 ### Test Coverage {#tests}
 

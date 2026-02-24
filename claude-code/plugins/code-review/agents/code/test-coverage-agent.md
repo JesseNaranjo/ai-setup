@@ -21,6 +21,7 @@ permissionMode: dontAsk
 - Happy-path-only: functions with branches/error paths but only positive test cases. Mock sprawl: tests mocking >5 deps indicate architecture smell
 - Truthy-only assertions: test assertions checking only `toBeTruthy()`/`Assert.NotNull()` without verifying actual behavior — passes on any non-null return
 - AI-generated test smells: assertions on mock return values only (not behavior), zero negative/error test cases, tests that pass with empty implementation body
+- Assertion quality: missing boundary value tests, snapshot tests without semantic assertions
 
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + New public functions without tests. Critical paths (auth, payment, data mutation) without tests. Modified functions without updated tests.

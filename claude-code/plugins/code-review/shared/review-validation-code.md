@@ -44,13 +44,6 @@ Issues matching these patterns skip validation entirely and are marked `auto_val
 
 Apply unlabeled patterns to all languages. Apply [Node.js]/[React] patterns only for Node.js/React projects; apply [.NET] patterns only for .NET projects. Detected language from Context Discovery step.
 
-### Architecture
-
-- `circular_dependency` [Architecture/Major]: Circular import/dependency between modules
-- `god_class_500_lines` [Architecture/Major]: Class/module exceeds 500 lines
-- `function_10_params` [Architecture/Minor]: Function has 10+ parameters — `function\s+\w+\s*\([^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*,\s*[^)]*\)`
-- `direct_new_instantiation` [Architecture/Minor]: Direct instantiation of service/repository dependency — `(?:=\s*new\s+\w+Service\|=\s*new\s+\w+Repository)\s*\(`
-
 ### Bugs
 
 - `blazor_improper_disposal` [Bugs/Major] [.NET]: Blazor component with IJSRuntime without IAsyncDisposable
@@ -68,11 +61,6 @@ Apply unlabeled patterns to all languages. Apply [Node.js]/[React] patterns only
 - `explicit_must_violation` [Compliance/Major]: Code violates a MUST rule from AI instructions
 - `missing_required_jsdoc` [Compliance/Minor] [Node.js]: Exported function without JSDoc comment — `export\s+(?:async\s+)?function\s+\w+\s*\([^)]*\)\s*(?::\s*\w+)?\s*\{(?!\s*/\*\*)`
 
-### Error Handling
-
-- `express_error_middleware_missing` [Error Handling/Major] [Node.js]: Express app without 4-argument error middleware — no `(err, req, res, next)` handler
-- `unhandled_promise_rejection` [Error Handling/Major] [Node.js]: Promise chain without .catch() in request handler
-
 ### Performance
 
 - `ef_missing_asnotracking` [Performance/Minor] [.NET]: EF Core read-only query without AsNoTracking()
@@ -83,15 +71,9 @@ Apply unlabeled patterns to all languages. Apply [Node.js]/[React] patterns only
 
 ### Security
 
-- `hardcoded_password` [Security/Critical]: Hardcoded password in assignment — `(?:password\|passwd\|pwd)\s*[:=]\s*['"][^'"]+['"]`
-- `hardcoded_api_key` [Security/Critical]: Hardcoded API key — `(?:api[_-]?key\|apikey)\s*[:=]\s*['"][^'"]+['"]`
-- `hardcoded_token` [Security/Critical]: Hardcoded auth token — `(?:token\|bearer\|auth[_-]?token\|access[_-]?token)\s*[:=]\s*['"][^'"]+['"]`
-- `hardcoded_secret` [Security/Critical]: Hardcoded secret/private key — `(?:secret\|client[_-]?secret\|private[_-]?key)\s*[:=]\s*['"][^'"]+['"]`
-- `hardcoded_credentials` [Security/Critical]: Hardcoded credentials object — `(?:credentials\|connection[_-]?string)\s*[:=]\s*['"][^'"]+['"]`
-- `sql_injection_concat` [Security/Critical]: SQL with string concatenation of user input — `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*[+]\s*(?:req\|request\|params\|query\|body\|input\|user)`
-- `sql_injection_template` [Security/Critical]: SQL with template literal interpolation of user input — `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*\$\{.*(?:req\|request\|params\|query\|body\|input\|user)`
-- `eval_untrusted` [Security/Critical]: eval() with untrusted input — `eval\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)`
-- `new_function_untrusted` [Security/Critical]: new Function() with untrusted input — `new\s+Function\s*\(\s*(?:req\|request\|params\|query\|body\|input\|user)`
+- `hardcoded_credential` [Security/Critical]: Hardcoded secret, key, token, password, or connection string — `(?:password\|passwd\|pwd\|api[_-]?key\|apikey\|token\|bearer\|auth[_-]?token\|access[_-]?token\|secret\|client[_-]?secret\|private[_-]?key\|credentials\|connection[_-]?string)\s*[:=]\s*['"][^'"]+['"]`
+- `sql_injection_user_input` [Security/Critical]: SQL with concatenation or template interpolation of user input — `(?:SELECT\|INSERT\|UPDATE\|DELETE\|FROM\|WHERE).*(?:[+]\s*\|\$\{.*?)(?:req\|request\|params\|query\|body\|input\|user)`
+- `code_execution_untrusted` [Security/Critical]: eval() or new Function() with untrusted input — `(?:eval\s*\(\s*\|new\s+Function\s*\(\s*)(?:req\|request\|params\|query\|body\|input\|user)`
 
 ### Technical Debt
 

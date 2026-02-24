@@ -42,12 +42,6 @@ Use agent `model` frontmatter. Cross-cutting insights always **Opus**.
 
 Issues matching these patterns skip validation entirely and are marked `auto_validated: true`:
 
-### Accuracy
-
-- `api_signature_mismatch` [Accuracy/Major]: Documented function signature differs from implementation
-- `missing_parameter_doc` [Accuracy/Minor]: Parameter exists in code but not documented
-- `outdated_version_reference` [Accuracy/Minor]: Documentation references older version than package.json/csproj
-
 ### Clarity
 
 - `undefined_acronym` [Clarity/Minor]: Acronym used without expansion (first occurrence) — `\b[A-Z]{2,}\b(?!.*\([^)]+\))`

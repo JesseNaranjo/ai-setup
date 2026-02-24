@@ -20,6 +20,6 @@ Adds scope prioritization (auth/config/middleware), security-specific FP adjustm
 - Placeholder values (`"changeme"`, `"TODO"`)
 - Vulnerabilities mitigated elsewhere (documented upstream protection)
 
-## Security References
+## Pattern References
 
 `references/common-vulnerabilities.md`

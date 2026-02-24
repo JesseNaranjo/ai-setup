@@ -31,3 +31,9 @@ Array.from() on large iterables more memory-efficient than spread. Severity: Min
 Boxing/Unboxing: `ArrayList` with value types → `List<int>`. Severity: Minor (isolated), Major (hot loops).
 LINQ in hot paths: `FirstOrDefault()` allocates — use manual loop. Severity: Minor to Major.
 Async void: exceptions lost, can't await — use `async Task`. Severity: Major (also correctness issue).
+
+## Observability
+
+OpenTelemetry context propagation: span context lost across async boundaries — `Task.Run()`, `Promise.all()`, `setTimeout()`, fire-and-forget patterns, thread pool dispatch. Traces break into disconnected fragments. Severity: Major.
+Missing W3C trace context: HTTP client calls without `traceparent`/`tracestate` headers — distributed traces break at service boundaries. Severity: Major.
+Span explosion: creating spans inside tight loops or per-item in batch operations — overwhelms trace backends, increases latency. Severity: Minor (small batches), Major (unbounded).

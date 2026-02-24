@@ -17,7 +17,7 @@ permissionMode: dontAsk
 
 Scan documentation for all code blocks (fenced with triple backticks or indented). Record language tag, surrounding context, and what the example claims to demonstrate.
 
-### Step 2: Verify Syntax and Imports
+### Step 2: Verify Syntax and Imports (Based on MODE)
 
 **thorough:**
 
@@ -31,7 +31,7 @@ For each code example:
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + Missing critical imports. Examples that would throw at runtime.
 
-### Step 3: Verify API Currency
+### Step 3: Verify API Currency (Based on MODE)
 
 **thorough:**
 

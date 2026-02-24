@@ -13,7 +13,7 @@ permissionMode: dontAsk
 
 ## Review Process
 
-### Step 1: Identify Technical Debt
+### Step 1: Identify Technical Debt (Based on MODE)
 
 **thorough:**
 For each file, check:

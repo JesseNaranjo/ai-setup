@@ -1,5 +1,18 @@
 # Common Security Vulnerabilities
 
+## Table of Contents
+- [.NET-Specific Patterns](#net-specific-patterns)
+- [Detection Regexes — Hardcoded Secrets](#detection-regexes--hardcoded-secrets)
+- [Cryptographic Issues](#cryptographic-issues)
+- [Prototype Pollution](#prototype-pollution)
+- [Path Traversal](#path-traversal)
+- [ReDoS](#redos)
+- [Security Headers](#security-headers)
+- [Quick Detection Patterns](#quick-detection-patterns)
+- [Supply Chain](#supply-chain)
+- [CI/CD Pipeline Security](#cicd-pipeline-security)
+- [AI/LLM Security](#aillm-security)
+
 **Test file exclusion:** Skip matches in files matching `*.test.*`, `*.spec.*`, `__tests__/`, `test/`, `fixtures/`.
 
 ## .NET-Specific Patterns
@@ -88,3 +101,11 @@ Detection: Flag unfamiliar packages (<1000 weekly downloads) with names within e
 - `pull_request_target` + `actions/checkout` of PR code — runs untrusted PR code with repo secrets. Severity: Critical
 - Composite GitHub Action injection: untrusted inputs (`github.event.issue.title`, `github.event.pull_request.body`) interpolated in composite action `run:` steps
 - Self-hosted runners: shared `_work` directory persists between jobs, env vars leak across workflows, no container isolation by default
+
+## AI/LLM Security
+
+Prompt injection: user input concatenated into system/instruction prompts via string interpolation or template literals — `system: "You are a ${role}. User says: ${userInput}"`. Severity: Critical (RCE equivalent — attacker controls agent behavior).
+Output sanitization: LLM-generated content rendered via `innerHTML`, `dangerouslySetInnerHTML`, `@Html.Raw()`, or `v-html` without escaping. Severity: Major (XSS equivalent — LLM output is untrusted).
+RAG poisoning: untrusted documents ingested into vector stores without content validation — attacker-controlled embeddings influence retrieval results. Severity: Major.
+Agent permission scope: LLM agents granted broad tool/API permissions (file system write, network access, DB mutations) beyond task requirements. Severity: Major.
+Detection: grep for string concatenation patterns feeding `system`, `prompt`, `messages` fields in LLM API calls; grep for LLM response variables flowing into DOM/HTML render sinks.

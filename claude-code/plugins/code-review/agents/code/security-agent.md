@@ -17,6 +17,7 @@ permissionMode: dontAsk
 - Supply chain: lockfile integrity (missing/outdated lockfile, lockfile-source mismatches), dependency confusion (internal package names in public registries), unpinned transitive dependencies in production
 - SSRF: fetch/request/axios with user-controlled URLs without allowlist. Deserialization: TypeNameHandling, pickle.loads, unserialize with untrusted input
 - AI-generated crypto: MD5/SHA1 for password hashing, hardcoded IV/nonce, `Math.random()` for tokens/secrets, `crypto.createCipher` (deprecated)
+- AI/LLM: prompt injection (user input concatenated into system prompts without sanitization), LLM output rendered as HTML/JS without escaping, RAG injection (untrusted documents in vector stores influencing responses), agent permissions exceeding task scope
 
 **gaps:**
 1. **Identify overlooked vulnerability patterns**: second-order injection, auth edge cases, timing attacks, security-affecting race conditions, info leakage in errors, weak randomness, missing headers, insecure defaults

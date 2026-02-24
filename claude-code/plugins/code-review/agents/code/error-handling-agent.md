@@ -21,6 +21,7 @@ permissionMode: dontAsk
 - Retry/circuit breaker gaps for transient failures. Retry candidates: external HTTP, DB connections, message queue publishes (not local file reads or in-memory ops)
 - Observability gaps: missing structured logging on error paths, missing correlation/request IDs in error context, catch blocks that log nothing or log unstructured strings
 - Defensive overkill: nested try-catch where inner re-throws same type caught by outer, or catch blocks that only log + re-throw identical error (double-logging)
+- OpenTelemetry span context lost across async boundaries: Task.Run, Promise.all, setTimeout, fire-and-forget, or thread pool dispatch without propagating parent span
 
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + Empty catch blocks (allows single comment). Resources without cleanup (no finally/using/defer).

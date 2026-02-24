@@ -36,6 +36,6 @@ Always include: **Current** (Big O now), **Optimized** (achievable Big O), **Dat
 
 Example: "Current O(n*m) where n=orders, m=items. With 100 orders and 1000 items, this executes 100,000 comparisons. Optimized O(n+m) would be 1,100 operations."
 
-## Detailed Performance Patterns
+## Pattern References
 
 `references/performance-patterns.md`

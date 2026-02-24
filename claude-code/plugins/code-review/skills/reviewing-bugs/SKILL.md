@@ -15,6 +15,10 @@ When reviewing code for bugs:
 - Use Grep to trace data flow through suspicious paths
 - Verify boundary conditions in loops, array access, and arithmetic
 
+## Scope Prioritization
+
+Changed lines > touched functions > peripheral files. Prioritize bugs in new/modified code over pre-existing issues in unchanged code.
+
 ## False Positives
 
 **Bug-specific** - do NOT flag:
@@ -29,6 +33,6 @@ For each bug: **Preconditions** (required state), **Trigger** (causing action), 
 
 Example: "When two users simultaneously withdraw from the same account (concurrent requests), and the balance check passes for both before either write completes, the second write overwrites the first, resulting in only one deduction being recorded."
 
-## Detailed Bug Patterns
+## Pattern References
 
 `references/common-bugs.md`

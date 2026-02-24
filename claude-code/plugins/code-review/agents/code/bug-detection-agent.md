@@ -16,6 +16,7 @@ permissionMode: dontAsk
 **thorough:**
 - Unchecked returns on I/O/DB/external API calls (skip pure functions). Floating promises: missing await on async calls affecting control flow. State mutation: .sort()/.reverse() modifying original, shared mutable refs across async boundaries
 - AI-hallucinated APIs: method calls on standard library objects that don't exist in target runtime (e.g., Array.groupBy, fs.promises.exists)
+- Cross-file state: renamed variable/type in one file without updating imports/consumers
 
 **gaps:**
 1. **Identify overlooked runtime failures**: unhandled promise rejections, implicit type coercions causing silent data loss, off-by-one in boundary conditions, state mutations during async iteration

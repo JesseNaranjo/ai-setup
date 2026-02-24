@@ -17,7 +17,7 @@ permissionMode: dontAsk
 
 Determine doc type for each file: README, API reference, tutorial, library docs, changelog, contributing guide, AI instructions. This determines which sections are expected.
 
-### Step 2: Check Required Sections
+### Step 2: Check Required Sections (Based on MODE)
 
 **thorough:**
 
@@ -28,7 +28,7 @@ Per doc type, grep for expected section headings and content:
 
 Use Grep to find public exports in code (`export`, `module.exports`, `public class/interface`) and cross-reference against documentation coverage.
 
-### Step 3: Check Undocumented Features
+### Step 3: Check Undocumented Features (Based on MODE)
 
 **thorough:**
 
@@ -36,7 +36,7 @@ Use Grep to find public exports in code (`export`, `module.exports`, `public cla
 - Check for env vars, CLI commands, config keys mentioned in code but absent from docs
 - Verify setup prerequisites are complete: runtime versions, required services, env vars to set
 
-### Step 4: Check Coverage Gaps
+### Step 4: Check Coverage Gaps (Based on MODE)
 
 **thorough:**
 - Missing error/troubleshooting docs, missing migration guides for breaking changes
