@@ -11,33 +11,19 @@ permissionMode: dontAsk
 
 # Examples Review Agent
 
-## Review Process
-
-### Step 1: Extract Code Examples
-
-Scan documentation for all code blocks (fenced with triple backticks or indented). Record language tag, surrounding context, and what the example claims to demonstrate.
-
-### Step 2: Verify Syntax and Imports (Based on MODE)
+## MODE Checklists
 
 **thorough:**
-
-For each code example:
+For each code block (fenced or indented), record language tag, surrounding context, and claimed purpose:
 - Verify language tag matches actual syntax
 - Check all imports/requires reference real modules — use Grep to find the referenced function/class in the codebase
 - Verify function/method signatures match current code (parameter count, types, return type)
 - Check output comments match actual behavior (`// returns X` claims)
 - Flag references to non-existent resources (files, endpoints, config keys)
+- API currency: use Grep to find each referenced API in the codebase — verify it hasn't been renamed, removed, or deprecated. Cross-check parameter names and types against current function signatures. Flag examples using deprecated patterns when modern alternatives exist
 
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + Missing critical imports. Examples that would throw at runtime.
-
-### Step 3: Verify API Currency (Based on MODE)
-
-**thorough:**
-
-- Use Grep to find each referenced API in the codebase — verify it hasn't been renamed, removed, or deprecated
-- Cross-check parameter names and types against current function signatures
-- Flag examples using deprecated patterns when modern alternatives exist
 
 ## Output
 

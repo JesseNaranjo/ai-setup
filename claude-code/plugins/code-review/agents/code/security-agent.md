@@ -18,6 +18,8 @@ permissionMode: dontAsk
 - SSRF: fetch/request/axios with user-controlled URLs without allowlist. Deserialization: TypeNameHandling, pickle.loads, unserialize with untrusted input
 - AI-generated crypto: MD5/SHA1 for password hashing, hardcoded IV/nonce, `Math.random()` for tokens/secrets, `crypto.createCipher` (deprecated)
 - AI/LLM: prompt injection (user input concatenated into system prompts without sanitization), LLM output rendered as HTML/JS without escaping, RAG injection (untrusted documents in vector stores influencing responses), agent permissions exceeding task scope
+- AI-generated secret handling: copying documentation patterns (hardcoded connection strings, inline API keys) instead of using project's actual secrets manager or environment variable configuration
+- Container security: Dockerfile running as root (no USER directive), `latest` tag instead of pinned digest, multi-stage build leaking secrets to runtime, `.dockerignore` missing `.env`/`.git`/`node_modules`, `COPY . .` before `.dockerignore` filtering, `--privileged` or `--cap-add=ALL`
 
 **gaps:**
 1. **Identify overlooked vulnerability patterns**: second-order injection, auth edge cases, timing attacks, security-affecting race conditions, info leakage in errors, weak randomness, missing headers, insecure defaults

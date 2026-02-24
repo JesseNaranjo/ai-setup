@@ -11,9 +11,7 @@ permissionMode: dontAsk
 
 # Test Coverage Review Agent
 
-## Review Process
-
-### Step 1: Identify Coverage Categories (Based on MODE)
+## MODE Checklists
 
 **thorough:**
 - Test quality (no assertions, testing implementation details, always-pass tests), integration gaps

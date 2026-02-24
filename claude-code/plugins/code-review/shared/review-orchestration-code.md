@@ -25,6 +25,8 @@ Per agent, append to `additional_instructions`: (1) Language checks from detecte
 
 **Anchors:** architecture→#architecture, bugs→#bugs, errors→#errors, performance→#performance, security→#security, debt→#debt, tests→#tests. No anchors: api-contracts, compliance. Synthesis: skip all.
 
+**Framework tags:** Language checks include framework-tagged entries (e.g., `[Express]`, `[Next.js]`, `[EF Core]`, `[Docker]`). Agents apply framework-tagged checks when reviewed file's framework context matches. No orchestrator filtering needed — agents use contextual judgment.
+
 **LSP:** architecture→Architecture, bugs→Bugs, errors→Error Handling, performance→Performance, security→Security. Unavailable → skip.
 
 **Selective:** `related_tests` → bug-detection, technical-debt, test-coverage only. Full `ai_instructions` → architecture, compliance only (others: path summary).

@@ -2,7 +2,7 @@
 name: error-handling-agent
 description: "Error handling specialist. Use for detecting missing try/catch blocks, swallowed exceptions, improper error propagation, missing cleanup, or resilience gaps."
 color: orange
-model: sonnet
+model: opus
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
 maxTurns: 5
@@ -11,9 +11,7 @@ permissionMode: dontAsk
 
 # Error Handling Review Agent
 
-## Review Process
-
-### Step 1: Identify Error Handling Categories (Based on MODE)
+## MODE Checklists
 
 **thorough:**
 - Missing error handling on fail-prone operations (I/O, network, DB, external services, parsing)

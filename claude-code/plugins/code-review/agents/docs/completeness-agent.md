@@ -11,15 +11,11 @@ permissionMode: dontAsk
 
 # Completeness Review Agent
 
-## Review Process
-
-### Step 1: Classify Documentation Type
-
-Determine doc type for each file: README, API reference, tutorial, library docs, changelog, contributing guide, AI instructions. This determines which sections are expected.
-
-### Step 2: Check Required Sections (Based on MODE)
+## MODE Checklists
 
 **thorough:**
+
+Classify doc type for each file: README, API reference, tutorial, library docs, changelog, contributing guide, AI instructions. This determines which sections are expected.
 
 Per doc type, grep for expected section headings and content:
 - **README**: Title, Install/Getting Started, Quick Start/Usage, Configuration, API/CLI Reference, Contributing, License. Missing any = Major.
@@ -28,17 +24,12 @@ Per doc type, grep for expected section headings and content:
 
 Use Grep to find public exports in code (`export`, `module.exports`, `public class/interface`) and cross-reference against documentation coverage.
 
-### Step 3: Check Undocumented Features (Based on MODE)
-
-**thorough:**
-
+Undocumented features:
 - Grep for `process.env`, CLI flag parsing (`commander`, `yargs`, `minimist`, `System.CommandLine`), config file loading — cross-reference against documented options
 - Check for env vars, CLI commands, config keys mentioned in code but absent from docs
 - Verify setup prerequisites are complete: runtime versions, required services, env vars to set
 
-### Step 4: Check Coverage Gaps (Based on MODE)
-
-**thorough:**
+Coverage gaps:
 - Missing error/troubleshooting docs, missing migration guides for breaking changes
 - Incomplete setup/prerequisites — required tools, services, or configuration not listed
 

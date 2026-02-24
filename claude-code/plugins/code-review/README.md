@@ -363,10 +363,10 @@ code-review/
 | Agent | Model | Supported Modes | Color |
 |-------|-------|-----------------|-------|
 | api-contracts-agent | Sonnet | thorough | cyan |
-| architecture-agent | Opus | thorough | yellow |
+| architecture-agent | Sonnet | thorough | yellow |
 | bug-detection-agent | Opus | thorough, gaps, quick | red |
 | compliance-agent | Sonnet | thorough, gaps | blue |
-| error-handling-agent | Sonnet | thorough, quick | orange |
+| error-handling-agent | Opus | thorough, quick | orange |
 | performance-agent | Opus | thorough, gaps | green |
 | security-agent | Opus | thorough, gaps, quick | purple |
 | synthesis-code-agent | Opus | (cross-category) | white |
@@ -394,7 +394,7 @@ Each agent accepts a MODE parameter:
 | Mode | Description | Use Case |
 |------|-------------|----------|
 | **thorough** | Comprehensive review, check all issues | Default for full reviews |
-| **gaps** | Focus on subtle issues that might be missed | Additional coverage for Opus agents |
+| **gaps** | Focus on subtle issues that might be missed | Additional coverage on complex domains |
 | **quick** | Fast pass on critical issues only | Quick pre-commit checks |
 
 ### Review Configurations

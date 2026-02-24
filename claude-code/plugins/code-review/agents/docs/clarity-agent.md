@@ -11,21 +11,16 @@ permissionMode: dontAsk
 
 # Clarity Review Agent
 
-## Review Process
-
-### Step 1: Identify Clarity Categories (Based on MODE)
+## MODE Checklists
 
 **thorough:**
 - Unexplained jargon/acronyms, ambiguous references, missing context
 - Overly complex structures (>40 words without structure, >3 nested clauses), inconsistent depth
 - Passive voice obscuring actors, wall-of-text paragraphs
+- Audience analysis: determine target audience (beginner/intermediate/expert); flag mismatches. Jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed)
 
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + Critical concepts with no explanation. Missing prerequisites that block users.
-
-### Step 2: Audience and Readability Analysis
-
-Determine target audience (beginner/intermediate/expert); flag mismatches. Check jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed).
 
 ## Output
 

@@ -128,15 +128,34 @@ Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory
 
 **Color rules:** Minimize conflicts within each parallel phase; reuse across sequential phases is fine. Use `white` for overflow. Do not change existing colors without necessity.
 
-**Agent body structure (two formats):**
+**Agent body structure (unified format):**
 
-- **Opus agents** (architecture, bug-detection, performance, security, accuracy): `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings — Opus needs domain context, not analysis methodology.
-- **Sonnet agents** (api-contracts, clarity, completeness, compliance, consistency, error-handling, examples, structure, technical-debt, test-coverage): `## Review Process` → `### Step 1-N:` methodology → `## Output`. Retains analysis steps — Sonnet benefits from explicit guidance. All Sonnet agents use `### Step N: [Domain] (Based on MODE)` header pattern where MODE-specific content appears.
+- **All 15 non-synthesis agents**: `## MODE Checklists` → `## Output`. No `## Review Process` or `### Step N:` headings.
 - **Synthesis agents** (synthesis-code, synthesis-docs): `model: opus`. Domain-specific body only (Category Key Mapping, Step 2 interaction patterns, example YAML). Shared process loaded via `code-review:synthesis-instructions` skill.
 
 **MODE labels:** `**thorough:**`, `**gaps:**`, `**quick:**` (no suffixes like "mode - Focus on:").
 
 **Output section:** All 15 non-synthesis agents use `## Output` with: category, description guidance, severity thresholds (compressed single-line `Thresholds: Critical=...; Major=...`), and category-specific YAML extra fields. No "See Output Schema in additional_instructions" — that content is injected by the orchestrator at runtime.
+
+### Skill Frontmatter
+
+Orchestration and review skills use YAML frontmatter fields from the Anthropic Skill Authoring specification:
+
+```yaml
+---
+name: <skill-name>                    # Required
+description: <purpose+trigger>        # Required. "[What in third person]. Use when [triggers]."
+allowed-tools: Tool1, Tool2           # Orchestration skills only (comma-separated)
+argument-hint: "<args>"               # Orchestration skills only (CLI argument template)
+model: opus                           # Orchestration skills only
+user-invocable: false                 # Internal skills (agent-review-instructions, synthesis-instructions)
+disable-model-invocation: true        # Internal skills (prevents model from invoking)
+---
+```
+
+**Fields used by this plugin:** `name`, `description` (all skills), `allowed-tools`, `argument-hint`, `model` (orchestration skills), `user-invocable`, `disable-model-invocation` (internal skills).
+
+**Fields NOT used:** `context` (must NOT be `fork` for orchestration — see Orchestration Skills section), `agent`, `hooks`.
 
 ### Deep Review Pipeline
 
@@ -204,6 +223,8 @@ Settings loading logic is inlined in each orchestration skill (Step 2). See `REA
 
 All category anchors referenced in `review-orchestration-code.md` (`{#architecture}`, `{#bugs}`, `{#errors}`, `{#performance}`, `{#security}`, `{#debt}`, `{#tests}`) must have content in language files. React inherits Node.js anchors; add React-specific overrides only.
 
+**Framework tags:** Language file entries include framework-tagged checks (e.g., `[Express]`, `[NestJS]`, `[Vite]`, `[Next.js]`, `[Redux]`, `[React Query]`, `[EF Core]`, `[ASP.NET Core]`, `[Docker]`, `[Server Actions]`). Tags are distributed to agents via category anchors. Agents apply framework-tagged checks when the reviewed file's framework context matches. No orchestrator filtering needed — agents use contextual judgment.
+
 ### Skill Structure (Progressive Disclosure)
 
 Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only. Two internal skills (not user-facing) provide static configuration loaded at startup via the `skills` frontmatter field: `agent-review-instructions` (MODE, FP rules, output schema for non-synthesis agents) and `synthesis-instructions` (input format, review process, output schema for synthesis agents).
@@ -253,7 +274,7 @@ When modifying the plugin:
 ### Orchestration Skills & Settings
 - **Orchestration skill arguments**: Edit skill YAML frontmatter in `skills/code-review/SKILL.md` or `skills/docs-review/SKILL.md`
 - **Settings options**: Edit Step 2 in `skills/code-review/SKILL.md` and `skills/docs-review/SKILL.md`, and `templates/code-review.local.md.example`
-- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `skills/code-review/SKILL.md` (Step 4, staged scope section)
+- **Pre-existing issue detection**: Edit "Pre-Existing Issue Detection" in `skills/code-review/SKILL.md` (Step 4, diff-based scope section)
 
 ## Coding Conventions
 
@@ -271,10 +292,8 @@ When modifying the plugin:
 
 ### Agent Checklist Compression
 
-Model-aware compression:
-- **Opus agents**: No analysis steps (Step 2+). `## MODE Checklists` with high-level triggers (1-3 lines for thorough). `## Output` merges description + thresholds + YAML fields. "Claude is already smart" — only add domain context Claude doesn't already have. Thorough items must NOT repeat the agent's `description` field — the description defines the domain; thorough adds only calibration thresholds, specific scope steering, or scope the description doesn't cover. If thorough would merely restate the description, omit it.
-- **Sonnet agents**: Keep `## Review Process` with methodology steps. `## Output` merges description + thresholds + YAML fields (no separate Report step or Output Schema section).
-- **All agents**: Preserve gaps/quick mode items, severity thresholds, category-specific YAML fields verbatim. MODE differentiation (thorough/gaps/quick sections) intact. MODE labels: `**thorough:**` not `**thorough mode - Focus on:**`.
+- **All non-synthesis agents**: `## MODE Checklists` with high-level triggers. `## Output` merges description + thresholds + YAML fields. "Claude is already smart" — only add domain context Claude doesn't already have. Thorough items must NOT repeat the agent's `description` field — the description defines the domain; thorough adds only calibration thresholds, specific scope steering, or scope the description doesn't cover. If thorough would merely restate the description, omit it.
+- Preserve gaps/quick mode items, severity thresholds, category-specific YAML fields verbatim. MODE differentiation (thorough/gaps/quick sections) intact. MODE labels: `**thorough:**` not `**thorough mode - Focus on:**`.
 
 ### Content Audience
 
@@ -331,10 +350,9 @@ Apply alphabetical ordering to:
 
 This applies to:
 - Orchestration skill workflows in `skills/code-review/SKILL.md` and `skills/docs-review/SKILL.md`
-- Sonnet agent workflows in `agents/code/*.md` and `agents/docs/*.md` (Opus agents have no step headings)
 - Other skill workflows in `skills/*/SKILL.md`
 
-**Rationale:** Consistency across orchestration skill and Sonnet agent workflows.
+**Rationale:** Consistency across orchestration skill workflows.
 
 **Step layout in orchestration skills:**
 - Steps 1-3, 5: Pre-review setup (methodology, settings, context, skills) - inlined in each skill

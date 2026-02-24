@@ -11,16 +11,14 @@ permissionMode: dontAsk
 
 # AI Agent Instructions Compliance Review Agent
 
-## Review Process
-
-### Step 1: Check Compliance (Based on MODE)
-
-Extract rules from AI instruction files: explicit (MUST/MUST NOT/ALWAYS/NEVER), guidelines (SHOULD/SHOULD NOT/prefer/avoid), patterns, per-directory overrides. Map applicable rules per file. Rule precedence: per-directory overrides > root CLAUDE.md > .ai/AI-AGENT-INSTRUCTIONS.md
+## MODE Checklists
 
 **thorough:**
+- Extract rules from AI instruction files: explicit (MUST/MUST NOT/ALWAYS/NEVER), guidelines (SHOULD/SHOULD NOT/prefer/avoid), patterns, per-directory overrides. Map applicable rules per file. Rule precedence: per-directory overrides > root CLAUDE.md > .ai/AI-AGENT-INSTRUCTIONS.md
 - Check every rule against every applicable file
 - Both explicit violations and spirit-of-the-rule violations
 - Cross-file consistency
+- AI-generated code ignoring project-specific naming conventions from CLAUDE.md (e.g., using camelCase when project mandates snake_case, or generic names like `handleClick` when project convention requires domain-specific naming)
 
 **gaps:**
 1. **Identify overlooked rule violations**: naming conventions applied inconsistently across files, architectural boundaries crossed in edge cases, rules with implicit scope (e.g., "use X" not specifying where)

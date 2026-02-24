@@ -76,35 +76,19 @@ Analyze the review prompt to determine review scope:
 
 ### Content Gathering
 
-**If staged scope:**
+**If staged or commit scope (diff-based):**
 
-Verify git repository (stop: "Not a git repository.") and staged changes exist (stop: "No staged changes to review.").
+Verify git repository (stop: "Not a git repository."). For staged: verify staged changes exist (stop: "No staged changes to review."). For commit: resolve commit references — validate SHAs exist via `git rev-parse`, resolve branch names, compute range. Stop if invalid: "Invalid commit reference: <ref>."
 
 Launch Sonnet agent to gather:
 
-- **Staged diff:** Full diff with line markers
+- **Diff:** Full diff with line markers. Staged: `git diff --staged`. Commit: `git diff <base>..<head>`
 - **Current branch:** Branch name
 - **File content (tiered):** Changed files (has_changes=true) → full content (critical). Unchanged import/context files (has_changes=false) → first 50 lines preview (peripheral)
 - **Related test files:** From Context Discovery (see `languages/nodejs.md`, `languages/dotnet.md`). Always critical tier
-- **Summary:** Files modified count, change description, project types, test files, tier classification
+- **Summary:** Files modified count, change description, project types, test files, tier classification. Commit scope also includes: commit range
 
-**Output:** Branch name. Per file: path, has_changes, tier. Critical: diff + full_content. Peripheral: preview (50 lines), line_count, full_content_available: true. Related tests (critical). Review summary.
-
-**If commit scope:**
-
-Verify git repository (stop: "Not a git repository."). Resolve commit references — validate SHAs exist
-via `git rev-parse`, resolve branch names, compute range. Stop if invalid: "Invalid commit reference: <ref>."
-
-Launch Sonnet agent to gather:
-
-- **Commit diff:** `git diff <base>..<head>` with full diff and line markers
-- **Current branch:** Branch name
-- **File content (tiered):** Changed files (has_changes=true) → full content (critical). Unchanged
-  import/context files (has_changes=false) → first 50 lines preview (peripheral)
-- **Related test files:** From Context Discovery. Always critical tier
-- **Summary:** Commit range, files modified count, change description, project types, test files, tier classification
-
-**Output:** Branch name. Per file: path, has_changes, tier. Critical: diff + full_content. Peripheral: preview (50 lines), line_count, full_content_available: true. Related tests (critical). Commit range. Review summary.
+**Output:** Branch name. Per file: path, has_changes, tier. Critical: diff + full_content. Peripheral: preview (50 lines), line_count, full_content_available: true. Related tests (critical). Review summary. Commit scope also includes: commit range.
 
 **Pre-Existing Issue Detection** — include in each agent's `additional_instructions`:
 

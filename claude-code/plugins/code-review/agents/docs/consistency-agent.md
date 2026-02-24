@@ -11,14 +11,14 @@ permissionMode: dontAsk
 
 # Consistency Review Agent
 
-## Review Process
-
-### Step 1: Identify Consistency Categories (Based on MODE)
+## MODE Checklists
 
 **thorough:**
 - Terminology variations (same concept, different words), naming convention mismatches
 - Formatting inconsistencies: headings, code blocks, lists, links, spelling (US vs UK)
 - Voice/tense inconsistencies (you vs we vs passive)
+- Term variant analysis: scan for variants (e.g., "config" vs "configuration" vs "settings"); track first usage as canonical. Common pairs: config/configuration/settings, dir/directory/folder, repo/repository, env/environment
+- Formatting verification: use Grep to check heading, code block, list consistency. Voice: person (you/we/passive), formality, tense
 
 **gaps:**
 1. **Identify overlooked consistency issues**: same concept named differently across sections, formatting patterns that shift mid-document, code style conventions that vary between examples, terminology that conflicts with glossary or industry standard
@@ -26,11 +26,6 @@ permissionMode: dontAsk
 3. **Verify reader confusion risk**: Confirm the inconsistency would cause ambiguity or misunderstanding, not just stylistic variation
 
 Skip: within ±5 lines of thorough findings, same issue type on same section. Major/Critical only. Max 5 new.
-
-### Step 2: Terminology, Formatting, and Voice Analysis
-
-Scan for term variants (e.g., "config" vs "configuration" vs "settings"); track first usage as canonical. Use Grep to check formatting consistency (headings, code blocks, lists). Check voice: person (you/we/passive), formality, tense.
-Common variant pairs to check: config/configuration/settings, dir/directory/folder, repo/repository, env/environment
 
 ## Output
 

@@ -11,9 +11,7 @@ permissionMode: dontAsk
 
 # Technical Debt Review Agent
 
-## Review Process
-
-### Step 1: Identify Technical Debt (Based on MODE)
+## MODE Checklists
 
 **thorough:**
 For each file, check:

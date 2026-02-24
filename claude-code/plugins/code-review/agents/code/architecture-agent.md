@@ -2,7 +2,7 @@
 name: architecture-agent
 description: "Architecture review specialist. Use for checking SOLID, DRY, YAGNI, SoC violations, coupling problems, anti-patterns, layer violations, or file organization issues."
 color: yellow
-model: opus
+model: sonnet
 tools: ["Read", "Grep", "Glob"]
 skills: ["code-review:agent-review-instructions"]
 maxTurns: 5
@@ -16,8 +16,9 @@ permissionMode: dontAsk
 **thorough:**
 - DRY thresholds: >10 lines/>80% similarity
 - SRP thresholds: >500 lines or >15 methods per class, >5 unrelated domain imports. Coupling: fan-out >10 direct deps
-- AI over-abstraction: factory/strategy/observer wrapping single implementation with no extension plan. Flag when 3+ files/classes exist for behavior achievable in 1 (distinct from YAGNI — this flags structural complexity, not unused generics)
+- AI over-abstraction: factory/strategy/observer wrapping single implementation with no extension plan. Flag when 2+ files/classes exist for single-behavior features achievable in 1 (distinct from YAGNI — this flags structural complexity, not unused generics)
 - AI-generated duplicate service classes: identical CRUD structure across entity types — collapse to generic/base class
+- AI-generated tutorial-pattern code: follows generic tutorial structure (e.g., separate controller/service/repository for trivial CRUD) instead of project's established patterns
 
 ## Output
 

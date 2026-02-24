@@ -11,35 +11,21 @@ permissionMode: dontAsk
 
 # Structure Review Agent
 
-## Review Process
-
-### Step 1: Identify Structure Categories (Based on MODE)
+## MODE Checklists
 
 **thorough:**
 - Heading hierarchy (skipped levels, single H1), broken links (internal/external/anchors)
 - Navigation: missing cross-refs, orphaned docs, circular paths, ToC mismatches
-- **AI instruction file standardization** (see Step 3)
+- Link verification: use Grep to find internal links; verify targets and anchors exist, check path consistency. Verify image/media references exist; flag missing alt text as Minor. Internal links: verify in reviewed files. External: flag broken patterns (github.com paths to nonexistent files) but skip HTTP requests
+- **AI instruction file standardization** (CRITICAL):
+  1. `/.ai/AI-AGENT-INSTRUCTIONS.md` exists (not in root)
+  2. `/CLAUDE.md` exists with header referencing `.ai/AI-AGENT-INSTRUCTIONS.md`
+  3. `/.github/copilot-instructions.md` exists with header referencing `.ai/AI-AGENT-INSTRUCTIONS.md`
+  Verify via Grep that both `CLAUDE.md` and `.github/copilot-instructions.md` reference `.ai/AI-AGENT-INSTRUCTIONS.md`. All three must cross-reference with valid relative paths.
+  See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruction-templates.md` for required header templates.
 
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + Broken links (404s, missing files). Missing navigation to critical content. AI instruction file location errors.
-
-### Step 2: Link Verification
-
-Use Grep to find internal links; verify targets and anchors exist, check path consistency. Verify image/media references exist; flag missing alt text as Minor.
-Internal links: verify in reviewed files. External: flag broken patterns (github.com paths to nonexistent files) but skip HTTP requests
-
-### Step 3: AI Instruction File Standardization
-
-**CRITICAL**: Check for AI agent instruction file compliance.
-
-**Required structure:**
-1. `/.ai/AI-AGENT-INSTRUCTIONS.md` exists (not in root)
-2. `/CLAUDE.md` exists with header referencing `.ai/AI-AGENT-INSTRUCTIONS.md`
-3. `/.github/copilot-instructions.md` exists with header referencing `.ai/AI-AGENT-INSTRUCTIONS.md`
-
-Verify via Grep that both `CLAUDE.md` and `.github/copilot-instructions.md` reference `.ai/AI-AGENT-INSTRUCTIONS.md`. All three must cross-reference with valid relative paths.
-
-See `${CLAUDE_PLUGIN_ROOT}/skills/reviewing-documentation/references/ai-instruction-templates.md` for required header templates.
 
 ## Output
 

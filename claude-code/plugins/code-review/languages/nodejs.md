@@ -7,11 +7,12 @@
 ### Architecture {#architecture}
 
 - Barrel file abuse — re-exports causing bundle bloat
-- Missing noImplicitAny, noUncheckedIndexedAccess, strictNullChecks in tsconfig
+- Missing `noUncheckedIndexedAccess` in tsconfig — non-obvious default, allows undefined on index access without error
 - `as any` casts in production code (not `.d.ts` stubs or test files) — suppresses type checking
 - `@ts-ignore`/`@ts-expect-error` without justification comment on preceding line
 - `enum` usage in new code: runtime overhead, poor tree-shaking — prefer `as const` objects
 - Node.js 22 `--experimental-strip-types`: no enums, no namespaces, no `const enum` — type stripping silently drops these without error
+- [NestJS] Circular module imports — ModuleRef required due to circular DI
 
 ### Bugs {#bugs}
 
@@ -21,10 +22,16 @@
 - `Date.parse()` format asymmetry: `new Date('2024-01-01')` = UTC, `new Date('01/01/2024')` = local time
 - Promise.all without error isolation — single rejection loses all other results (use Promise.allSettled when partial results are acceptable)
 - Async route handler without error forwarding — Express doesn't catch async rejections natively; missing next(err) call or express-async-errors wrapper causes unhandled rejection
+- [NestJS] Injectable scope — singleton services holding request-scoped data
+- [NestJS] Missing validation pipe on DTOs (no class-validator decorators) — unvalidated input reaches service layer
+- [Vite] `import.meta.env` variables: only `VITE_` prefixed vars exposed to client. Non-prefixed silently resolve to `undefined`
+- [Vite] `import.meta.glob()` default eager:false returns `() => Promise<Module>`, not Module — accessing .default without await returns undefined
+- [Vite] CJS dependencies without `optimizeDeps.include` cause runtime loading errors in dev (Vite pre-bundles on first access)
 
 ### Error Handling {#errors}
 
-- Express route without try/catch wrapping async operations
+- [Express] Express route without try/catch wrapping async operations
+- [Express] Missing error middleware — no app.use((err, req, res, next)) handler
 
 ### Performance {#performance}
 
@@ -40,6 +47,14 @@
 - Missing `ignore-scripts=true` in `.npmrc` for CI environments (pnpm: `pnpm.enable-pre-post-scripts=false` in package.json)
 - Missing or uncommitted lockfile (package-lock.json/yarn.lock/pnpm-lock.yaml) — allows dependency version drift
 - Dependencies using `*`, `latest`, or unpinned git URLs — non-reproducible builds
+- [Express] Route param injection — req.params in SQL/shell without validation
+- [Express] Trust proxy misconfiguration
+- [Express] Session fixation — missing `session.regenerate()` after authentication
+- [Express] Missing CSRF protection on state-changing endpoints (no csurf/csrf-csrf)
+- [NestJS] Missing guards on controllers
+- [Docker] `node:latest` or unpinned Node.js base image — use `node:<version>-slim` with digest pin
+- [Docker] Running as root — add `USER node` after COPY
+- [Docker] `COPY package*.json` after `COPY . .` — invalidates layer cache, rebuilds dependencies on every code change
 
 ### Technical Debt {#debt}
 
@@ -52,28 +67,3 @@
 - Express routes without supertest integration tests
 - Missing test for error middleware error path
 - Async operations without rejection test cases
-
-## Framework-Specific Checks
-
-Apply when framework detected by context-discovery.
-
-### Express
-
-- Missing error middleware — no app.use((err, req, res, next)) handler
-- Route param injection — req.params in SQL/shell without validation
-- Trust proxy misconfiguration
-- Session fixation — missing `session.regenerate()` after authentication
-- Missing CSRF protection on state-changing endpoints (no csurf/csrf-csrf)
-
-### NestJS
-
-- Injectable scope — singleton services holding request-scoped data
-- Circular module imports — ModuleRef required due to circular DI
-- Missing guards on controllers
-- Missing validation pipe on DTOs (no class-validator decorators)
-
-### Vite
-
-- `import.meta.env` variables: only `VITE_` prefixed vars exposed to client. Non-prefixed silently resolve to `undefined`
-- `import.meta.glob()` default eager:false returns `() => Promise<Module>`, not Module — accessing .default without await returns undefined
-- CJS dependencies without `optimizeDeps.include` cause runtime loading errors in dev (Vite pre-bundles on first access)
