@@ -5,6 +5,33 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.2] - 2026-02-24
+
+### Changed
+
+- Unified agent body structure: all 15 non-synthesis agents use `## MODE Checklists` → `## Output` (removed Opus/Sonnet format split)
+- Centralized gaps calibration rules from individual agents to `agent-review-instructions` skill
+- Renamed LSP reference: `lsp-integration.md` → `lsp-dotnet.md`; extracted Node.js content to new `lsp-nodejs.md`
+- Deep review invocations: code 19 → 21 (7 synthesis pairs), docs 13 → 14 (5 synthesis pairs)
+- Compressed language configs: React -53%, Node.js -31%, .NET -50% with redistributed framework checks
+- Model reassignments: architecture-agent Opus → Sonnet, error-handling-agent Sonnet → Opus
+- Removed auto-validation for self-validating categories: Architecture, Error Handling (code), Accuracy (docs)
+- Enhanced Bugs+Error Handling synthesis with observability checks (OpenTelemetry spans, sensitive data logging)
+- Inlined `documentation-best-practices.md` content into `reviewing-documentation/SKILL.md` (2 → 1 reference file)
+
+### Added
+
+- Code synthesis pairs: Architecture+Performance, Security+Test Coverage (7 total, up from 5)
+- Docs synthesis pair: Accuracy+Completeness (5 total, up from 4)
+- Framework-tagged checks in language configs: `[Express]`, `[NestJS]`, `[EF Core]`, `[Docker]`, `[ASP.NET Core]`, `[React Query]`, `[Server Actions]`
+- Framework tags documentation in code review orchestration
+- Skill Frontmatter documentation section in CLAUDE.md
+- Language-specific LSP reference files with per-language availability checks
+
+### Removed
+
+- `skills/reviewing-documentation/references/documentation-best-practices.md` (content inlined into SKILL.md)
+
 ## [4.0.1] - 2026-02-23
 
 ### Breaking Changes

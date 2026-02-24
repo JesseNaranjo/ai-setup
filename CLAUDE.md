@@ -11,7 +11,7 @@ Do not optimize any other file for human readability. Do not add prose softeners
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v4.0.1) - a modular 17-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v4.0.2) - a modular 17-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
@@ -444,4 +444,4 @@ Agents have access to Read, Grep, and Glob tools. For Phase 2 (gaps) and Synthes
 2. Update CHANGELOG.md first (Keep a Changelog format, base on `git diff` not commit messages)
 3. Update version in all 4 locations
 4. Verify: `grep -r "<prev>" --include="*.md" --include="*.json" | grep -v CHANGELOG` (expect 0) and `grep -r "<new>" ... | wc -l` (expect 4)
-5. Commit, tag, push: `git tag v<new> && git push origin main && git push origin v<new>`
+5. Commit, tag, push: `git add <files> && git commit -m "release: v<new>" && git tag v<new> && git push origin main && git push origin v<new>`
