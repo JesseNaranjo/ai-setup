@@ -18,14 +18,14 @@ permissionMode: dontAsk
 - AI-hallucinated APIs: method calls on standard library objects that don't exist in target runtime (e.g., Array.groupBy, fs.promises.exists)
 - AI-generated `as any`/`any` type assertions to silence TS errors instead of fixing types — distinct from general `as any` casts (nodejs.md): targets the pattern of suppressing real type errors rather than typing gaps
 - AI-generated code using deprecated API signatures that compile but behave differently in current runtime version
+- AI-generated incomplete error handling: catch blocks that return generic status (500) without logging error context or propagating to monitoring
+- Destructive schema migrations: column drops, type narrowing, or renames without backward compatibility period
 - Cross-file state: renamed variable/type in one file without updating imports/consumers
 
 **gaps:**
 1. **Identify overlooked runtime failures**: unhandled promise rejections, implicit type coercions causing silent data loss, off-by-one in boundary conditions, state mutations during async iteration
 2. **Trace execution paths**: Follow data from input through branching/looping to output. Check error propagation through callback chains and async boundaries
 3. **Verify reachability**: Confirm failure conditions are reachable with valid inputs in production paths
-
-Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
 
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style.

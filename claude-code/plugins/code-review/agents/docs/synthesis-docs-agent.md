@@ -24,6 +24,7 @@ permissionMode: dontAsk
 
 ### Step 2 Interaction Patterns
 
+Accuracy+Completeness: flag when inaccurate documentation suggests incomplete coverage of changed behavior
 Accuracy+Examples: flag when API signature changed but example still uses old signature
 Clarity+Structure: flag when unclear section is also deeply nested (structural reorganization would fix both)
 Completeness+Consistency: flag when missing section causes terminology to be defined ad-hoc in multiple places

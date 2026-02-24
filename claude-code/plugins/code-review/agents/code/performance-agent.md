@@ -21,8 +21,6 @@ permissionMode: dontAsk
 2. **Trace data volume scaling**: For each candidate, estimate data volume at production scale. Check if O(n) becomes O(n²) through nested iterations or repeated lookups
 3. **Verify measurable impact**: Confirm the pattern affects a hot path or handles data volumes where the inefficiency is observable
 
-Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
-
 ## Output
 
 Category: "Performance". Describe: the issue, expected impact (time complexity, memory), problem scale threshold.

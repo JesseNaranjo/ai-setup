@@ -21,7 +21,7 @@ End prompt with: `Return findings as YAML per agent examples in your agent file.
 
 ### Content Distribution
 
-Per agent, append to `additional_instructions`: (1) Language checks from detected language files using agent anchor. (2) LSP codes from lsp-integration.md using agent category.
+Per agent, append to `additional_instructions`: (1) Language checks from detected language files using agent anchor. (2) LSP codes from `lsp-nodejs.md` or `lsp-dotnet.md` (per detected language) using agent category.
 
 **Anchors:** architecture→#architecture, bugs→#bugs, errors→#errors, performance→#performance, security→#security, debt→#debt, tests→#tests. No anchors: api-contracts, compliance. Synthesis: skip all.
 
@@ -35,7 +35,7 @@ Per agent, append to `additional_instructions`: (1) Language checks from detecte
 
 Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within +/-5 lines of prior findings; skip same issue type on same function/method; range (A-B): skip zone [A-5, B+5]. **Constraints:** Major/Critical only. Max 5 new per agent. Always Sonnet. **Agents:** bug-detection, compliance, performance, security, technical-debt.
 
-## Deep Code Review Sequence (up to 19 invocations)
+## Deep Code Review Sequence (up to 21 invocations)
 
 **Phase 1 — Thorough** (9 parallel): api-contracts, architecture, bug-detection, compliance, error-handling, performance, security, technical-debt, test-coverage. MODE: thorough.
 **CRITICAL: WAIT for ALL 9 before Phase 2.**
@@ -43,9 +43,9 @@ Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within 
 **Phase 2 — Gaps** (5 parallel Sonnet): bug-detection, compliance, performance, security, technical-debt. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Content: diff only (agents Read for deeper). Distribute Gaps Mode rules via `additional_instructions`.
 **CRITICAL: WAIT for ALL 5 before Synthesis.**
 
-**Synthesis** (up to 5 parallel): 5 instances of synthesis-code-agent. Input: ALL Phase 1+2 findings. Content: file paths only (agents Read to cross-reference). **Skip pairs where either category has zero Phase 1+2 findings.**
+**Synthesis** (up to 7 parallel): 7 instances of synthesis-code-agent. Input: ALL Phase 1+2 findings. Content: file paths only (agents Read to cross-reference). **Skip pairs where either category has zero Phase 1+2 findings.**
 **CRITICAL: WAIT for Phase 1 AND Phase 2 fully complete before starting.**
-Pairs: Architecture+Test Coverage ("Are architectural changes covered by tests?"), Bugs+Compliance ("Do compliance violations introduce or mask bugs?"), Bugs+Error Handling ("Do bugs have proper error handling in fix paths?"), Compliance+Technical Debt ("Do compliance violations indicate or worsen debt?"), Performance+Security ("Do security fixes introduce performance issues?")
+Pairs: Architecture+Performance ("Do architectural changes introduce performance issues in hot paths?"), Architecture+Test Coverage ("Are architectural changes covered by tests?"), Bugs+Compliance ("Do compliance violations introduce or mask bugs?"), Bugs+Error Handling ("Do bugs have proper error handling in fix paths?"), Compliance+Technical Debt ("Do compliance violations indicate or worsen debt?"), Performance+Security ("Do security fixes introduce performance issues?"), Security+Test Coverage ("Are security fixes covered by corresponding security tests?")
 
 **Post-review:** Validate all issues → filter invalid → deduplicate → generate report.
 

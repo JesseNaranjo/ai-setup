@@ -1,12 +1,12 @@
 ---
 name: docs-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Bash(find:*), Read, Write, Glob, Grep
-description: Documentation review with configurable depth (deep: up to 13 agent invocations, quick: up to 7). Describe what to review in the prompt, or omit for auto-discovery.
+description: Documentation review with configurable depth (deep: up to 14 agent invocations, quick: up to 7). Describe what to review in the prompt, or omit for auto-discovery.
 argument-hint: "\"<review prompt>\" [--depth deep|quick] [--output-file <path>] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a documentation review. Depth controls the review pipeline: deep uses all 6 documentation agents (up to 13 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no reviewable scope inferred from prompt, discover and review all documentation files in the project.
+Perform a documentation review. Depth controls the review pipeline: deep uses all 6 documentation agents (up to 14 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure). If no reviewable scope inferred from prompt, discover and review all documentation files in the project.
 
 Parse `$ARGUMENTS`: extract structural flags (--depth, --output-file, --skills); remaining text = review prompt.
 - Optional: `--depth deep|quick` (default: `deep`)
@@ -125,6 +125,6 @@ Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_
 
 Validate, aggregate, and generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-docs.md`. Write to file.
 
-**Output config (deep):** Review Type: "Deep Documentation Review (up to 13 invocations)", Categories: All 6
+**Output config (deep):** Review Type: "Deep Documentation Review (up to 14 invocations)", Categories: All 6
 **Output config (quick):** Review Type: "Quick Documentation Review (up to 7 invocations)", Categories: Accuracy, Clarity, Examples, Structure
 Include AI instruction file standardization section. Report summary: total issues by severity, issues by category, AI instruction standardization status, path to report.

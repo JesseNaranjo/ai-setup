@@ -1,12 +1,12 @@
 ---
 name: code-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob, Grep
-description: Code review with configurable depth (deep: up to 19 agent invocations, quick: up to 7). Describe what to review in the prompt.
+description: Code review with configurable depth (deep: up to 21 agent invocations, quick: up to 7). Describe what to review in the prompt.
 argument-hint: "\"<review prompt>\" [--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--skills <skill1,skill2,...>]"
 model: opus
 ---
 
-Perform a code review. Depth controls the review pipeline: deep uses all 9 agents (up to 19 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on bugs, security, error handling, and test coverage. For file reviews with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
+Perform a code review. Depth controls the review pipeline: deep uses all 9 agents (up to 21 invocations total) with thorough + gaps modes; quick uses 4 agents (up to 7 invocations) focusing on bugs, security, error handling, and test coverage. For file reviews with uncommitted changes, review those changes. For files without uncommitted changes, review the entire file.
 
 Parse `$ARGUMENTS`: extract structural flags (--depth, --output-file, --language, --skills); remaining text = review prompt.
 - Optional: `--depth deep|quick` (default: `deep`)
@@ -40,7 +40,7 @@ Detect: Node.js/TypeScript (`package.json`), .NET/C# (`*.csproj`/`*.sln`/`*.slnx
 
 **Framework:** Node.js files: check nearest `package.json` for `react`/`react-dom` in dependencies. `--language react` = Node.js + React checks.
 
-**LSP:** Check for `typescript-lsp` (Node.js), `csharp-lsp`/OmniSharp (.NET). If available: read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-integration.md`, add `lsp_available` to discovery. If none: skip.
+**LSP:** Check for `typescript-lsp` (Node.js), `csharp-lsp`/OmniSharp (.NET). If available: read `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-nodejs.md` for Node.js/TypeScript/React, `${CLAUDE_PLUGIN_ROOT}/shared/references/lsp-dotnet.md` for .NET/C#. Add `lsp_available` to discovery. If none: skip.
 
 **Test Files:** Per detected language from `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` and `${CLAUDE_PLUGIN_ROOT}/languages/dotnet.md`. Merge `additional_test_patterns` from settings.
 
@@ -146,6 +146,6 @@ Execute the **Synthesis** step from the applicable Review Sequence in `${CLAUDE_
 
 Validate, aggregate, and generate output per `${CLAUDE_PLUGIN_ROOT}/shared/review-validation-code.md`. Write to file.
 
-**Output config (deep):** Review Type: "Deep (up to 19 invocations)", Categories: All 9
+**Output config (deep):** Review Type: "Deep (up to 21 invocations)", Categories: All 9
 **Output config (quick):** Review Type: "Quick (up to 7 invocations)", Categories: 4 only
 **Note (quick only):** Quick review should be extra conservative - skip theoretical edge cases.

@@ -25,8 +25,6 @@ permissionMode: dontAsk
 2. **Cross-reference rules with implementation**: For each candidate, locate the specific rule text and compare against actual code. Check both positive requirements ("must use") and negative constraints ("must not")
 3. **Verify rule applicability**: Confirm the rule applies to this file type, context, and scope
 
-Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
-
 ## Output
 
 Category: "Compliance". Describe: exact rule violated (quote from instruction file), how code violates it, impact.

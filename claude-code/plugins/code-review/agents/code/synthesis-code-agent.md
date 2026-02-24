@@ -27,11 +27,13 @@ permissionMode: dontAsk
 
 ### Step 2 Interaction Patterns
 
+Architecture+Performance: flag when abstraction layer added in hot path (>100 calls/sec) without performance consideration
 Architecture+Test Coverage: flag when refactored code moves logic but tests still reference old structure
 Bugs+Error Handling: flag when bug fix path has no error handling AND fix involves I/O or external calls. Observability: error handling changes that break OpenTelemetry span propagation → fragmented distributed traces; error handlers logging sensitive data (PII, tokens, credentials) into observability platforms via spans or structured logs
 Bugs+Test Coverage: flag when bug fix introduces new branch but no test covers it
 Compliance+Technical Debt: flag when compliance violation is caused by deprecated pattern that has a modern replacement, or when debt workaround bypasses a compliance requirement
 Performance+Security: flag only when security fix is in hot path (>100 calls/sec) or adds >10ms latency
+Security+Test Coverage: flag when security fix has no corresponding security test (regression risk)
 
 ### Language-Specific Cross-Cutting Patterns
 

@@ -22,7 +22,7 @@ Additionally, the plugin provides documentation review commands that analyze pro
 
 ### `/code-review`
 
-Code review with configurable depth. Describe what to review in the prompt: file paths, "staged changes", specific commits, or a description of the code area. Deep (default) uses all 9 review agents plus synthesis (up to 19 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (bugs, security, errors, tests).
+Code review with configurable depth. Describe what to review in the prompt: file paths, "staged changes", specific commits, or a description of the code area. Deep (default) uses all 9 review agents plus synthesis (up to 21 invocations) with thorough + gaps modes for maximum coverage. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (bugs, security, errors, tests).
 
 ```bash
 /code-review "<review prompt>" [--depth deep|quick] [--output-file <path>] [--language <nodejs|react|dotnet>] [--skills <skills>]
@@ -30,7 +30,7 @@ Code review with configurable depth. Describe what to review in the prompt: file
 
 ### `/docs-review`
 
-Documentation review with configurable depth. Describe what to review in the prompt, or omit for auto-discovery of all project documentation (README.md, CLAUDE.md, docs/*, etc.). Deep (default) uses all 6 documentation agents (up to 13 invocations) with thorough + gaps modes. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure).
+Documentation review with configurable depth. Describe what to review in the prompt, or omit for auto-discovery of all project documentation (README.md, CLAUDE.md, docs/*, etc.). Deep (default) uses all 6 documentation agents (up to 14 invocations) with thorough + gaps modes. Quick uses 4 agents (up to 7 invocations) focusing on critical issues (accuracy, clarity, examples, structure).
 
 ```bash
 /docs-review ["<review prompt>"] [--depth deep|quick] [--output-file <path>] [--skills <skills>]
@@ -330,9 +330,9 @@ code-review/
 │       └── synthesis-docs-agent.md  # Cross-agent insights (docs reviews)
 ├── skills/                      # Orchestration entry points and targeted review skills
 │   ├── agent-review-instructions/   # Static agent config (MODE, FP rules, output schema)
-│   ├── code-review/                # Orchestration: code review pipeline (deep: up to 19, quick: up to 7 invocations)
+│   ├── code-review/                # Orchestration: code review pipeline (deep: up to 21, quick: up to 7 invocations)
 │   │   └── SKILL.md
-│   ├── docs-review/                # Orchestration: docs review pipeline (deep: up to 13, quick: up to 7 invocations)
+│   ├── docs-review/                # Orchestration: docs review pipeline (deep: up to 14, quick: up to 7 invocations)
 │   │   └── SKILL.md
 │   ├── reviewing-architecture-principles/
 │   ├── reviewing-bugs/
@@ -352,7 +352,8 @@ code-review/
 │   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (--skills)
 │   └── references/                  # LSP integration details (progressive disclosure)
-│       └── lsp-integration.md       # LSP integration details for Node.js and .NET
+│       ├── lsp-dotnet.md            # .NET/C# LSP diagnostic codes
+│       └── lsp-nodejs.md            # Node.js/TypeScript LSP diagnostic codes
 └── README.md
 ```
 
@@ -403,7 +404,7 @@ Each agent accepts a MODE parameter:
 
 | Command | Depth | Agents | Mode Invocations | Total Invocations |
 |---------|-------|--------|------------------|-------------------|
-| `/code-review` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (up to 5) | up to 19 |
+| `/code-review` | deep | 9 review + synthesis | thorough (9) + gaps (5) + synthesis (up to 7) | up to 21 |
 | `/code-review` | quick | 4 (bugs, security, errors, tests) | quick (4) + synthesis (up to 3) | up to 7 |
 
 > The review pipeline is the same regardless of scope type (file paths, staged changes, or descriptive scope).
@@ -412,7 +413,7 @@ Each agent accepts a MODE parameter:
 
 | Command | Depth | Agents | Mode Invocations | Total Invocations |
 |---------|-------|--------|------------------|-------------------|
-| `/docs-review` | deep | All 6 docs | thorough (6) + gaps (3) + synthesis (up to 4) | up to 13 |
+| `/docs-review` | deep | All 6 docs | thorough (6) + gaps (3) + synthesis (up to 5) | up to 14 |
 | `/docs-review` | quick | 4 (accuracy, clarity, examples, structure) | quick (4) + synthesis (up to 3) | up to 7 |
 
 > Synthesis invocations = parallel instances of the synthesis agent, each analyzing a different cross-category pair. See Architecture section for pair definitions.
@@ -465,7 +466,7 @@ See `shared/review-validation-code.md` "Output Format" section for complete outp
 ## Code Review
 
 **Reviewed:** 5 file(s) | **Branch:** feature/new-auth
-**Review Depth:** Deep (up to 19 invocations: 9 thorough + 5 gaps + up to 5 synthesis)
+**Review Depth:** Deep (up to 21 invocations: 9 thorough + 5 gaps + up to 7 synthesis)
 
 ### Summary
 

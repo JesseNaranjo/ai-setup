@@ -20,8 +20,6 @@ permissionMode: dontAsk
 2. **Cross-verify claims against code**: For each candidate, read the actual source code and compare documented behavior with implementation. Check default values, error conditions, and edge case handling
 3. **Verify practical impact**: Confirm the inaccuracy would cause incorrect usage or failed implementations
 
-Skip: within ±5 lines of thorough findings, same issue type on same section. Major/Critical only. Max 5 new.
-
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + Incorrect function/method names. Wrong parameter types/counts. Broken code examples (syntax errors, missing imports). Incorrect CLI commands. Major version mismatches.
 

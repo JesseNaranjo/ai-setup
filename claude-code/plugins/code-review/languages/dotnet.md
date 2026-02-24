@@ -18,6 +18,8 @@
 - Task.Result or Task.Wait in async context — synchronous blocking causes thread pool starvation/deadlocks
 - [EF Core] DbContext in Singleton — scoped DbContext injected into Singleton
 - [EF Core] Missing transactions — multiple SaveChanges without TransactionScope
+- [MongoDB] BsonDocument without typed model in production queries — loses compile-time type safety
+- [Redis] ConnectionMultiplexer without retry policy — transient failures cause cascading request failures
 
 ### Error Handling {#errors}
 
@@ -38,6 +40,9 @@
 - [EF Core] Missing AsSplitQuery — large Include graphs, Cartesian explosion
 - [EF Core] Missing index hint — frequent WHERE on non-indexed columns
 - [EF Core] Unbounded Include depth — navigation properties without explicit depth limit
+- [MongoDB] FindSync instead of FindAsync — blocks thread pool. Use Find().ToListAsync()
+- [Redis] IDistributedCache without AbsoluteExpirationRelativeToNow — entries never expire, unbounded memory
+- [Redis] StringGet/StringSet for complex objects — use HashSet/HashGet for structured data to avoid full serialization
 
 ### Security {#security}
 
@@ -54,11 +59,11 @@
 - [Docker] `mcr.microsoft.com/dotnet/aspnet:latest` or unpinned base image — pin to specific version with digest
 - [Docker] Running as root — add `USER app` (built-in non-root user in .NET 8+ images)
 - [Docker] Publishing with `--no-restore` in multi-stage build without prior restore layer — breaks layer caching
+- [MongoDB] Filter with user input in BsonRegularExpression — regex injection
 
 ### Technical Debt {#debt}
 
-- Pre-.NET 6 patterns — `WebClient`, sync-over-async, old configuration
-- Legacy serialization — `BinaryFormatter`, non-JSON serialization
+- Pre-.NET 6 patterns — `WebClient`, `BinaryFormatter`, non-JSON serialization, sync-over-async, old configuration
 - Missing `#nullable enable`
 - Primary constructors (.NET 8/C# 12): classes with single constructor + field assignment should use primary constructor syntax
 - `TimeProvider` (.NET 8): direct `DateTime.Now`/`DateTimeOffset.Now` in injectable services — use `TimeProvider.System` for testability

@@ -23,8 +23,8 @@ This is a Claude Code plugin repository containing the **Code Review Plugin** (v
 
 | Command | Description |
 |---------|-------------|
-| `/code-review "<review prompt>" [--depth deep\|quick] [--output-file <path>]` | Code review with configurable depth (deep: up to 19 agents, quick: up to 7). Describe what to review in the prompt. |
-| `/docs-review "<review prompt>" [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: up to 13 agents, quick: up to 7). Describe what to review in the prompt, or omit for auto-discovery. |
+| `/code-review "<review prompt>" [--depth deep\|quick] [--output-file <path>]` | Code review with configurable depth (deep: up to 21 agents, quick: up to 7). Describe what to review in the prompt. |
+| `/docs-review "<review prompt>" [--depth deep\|quick] [--output-file <path>]` | Docs review with configurable depth (deep: up to 14 agents, quick: up to 7). Describe what to review in the prompt, or omit for auto-discovery. |
 
 **Note:** All review commands also accept:
 - `--language nodejs|react|dotnet` to force language detection (code reviews only)
@@ -72,13 +72,13 @@ claude-code/plugins/code-review/
 ├── skills/                          # 11 skills (2 orchestration + 7 review + 2 internal)
 │   ├── agent-review-instructions/   # Internal: MODE, FP rules, output schema (loaded by agents via skills field)
 │   │   └── SKILL.md
-│   ├── code-review/                 # Orchestration: code review pipeline (deep: up to 19, quick: up to 7 invocations)
+│   ├── code-review/                 # Orchestration: code review pipeline (deep: up to 21, quick: up to 7 invocations)
 │   │   └── SKILL.md
-│   ├── docs-review/                 # Orchestration: docs review pipeline (deep: up to 13, quick: up to 7 invocations)
+│   ├── docs-review/                 # Orchestration: docs review pipeline (deep: up to 14, quick: up to 7 invocations)
 │   │   └── SKILL.md
 │   ├── reviewing-architecture-principles/
 │   ├── reviewing-bugs/
-│   ├── reviewing-compliance/        # Reference file inlined into SKILL.md
+│   ├── reviewing-compliance/
 │   ├── reviewing-documentation/     # Has 1 reference file (ai-instruction-templates.md)
 │   ├── reviewing-performance/
 │   ├── reviewing-security/          # Expanded example (all 7 review skills follow this pattern):
@@ -99,7 +99,8 @@ claude-code/plugins/code-review/
 │   ├── review-validation-docs.md    # Docs validation: batch validation, aggregation, auto-validation patterns
 │   ├── skill-handling.md            # Skill resolution and orchestration (loaded when --skills used)
 │   └── references/                  # LSP integration details (progressive disclosure)
-│       └── lsp-integration.md       # LSP integration details for Node.js and .NET
+│       ├── lsp-dotnet.md            # .NET/C# LSP diagnostic codes
+│       └── lsp-nodejs.md            # Node.js/TypeScript LSP diagnostic codes
 ├── templates/
 │   └── code-review.local.md.example # Settings template (parsed by orchestrator at runtime)
 └── README.md
@@ -161,7 +162,7 @@ disable-model-invocation: true        # Internal skills (prevents model from inv
 
 1. **Phase 1** (9 agents parallel): Thorough mode review (4 Opus, 5 Sonnet)
 2. **Phase 2** (5 Sonnet agents parallel): Gaps mode with Phase 1 findings as context
-3. **Synthesis** (up to 5 Opus agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
+3. **Synthesis** (up to 7 Opus agents parallel): Cross-cutting concern detection (requires findings in BOTH input categories; single-category insights are rejected)
 4. **Validation**: All issues validated before output
 
 ### Agent Content Distribution

@@ -38,8 +38,6 @@ Coverage gaps:
 2. **Trace user workflows**: For each candidate, follow the documented workflow end-to-end. Check if a user could complete the task using only the documentation provided
 3. **Verify gap significance**: Confirm the missing content would block or significantly hinder users
 
-Skip: within ±5 lines of thorough findings, same issue type on same section. Major/Critical only. Max 5 new.
-
 ## Output
 
 Category: "Completeness". Describe: what is missing, why needed, impact of absence.

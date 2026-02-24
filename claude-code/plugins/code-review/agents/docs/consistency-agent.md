@@ -25,8 +25,6 @@ permissionMode: dontAsk
 2. **Cross-reference across document scope**: For each candidate, search for all occurrences of the term/pattern and verify consistent usage. Check headings, code comments, and inline references
 3. **Verify reader confusion risk**: Confirm the inconsistency would cause ambiguity or misunderstanding, not just stylistic variation
 
-Skip: within ±5 lines of thorough findings, same issue type on same section. Major/Critical only. Max 5 new.
-
 ## Output
 
 Category: "Consistency". Describe: what is inconsistent, variant forms found, recommended canonical form.

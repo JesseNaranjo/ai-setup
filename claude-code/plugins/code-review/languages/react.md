@@ -73,14 +73,8 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 ### Technical Debt {#debt}
 
-- Class components with no state or lifecycle justifying class form — convert to function
-- Deprecated lifecycle methods: componentWillMount, componentWillReceiveProps, componentWillUpdate (use alternatives since React 16.3)
-- Legacy context API (contextTypes/childContextTypes) — migrate to createContext/useContext
-- String refs (`ref="myRef"`) — migrate to useRef/createRef
-- defaultProps on function components (deprecated React 18.3+) — use default parameter values
-- PropTypes runtime validation in TypeScript projects — remove in favor of static types
-- React 19: `forwardRef` deprecated — ref is now a regular prop, remove forwardRef wrappers
-- React 19: `use()` hook replaces useEffect-for-data-fetching and useContext — flag patterns `use()` directly replaces
+- Legacy React patterns: class components, deprecated lifecycle methods (componentWillMount/componentWillReceiveProps/componentWillUpdate), string refs, defaultProps, PropTypes, legacy context API → modern equivalents (function components, hooks, createContext/useContext, useRef)
+- React 19: forwardRef removal (use ref prop directly), use() hook replaces useEffect-for-data-fetching and useContext
 
 ### Test Coverage {#tests}
 

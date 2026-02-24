@@ -27,6 +27,8 @@
 - [Vite] `import.meta.env` variables: only `VITE_` prefixed vars exposed to client. Non-prefixed silently resolve to `undefined`
 - [Vite] `import.meta.glob()` default eager:false returns `() => Promise<Module>`, not Module — accessing .default without await returns undefined
 - [Vite] CJS dependencies without `optimizeDeps.include` cause runtime loading errors in dev (Vite pre-bundles on first access)
+- [MongoDB] .find() without .limit() on user-facing queries — unbounded result sets consume memory
+- [Redis] Pub/Sub without reconnection handler — silently stops receiving after connection drop
 
 ### Error Handling {#errors}
 
@@ -38,6 +40,10 @@
 - Synchronous crypto (crypto.pbkdf2Sync) blocking event loop
 - `fetch()` without `AbortSignal.timeout(ms)` in server code — Node.js undici has no default timeout, waits indefinitely
 - Missing AbortController for cancellable fetch/stream operations — abandoned requests hold connections
+- [MongoDB] Mongoose .populate() in loops — N+1. Use .populate() on initial query or aggregation $lookup
+- [MongoDB] Missing .lean() on read-only Mongoose queries — skips hydration overhead (5-10x faster for large result sets)
+- [Redis] KEYS pattern in production — O(N) blocks event loop. Use SCAN iterator
+- [Redis] SET without TTL in cache patterns — unbounded memory growth
 
 ### Security {#security}
 
@@ -55,6 +61,7 @@
 - [Docker] `node:latest` or unpinned Node.js base image — use `node:<version>-slim` with digest pin
 - [Docker] Running as root — add `USER node` after COPY
 - [Docker] `COPY package*.json` after `COPY . .` — invalidates layer cache, rebuilds dependencies on every code change
+- [MongoDB] $where or $regex with user input — JavaScript/expression injection
 
 ### Technical Debt {#debt}
 

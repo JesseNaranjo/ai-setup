@@ -26,8 +26,6 @@ For each file, check:
 2. **Assess migration urgency**: For each candidate, check if the deprecated API has a removal timeline, if the pattern blocks other modernization, or if it causes maintenance burden disproportionate to the code's importance
 3. **Verify debt impact**: Confirm the pattern causes ongoing cost (maintenance, confusion, blocked upgrades) beyond a one-time cleanup
 
-Skip: within ±5 lines of thorough findings, same issue type on same function. Major/Critical only. Max 5 new.
-
 ## Output
 
 Category: "Technical Debt". Describe: what the debt is, why it's debt, urgency.

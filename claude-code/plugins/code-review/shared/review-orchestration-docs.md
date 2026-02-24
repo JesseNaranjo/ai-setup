@@ -26,7 +26,7 @@ Synthesis: skip `additional_instructions` distribution.
 
 Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within +/-5 lines of prior findings; skip same issue type on same function/method; range (A-B): skip zone [A-5, B+5]. **Constraints:** Major/Critical only. Max 5 new per agent. Always Sonnet. **Agents:** accuracy, completeness, consistency.
 
-## Deep Docs Review Sequence (up to 13 invocations)
+## Deep Docs Review Sequence (up to 14 invocations)
 
 **Phase 1 — Thorough** (6 parallel): accuracy, clarity, completeness, consistency, examples, structure. MODE: thorough. Pass: doc contents, related code snippets, project metadata, AI instruction file status, additional prompt instructions.
 **CRITICAL: WAIT for ALL 6 before Phase 2.**
@@ -34,9 +34,9 @@ Input: `previous_findings` from thorough mode. **Dedup:** Skip same file within 
 **Phase 2 — Gaps** (3 parallel Sonnet): accuracy, completeness, consistency. MODE: gaps. Input: Phase 1 findings as `previous_findings`. Distribute Gaps Mode rules via `additional_instructions`.
 **CRITICAL: WAIT for ALL 3 before Synthesis.**
 
-**Synthesis** (up to 4 parallel): 4 instances of synthesis-docs-agent. Input: ALL Phase 1+2 findings. **Skip pairs where either category has zero Phase 1+2 findings.**
+**Synthesis** (up to 5 parallel): 5 instances of synthesis-docs-agent. Input: ALL Phase 1+2 findings. **Skip pairs where either category has zero Phase 1+2 findings.**
 **CRITICAL: WAIT for Phase 1 AND Phase 2 fully complete before starting.**
-Pairs: Accuracy+Examples ("Do code examples match documented behavior?"), Clarity+Structure ("Does poor structure contribute to clarity issues?"), Completeness+Consistency ("Are missing sections causing terminology inconsistencies?"), Consistency+Structure ("Do formatting inconsistencies reflect structural problems?")
+Pairs: Accuracy+Completeness ("Does inaccurate documentation indicate incomplete coverage of changes?"), Accuracy+Examples ("Do code examples match documented behavior?"), Clarity+Structure ("Does poor structure contribute to clarity issues?"), Completeness+Consistency ("Are missing sections causing terminology inconsistencies?"), Consistency+Structure ("Do formatting inconsistencies reflect structural problems?")
 
 **Post-review:** Validate all issues → filter invalid → deduplicate → generate report.
 
