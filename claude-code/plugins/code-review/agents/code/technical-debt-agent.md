@@ -16,6 +16,7 @@ permissionMode: dontAsk
 **thorough:**
 For each file, check:
 - Deprecated deps: major version 2+ behind, discontinued libraries, known CVEs. Verify via package.json/*.csproj version fields
+- Runtime/framework versions: Check manifest files (package.json engines, .nvmrc, .node-version, *.csproj TargetFramework, Containerfile FROM, Dockerfile FROM) for EOL runtimes (Critical), maintenance-only approaching EOL within 6 months (Major), or frameworks 2+ major versions behind (Major)
 - Workarounds/hacks: HACK/WORKAROUND/XXX comments, monkey patches, version-specific workarounds for fixed issues. Check if upstream fix exists
 - Dead code: unused exports (Grep for import/require refs), commented-out blocks (10+ lines), unreachable paths, stale feature flags
 - Scalability: hardcoded limits, in-memory state needing externalization, unbounded collections without pagination

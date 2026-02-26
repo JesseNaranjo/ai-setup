@@ -82,6 +82,7 @@ Apply unlabeled patterns to all languages. Apply [Node.js]/[React] patterns only
 - `commented_out_code` [Technical Debt/Minor]: 10+ consecutive lines of commented code — `^(?:\s*(?:\/\/\|#).*\n){10,}`
 - `hack_comment` [Technical Debt/Minor]: Explicit HACK/WORKAROUND/XXX marker — `(?:\/\/\|#\|\/\*)\s*(?:HACK\|WORKAROUND\|XXX)\s*[:\-]?`
 - `outdated_callback` [Technical Debt/Minor] [Node.js]: Callback pattern in async context — `function\s+\w+\s*\([^)]*,\s*(?:callback\|cb\|done)\s*\)`
+- `eol_runtime` [Technical Debt/Critical]: EOL runtime version detected in manifest file (engines, TargetFramework, .nvmrc)
 
 ---
 

@@ -69,6 +69,12 @@
 - Legacy bundler — Webpack 4 and below, Gulp, Grunt. Flag Webpack 5 projects without Vite/esbuild migration plan
 - Monolithic modules — 1000+ lines or 50+ exports
 - Bun/Deno runtime differences: flag Node.js-specific APIs (`child_process`, `cluster`, `node:*` prefixed) when project targets multiple runtimes
+- EOL Node.js runtime: `engines.node` or `.nvmrc` specifying Node.js 16.x or 18.x — both past end-of-life
+- Bootstrap 4.x or earlier in `package.json` dependencies — Bootstrap 5 dropped jQuery dependency, new utility API, RTL support
+- Express 4.x without migration blocker — Express 5 available with async error handling and path matching changes
+- Fastify 3.x or earlier — Fastify 4 introduced TypeScript-first design, hooks API overhaul, and serialization changes
+- TypeScript 4.x in active projects — 5.x introduced module resolution improvements and decorator changes
+- Vite 4.x or earlier in `package.json` devDependencies — Vite 5 introduced environment API and requires Node.js 18+
 
 ### Test Coverage {#tests}
 

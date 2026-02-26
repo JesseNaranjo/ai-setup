@@ -77,6 +77,8 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 - Legacy React patterns: class components, deprecated lifecycle methods (componentWillMount/componentWillReceiveProps/componentWillUpdate), string refs, defaultProps, PropTypes, legacy context API, `createRef` in function components (use `useRef`), `React.FC` type annotation (unnecessary — use plain function with typed props) → modern equivalents (function components, hooks, createContext/useContext, useRef)
 - React 19: forwardRef removal (use ref prop directly), use() hook replaces useEffect-for-data-fetching and useContext
+- React 17 or earlier in `package.json` dependencies — two major versions behind (18 introduced concurrent rendering, 19 removed forwardRef)
+- `react-bootstrap` v1.x — targets Bootstrap 4, v2.x required for Bootstrap 5 support
 
 ### Test Coverage {#tests}
 
