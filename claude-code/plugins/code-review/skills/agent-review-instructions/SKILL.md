@@ -1,6 +1,6 @@
 ---
 name: agent-review-instructions
-description: "Shared configuration for non-synthesis review agents. Loaded at agent startup via skills field to provide MODE definitions, false positive rules, gaps calibration, and output schema."
+description: "Internal: MODE definitions, false positive rules, output schema for non-synthesis agents."
 user-invocable: false
 disable-model-invocation: true
 ---

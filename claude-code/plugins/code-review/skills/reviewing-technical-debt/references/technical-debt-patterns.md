@@ -11,7 +11,7 @@
 | Unmaintained | No commits 2+ years, archived | Major |
 | Known CVE | `npm audit`, Snyk | Critical |
 
-**Common:** `request` (use node-fetch/axios), `moment` (use date-fns/luxon), `node-sass` (use sass), `tslint` (use eslint), `passport` < v0.7 (session fixation fix), `uuid` v3 (use v4+)
+**Common:** `request` (use node-fetch/axios), `moment` (use date-fns/luxon), `node-sass` (use sass), `tslint` (use eslint), `passport` < v0.7 (session fixation fix), `uuid` v3 (use v4+), `create-react-app` (deprecated 2023; use Vite, Next.js, or Remix), `eslint` v8 `.eslintrc` format (v9 requires `eslint.config.js` flat config), `faker` (compromised; use `@faker-js/faker`), `querystring` built-in (deprecated; use `URLSearchParams`)
 
 ### .NET
 
@@ -21,7 +21,7 @@
 | .NET Framework only | No .NET Core/5+ support | Major |
 | Known CVE | NuGet advisory database | Critical |
 
-**Common:** `Newtonsoft.Json` in .NET 5+ (consider System.Text.Json), `Microsoft.AspNet.*` (use AspNetCore), `WindowsAzure.Storage` (use Azure.Storage.*)
+**Common:** `Newtonsoft.Json` in .NET 5+ (consider System.Text.Json), `Microsoft.AspNet.*` (use AspNetCore), `WindowsAzure.Storage` (use Azure.Storage.*), `HttpWebRequest` (use `HttpClient` via `IHttpClientFactory`)
 
 ## Outdated Patterns
 

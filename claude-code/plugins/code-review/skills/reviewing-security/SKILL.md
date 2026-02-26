@@ -1,6 +1,6 @@
 ---
 name: reviewing-security
-description: Detects injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, and OWASP top 10 issues. Use when checking for security vulnerabilities, conducting vulnerability audits, or scanning for secrets during code review.
+description: Use when checking for security vulnerabilities, conducting vulnerability audits, or scanning for secrets during code review.
 ---
 
 # Security Code Review Skill

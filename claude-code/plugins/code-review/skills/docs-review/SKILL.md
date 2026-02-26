@@ -1,7 +1,7 @@
 ---
 name: docs-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Bash(find:*), Read, Write, Glob, Grep
-description: Documentation review with configurable depth (deep: up to 14 agent invocations, quick: up to 7). Describe what to review in the prompt, or omit for auto-discovery.
+description: Use when reviewing project documentation for quality issues. Supports deep (up to 14 agents) and quick (up to 7 agents) depth. Omit prompt for auto-discovery.
 argument-hint: "\"<review prompt>\" [--depth deep|quick] [--output-file <path>] [--skills <skill1,skill2,...>]"
 model: opus
 ---
@@ -23,7 +23,7 @@ Invoke superpowers methodology skills; pass to agents via `skill_instructions.me
 
 Load from `.claude/code-review.local.md` in project root. If missing, use defaults.
 
-Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend to output filename unless --output-file), `skip_agents` ([] ; exclude from review), `min_severity` ("suggestion" ; filter to issues at or above), `additional_test_patterns` ([] ; merge with defaults).
+Fields: `enabled` (true; false → stop with error), `output_dir` ("." ; prepend to output filename unless --output-file), `skip_agents` ([] ; exclude from review), `min_severity` ("suggestion" ; filter to issues at or above).
 
 Markdown body → "Project-Specific Instructions" for all agents. Review prompt appended. Precedence: CLI flags > settings file > defaults.
 

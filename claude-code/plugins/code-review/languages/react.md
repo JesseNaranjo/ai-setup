@@ -33,6 +33,7 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 - [Next.js] GET Route Handler with mutation side effects: GET responses may be cached by CDN/browser, causing stale mutations
 - [Server Actions] `useActionState`/`useFormStatus` race conditions with concurrent Server Action submissions — UI state desyncs when multiple actions complete out of order
 - [Server Actions] Server Action used as ad-hoc API endpoint without rate limiting or input validation — bypasses API gateway protections
+- [React 19] `use()` hook called inside loops with varying iteration count — violates rules of hooks (conditional call count per render)
 
 ### Error Handling {#errors}
 
@@ -53,6 +54,7 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 - [React Query] Stale time too short — unnecessary refetch on every mount
 - [Next.js] Next.js 15: `fetch` no longer cached by default (was force-cache in 14) — add explicit `{ cache: 'force-cache' }` or `revalidate` if caching intended
 - [Next.js] Route Handler missing `revalidate` export or cache-control headers — defaults to dynamic rendering on every request
+- [React Compiler] `"use no memo"` directive on components receiving frequently-changing props — disables auto-memoization where it provides the most benefit
 
 ### Security {#security}
 
@@ -73,7 +75,7 @@ IN ADDITION to Node.js checks. See `${CLAUDE_PLUGIN_ROOT}/languages/nodejs.md` f
 
 ### Technical Debt {#debt}
 
-- Legacy React patterns: class components, deprecated lifecycle methods (componentWillMount/componentWillReceiveProps/componentWillUpdate), string refs, defaultProps, PropTypes, legacy context API → modern equivalents (function components, hooks, createContext/useContext, useRef)
+- Legacy React patterns: class components, deprecated lifecycle methods (componentWillMount/componentWillReceiveProps/componentWillUpdate), string refs, defaultProps, PropTypes, legacy context API, `createRef` in function components (use `useRef`), `React.FC` type annotation (unnecessary — use plain function with typed props) → modern equivalents (function components, hooks, createContext/useContext, useRef)
 - React 19: forwardRef removal (use ref prop directly), use() hook replaces useEffect-for-data-fetching and useContext
 
 ### Test Coverage {#tests}

@@ -40,6 +40,7 @@
 - Synchronous crypto (crypto.pbkdf2Sync) blocking event loop
 - `fetch()` without `AbortSignal.timeout(ms)` in server code — Node.js undici has no default timeout, waits indefinitely
 - Missing AbortController for cancellable fetch/stream operations — abandoned requests hold connections
+- `console.log` in production API handlers — use structured logger (pino, winston) with correlation IDs for queryable, leveled output
 - [MongoDB] Mongoose .populate() in loops — N+1. Use .populate() on initial query or aggregation $lookup
 - [MongoDB] Missing .lean() on read-only Mongoose queries — skips hydration overhead (5-10x faster for large result sets)
 - [Redis] KEYS pattern in production — O(N) blocks event loop. Use SCAN iterator

@@ -1,6 +1,6 @@
 ---
 name: synthesis-instructions
-description: "Shared configuration for cross-cutting synthesis agents. Loaded at agent startup via skills field to provide input format, review process, output schema, and guidelines."
+description: "Internal: input format, review process, output schema for synthesis agents."
 user-invocable: false
 disable-model-invocation: true
 ---

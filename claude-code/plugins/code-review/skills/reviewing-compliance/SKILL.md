@@ -1,6 +1,6 @@
 ---
 name: reviewing-compliance
-description: Reviews adherence to project-specific coding standards, CLAUDE.md guidelines, and AI agent instruction files. Use when checking coding standards compliance or convention adherence during code review.
+description: Use when checking coding standards compliance or convention adherence during code review.
 ---
 
 # Compliance Code Review Skill

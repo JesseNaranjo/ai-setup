@@ -145,7 +145,7 @@ Orchestration and review skills use YAML frontmatter fields from the Anthropic S
 ```yaml
 ---
 name: <skill-name>                    # Required
-description: <purpose+trigger>        # Required. "[What in third person]. Use when [triggers]."
+description: <purpose+trigger>        # Required. "Use when [specific triggers]."
 allowed-tools: Tool1, Tool2           # Orchestration skills only (comma-separated)
 argument-hint: "<args>"               # Orchestration skills only (CLI argument template)
 model: opus                           # Orchestration skills only
@@ -231,7 +231,7 @@ All category anchors referenced in `review-orchestration-code.md` (`{#architectu
 Each skill follows progressive disclosure: `SKILL.md` is always loaded when triggered; `references/` subdirectories are loaded on-demand (one level deep from SKILL.md). Skills are self-contained with their own workflow procedures. Review skills provide unique value (scope prioritization, FP adjustments, reference files, methodology) but do not duplicate agent category checklists — categories are in agent files only. Two internal skills (not user-facing) provide static configuration loaded at startup via the `skills` frontmatter field: `agent-review-instructions` (MODE, FP rules, output schema for non-synthesis agents) and `synthesis-instructions` (input format, review process, output schema for synthesis agents).
 
 **Description patterns:**
-- Skills: `"[What in third person]. Use when [specific triggers]."` — e.g., `"Detects injection attacks... Use when checking for security vulnerabilities during code review."`
+- Skills: `"Use when [specific triggers]."` — e.g., `"Use when checking for security vulnerabilities, conducting vulnerability audits, or scanning for secrets during code review."`
 - Agents: `"[Role] specialist. Use [for] [triggers]."` — e.g., `"Security vulnerability specialist. Use for detecting injection attacks..."`
 
 ### Skill-Informed Orchestration

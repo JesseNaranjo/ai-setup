@@ -1,7 +1,7 @@
 ---
 name: code-review
 allowed-tools: Task, Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git rev-parse:*), Bash(ls:*), Read, Write, Glob, Grep
-description: Code review with configurable depth (deep: up to 21 agent invocations, quick: up to 7). Describe what to review in the prompt.
+description: Use when performing code reviews on files, staged changes, or commits. Supports deep (up to 21 agents) and quick (up to 7 agents) depth.
 argument-hint: "\"<review prompt>\" [--depth deep|quick] [--output-file <path>] [--language dotnet|nodejs|react] [--skills <skill1,skill2,...>]"
 model: opus
 ---

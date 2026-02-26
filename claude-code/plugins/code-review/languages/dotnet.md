@@ -20,6 +20,10 @@
 - [EF Core] Missing transactions — multiple SaveChanges without TransactionScope
 - [MongoDB] BsonDocument without typed model in production queries — loses compile-time type safety
 - [Redis] ConnectionMultiplexer without retry policy — transient failures cause cascading request failures
+- [Blazor] Interactive elements (`@onclick`, `@onchange`) without accessible name — screen readers announce generic "button" or "element"
+- [Blazor] Form inputs without associated label (`<label for="...">` or `aria-label`) — fails WCAG 1.3.1
+- [Blazor] Dynamic content updates without `aria-live` region — screen readers miss asynchronous content changes (loading states, validation messages, notifications)
+- [Blazor] `<NavLink>` navigation without skip-to-content link or focus management — keyboard users must tab through entire nav on every page transition
 
 ### Error Handling {#errors}
 
@@ -43,6 +47,8 @@
 - [MongoDB] FindSync instead of FindAsync — blocks thread pool. Use Find().ToListAsync()
 - [Redis] IDistributedCache without AbsoluteExpirationRelativeToNow — entries never expire, unbounded memory
 - [Redis] StringGet/StringSet for complex objects — use HashSet/HashGet for structured data to avoid full serialization
+- [ASP.NET Core] `ILogger.LogInformation($"User {userId}")` — string interpolation allocates even when log level is disabled; use structured parameters `ILogger.LogInformation("User {UserId}", userId)`
+- [ASP.NET Core] Missing `IHealthCheck` registration for external dependencies (database, cache, message broker) — orchestrators cannot distinguish between app failure and dependency failure
 
 ### Security {#security}
 
@@ -60,6 +66,7 @@
 - [Docker] Running as root — add `USER app` (built-in non-root user in .NET 8+ images)
 - [Docker] Publishing with `--no-restore` in multi-stage build without prior restore layer — breaks layer caching
 - [MongoDB] Filter with user input in BsonRegularExpression — regex injection
+- `HttpWebRequest` with user-controlled URL — SSRF risk; use `HttpClient` with `SocketsHttpHandler` and URL allowlist
 
 ### Technical Debt {#debt}
 
@@ -71,6 +78,7 @@
 - `System.Threading.Lock` (.NET 9): replaces `lock(object)` — dedicated lock type with scoped `EnterScope()`, avoids accidental lock on non-lock objects
 - `params` collections (.NET 9/C# 13): `params` now accepts `Span<T>`, `ReadOnlySpan<T>`, `IEnumerable<T>` — not just arrays. Flag `params T[]` when span variant reduces allocations
 - LINQ `CountBy`/`AggregateBy` (.NET 9): replaces `GroupBy(k).Select(g => ...)` pattern — single-pass, no intermediate grouping allocations
+- `Newtonsoft.Json` in .NET 6+ without documented compatibility requirement — `System.Text.Json` is default; flag unless codebase has explicit reason (polymorphic serialization, LINQ-to-JSON, custom converters not yet migrated)
 
 ### Test Coverage {#tests}
 

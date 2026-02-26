@@ -93,6 +93,12 @@ Detection: Flag unfamiliar packages (<1000 weekly downloads) with names within e
 - Flag new dependencies with lifecycle scripts, especially if package has <1000 weekly downloads
 - CI mitigation: `.npmrc` should contain `ignore-scripts=true`; run scripts explicitly after audit
 
+### Artifact Attestation and OIDC
+
+- GitHub Actions Artifact Attestations: `uses: actions/attest-build-provenance` missing on published artifacts — required for SLSA Build Level 2+. Severity: Minor.
+- Long-lived cloud credentials (`AWS_ACCESS_KEY_ID`, `AZURE_CREDENTIALS`, `GCP_SA_KEY`) in repository secrets when OIDC is available — use `permissions: id-token: write` with cloud provider's OIDC federation. Severity: Minor.
+- Reusable workflow trust: `uses: org/workflows/.github/workflows/build.yml@main` (mutable ref) — pin to commit SHA for reproducible builds. Severity: Minor.
+
 ## CI/CD Pipeline Security
 
 - Unpinned GitHub Actions: `actions/checkout@v3` (mutable tag) → use SHA pinning `actions/checkout@SHA`
@@ -101,6 +107,7 @@ Detection: Flag unfamiliar packages (<1000 weekly downloads) with names within e
 - `pull_request_target` + `actions/checkout` of PR code — runs untrusted PR code with repo secrets. Severity: Critical
 - Composite GitHub Action injection: untrusted inputs (`github.event.issue.title`, `github.event.pull_request.body`) interpolated in composite action `run:` steps
 - Self-hosted runners: shared `_work` directory persists between jobs, env vars leak across workflows, no container isolation by default
+- Missing `permissions:` block in workflow YAML defaults to read-write-all — `permissions: {}` is secure baseline, add specific permissions per job. Severity: Major
 
 ## AI/LLM Security
 
@@ -108,4 +115,9 @@ Prompt injection: user input concatenated into system/instruction prompts via st
 Output sanitization: LLM-generated content rendered via `innerHTML`, `dangerouslySetInnerHTML`, `@Html.Raw()`, or `v-html` without escaping. Severity: Major (XSS equivalent — LLM output is untrusted).
 RAG poisoning: untrusted documents ingested into vector stores without content validation — attacker-controlled embeddings influence retrieval results. Severity: Major.
 Agent permission scope: LLM agents granted broad tool/API permissions (file system write, network access, DB mutations) beyond task requirements. Severity: Major.
-Detection: grep for string concatenation patterns feeding `system`, `prompt`, `messages` fields in LLM API calls; grep for LLM response variables flowing into DOM/HTML render sinks.
+MCP tool injection: user-controlled tool names or parameters passed to MCP `callTool`/`useTool` — attacker selects which tool executes or controls tool arguments. Severity: Critical (tool name controlled), Major (parameters only). Detection: grep for `callTool.*user|tool_name.*input|mcp.*request|useTool.*param`.
+Agent autonomy escalation: initial benign tool call establishes trusted context, subsequent call uses that context for privileged operation — single-step authorization checks miss the escalation chain. Severity: Major. Detection: agent tool sequences with mixed authorization contexts; grep for tool call chains without per-call authorization.
+Confused deputy: agent combines privileges from different authorization contexts in a single operation — permission scope checks missing between tool calls allow cross-context privilege use. Severity: Major.
+Missing LLM output schema validation: structured LLM outputs (JSON, function call results) written to DB/API without Zod/JSON Schema validation — malformed or adversarial output corrupts data. Severity: Major. Detection: grep for `JSON\.parse.*llm|ai.*response.*insert|completion.*write|chat.*result.*save`.
+Token/context abuse: user input designed to consume context budget, crowding out system instructions — large payloads concatenated into system prompt dilute safety instructions. Severity: Minor. Detection: unbounded user input concatenated into system/instruction prompts without length limits.
+Detection: grep for string concatenation patterns feeding `system`, `prompt`, `messages` fields in LLM API calls; grep for LLM response variables flowing into DOM/HTML render sinks; grep for MCP tool invocations with dynamic tool names or user-derived parameters.

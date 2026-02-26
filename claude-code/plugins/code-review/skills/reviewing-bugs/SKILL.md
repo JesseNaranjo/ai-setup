@@ -1,6 +1,6 @@
 ---
 name: reviewing-bugs
-description: Detects runtime errors, null references, off-by-one errors, boundary conditions, race conditions, and state management issues. Use when hunting for bugs, edge cases, or logical errors during code review.
+description: Use when hunting for bugs, edge cases, or logical errors during code review.
 ---
 
 # Bug Detection Code Review Skill

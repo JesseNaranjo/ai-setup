@@ -37,3 +37,9 @@ Async void: exceptions lost, can't await — use `async Task`. Severity: Major (
 OpenTelemetry context propagation: span context lost across async boundaries — `Task.Run()`, `Promise.all()`, `setTimeout()`, fire-and-forget patterns, thread pool dispatch. Traces break into disconnected fragments. Severity: Major.
 Missing W3C trace context: HTTP client calls without `traceparent`/`tracestate` headers — distributed traces break at service boundaries. Severity: Major.
 Span explosion: creating spans inside tight loops or per-item in batch operations — overwhelms trace backends, increases latency. Severity: Minor (small batches), Major (unbounded).
+Structured logging: `console.log` in production server/API code (Node.js) or `ILogger.Log*` with string interpolation instead of structured parameters (.NET) — loses queryability and adds GC pressure. Severity: Minor.
+Missing correlation IDs: HTTP handlers without request ID propagation (`X-Request-Id`, `X-Correlation-Id`) — cannot trace requests across services without distributed tracing. Severity: Minor.
+Health checks: missing `/health` or `/healthz` endpoint in API projects — load balancers and orchestrators cannot determine service readiness. Severity: Minor.
+Metrics cardinality: user IDs, full URLs, request bodies, or request IDs as metric labels/tags — unbounded label cardinality causes metric storage explosion and query timeouts. Severity: Major.
+Distributed tracing: span not recording error status (`span.SetStatus(Error)`, `span.recordException()`) on error paths — errors invisible in trace visualization. Severity: Major.
+Trace context lost in async workers: background workers, message consumers, or scheduled jobs not propagating `Activity` (.NET) or `traceparent` (Node.js) — async processing creates orphan traces. Severity: Major.
