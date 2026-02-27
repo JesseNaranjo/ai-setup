@@ -80,7 +80,7 @@
 - `params` collections (.NET 9/C# 13): `params` now accepts `Span<T>`, `ReadOnlySpan<T>`, `IEnumerable<T>` — not just arrays. Flag `params T[]` when span variant reduces allocations
 - LINQ `CountBy`/`AggregateBy` (.NET 9): replaces `GroupBy(k).Select(g => ...)` pattern — single-pass, no intermediate grouping allocations
 - `Newtonsoft.Json` in .NET 6+ without documented compatibility requirement — `System.Text.Json` is default; flag unless codebase has explicit reason (polymorphic serialization, LINQ-to-JSON, custom converters not yet migrated)
-- EOL .NET: 5 (May 2022), 6 (Nov 2024), 7 (May 2024). Active LTS: 8 (Nov 2026). Current STS: 9 (May 2026). EF Core follows .NET lifecycle. Flag `<TargetFramework>` specifying EOL versions
+- EOL .NET: 5 (May 2022), 6 (Nov 2024), 7 (May 2024). LTS: 8 (Nov 2026). STS: 9 (Nov 2026). EF Core follows .NET lifecycle. Flag `<TargetFramework>` specifying EOL versions
 - EF Core version mismatched with target framework version
 
 ### Test Coverage {#tests}

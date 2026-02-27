@@ -11,7 +11,7 @@
 - `as any` casts in production code (not `.d.ts` stubs or test files) — suppresses type checking
 - `@ts-ignore`/`@ts-expect-error` without justification comment on preceding line
 - `enum` usage in new code: runtime overhead, poor tree-shaking — prefer `as const` objects
-- Node.js native type stripping (stable in 24.12+, `--experimental-strip-types` removed): no enums, no namespaces, no `const enum` — type stripping silently drops these without error. Use `--experimental-transform-types` for non-erasable syntax
+- Node.js native type stripping (stable since v25.2.0, enabled by default): no enums, no namespaces, no `const enum` — type stripping silently drops these without error. Use `--experimental-transform-types` for non-erasable syntax
 - [NestJS] Circular module imports — ModuleRef required due to circular DI
 
 ### Bugs {#bugs}

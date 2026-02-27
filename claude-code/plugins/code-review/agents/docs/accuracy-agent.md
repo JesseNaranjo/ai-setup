@@ -13,7 +13,7 @@ permissionMode: dontAsk
 
 ## MODE Checklists
 
-**thorough:** Scope beyond description: CLI commands, config options, API endpoints, env vars, code examples
+**thorough:** CLI commands, config options, API endpoints, env vars, code examples
 
 **gaps:**
 1. **Identify overlooked accuracy issues**: implicit behavior changes not reflected in docs, version-specific differences documented as universal, parameter constraints documented incorrectly, return value documentation that omits error cases, order-dependent behavior changes, deprecated but still documented features, new required parameters not documented
