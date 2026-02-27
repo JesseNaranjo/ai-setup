@@ -1,6 +1,6 @@
 ---
 name: completeness-agent
-description: "Documentation completeness specialist. Use for detecting missing sections, undocumented features, incomplete setup instructions, or coverage gaps."
+description: "Use for detecting missing sections, undocumented features, incomplete setup instructions, or coverage gaps."
 color: green
 model: sonnet
 tools: ["Read", "Grep", "Glob"]

@@ -1,6 +1,6 @@
 ---
 name: structure-agent
-description: "Documentation structure specialist. Use for detecting organization problems, broken links, navigation issues, heading hierarchy problems, or AI instruction file issues."
+description: "Use for detecting organization problems, broken links, navigation issues, heading hierarchy problems, or AI instruction file issues."
 color: purple
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
@@ -14,8 +14,6 @@ permissionMode: dontAsk
 ## MODE Checklists
 
 **thorough:**
-- Heading hierarchy (skipped levels, single H1), broken links (internal/external/anchors)
-- Navigation: missing cross-refs, orphaned docs, circular paths, ToC mismatches
 - Link verification: use Grep to find internal links; verify targets and anchors exist, check path consistency. Verify image/media references exist; flag missing alt text as Minor. Internal links: verify in reviewed files. External: flag broken patterns (github.com paths to nonexistent files) but skip HTTP requests
 - **AI instruction file standardization** (CRITICAL):
   1. `/.ai/AI-AGENT-INSTRUCTIONS.md` exists (not in root)

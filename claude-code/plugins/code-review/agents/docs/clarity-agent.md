@@ -1,6 +1,6 @@
 ---
 name: clarity-agent
-description: "Documentation clarity specialist. Use for detecting readability problems, unexplained jargon, audience mismatches, or confusing explanations."
+description: "Use for detecting readability problems, unexplained jargon, audience mismatches, or confusing explanations."
 color: cyan
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
@@ -14,10 +14,8 @@ permissionMode: dontAsk
 ## MODE Checklists
 
 **thorough:**
-- Unexplained jargon/acronyms, ambiguous references, missing context
-- Overly complex structures (>40 words without structure, >3 nested clauses), inconsistent depth
-- Passive voice obscuring actors, wall-of-text paragraphs
-- Audience analysis: determine target audience (beginner/intermediate/expert); flag mismatches. Jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed)
+- Complexity thresholds: >40 words without structure, >3 nested clauses
+- Audience analysis: jargon density (>5 unexplained terms per paragraph), explanation quality ("what" and "why" addressed)
 
 **quick:**
 Critical/Major only. Skip: edge cases, theoretical issues, style. + Critical concepts with no explanation. Missing prerequisites that block users.

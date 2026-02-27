@@ -1,6 +1,6 @@
 ---
 name: accuracy-agent
-description: "Documentation accuracy specialist. Use for detecting code-documentation sync problems, factual errors, outdated version references, or incorrect API signatures."
+description: "Use for detecting code-documentation sync problems, factual errors, outdated version references, or incorrect API signatures."
 color: red
 model: opus
 tools: ["Read", "Grep", "Glob"]
@@ -13,7 +13,7 @@ permissionMode: dontAsk
 
 ## MODE Checklists
 
-**thorough:** All code-doc sync: signatures, CLI commands, config options, API endpoints, env vars, version numbers, code examples
+**thorough:** CLI commands, config options, API endpoints, env vars, code examples
 
 **gaps:**
 1. **Identify overlooked accuracy issues**: implicit behavior changes not reflected in docs, version-specific differences documented as universal, parameter constraints documented incorrectly, return value documentation that omits error cases, order-dependent behavior changes, deprecated but still documented features, new required parameters not documented

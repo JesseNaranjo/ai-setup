@@ -1,6 +1,6 @@
 ---
 name: performance-agent
-description: "Performance review specialist. Use for detecting algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, or hot path inefficiencies."
+description: "Use for detecting algorithmic complexity problems, memory leaks, N+1 queries, blocking operations, or hot path inefficiencies."
 color: green
 model: opus
 tools: ["Read", "Grep", "Glob"]

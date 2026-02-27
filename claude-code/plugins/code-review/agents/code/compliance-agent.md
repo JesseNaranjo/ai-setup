@@ -1,6 +1,6 @@
 ---
 name: compliance-agent
-description: "Coding standards compliance specialist. Use for checking adherence to CLAUDE.md guidelines, AI agent instructions, or project-specific coding standards."
+description: "Use for checking adherence to CLAUDE.md guidelines, AI agent instructions, or project-specific coding standards."
 color: blue
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
@@ -15,9 +15,7 @@ permissionMode: dontAsk
 
 **thorough:**
 - Extract rules from AI instruction files: explicit (MUST/MUST NOT/ALWAYS/NEVER), guidelines (SHOULD/SHOULD NOT/prefer/avoid), patterns, per-directory overrides. Map applicable rules per file. Rule precedence: per-directory overrides > root CLAUDE.md > .ai/AI-AGENT-INSTRUCTIONS.md
-- Check every rule against every applicable file
 - Both explicit violations and spirit-of-the-rule violations
-- Cross-file consistency
 - AI-generated code ignoring project-specific naming conventions from CLAUDE.md (e.g., using camelCase when project mandates snake_case, or generic names like `handleClick` when project convention requires domain-specific naming)
 
 **gaps:**

@@ -1,6 +1,6 @@
 ---
 name: error-handling-agent
-description: "Error handling specialist. Use for detecting missing try/catch blocks, swallowed exceptions, improper error propagation, missing cleanup, or resilience gaps."
+description: "Use for detecting missing try/catch blocks, swallowed exceptions, improper error propagation, missing cleanup, or resilience gaps."
 color: orange
 model: opus
 tools: ["Read", "Grep", "Glob"]

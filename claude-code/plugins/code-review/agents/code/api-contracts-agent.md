@@ -1,6 +1,6 @@
 ---
 name: api-contracts-agent
-description: "API contracts specialist. Use for detecting breaking changes, backward compatibility problems, interface contract violations, or inconsistent API patterns in code changes."
+description: "Use for detecting breaking changes, backward compatibility problems, interface contract violations, or inconsistent API patterns in code changes."
 color: cyan
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
@@ -14,8 +14,6 @@ permissionMode: dontAsk
 ## MODE Checklists
 
 **thorough:**
-- Breaking changes (removed methods/properties/fields, changed signatures/behavior), missing versioning
-- Backward compatibility (new required params without defaults, changed response/error formats)
 - Schema changes affecting consumers (database, API response, configuration)
 - API versioning inconsistency: mixed URL versioning (/v1/, /v2/) and header versioning in same API surface
 - Consumer verification: Grep for callers of changed APIs, verify default coverage for new required params. Breaking-change classification: REST (removed field = breaking, added optional = non-breaking), Library (changed public signature = breaking, added method = non-breaking)

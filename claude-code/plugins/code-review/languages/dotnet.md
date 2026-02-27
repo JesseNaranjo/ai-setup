@@ -38,6 +38,7 @@
 - `SearchValues<char>` (.NET 8): `IndexOfAny(new char[]{...})` with static char sets should use `SearchValues.Create()` for SIMD acceleration
 - `ConfigureAwaitOptions.SuppressThrowing` (.NET 8): replaces `try { await task; } catch { }` for fire-and-forget
 - Missing CancellationToken propagation through async call chains — operations continue after caller cancels, wasting resources
+- `params ReadOnlySpan<T>` (.NET 9/C# 13): methods accepting `params T[]` should prefer `params ReadOnlySpan<T>` — stack-allocated, zero heap allocation for small argument lists
 - `HybridCache` (.NET 9): replaces manual IDistributedCache + IMemoryCache layering — single API with stampede protection and tag-based invalidation
 - [EF Core] N+1 via lazy loading — navigation properties in loops
 - [EF Core] Client-side evaluation — LINQ in memory instead of SQL
@@ -79,7 +80,7 @@
 - `params` collections (.NET 9/C# 13): `params` now accepts `Span<T>`, `ReadOnlySpan<T>`, `IEnumerable<T>` — not just arrays. Flag `params T[]` when span variant reduces allocations
 - LINQ `CountBy`/`AggregateBy` (.NET 9): replaces `GroupBy(k).Select(g => ...)` pattern — single-pass, no intermediate grouping allocations
 - `Newtonsoft.Json` in .NET 6+ without documented compatibility requirement — `System.Text.Json` is default; flag unless codebase has explicit reason (polymorphic serialization, LINQ-to-JSON, custom converters not yet migrated)
-- EOL .NET runtime (`<TargetFramework>net6.0</TargetFramework>` or `net7.0`) — both past end-of-life
+- EOL .NET: 5 (May 2022), 6 (Nov 2024), 7 (May 2024). LTS: 8 (Nov 2026). STS: 9 (Nov 2026). EF Core follows .NET lifecycle. Flag `<TargetFramework>` specifying EOL versions
 - EF Core version mismatched with target framework version
 
 ### Test Coverage {#tests}

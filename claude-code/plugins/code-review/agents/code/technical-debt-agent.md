@@ -1,6 +1,6 @@
 ---
 name: technical-debt-agent
-description: "Technical debt specialist. Use for detecting deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, or documentation debt."
+description: "Use for detecting deprecated dependencies, outdated patterns, workarounds, dead code, scalability concerns, or documentation debt."
 color: brown
 model: sonnet
 tools: ["Read", "Grep", "Glob"]

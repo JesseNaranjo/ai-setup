@@ -1,6 +1,6 @@
 ---
 name: consistency-agent
-description: "Documentation consistency specialist. Use for detecting terminology variations, formatting inconsistencies, voice/tone mismatches, or naming convention violations."
+description: "Use for detecting terminology variations, formatting inconsistencies, voice/tone mismatches, or naming convention violations."
 color: blue
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
@@ -14,9 +14,6 @@ permissionMode: dontAsk
 ## MODE Checklists
 
 **thorough:**
-- Terminology variations (same concept, different words), naming convention mismatches
-- Formatting inconsistencies: headings, code blocks, lists, links, spelling (US vs UK)
-- Voice/tense inconsistencies (you vs we vs passive)
 - Term variant analysis: scan for variants (e.g., "config" vs "configuration" vs "settings"); track first usage as canonical. Common pairs: config/configuration/settings, dir/directory/folder, repo/repository, env/environment
 - Formatting verification: use Grep to check heading, code block, list consistency. Voice: person (you/we/passive), formality, tense
 
