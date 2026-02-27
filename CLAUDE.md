@@ -113,7 +113,7 @@ All 17 agents use the same YAML frontmatter fields:
 ```yaml
 ---
 name: <domain>-agent           # Required
-description: <role+trigger>    # Required. "[Role] specialist. Use [for/when] [triggers]."
+description: <trigger>          # Required. "Use [for/when] [triggers]."
 color: <color>                 # See color rules below
 model: <opus|sonnet>           # thorough-mode default; gaps always Sonnet
 tools: ["Read", "Grep", "Glob"]
@@ -125,7 +125,7 @@ permissionMode: dontAsk        # Auto-deny permissions (read-only agents)
 
 The `skills` field loads static agent configuration at agent startup. Non-synthesis agents load `code-review:agent-review-instructions` (MODE definitions, false positive rules, output schema). Synthesis agents load `code-review:synthesis-instructions` (input format, review process, output schema, guidelines).
 
-Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory`) are not used.
+Other Plugin Reference fields (`disallowedTools`, `mcpServers`, `hooks`, `memory`, `background`, `isolation`) are not used. Review agents are stateless and read-only, so persistence (`memory`), lifecycle (`hooks`, `background`), and isolation (`isolation`) fields are not applicable.
 
 **Color rules:** Minimize conflicts within each parallel phase; reuse across sequential phases is fine. Use `white` for overflow. Do not change existing colors without necessity.
 
@@ -232,7 +232,7 @@ Each skill follows progressive disclosure: `SKILL.md` is always loaded when trig
 
 **Description patterns:**
 - Skills: `"Use when [specific triggers]."` — e.g., `"Use when checking for security vulnerabilities, conducting vulnerability audits, or scanning for secrets during code review."`
-- Agents: `"[Role] specialist. Use [for] [triggers]."` — e.g., `"Security vulnerability specialist. Use for detecting injection attacks..."`
+- Agents: `"Use [for/when] [triggers]."` — e.g., `"Use for detecting injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, or OWASP top 10 issues."`
 
 ### Skill-Informed Orchestration
 

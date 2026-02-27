@@ -1,6 +1,6 @@
 ---
 name: security-agent
-description: "Security vulnerability specialist. Use for detecting injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, or OWASP top 10 issues."
+description: "Use for detecting injection attacks, authentication bypasses, hardcoded secrets, insecure cryptography, or OWASP top 10 issues."
 color: purple
 model: opus
 tools: ["Read", "Grep", "Glob"]
@@ -15,11 +15,12 @@ permissionMode: dontAsk
 
 **thorough:**
 - Supply chain: lockfile integrity (missing/outdated lockfile, lockfile-source mismatches), dependency confusion (internal package names in public registries), unpinned transitive dependencies in production
-- SSRF: fetch/request/axios with user-controlled URLs without allowlist. Deserialization: TypeNameHandling, pickle.loads, unserialize with untrusted input
+- Deserialization: TypeNameHandling, pickle.loads, unserialize with untrusted input
 - AI-generated crypto: MD5/SHA1 for password hashing, hardcoded IV/nonce, `Math.random()` for tokens/secrets, `crypto.createCipher` (deprecated)
-- AI/LLM: prompt injection (user input concatenated into system prompts without sanitization), LLM output rendered as HTML/JS without escaping, RAG injection (untrusted documents in vector stores influencing responses), agent permissions exceeding task scope, MCP tool injection (user-controlled tool names/parameters), agent autonomy escalation, LLM output schema validation
+- AI/LLM: prompt injection (user input concatenated into system prompts without sanitization), LLM output rendered as HTML/JS without escaping, RAG injection (untrusted documents in vector stores influencing responses), agent permissions exceeding task scope, MCP tool injection (user-controlled tool names/parameters), agent autonomy escalation, LLM output schema validation. See `reviewing-security` skill `references/common-vulnerabilities.md` AI/LLM section for detailed patterns.
 - AI-generated secret handling: copying documentation patterns (hardcoded connection strings, inline API keys) instead of using project's actual secrets manager or environment variable configuration
 - AI-generated insecure defaults: permissive CORS (`origin: '*'`), verbose error responses in production, disabled CSRF protection with "TODO: enable" comments
+- Known vulnerable dependency versions in manifest files (check against recent CVEs)
 - Container security: Dockerfile running as root (no USER directive), `latest` tag instead of pinned digest, multi-stage build leaking secrets to runtime, `.dockerignore` missing `.env`/`.git`/`node_modules`, `COPY . .` before `.dockerignore` filtering, `--privileged` or `--cap-add=ALL`
 
 **gaps:**

@@ -1,6 +1,6 @@
 ---
 name: examples-agent
-description: "Code example specialist. Use for detecting broken examples, missing imports, incorrect syntax, outdated API usage, or example-documentation mismatches."
+description: "Use for detecting broken examples, missing imports, incorrect syntax, outdated API usage, or example-documentation mismatches."
 color: yellow
 model: sonnet
 tools: ["Read", "Grep", "Glob"]

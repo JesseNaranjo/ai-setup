@@ -1,6 +1,6 @@
 ---
 name: architecture-agent
-description: "Architecture review specialist. Use for checking SOLID, DRY, YAGNI, SoC violations, coupling problems, anti-patterns, layer violations, or file organization issues."
+description: "Use for checking SOLID, DRY, YAGNI, SoC violations, coupling problems, anti-patterns, layer violations, or file organization issues."
 color: yellow
 model: sonnet
 tools: ["Read", "Grep", "Glob"]
@@ -20,6 +20,7 @@ permissionMode: dontAsk
 - AI-generated duplicate service classes: identical CRUD structure across entity types — collapse to generic/base class
 - AI-generated identical controller/route structures across entity types (copy-paste CRUD without shared base)
 - AI-generated tutorial-pattern code: follows generic tutorial structure (e.g., separate controller/service/repository for trivial CRUD) instead of project's established patterns
+- Semantic HTML structure, ARIA landmarks (web components)
 
 ## Output
 

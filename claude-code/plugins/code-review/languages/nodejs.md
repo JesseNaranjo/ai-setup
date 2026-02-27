@@ -11,7 +11,7 @@
 - `as any` casts in production code (not `.d.ts` stubs or test files) — suppresses type checking
 - `@ts-ignore`/`@ts-expect-error` without justification comment on preceding line
 - `enum` usage in new code: runtime overhead, poor tree-shaking — prefer `as const` objects
-- Node.js 22 `--experimental-strip-types`: no enums, no namespaces, no `const enum` — type stripping silently drops these without error
+- Node.js native type stripping (stable in 24.12+, `--experimental-strip-types` removed): no enums, no namespaces, no `const enum` — type stripping silently drops these without error. Use `--experimental-transform-types` for non-erasable syntax
 - [NestJS] Circular module imports — ModuleRef required due to circular DI
 
 ### Bugs {#bugs}
@@ -26,6 +26,7 @@
 - [NestJS] Missing validation pipe on DTOs (no class-validator decorators) — unvalidated input reaches service layer
 - [Vite] `import.meta.env` variables: only `VITE_` prefixed vars exposed to client. Non-prefixed silently resolve to `undefined`
 - [Vite] `import.meta.glob()` default eager:false returns `() => Promise<Module>`, not Module — accessing .default without await returns undefined
+- `any` parameter types in exported/public API functions — erases type safety at module boundaries, propagates `any` to all callers
 - [Vite] CJS dependencies without `optimizeDeps.include` cause runtime loading errors in dev (Vite pre-bundles on first access)
 - [MongoDB] .find() without .limit() on user-facing queries — unbounded result sets consume memory
 - [Redis] Pub/Sub without reconnection handler — silently stops receiving after connection drop
@@ -54,6 +55,7 @@
 - Missing `ignore-scripts=true` in `.npmrc` for CI environments (pnpm: `pnpm.enable-pre-post-scripts=false` in package.json)
 - Missing or uncommitted lockfile (package-lock.json/yarn.lock/pnpm-lock.yaml) — allows dependency version drift
 - Dependencies using `*`, `latest`, or unpinned git URLs — non-reproducible builds
+- [npm] Vulnerable transitive dependencies — `npm audit` high/critical findings in production dependency chains
 - [Express] Route param injection — req.params in SQL/shell without validation
 - [Express] Trust proxy misconfiguration
 - [Express] Session fixation — missing `session.regenerate()` after authentication
@@ -69,9 +71,13 @@
 - Legacy bundler — Webpack 4 and below, Gulp, Grunt. Flag Webpack 5 projects without Vite/esbuild migration plan
 - Monolithic modules — 1000+ lines or 50+ exports
 - Bun/Deno runtime differences: flag Node.js-specific APIs (`child_process`, `cluster`, `node:*` prefixed) when project targets multiple runtimes
-- EOL Node.js runtime: `engines.node` or `.nvmrc` specifying Node.js 16.x or 18.x — both past end-of-life
+- EOL Node.js: 16 (Sep 2023), 18 (Apr 2025), 20 (Apr 2026), 21 (Jun 2024). Active LTS: 24. Current: 25. Flag `engines.node` or `.nvmrc` specifying EOL versions
+- `strict: false` in tsconfig.json — disables `strictNullChecks`, `noImplicitAny`, and 5 other strict family checks. Flag in active projects without documented migration plan
+- [npm] npm 10+ workspaces without `workspaces` field in root package.json — missed workspace hoisting, duplicate installations
+- Missing corepack enable for package manager version pinning — `packageManager` field in package.json without corepack causes version drift across environments
 - Bootstrap 4.x or earlier in `package.json` dependencies — Bootstrap 5 dropped jQuery dependency, new utility API, RTL support
-- Express 4.x without migration blocker — Express 5 available with async error handling and path matching changes
+- Express 4.x without migration blocker — Express 5 available with async error handling and path matching changes. Express 4 in maintenance mode
+- [NestJS] NestJS 9.x or earlier — unsupported, use 10+
 - Fastify 3.x or earlier — Fastify 4 introduced TypeScript-first design, hooks API overhaul, and serialization changes
 - TypeScript 4.x in active projects — 5.x introduced module resolution improvements and decorator changes
 - Vite 4.x or earlier in `package.json` devDependencies — Vite 5 introduced environment API and requires Node.js 18+
