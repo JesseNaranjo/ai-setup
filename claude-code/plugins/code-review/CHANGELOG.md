@@ -5,6 +5,28 @@ All notable changes to the Code Review Plugin are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.1.0] - 2026-02-27
+
+### Added
+
+- Runtime and framework version detection in technical-debt agent: EOL runtimes (Critical), maintenance-only runtimes within 6 months of EOL (Major), frameworks 2+ major versions behind (Major)
+- Auto-validation pattern: `eol_runtime` [Technical Debt/Critical] for EOL runtime version in manifest files
+- Runtime & Framework Lifecycle reference: Node.js LTS schedule (16.x–22.x), .NET support lifecycle (6–9), key framework versions for 10 frameworks
+- Node.js language checks (+7): `console.log` in production API handlers, EOL Node.js 16.x/18.x, Bootstrap 4.x, Express 4.x, Fastify 3.x, TypeScript 4.x, Vite 4.x
+- .NET language checks (+10): `Newtonsoft.Json` in .NET 6+, EOL .NET runtime, EF Core version mismatch, Blazor accessibility (4 checks), ASP.NET Core performance (2 checks), SSRF via `HttpWebRequest`
+- React language checks (+4): `[React 19] use()` hook in loops, `[React Compiler] "use no memo"`, React 17 debt, `react-bootstrap` v1.x
+- Security detection patterns: MCP tool injection, agent autonomy escalation, confused deputy, LLM output schema validation, token/context abuse (AI/LLM)
+- Security detection patterns: GitHub Actions artifact attestations, OIDC vs long-lived credentials, mutable reusable workflow refs, missing `permissions:` block (CI/CD)
+- Performance detection patterns: structured logging, correlation IDs, health check endpoints, metrics cardinality, distributed tracing, trace context in async workers
+
+### Changed
+
+- Skill descriptions standardized for CSO compliance: all 11 skill SKILL.md files now use "Use when [triggers]." format only
+- Security agent AI/LLM checklist expanded: MCP tool injection, agent autonomy escalation, LLM output schema validation
+- Deprecated Node.js libraries list expanded: `create-react-app`, `eslint` v8, `faker`, `querystring`
+- .NET deprecated patterns: `HttpWebRequest` → `HttpClient`
+- Legacy React patterns list expanded: `createRef`, `React.FC`
+
 ## [4.0.2] - 2026-02-24
 
 ### Changed

@@ -11,7 +11,7 @@ Do not optimize any other file for human readability. Do not add prose softeners
 
 ## Repository Overview
 
-This is a Claude Code plugin repository containing the **Code Review Plugin** (v4.0.2) - a modular 17-agent architecture with:
+This is a Claude Code plugin repository containing the **Code Review Plugin** (v4.1.0) - a modular 17-agent architecture with:
 - Two-phase sequential review (thorough → gaps with context passing)
 - Cross-agent synthesis for ripple effect detection
 - Actionable fix outputs (inline diffs and Claude Code prompts)
